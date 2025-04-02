@@ -270,7 +270,7 @@ New mappings can be easily defined in custom configuration files (see [examples/
 
 ## What do they say about it?
 
-## Talks
+### Talks
 
 1. [Visualizing cloud-native applications with KubeDiagrams](https://mybox.inria.fr/f/61de0e6e5be94b7a941f/?dl=1), Philippe Merle, [PEPR Cloud Taranis Project](https://pepr-cloud.fr/en/project-taranis/), February 17, 2025.
 
@@ -285,6 +285,8 @@ New mappings can be easily defined in custom configuration files (see [examples/
 ### Social Networks
 
 1. [Michael Cade's post](https://x.com/MichaelCade1/status/1905964723809427625) on X, March 29, 2025.
+
+1. [Paco Xu's post](https://x.com/xu_paco/status/1904807247206899941) on X, March 26, 2025.
 
 1. [KubeDiagrams 0.2.0 is out!](https://www.reddit.com/r/kubernetes/comments/1jjjw6j/kubediagrams_020_is_out/) on Reddit, March 25, 2025.
 
