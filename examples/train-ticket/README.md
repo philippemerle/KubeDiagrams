@@ -6,6 +6,7 @@ Used Train Ticket manifests come from **[here](https://github.com/FudanSELab/tra
 ## Instructions
 
 Generate the Kubernetes architecture diagrams:
+
 ```sh
 $ ./generate.sh
 ```

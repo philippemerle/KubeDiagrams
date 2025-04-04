@@ -1,2 +1,5 @@
 KubeDiagrams.egg-info/
 dist/
+
+# Direnv stuff
+.direnv

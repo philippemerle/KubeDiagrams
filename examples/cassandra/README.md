@@ -5,16 +5,19 @@ This example is based on the **[official Kubernetes Cassandra tutorial](https://
 ## Instructions
 
 Generate the Kubernetes architecture diagram for [cassandra.yml](cassandra.yml):
+
 ```sh
 $ kube-diagrams cassandra.yml
 ```
 
 Start a minikube cluster:
+
 ```sh
 $ minikube start --memory 5120 --cpus=4
 ```
 
 Deploy the Cassandra application:
+
 ```sh
 $ kubectl apply -f cassandra.yml
 ```
@@ -22,16 +25,19 @@ $ kubectl apply -f cassandra.yml
 Wait a few minutes for the Cassandra application to be deployed.
 
 Get all Kubernetes resources in the `default` namespace:
+
 ```sh
 $ kubectl get all,pvc,serviceaccount,configmap,pv,storageclass -o=yaml > default.yml
 ```
 
 Generate a Kubernetes architecture diagram for the `default` namespace:
+
 ```sh
 $ kube-diagrams default.yml
 ```
 
 Delete Cassandra application.
+
 ```sh
 $ kubectl delete -f cassandra.yml
 ```

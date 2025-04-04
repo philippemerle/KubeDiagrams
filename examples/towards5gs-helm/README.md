@@ -5,13 +5,14 @@ This example is based on **[towards5gs-helm](https://github.com/Orange-OpenSourc
 ## Instructions
 
 Generate the Kubernetes architecture diagrams for **towards5gs-helm** charts:
+
 ```sh
 $ ./generate.sh
 ```
 
 ## Generated architecture diagrams
 
-Architecture diagram for the  **towards5gs/free5gc** chart:
+Architecture diagram for the **towards5gs/free5gc** chart:
 ![towards5gs_free5gc.png](towards5gs_free5gc.png)
 
 Architecture diagram for the **towards5gs/ueransim** chart:

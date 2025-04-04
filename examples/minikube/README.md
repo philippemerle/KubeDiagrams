@@ -6,7 +6,7 @@ Start a minikube cluster with `metrics-server`, `dashboard`, and `ingress` addon
 
 ```sh
 $ minikube start
-$ minikube addons enable metrics-server 
+$ minikube addons enable metrics-server
 $ minikube addons enable dashboard
 $ minikube addons enable ingress
 ```
@@ -16,6 +16,7 @@ Generate some Kubernetes architecture diagrams:
 ```sh
 $ ./generate.sh
 ```
+
 ## Generated architecture diagrams
 
 **Note**: In the following architecture diagrams, both red labels and red arrows indicate unfound Kubernetes resources.

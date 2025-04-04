@@ -11,6 +11,7 @@ Generate some **k0s** architecture diagrams:
 ```sh
 $ ./generate.sh
 ```
+
 ## Generated architecture diagrams
 
 **Note**: As shown in following architecture diagrams, **k0s** provides several custom resource definitions (CRD) and instantiates both `ControlPlane` and `EtcdMember` custom resources.
