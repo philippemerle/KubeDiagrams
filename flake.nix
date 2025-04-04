@@ -14,7 +14,9 @@
           git
           lazygit
 
+          graphviz
           nodePackages.prettier
+          python39
         ];
       };
   };
