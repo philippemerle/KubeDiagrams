@@ -39,6 +39,10 @@ $ kubectl delete -f wordpress-deployment.yaml
 $ kubectl delete -f mysql-deployment.yaml
 $ kubectl delete -f mysql-pass.yaml
 ```
+Generate a custom diagram where the WordPress application is deployed in AWS EKS.
+```sh
+$ kube-diagrams -c custom_diagram.kd -o wordpress_deployed_in_aws_eks namespace_default.yml
+```
 
 ## Generated architecture diagrams
 
@@ -47,3 +51,6 @@ Architecture diagram for WordPress manifests:
 
 Architecture diagram for a deployed WordPress instance:
 ![default namespace](namespace_default.png)
+
+Architecture diagram for a WordPress application deployed in AWS EKS:
+![wordpress_deployed_in_aws_eks.png](wordpress_deployed_in_aws_eks.png)

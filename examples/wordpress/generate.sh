@@ -23,3 +23,6 @@ $BIN/kube-diagrams namespace_default.yml
 kubectl delete -f wordpress-deployment.yaml
 kubectl delete -f mysql-deployment.yaml
 kubectl delete -f mysql-pass.yaml
+
+# Generate a custom diagram where the WordPress application is deployed in AWS EKS.
+$BIN/kube-diagrams -c custom_diagram.kd -o wordpress_deployed_in_aws_eks namespace_default.yml

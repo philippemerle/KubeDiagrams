@@ -1,0 +1,35 @@
+diagram:
+  clusters:
+    aws:
+      name: Amazon Web Service
+      clusters:
+        my-account:
+          name: "Account: Philippe Merle"
+          clusters:
+            my-ekc:
+              name: My Elastic Kubernetes Cluster
+          nodes:
+            user:
+              name: Philippe Merle
+              type: diagrams.aws.general.User
+      nodes:
+        eck:
+          name: Elastic Kubernetes Service
+          type: diagrams.aws.compute.ElasticKubernetesService
+  nodes:
+    users:
+      name: Users
+      type: diagrams.onprem.client.Users
+  edges:
+    - from: users
+      to: wordpress/default/Service/v1
+      fontcolor: green
+      xlabel: use
+    - from: wordpress/default/Deployment/apps/v1
+      to: wordpress-mysql/default/Service/v1
+      color: brown
+      fontcolor: red
+      xlabel: calls
+    - from: foo # Warning: ... Node 'foo' undefined!
+      to: bar # Warning: ... Node 'bar' undefined!
+  generate_diagram_in_cluster: aws.my-account.my-ekc

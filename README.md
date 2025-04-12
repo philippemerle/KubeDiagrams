@@ -268,6 +268,15 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 
 New mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2),  [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), and [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2)) and provided to **KubeDiagrams** via the `--config` command-line option.
 
+### Custom diagrams
+
+By default, **KubeDiagrams** generates diagrams from data contained into Kubernetes manifest files, actual cluster state, kustomization files, or Helm charts automatically. But sometimes, users would like to customize generated diagrams by adding their own clusters, nodes and edges as illustrated in the following diagram:
+
+[![Custom diagram](examples/wordpress/wordpress_deployed_in_aws_eks.png)](examples/wordpress/wordpress_deployed_in_aws_eks.png)
+
+This previous diagram contains three custom clusters labelled with `Amazon Web Service`, `Account: Philippe Merle` and `My Elastic Kubernetes Cluster`, three custom nodes labelled with `Users`, `Elastic Kubernetes Services`, and `Philippe Merle`, and two custom edges labelled with `use` and `calls`. The rest of this custom diagram is generated from actual cluster state for a deployed WordPress application automatically.
+See [examples/wordpress/custom_diagram.kd](examples/wordpress/custom_diagram.kd) to define custom diagrams, clusters, nodes and edges declaratively.
+
 ## What do they say about it?
 
 ### Talks
