@@ -5,7 +5,6 @@ This example is based on some Helm charts available on **[Artifact Hub](https://
 ## Instructions
 
 Generate the Kubernetes architecture diagrams for some Helm charts:
-
 ```sh
 $ ./generate.sh
 ```

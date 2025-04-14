@@ -5,7 +5,6 @@ This example is based on **[docker-open5gs](https://github.com/Borjis131/docker-
 ## Instructions
 
 Generate the Kubernetes architecture diagrams for **docker-open5gs** Helm charts:
-
 ```sh
 $ ./generate.sh
 ```

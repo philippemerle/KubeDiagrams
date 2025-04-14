@@ -1,11 +1,10 @@
-# OpenAirInterface 5G Core Network Example
+# OpenAirInterface 5G Core Network  Example
 
 This example is based on **[OpenAirInterface 5G Core Network](https://openairinterface.org/oai-5g-core-network-project/)** (OAI-5G-CN).
 
 ## Instructions
 
 Generate the Kubernetes architecture diagrams for **OpenAirInterface 5G Core Network** Helm charts:
-
 ```sh
 $ ./generate.sh
 ```

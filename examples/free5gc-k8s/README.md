@@ -5,7 +5,6 @@ This example is based on **[free5gc-k8s](https://github.com/niloysh/free5gc-k8s)
 ## Instructions
 
 Generate the Kubernetes architecture diagram for **free5gc-k8s** manifests:
-
 ```sh
 $ ./generate.sh
 ```

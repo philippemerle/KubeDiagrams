@@ -53,7 +53,6 @@ Architecture diagram for **NetworkPolicy** resources: ![network_policies.png](ht
 Many other architecture diagrams are available into [examples/](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/).
 
 All the examples are
-
 1. [official Kubernetes WordPress tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/wordpress/)
 1. [official Kubernetes ZooKeeper tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/zookeeper/)
 1. [official Kubernetes Cassandra tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cassandra/)
@@ -72,9 +71,8 @@ All the examples are
 ## Prerequisites
 
 Following software must be installed:
-
-- [Python](https://www.python.org) 3.9 or higher
-- `dot` command ([Graphviz](https://www.graphviz.org/))
+* [Python](https://www.python.org) 3.9 or higher
+* `dot` command ([Graphviz](https://www.graphviz.org/))
 
 ## Getting Started
 
@@ -113,9 +111,7 @@ options:
   -v, --verbose         verbosity, set to false by default
   --without-namespace   disable namespace cluster generation
 ```
-
 Examples:
-
 ```ssh
 # generate a diagram from a manifest
 kube-diagrams -o cassandra.png examples/cassandra/cassandra.yml
@@ -137,7 +133,6 @@ kubectl get all --all-namespaces -o yaml | kube-diagrams -o all-namespaces.png -
 `helm-diagrams` takes only one argument - the URL of the Helm chart - but requires that the `helm` command was installed.
 
 Examples:
-
 ```ssh
 # generate a diagram for the Helm chart 'cert-manager' available in HTTP repository 'charts.jetstack.io'
 helm-diagrams https://charts.jetstack.io/cert-manager
@@ -181,55 +176,55 @@ docker run -v "$(pwd)":/work philippemerle/kubediagrams helm-diagrams oci://ghcr
 
 **KubeDiagrams** supported the following 47 Kubernetes resource types:
 
-|               Kind               |            ApiGroup            |           Versions            |                                                                          Icon                                                                          |
-| :------------------------------: | :----------------------------: | :---------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------: |
-|           `APIService`           |    `apiregistration.k8s.io`    |        `v1beta1` `v1`         |                  ![APIService](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/apiservice.png)                  |
-|          `ClusterRole`           |  `rbac.authorization.k8s.io`   |        `v1beta1` `v1`         |          ![ClusterRole](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/c-role-128.png)           |
-|       `ClusterRoleBinding`       |  `rbac.authorization.k8s.io`   |        `v1beta1` `v1`         |        ![ClusterRoleBinding](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/crb-128.png)         |
-|           `ConfigMap`            |                                |             `v1`              |             ![ConfigMap](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/cm-128.png)              |
-|            `CronJob`             |            `batch`             |        `v1beta1` `v1`         |            ![CronJob](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/cronjob-128.png)            |
-|           `CSIDriver`            |        `storage.k8s.io`        |        `v1beta1` `v1`         |                   ![CSIDriver](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csidriver.png)                   |
-|            `CSINode`             |        `storage.k8s.io`        |             `v1`              |                     ![CSINode](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csinode.png)                     |
-|       `CSIStorageCapacity`       |        `storage.k8s.io`        |             `v1`              |                ![CSIStorageCapacity](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csisc.png)                 |
-|    `CustomResourceDefinition`    |     `apiextensions.k8s.io`     |        `v1beta1` `v1`         |     ![CustomResourceDefinition](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/crd-128.png)      |
-|           `DaemonSet`            |             `apps`             |        `v1beta2` `v1`         |             ![DaemonSet](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ds-128.png)              |
-|           `Deployment`           |             `apps`             |   `v1beta1` `v1beta2` `v1`    |           ![Deployment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/deploy-128.png)           |
-|           `Endpoints`            |                                |             `v1`              |             ![Endpoints](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ep-128.png)              |
-|         `EndpointSlice`          |       `discovery.k8s.io`       |             `v1`              |                    ![EndpointSlice](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/eps.png)                    |
-|             `Group`              |  `rbac.authorization.k8s.io`   |             `v1`              |              ![Group](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/group-128.png)              |
-|    `HorizontalPodAutoscaler`     |         `autoscaling`          | `v1` `v2beta1` `v2beta2` `v2` |      ![HorizontalPodAutoscaler](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/hpa-128.png)      |
-|            `Ingress`             |      `networking.k8s.io`       |        `v1beta1` `v1`         |              ![Ingress](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ing-128.png)              |
-|          `IngressClass`          |      `networking.k8s.io`       |        `v1beta1` `v1`         |                     ![IngressClass](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/ic.png)                     |
-|              `Job`               |            `batch`             |        `v1beta1` `v1`         |                ![Job](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/job-128.png)                |
-|             `Lease`              |     `coordination.k8s.io`      |             `v1`              |                       ![Lease](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/lease.png)                       |
-|           `LimitRange`           |                                |             `v1`              |           ![LimitRange](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/limits-128.png)           |
-|  `MutatingWebhookConfiguration`  | `admissionregistration.k8s.io` |        `v1beta1` `v1`         |            ![MutatingWebhookConfiguration](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/mwc.png)             |
-|           `Namespace`            |                                |             `v1`              |             ![Namespace](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ns-128.png)              |
-|  `NetworkAttachmentDefinition`   |       `k8s.cni.cncf.io`        |             `v1`              | ![NetworkAttachmentDefinition](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/azure/network/network-interfaces.png) |
-|         `NetworkPolicy`          |      `networking.k8s.io`       |             `v1`              |         ![NetworkPolicy](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/netpol-128.png)          |
-|              `Node`              |                                |             `v1`              |       ![Node](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/infrastructure_components/labeled/node-128.png)       |
-|        `PersistentVolume`        |                                |             `v1`              |          ![PersistentVolume](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/pv-128.png)          |
-|     `PersistentVolumeClaim`      |                                |             `v1`              |       ![PersistentVolumeClaim](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/pvc-128.png)       |
-|              `Pod`               |                                |             `v1`              |                ![Pod](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/pod-128.png)                |
-|      `PodDisruptionBudget`       |            `policy`            |        `v1beta1` `v1`         |                 ![PodDisruptionBudget](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/pdb.png)                 |
-|       `PodSecurityPolicy`        |            `policy`            |        `v1beta1` `v1`         |         ![PodSecurityPolicy](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/psp-128.png)         |
-|          `PodTemplate`           |                                |             `v1`              |                 ![PodTemplate](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/podtemplate.png)                 |
-|         `PriorityClass`          |      `scheduling.k8s.io`       |        `v1beta1` `v1`         |                    ![PriorityClass](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/pc.png)                     |
-|           `ReplicaSet`           |             `apps`             |             `v1`              |             ![ReplicaSet](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/rs-128.png)             |
-|     `ReplicationController`      |                                |             `v1`              |                ![ReplicationController](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/rc.png)                 |
-|         `ResourceQuota`          |                                |             `v1`              |          ![ResourceQuota](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/quota-128.png)          |
-|              `Role`              |  `rbac.authorization.k8s.io`   |        `v1beta1` `v1`         |               ![Role](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/role-128.png)               |
-|          `RoleBinding`           |  `rbac.authorization.k8s.io`   |        `v1beta1` `v1`         |            ![RoleBinding](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/rb-128.png)             |
-|          `RuntimeClass`          |         `node.k8s.io`          |             `v1`              |                ![RuntimeClass](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/runtimeclass.png)                |
-|             `Secret`             |                                |             `v1`              |             ![Secret](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/secret-128.png)             |
-|            `Service`             |                                |             `v1`              |              ![Service](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/svc-128.png)              |
-|         `ServiceAccount`         |                                |             `v1`              |           ![ServiceAccount](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/sa-128.png)           |
-|          `StatefulSet`           |             `apps`             |   `v1beta1` `v1beta2` `v1`    |            ![StatefulSet](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/sts-128.png)            |
-|          `StorageClass`          |        `storage.k8s.io`        |        `v1beta1` `v1`         |            ![StorageClass](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/sc-128.png)            |
-|              `User`              |  `rbac.authorization.k8s.io`   |             `v1`              |               ![User](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/user-128.png)               |
-| `ValidatingWebhookConfiguration` | `admissionregistration.k8s.io` |        `v1beta1` `v1`         |           ![ValidatingWebhookConfiguration](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vwc.png)            |
-|     `VerticalPodAutoscaler`      |      `autoscaling.k8s.io`      |             `v1`              |                ![VerticalPodAutoscaler](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vpa.png)                |
-|        `VolumeAttachment`        |        `storage.k8s.io`        |             `v1`              |         ![VolumeAttachment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/vol-128.png)          |
+| Kind          | ApiGroup                    | Versions | Icon |
+| :--------: | :-------: | :-------: | :-------: |
+| `APIService` | `apiregistration.k8s.io` | `v1beta1` `v1` | ![APIService](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/apiservice.png) |
+| `ClusterRole` | `rbac.authorization.k8s.io` | `v1beta1` `v1` | ![ClusterRole](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/c-role-128.png) |
+| `ClusterRoleBinding` | `rbac.authorization.k8s.io` | `v1beta1` `v1` | ![ClusterRoleBinding](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/crb-128.png) |
+| `ConfigMap` | | `v1` | ![ConfigMap](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/cm-128.png) |
+| `CronJob` | `batch` | `v1beta1` `v1` | ![CronJob](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/cronjob-128.png) |
+| `CSIDriver` | `storage.k8s.io` | `v1beta1` `v1` | ![CSIDriver](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csidriver.png) |
+| `CSINode` | `storage.k8s.io` | `v1` | ![CSINode](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csinode.png) |
+| `CSIStorageCapacity` | `storage.k8s.io` | `v1` | ![CSIStorageCapacity](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csisc.png) |
+| `CustomResourceDefinition` | `apiextensions.k8s.io` | `v1beta1` `v1` | ![CustomResourceDefinition](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/crd-128.png) |
+| `DaemonSet` | `apps` | `v1beta2` `v1` | ![DaemonSet](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ds-128.png) |
+| `Deployment` | `apps` | `v1beta1` `v1beta2` `v1` | ![Deployment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/deploy-128.png) |
+| `Endpoints` | | `v1` | ![Endpoints](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ep-128.png) |
+| `EndpointSlice` | `discovery.k8s.io` | `v1` | ![EndpointSlice](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/eps.png) |
+| `Group` | `rbac.authorization.k8s.io` | `v1` | ![Group](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/group-128.png) |
+| `HorizontalPodAutoscaler` | `autoscaling` | `v1` `v2beta1` `v2beta2` `v2` | ![HorizontalPodAutoscaler](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/hpa-128.png) |
+| `Ingress` | `networking.k8s.io` | `v1beta1` `v1` | ![Ingress](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ing-128.png) |
+| `IngressClass` | `networking.k8s.io` | `v1beta1` `v1` | ![IngressClass](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/ic.png) |
+| `Job` | `batch` | `v1beta1` `v1` | ![Job](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/job-128.png) |
+| `Lease` | `coordination.k8s.io` | `v1` | ![Lease](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/lease.png) |
+| `LimitRange` | | `v1` | ![LimitRange](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/limits-128.png) |
+| `MutatingWebhookConfiguration` | `admissionregistration.k8s.io` | `v1beta1` `v1` | ![MutatingWebhookConfiguration](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/mwc.png) |
+| `Namespace` | | `v1` | ![Namespace](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/ns-128.png) |
+| `NetworkAttachmentDefinition` | `k8s.cni.cncf.io` | `v1` | ![NetworkAttachmentDefinition](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/azure/network/network-interfaces.png) |
+| `NetworkPolicy` | `networking.k8s.io` | `v1` | ![NetworkPolicy](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/netpol-128.png) |
+| `Node` | | `v1` | ![Node](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/infrastructure_components/labeled/node-128.png) |
+| `PersistentVolume` | | `v1` | ![PersistentVolume](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/pv-128.png) |
+| `PersistentVolumeClaim` | | `v1` | ![PersistentVolumeClaim](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/pvc-128.png) |
+| `Pod` | | `v1` | ![Pod](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/pod-128.png) |
+| `PodDisruptionBudget` | `policy` | `v1beta1` `v1` | ![PodDisruptionBudget](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/pdb.png) |
+| `PodSecurityPolicy` | `policy` | `v1beta1` `v1` | ![PodSecurityPolicy](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/psp-128.png) |
+| `PodTemplate` | | `v1` | ![PodTemplate](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/podtemplate.png) |
+| `PriorityClass` | `scheduling.k8s.io` | `v1beta1` `v1` | ![PriorityClass](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/pc.png) |
+| `ReplicaSet` | `apps` | `v1` | ![ReplicaSet](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/rs-128.png) |
+| `ReplicationController` | | `v1` | ![ReplicationController](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/rc.png) |
+| `ResourceQuota` | | `v1` | ![ResourceQuota](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/quota-128.png) |
+| `Role` | `rbac.authorization.k8s.io` | `v1beta1` `v1` | ![Role](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/role-128.png) |
+| `RoleBinding` | `rbac.authorization.k8s.io` | `v1beta1` `v1` | ![RoleBinding](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/rb-128.png) |
+| `RuntimeClass` | `node.k8s.io` | `v1` | ![RuntimeClass](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/runtimeclass.png) |
+| `Secret` | | `v1` | ![Secret](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/secret-128.png) |
+| `Service` | | `v1` | ![Service](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/svc-128.png) |
+| `ServiceAccount` | | `v1` | ![ServiceAccount](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/sa-128.png) |
+| `StatefulSet` | `apps` | `v1beta1` `v1beta2` `v1` | ![StatefulSet](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/sts-128.png) |
+| `StorageClass` | `storage.k8s.io` | `v1beta1` `v1` | ![StorageClass](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/sc-128.png) |
+| `User` | `rbac.authorization.k8s.io` | `v1` | ![User](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/user-128.png) |
+| `ValidatingWebhookConfiguration` | `admissionregistration.k8s.io` | `v1beta1` `v1` | ![ValidatingWebhookConfiguration](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vwc.png) |
+| `VerticalPodAutoscaler` | `autoscaling.k8s.io` | `v1` | ![VerticalPodAutoscaler](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vpa.png) |
+| `VolumeAttachment` | `storage.k8s.io` | `v1` | ![VolumeAttachment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/vol-128.png) |
 
 **Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L61).
 
@@ -237,41 +232,41 @@ docker run -v "$(pwd)":/work philippemerle/kubediagrams helm-diagrams oci://ghcr
 
 Currently, there are 15 unsupported Kubernetes resource types:
 
-|             Kind             |            ApiGroup            |
-| :--------------------------: | :----------------------------: |
-|          `Binding`           |                                |
-|      `ComponentStatus`       |                                |
-|           `Event`            |                                |
-|     `ControllerRevision`     |             `apps`             |
-|        `TokenReview`         |    `authentication.k8s.io`     |
-|  `LocalSubjectAccessReview`  |     `authorization.k8s.io`     |
-|  `SelfSubjectAccessReview`   |     `authorization.k8s.io`     |
-|   `SelfSubjectRulesReview`   |     `authorization.k8s.io`     |
-|    `SubjectAccessReview`     |     `authorization.k8s.io`     |
-| `CertificateSigningRequest`  |     `certificates.k8s.io`      |
-|           `Event`            |        `events.k8s.io`         |
-|         `FlowSchema`         | `flowcontrol.apiserver.k8s.io` |
-| `PriorityLevelConfiguration` | `flowcontrol.apiserver.k8s.io` |
-|        `NodeMetrics`         |        `metrics.k8s.io`        |
-|         `PodMetrics`         |        `metrics.k8s.io`        |
+| Kind          | ApiGroup                    |
+| :--------: | :-------: |
+| `Binding` | |
+| `ComponentStatus` | |
+| `Event`| |
+| `ControllerRevision` | `apps`|
+| `TokenReview` | `authentication.k8s.io`|
+| `LocalSubjectAccessReview` | `authorization.k8s.io` |
+| `SelfSubjectAccessReview` | `authorization.k8s.io` |
+| `SelfSubjectRulesReview` | `authorization.k8s.io` |
+| `SubjectAccessReview` | `authorization.k8s.io`|
+| `CertificateSigningRequest` | `certificates.k8s.io` |
+| `Event` | `events.k8s.io` |
+| `FlowSchema` | `flowcontrol.apiserver.k8s.io` |
+| `PriorityLevelConfiguration`  | `flowcontrol.apiserver.k8s.io` |
+| `NodeMetrics` | `metrics.k8s.io` |
+| `PodMetrics` |  `metrics.k8s.io` |
 
 ### Kubernetes resources clustering
 
 With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L33) file (see the `clusters` list).
 
-|             Label             |  Cluster Title  |
-| :---------------------------: | :-------------: |
-| `app.kubernetes.io/instance`  |  K8s Instance   |
-|           `release`           |     Release     |
-|        `helm.sh/chart`        |   Helm Chart    |
-|            `chart`            |      Chart      |
-|   `app.kubernetes.io/name`    | K8s Application |
-|             `app`             |   Application   |
-| `app.kubernetes.io/component` |  K8s Component  |
-|           `service`           |  Microservice   |
-|            `tier`             |      Tier       |
+| Label | Cluster Title |
+| :--------: | :-------: |
+| `app.kubernetes.io/instance` | K8s Instance |
+| `release` | Release |
+| `helm.sh/chart` | Helm Chart |
+| `chart` | Chart |
+| `app.kubernetes.io/name` | K8s Application |
+| `app` | Application |
+| `app.kubernetes.io/component` | K8s Component |
+| `service` | Microservice |
+| `tier` | Tier |
 
-New mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2), [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), and [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2)) and provided to **KubeDiagrams** via the `--config` command-line option.
+New mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2),  [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), and [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2)) and provided to **KubeDiagrams** via the `--config` command-line option.
 
 ## What do they say about it?
 
@@ -296,13 +291,13 @@ New mappings can be easily defined in custom configuration files (see [examples/
 1. [KubeDiagrams 0.2.0 is out!](https://www.reddit.com/r/kubernetes/comments/1jjjw6j/kubediagrams_020_is_out/) on Reddit, March 25, 2025.
 
 1. [KubeDiagrams: Revolutionizing Cloud Cluster Management!
-   ](https://www.linkedin.com/posts/pepr-cloud_kubediagrams-activity-7307698605371379713-BqRp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAAemi4BApQnQWOvw041B_9Tbc_ljWmw1-E) on LinkedIn, March 18, 2025.
+](https://www.linkedin.com/posts/pepr-cloud_kubediagrams-activity-7307698605371379713-BqRp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAAemi4BApQnQWOvw041B_9Tbc_ljWmw1-E) on LinkedIn, March 18, 2025.
 
 1. [Anyone know of any repos/open source tools that can create k8 diagrams?](https://www.reddit.com/r/kubernetes/comments/1jabdoa/anyone_know_of_any_reposopen_source_tools_that/) on Reddit, March 13, 2025.
 
-- [Automation of diagram creation for Kubernetes](https://tlgrm.ru/channels/@devsecops_weekly/1145), DevSecOps, February/March 2025.
+* [Automation of diagram creation for Kubernetes](https://tlgrm.ru/channels/@devsecops_weekly/1145), DevSecOps, February/March 2025.
 
-- [Facebook Kubernetes Users Group](https://www.facebook.com/groups/kubernetes.users/permalink/2818586068320504), February 6, 2025.
+* [Facebook Kubernetes Users Group](https://www.facebook.com/groups/kubernetes.users/permalink/2818586068320504), February 6, 2025.
 
 1. [KubeDiagrams](https://www.reddit.com/r/kubernetes/comments/1ihjujy/kubediagrams) on Reddit, February 4, 2025.
 

@@ -5,7 +5,6 @@ This example is based on **[Kube Prometheus Stack](https://github.com/prometheus
 ## Instructions
 
 Generate the Kubernetes architecture diagram for the **Kube Prometheus Stack** chart:
-
 ```sh
 $ ./helm-diagrams https://prometheus-community.github.io/helm-charts/kube-prometheus-stack
 ```
