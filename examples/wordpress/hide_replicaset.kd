@@ -1,0 +1,16 @@
+nodes:
+  ReplicaSet/apps/v1:
+    show: false # ReplicaSet objects are hidden.
+  Deployment/apps/v1:
+    edges: |
+      # Add owner edges to transitive owned pods.
+      for replica_set in edges.get_owned_resources(resource):
+        for pod in edges.get_owned_resources(replica_set):
+          edges.add_edge_to(
+            None,
+            pod['metadata']['name'],
+            get_namespace(pod),
+            pod['kind'],
+            pod['apiVersion'],
+            "OWNER"
+          )

@@ -33,6 +33,11 @@ Generate a Kubernetes architecture diagram for the `default` namespace:
 $ kube-diagrams namespace_default.yml
 ```
 
+Generate a Kubernetes architecture diagram for the `default` namespace but hide ReplicaSet objects:
+```sh
+$ kube-diagrams -c hide_replicaset.kd -o namespace_default_without_replicaset.png namespace_default.yml
+```
+
 Delete the WordPress application:
 ```sh
 $ kubectl delete -f wordpress-deployment.yaml
@@ -51,6 +56,9 @@ Architecture diagram for WordPress manifests:
 
 Architecture diagram for a deployed WordPress instance:
 ![default namespace](namespace_default.png)
+
+Architecture diagram for a deployed WordPress instance but without ReplicaSet objects:
+![default namespace without ReplicaSet](namespace_default_without_replicaset.png)
 
 Architecture diagram for a WordPress application deployed in AWS EKS:
 ![wordpress_deployed_in_aws_eks.png](wordpress_deployed_in_aws_eks.png)

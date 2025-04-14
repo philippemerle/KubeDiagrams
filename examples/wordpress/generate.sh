@@ -19,6 +19,9 @@ kubectl get all,sa,cm,secret,pvc,pv,sc -o=yaml > namespace_default.yml
 # Generate a Kubernetes architecture diagram for the `default` namespace.
 $BIN/kube-diagrams namespace_default.yml
 
+# Generate a Kubernetes architecture diagram for the `default` namespace but hide ReplicaSet objects.
+$BIN/kube-diagrams -c hide_replicaset.kd -o namespace_default_without_replicaset.png namespace_default.yml
+
 # Delete the WordPress application.
 kubectl delete -f wordpress-deployment.yaml
 kubectl delete -f mysql-deployment.yaml

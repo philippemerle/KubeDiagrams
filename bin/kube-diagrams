@@ -276,6 +276,8 @@ class EdgesContext(list):
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"{kind} '{name}' provided by Kubernetes cluster")
+            elif not config.get("nodes", {}).get(f"{kind}/{api_version}", {}).get("show", True):
+                self.info(path, f"{kind} '{name}' hidden")
             else:
                 self.warning(path, f"{kind} '{name}' undefined")
 
@@ -606,26 +608,35 @@ class EdgesContext(list):
                 "REFERENCE"
             )
 
+    def get_owned_resources(self, owner_resource):
+        """
+            Get owned resources.
+        """
+        result = []
+        uid = query_path(owner_resource, "metadata.uid")
+        for _, resource in resources.items():
+            for owner_reference in query_path(resource, "metadata.ownerReferences", []):
+                if owner_reference.get("uid") == uid:
+                    result.append(resource)
+        return result
+
     def add_owned_resources(self):
         """
             Add owner edges to owned resources.
         """
-        uid = query_path(self.resource, "metadata.uid")
-        for _, resource in resources.items():
-            for owner_reference in query_path(resource, "metadata.ownerReferences", []):
-                if owner_reference.get("uid") == uid:
-                    if get_node_config(resource).get("scope") == "Namespaced":
-                        namespace = get_namespace(resource)
-                    else:
-                        namespace = None
-                    self.add_edge_to(
-                        None,
-                        resource['metadata']['name'],
-                        namespace,
-                        resource['kind'],
-                        resource['apiVersion'],
-                        "OWNER"
-                    )
+        for resource in self.get_owned_resources(self.resource):
+            if get_node_config(resource).get("scope") == "Namespaced":
+                namespace = get_namespace(resource)
+            else:
+                namespace = None
+            self.add_edge_to(
+                None,
+                resource['metadata']['name'],
+                namespace,
+                resource['kind'],
+                resource['apiVersion'],
+                "OWNER"
+            )
 
     def add_ingress_and_egress_rules(self):
         """
@@ -856,7 +867,12 @@ if args.config is not None:
             if custom_config.get("clusters"):
                 config["clusters"].extend(custom_config["clusters"])
             if custom_config.get("nodes"):
-                config["nodes"].update(custom_config["nodes"])
+                for k, v in custom_config["nodes"].items():
+                    previous = config["nodes"].get(k)
+                    if previous is None:
+                        config["nodes"][k] = v
+                    else:
+                        previous.update(v)
             if "diagram" in custom_config:
                 config["diagram"] = custom_config["diagram"]
 
@@ -952,6 +968,8 @@ def process_edges():
         Process diagram edges.
     """
     for resource_id, resource in resources.items():
+        if not get_node_config(resource).get("show", True):
+            continue # Skip this hidden resource.
         edges = EdgesContext(resource_id, resource)
         # execute config code to generate edges
         code_to_exec = get_node_config(resource).get("edges")
@@ -1024,7 +1042,8 @@ def create_nodes(cluster):
         Create diagram nodes and clusters recursively.
     """
     for rid, resource in cluster.resources.items():
-        diagram_nodes[rid] = create_diagram_node(resource)
+        if get_node_config(resource).get("show", True):
+            diagram_nodes[rid] = create_diagram_node(resource)
     for cid, sub_cluster in cluster.clusters.items():
         with Cluster(cid):
             create_nodes(sub_cluster)
