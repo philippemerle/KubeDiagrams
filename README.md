@@ -55,19 +55,19 @@ Many other architecture diagrams are available into [examples/](./examples/).
 All the examples are
 
 1. [official Kubernetes WordPress tutorial](./examples/wordpress/)
-2. [official Kubernetes ZooKeeper tutorial](./examples/zookeeper/)
-3. [official Kubernetes Cassandra tutorial](./examples/cassandra/)
-4. [Train Ticket](./examples/train-ticket/)
-5. [minikube architecture diagrams](./examples/minikube/)
-6. [k0s architecture diagrams](./examples/k0s/)
-7. [Kube Prometheus Stack](./examples/kube-prometheus-stack/)
-8. [free5gc-k8s](./examples/free5gc-k8s/)
-9. [open5gs-k8s](./examples/open5gs-k8s/)
-10. [Towards5GS-helm](./examples/towards5gs-helm/)
-11. [OpenAirInterface 5G Core Network](./examples/oai-5g-cn/)
-12. [docker-open5gs](./examples/docker-open5gs/)
-13. [Miscellaneous examples](./examples/miscellaneous/)
-14. [Some Helm charts](./examples/helm-charts/)
+1. [official Kubernetes ZooKeeper tutorial](./examples/zookeeper/)
+1. [official Kubernetes Cassandra tutorial](./examples/cassandra/)
+1. [Train Ticket](./examples/train-ticket/)
+1. [minikube architecture diagrams](./examples/minikube/)
+1. [k0s architecture diagrams](./examples/k0s/)
+1. [Kube Prometheus Stack](./examples/kube-prometheus-stack/)
+1. [free5gc-k8s](./examples/free5gc-k8s/)
+1. [open5gs-k8s](./examples/open5gs-k8s/)
+1. [Towards5GS-helm](./examples/towards5gs-helm/)
+1. [OpenAirInterface 5G Core Network](./examples/oai-5g-cn/)
+1. [docker-open5gs](./examples/docker-open5gs/)
+1. [Miscellaneous examples](./examples/miscellaneous/)
+1. [Some Helm charts](./examples/helm-charts/)
 
 ## Prerequisites
 
@@ -282,30 +282,41 @@ New mappings can be easily defined in custom configuration files (see [examples/
 ### Blogs
 
 1. [Generate Kubernetes Architecture Maps Directly from Your Cluster](https://blog.abhimanyu-saharan.com/posts/generate-kubernetes-architecture-maps-directly-from-your-cluster), Abhimanyu Saharan, March 29, 2025.
-2. [KubeDiagrams 0.2.0 Makes It Way Easier to Visualize Your Kubernetes Setup](https://medium.com/@PlanB./kubediagrams-0-2-0-makes-it-way-easier-to-visualize-your-kubernetes-setup-bb65dd72668c), Mr.PlanB, Medium, March 27, 2025.
-3. [Visualising SQL Server in Kubernetes](https://dbafromthecold.com/2025/02/06/visualising-sql-server-in-kubernetes/), Andrew Pruski, February 6, 2025.
+
+1. [KubeDiagrams 0.2.0 Makes It Way Easier to Visualize Your Kubernetes Setup](https://medium.com/@PlanB./kubediagrams-0-2-0-makes-it-way-easier-to-visualize-your-kubernetes-setup-bb65dd72668c), Mr.PlanB, Medium, March 27, 2025.
+
+1. [Visualising SQL Server in Kubernetes](https://dbafromthecold.com/2025/02/06/visualising-sql-server-in-kubernetes/), Andrew Pruski, February 6, 2025.
 
 ### Social Networks
 
 1. [Michael Cade's post](https://x.com/MichaelCade1/status/1905964723809427625) on X, March 29, 2025.
-2. [Paco Xu's post](https://x.com/xu_paco/status/1904807247206899941) on X, March 26, 2025.
-3. [KubeDiagrams 0.2.0 is out!](https://www.reddit.com/r/kubernetes/comments/1jjjw6j/kubediagrams_020_is_out/) on Reddit, March 25, 2025.
-4. [KubeDiagrams: Revolutionizing Cloud Cluster Management!
+
+1. [Paco Xu's post](https://x.com/xu_paco/status/1904807247206899941) on X, March 26, 2025.
+
+1. [KubeDiagrams 0.2.0 is out!](https://www.reddit.com/r/kubernetes/comments/1jjjw6j/kubediagrams_020_is_out/) on Reddit, March 25, 2025.
+
+1. [KubeDiagrams: Revolutionizing Cloud Cluster Management!
    ](https://www.linkedin.com/posts/pepr-cloud_kubediagrams-activity-7307698605371379713-BqRp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAAemi4BApQnQWOvw041B_9Tbc_ljWmw1-E) on LinkedIn, March 18, 2025.
-5. [Anyone know of any repos/open source tools that can create k8 diagrams?](https://www.reddit.com/r/kubernetes/comments/1jabdoa/anyone_know_of_any_reposopen_source_tools_that/) on Reddit, March 13, 2025.
+
+1. [Anyone know of any repos/open source tools that can create k8 diagrams?](https://www.reddit.com/r/kubernetes/comments/1jabdoa/anyone_know_of_any_reposopen_source_tools_that/) on Reddit, March 13, 2025.
 
 - [Automation of diagram creation for Kubernetes](https://tlgrm.ru/channels/@devsecops_weekly/1145), DevSecOps, February/March 2025.
+
 - [Facebook Kubernetes Users Group](https://www.facebook.com/groups/kubernetes.users/permalink/2818586068320504), February 6, 2025.
 
-6. [KubeDiagrams](https://www.reddit.com/r/kubernetes/comments/1ihjujy/kubediagrams) on Reddit, February 4, 2025.
+1. [KubeDiagrams](https://www.reddit.com/r/kubernetes/comments/1ihjujy/kubediagrams) on Reddit, February 4, 2025.
 
 ### Referencing
 
 1. [Cloud Native Landscape](https://landscape.cncf.io/)
-2. [Awesome Open Source K8s And Container Tools](https://github.com/vilaca/awesome-k8s-tools)
-3. [Kubetools - Curated List of Kubernetes Tools](https://github.com/collabnix/kubetools/)
-4. [GitHub mingrammer/diagrams](https://github.com/mingrammer/diagrams)
-5. [Tool of the day](https://www.techopsexamples.com/p/understanding-kubernetes-etcd-locks), TechOps Examples, February 11, 2025.
+
+1. [Awesome Open Source K8s And Container Tools](https://github.com/vilaca/awesome-k8s-tools)
+
+1. [Kubetools - Curated List of Kubernetes Tools](https://github.com/collabnix/kubetools/)
+
+1. [GitHub mingrammer/diagrams](https://github.com/mingrammer/diagrams)
+
+1. [Tool of the day](https://www.techopsexamples.com/p/understanding-kubernetes-etcd-locks), TechOps Examples, February 11, 2025.
 
 ## Star History
 
