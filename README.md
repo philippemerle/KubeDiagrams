@@ -285,6 +285,8 @@ See [examples/wordpress/custom_diagram.kd](examples/wordpress/custom_diagram.kd)
 
 ### Blogs
 
+1. [KubeDiagrams](https://blog.csdn.net/gitblog_00745/article/details/147113830), CSDN, April 10, 2025.
+
 1. [Generate Kubernetes Architecture Maps Directly from Your Cluster](https://blog.abhimanyu-saharan.com/posts/generate-kubernetes-architecture-maps-directly-from-your-cluster), Abhimanyu Saharan, March 29, 2025.
 
 1. [KubeDiagrams 0.2.0 Makes It Way Easier to Visualize Your Kubernetes Setup](https://medium.com/@PlanB./kubediagrams-0-2-0-makes-it-way-easier-to-visualize-your-kubernetes-setup-bb65dd72668c), Mr.PlanB, Medium, March 27, 2025.
@@ -292,6 +294,8 @@ See [examples/wordpress/custom_diagram.kd](examples/wordpress/custom_diagram.kd)
 1. [Visualising SQL Server in Kubernetes](https://dbafromthecold.com/2025/02/06/visualising-sql-server-in-kubernetes/), Andrew Pruski, February 6, 2025.
 
 ### Social Networks
+
+1. [DevOps Radar](https://www.linkedin.com/posts/devops-radar_kubernetes-devops-kubediagrams-activity-7310533737325174784-zEJi) on LinkedIn, April 1, 2025.
 
 1. [Michael Cade's post](https://x.com/MichaelCade1/status/1905964723809427625) on X, March 29, 2025.
 
