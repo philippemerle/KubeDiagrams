@@ -295,6 +295,8 @@ See [examples/wordpress/custom_diagram.kd](examples/wordpress/custom_diagram.kd)
 
 ### Social Networks
 
+1. [Custom declarative diagrams with KubeDiagrams](https://www.reddit.com/r/kubernetes/comments/1k184xj/custom_declarative_diagrams_with_kubediagrams/) on Reddit, April 17, 2025.
+
 1. [DevOps Radar](https://www.linkedin.com/posts/devops-radar_kubernetes-devops-kubediagrams-activity-7310533737325174784-zEJi) on LinkedIn, April 1, 2025.
 
 1. [Michael Cade's post](https://x.com/MichaelCade1/status/1905964723809427625) on X, March 29, 2025.
