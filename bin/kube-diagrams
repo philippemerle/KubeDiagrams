@@ -299,7 +299,7 @@ class EdgesContext(list):
             self.namespace,
             target['kind'],
             target['apiVersion'],
-            "REFERENCE"
+            "REFERENCE-UP"
         )
 
     def add_resources(self, path, name_path, namespace_path, kind, api_version):
