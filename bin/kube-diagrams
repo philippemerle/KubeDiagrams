@@ -193,6 +193,7 @@ class ResourceCluster:
         """
         self.resources = {} # dict<str, resource>
         self.clusters = {} # dict<str, Cluster>
+        self.graph_attr = {}
 
     def get_or_create_cluster(self, name):
         """
@@ -872,6 +873,7 @@ def process_resource(resource):
                     cluster = cluster.get_or_create_cluster(
                                 f"{cluster_config['title']}: {labels[label]}"
                     )
+                    cluster.graph_attr = cluster_config.get("graph_attr", {})
                     clusters.remove(cluster_config)
                     return process_clusters(cluster, resource, clusters)
         return cluster
@@ -1006,7 +1008,7 @@ def create_nodes(cluster):
         if get_node_config(resource).get("show", True):
             diagram_nodes[rid] = create_diagram_node(resource)
     for cid, sub_cluster in cluster.clusters.items():
-        with Cluster(cid):
+        with Cluster(cid, graph_attr=sub_cluster.graph_attr):
             create_nodes(sub_cluster)
 
 def create_custom_node(node_id, node_def):
