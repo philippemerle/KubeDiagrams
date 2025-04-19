@@ -63,7 +63,7 @@ def report(kind, resource, path, msg, end):
         Report.
     """
     rm = f"[{kind}] " \
-        + resource.get("kind", "NO-KIND") + ":" \
+        + query_path(resource, "kind", "NO-KIND") + ":" \
         + query_path(resource, "metadata.name", "NO-NAME")
     if path is not None:
         rm += f":{path}"
@@ -111,8 +111,8 @@ def get_type(resource):
     """
         Get the type of a Kubernetes resource, i.e., "kind/apiVersion".
     """
-    return resource.get("kind", "kind-NOT-SET") + "/" \
-            + resource.get("apiVersion", "apiVersion-NOT-SET")
+    return query_path(resource, "kind", "kind-NOT-SET") + "/" \
+            + query_path(resource, "apiVersion", "apiVersion-NOT-SET")
 
 def get_name(resource):
     """
@@ -245,15 +245,18 @@ class EdgesContext(list):
         """
         error(self.resource, path, msg)
 
+    def add_edge(self, edge):
+        """
+            Add an edge.
+        """
+        self.append(edge)
+
     def add_edge_to_rid(self, path, rid, edge_kind):
         """
             Add an edge to a resource identifier.
         """
         if rid in resources:
-            self.append([
-                rid,
-                edge_kind
-            ])
+            self.add_edge([rid, edge_kind])
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"'{rid}' provided by Kubernetes cluster")
@@ -264,15 +267,19 @@ class EdgesContext(list):
         """
             Add an edge to a resource.
         """
+        if name == ".":
+            name = query_path(self.resource, path)
+        if name is None:
+            return
+        if name == "":
+            self.warning(path, "Set to \"\"")
+            return
         if namespace is not None:
             rid = f"{name}/{namespace}/{kind}/{api_version}"
         else:
             rid = f"{name}/{kind}/{api_version}"
         if rid in resources:
-            self.append([
-                rid,
-                edge_kind
-            ])
+            self.add_edge([rid, edge_kind])
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"{kind} '{name}' provided by Kubernetes cluster")
@@ -461,41 +468,6 @@ class EdgesContext(list):
                 "REFERENCE"
             )
 
-    def add_storage_class(self, path, data=None):
-        """
-            Add a reference edge to a storage class resource.
-        """
-        if data is None:
-            data = self.resource
-        storage_class_name = query_path(data, path)
-        if storage_class_name == "":
-            self.warning(path, "Set to \"\"")
-            storage_class_name = None
-        if storage_class_name is not None:
-            self.add_edge_to(
-                path,
-                storage_class_name,
-                None,
-                "StorageClass",
-                "storage.k8s.io/v1",
-                "REFERENCE"
-            )
-
-    def add_volume(self, path):
-        """
-            Add a reference edge to a volume resource.
-        """
-        volume_name = query_path(self.resource, path)
-        if volume_name is not None:
-            self.add_edge_to(
-                path,
-                volume_name,
-                None,
-                "PersistentVolume",
-                "v1",
-                "REFERENCE"
-            )
-
     def add_wait_for_services(self, path):
         """
             Add dependence edges between worload resources.
@@ -526,24 +498,22 @@ class EdgesContext(list):
             service_account_name = pod_spec.get("serviceAccount")
             if service_account_name is not None:
                 self.warning(f"{path}.serviceAccount", "Deprecated")
-        if service_account_name == "":
-            self.warning(f"{path}.serviceAccountName", "Set to \"\"")
-            service_account_name = None
-        if service_account_name is not None:
-            self.add_edge_to(
-                f"{path}.serviceAccountName",
-                service_account_name,
-                self.namespace,
-                "ServiceAccount",
-                "v1",
-                "REFERENCE"
-            )
+        self.add_edge_to(
+            f"{path}.serviceAccountName",
+            service_account_name,
+            self.namespace,
+            "ServiceAccount",
+            "v1",
+            "REFERENCE"
+        )
 
     def add_role(self, path):
         """
             Add a reference edge to a role resource.
         """
-        role_ref = self.resource[path]
+        role_ref = self.resource.get(path)
+        if role_ref is None:
+            return
         api_group = query_path(role_ref, "apiGroup", "rbac.authorization.k8s.io")
         if api_group == "":
             self.warning(path, "Set to \"\"")
@@ -595,18 +565,14 @@ class EdgesContext(list):
         if data is None:
             data = self.resource
         name = query_path(data, path)
-        if name == "":
-            self.warning(path, "Set to \"\"")
-            name = None
-        if name is not None:
-            self.add_edge_to(
-                path,
-                name,
-                self.namespace,
-                "Service",
-                "v1",
-                "REFERENCE"
-            )
+        self.add_edge_to(
+            path,
+            name,
+            self.namespace,
+            "Service",
+            "v1",
+            "REFERENCE"
+        )
 
     def get_owned_resources(self, owner_resource):
         """
@@ -664,7 +630,7 @@ class EdgesContext(list):
                 }
                 for rid_from in [e[0] for e in self[current_index:]]:
                     for rid_to in selected_nodes:
-                        self.append([rid_from, rid_to, edge])
+                        self.add_edge([rid_from, rid_to, edge])
 
         for egress_rule in query_path(self.resource, "spec.egress", []):
             for egress_to in query_path(egress_rule, "to", []):
@@ -687,7 +653,7 @@ class EdgesContext(list):
                 }
                 for rid_to in [e[0] for e in self[current_index:]]:
                     for rid_from in selected_nodes:
-                        self.append([rid_from, rid_to, edge])
+                        self.add_edge([rid_from, rid_to, edge])
 
     def add_webhooks(self):
         """
@@ -774,7 +740,7 @@ class EdgesContext(list):
         rid = f"{query_path(self.resource, 'metadata.name')}" \
                 f"/{get_namespace(self.resource)}/Endpoints/v1"
         if rid in resources:
-            self.append([rid, "SELECTOR"])
+            self.add_edge([rid, "SELECTOR"])
 
     def add_networks(self, path):
         """
@@ -805,19 +771,14 @@ class EdgesContext(list):
         """
             Add a reference edge to a priority class resource.
         """
-        priority_class_name = query_path(self.resource, path)
-        if priority_class_name == "":
-            self.warning(path, "Set to \"\"")
-            priority_class_name = None
-        if priority_class_name is not None:
-            self.add_edge_to(
-                path,
-                priority_class_name,
-                None,
-                "PriorityClass",
-                "scheduling.k8s.io/v1",
-                "REFERENCE"
-            )
+        self.add_edge_to(
+            path,
+            ".",
+            None,
+            "PriorityClass",
+            "scheduling.k8s.io/v1",
+            "REFERENCE"
+        )
 
 # Parse arguments
 parser = argparse.ArgumentParser(

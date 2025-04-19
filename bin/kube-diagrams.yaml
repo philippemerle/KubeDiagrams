@@ -64,11 +64,15 @@ nodes:
     custom_icon: $KD/icons/apiservice.png
     edges: |
       service = query_path(resource, "spec.service")
-      if service != None:
-        edges.append([
-                f"{service['name']}/{service['namespace']}/Service/v1",
-                "REFERENCE"
-            ])
+      if service is not None:
+        edges.add_edge_to(
+          "spec.service",
+          service['name'],
+          service['namespace'],
+          "Service",
+          "v1",
+          "REFERENCE"
+        )
   APIService/apiregistration.k8s.io/v1beta1: APIService/apiregistration.k8s.io/v1
   ClusterRole/rbac.authorization.k8s.io/v1:
     scope: Cluster
@@ -99,9 +103,14 @@ nodes:
       edges.add_wait_for_services("spec.jobTemplate.spec.template.spec.initContainers")
       edges.add_networks("spec.jobTemplate.spec.template.metadata.annotations")
       edges.add_priority_class("spec.jobTemplate.spec.template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.jobTemplate.spec.template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.jobTemplate.spec.template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   CronJob/batch/v1beta1: CronJob/batch/v1
   CustomResourceDefinition/apiextensions.k8s.io/v1:
     scope: Cluster
@@ -118,13 +127,26 @@ nodes:
     custom_icon: $KD/icons/csinode.png
     edges: |
       for driver in query_path(resource, "spec.drivers", []):
-        edges.append([f"{driver['name']}/CSIDriver/storage.k8s.io/v1", "REFERENCE"])
+        edges.add_edge_to(
+          "spec.drivers",
+          driver['name'],
+          None,
+          "CSIDriver",
+          "storage.k8s.io/v1",
+          "REFERENCE"
+        )
   CSIStorageCapacity/storage.k8s.io/v1:
     scope: Namescaped
     custom_icon: $KD/icons/csisc.png
     edges: |
-      storageClassName = query_path(resource, "storageClassName")
-      edges.append([f"{storageClassName}/StorageClass/storage.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "storageClassName",
+        ".",
+        None,
+        "StorageClass",
+        "storage.k8s.io/v1",
+        "REFERENCE"
+      )
   DaemonSet/apps/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.compute.DS
@@ -136,9 +158,14 @@ nodes:
       edges.add_wait_for_services("spec.template.spec.initContainers")
       edges.add_networks("spec.template.metadata.annotations")
       edges.add_priority_class("spec.template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   DaemonSet/apps/v1beta2: DaemonSet/apps/v1
   Deployment/apps/v1:
     scope: Namespaced
@@ -151,28 +178,32 @@ nodes:
       edges.add_wait_for_services("spec.template.spec.initContainers")
       edges.add_networks("spec.template.metadata.annotations")
       edges.add_priority_class("spec.template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   Deployment/apps/v1beta1: Deployment/apps/v1
   Deployment/apps/v1beta2: Deployment/apps/v1
   Endpoints/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.network.Endpoint
     edges: |
-        for subset in resource.get("subsets", []):
-          for address in subset.get("addresses", []):
+        for sidx, subset in enumerate(resource.get("subsets", [])):
+          for aidx, address in enumerate(subset.get("addresses", [])):
             if "targetRef" in address:
               target = address["targetRef"]
-              edges.append([
-                "%s/%s/%s/%s" % (
-                  target["name"],
-                  target["namespace"],
-                  target["kind"],
-                  "v1",
-                ),
+              edges.add_edge_to(
+                f"subjects[{sidx}].addresses[{aidx}].targetRef",
+                target["name"],
+                target["namespace"],
+                target["kind"],
+                "v1",
                 "REFERENCE"
-              ])
+              )
   EndpointSlice/discovery.k8s.io/v1:
     scope: Namespaced
     custom_icon: $KD/icons/eps.png
@@ -211,11 +242,14 @@ nodes:
       for rule in query_path(resource, "spec.rules", []):
         for path in query_path(rule, "http.paths", []):
           edges.add_service("backend.service.name", path)
-      ic = "%s/IngressClass/networking.k8s.io/v1" % (
-        query_path(resource, "spec.ingressClassName"),
+      edges.add_edge_to(
+        "spec.ingressClassName",
+        ".",
+        None,
+        "IngressClass",
+        "networking.k8s.io/v1",
+        "REFERENCE"
       )
-      if ic in resources:
-        edges.append([ic, "REFERENCE"])
   Ingress/networking.k8s.io/v1beta1: Ingress/networking.k8s.io/v1
   IngressClass/networking.k8s.io/v1:
     scope: Cluster
@@ -237,9 +271,14 @@ nodes:
       edges.add_wait_for_services("spec.template.spec.initContainers")
       edges.add_networks("spec.template.metadata.annotations")
       edges.add_priority_class("spec.template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   Job/batch/v1beta1: Job/batch/v1
   Lease/coordination.k8s.io/v1:
     scope: Namespaced
@@ -282,13 +321,34 @@ nodes:
     scope: Cluster
     diagram_node_classname: diagrams.k8s.storage.PV
     edges: |
-      edges.add_storage_class("spec.storageClassName")
+      edges.add_edge_to(
+        "spec.storageClassName",
+        ".",
+        None,
+        "StorageClass",
+        "storage.k8s.io/v1",
+        "REFERENCE"
+      )
   PersistentVolumeClaim/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.storage.PVC
     edges: |
-      edges.add_storage_class("spec.storageClassName")
-      edges.add_volume("spec.volumeName")
+      edges.add_edge_to(
+        "spec.storageClassName",
+        ".",
+        None,
+        "StorageClass",
+        "storage.k8s.io/v1",
+        "REFERENCE"
+      )
+      edges.add_edge_to(
+          "spec.volumeName",
+          ".",
+          None,
+          "PersistentVolume",
+          "v1",
+          "REFERENCE"
+      )
   PriorityClass/scheduling.k8s.io/v1:
     scope: Cluster
     custom_icon: $KD/icons/pc.png
@@ -302,16 +362,24 @@ nodes:
       edges.add_all_volume_resources("spec.volumes")
       edges.add_containers_env_value_from("spec.containers")
       edges.add_wait_for_services("spec.initContainers")
-      nid = "%s/Node/v1" % (
-        query_path(resource, "spec.nodeName"),
+      edges.add_edge_to(
+        "spec.nodeName",
+        ".",
+        None,
+        "Node",
+        "v1",
+        "REFERENCE"
       )
-      if nid in resources:
-        edges.append([nid, "REFERENCE"])
       edges.add_networks("metadata.annotations")
       edges.add_priority_class("spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   PodDisruptionBudget/policy/v1:
     scope: Namespaced
     custom_icon: $KD/icons/pdb.png
@@ -334,16 +402,24 @@ nodes:
       edges.add_all_volume_resources("template.spec.volumes")
       edges.add_containers_env_value_from("template.spec.containers")
       edges.add_wait_for_services("template.spec.initContainers")
-      nid = "%s/Node/v1" % (
-        query_path(resource, "template.spec.nodeName"),
+      edges.add_edge_to(
+        "template.spec.nodeName",
+        ".",
+        None,
+        "Node",
+        "v1",
+        "REFERENCE"
       )
-      if nid in resources:
-        edges.append([nid, "REFERENCE"])
       edges.add_networks("template.metadata.annotations")
       edges.add_priority_class("template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   ReplicaSet/apps/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.compute.RS
@@ -355,9 +431,14 @@ nodes:
       edges.add_wait_for_services("spec.template.spec.initContainers")
       edges.add_networks("spec.template.metadata.annotations")
       edges.add_priority_class("spec.template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   ReplicationController/v1:
     scope: Namespaced
     custom_icon: $KD/icons/rc.png
@@ -369,9 +450,14 @@ nodes:
       edges.add_wait_for_services("spec.template.spec.initContainers")
       edges.add_networks("spec.template.metadata.annotations")
       edges.add_priority_class("spec.template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
   ResourceQuota/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.clusterconfig.Quota
@@ -416,7 +502,7 @@ nodes:
           **vct
         }
         pvc["metadata"]["name"] = f'{pvc["metadata"]["name"]}-{resource["metadata"]["name"]}'
-        if namespace != None:
+        if namespace is not None:
           pvc["metadata"]["namespace"] = namespace
         nodes.append(pvc)
     edges: |
@@ -427,9 +513,14 @@ nodes:
       edges.add_wait_for_services("spec.template.spec.initContainers")
       edges.add_networks("spec.template.metadata.annotations")
       edges.add_priority_class("spec.template.spec.priorityClassName")
-      runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
-      if runtimeClassName != None:
-        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+      edges.add_edge_to(
+        "spec.template.spec.runtimeClassName",
+        ".",
+        None,
+        "RuntimeClass",
+        "node.k8s.io/v1",
+        "REFERENCE"
+      )
       edges.add_volume_claim_templates("spec.volumeClaimTemplates")
       edges.add_service("spec.serviceName")
   StatefulSet/apps/v1beta1: StatefulSet/apps/v1
@@ -438,9 +529,14 @@ nodes:
     scope: Cluster
     diagram_node_classname: diagrams.k8s.storage.SC
     edges: |
-      pid = f"{resource['provisioner']}/CSIDriver/storage.k8s.io/v1"
-      if pid in resources:
-        edges.append([pid, "REFERENCE"])
+      edges.add_edge_to(
+        "provisioner",
+        ".",
+        None,
+        "CSIDriver",
+        "storage.k8s.io/v1",
+        "REFERENCE"
+      )
   StorageClass/storage.k8s.io/v1beta1: StorageClass/storage.k8s.io/v1
   User/rbac.authorization.k8s.io/v1:
     scope: Cluster
@@ -461,11 +557,14 @@ nodes:
     scope: Cluster
     diagram_node_classname: diagrams.k8s.storage.Volume
     edges: |
-      nid = "%s/Node/v1" % (
-        query_path(resource, "spec.nodeName"),
+      edges.add_edge_to(
+        "spec.nodeName",
+        ".",
+        None,
+        "Node",
+        "v1",
+        "REFERENCE"
       )
-      if nid in resources:
-        edges.append([nid, "REFERENCE"])
 cluster-resources:
   # default namespace
   - default/default/ServiceAccount/v1
