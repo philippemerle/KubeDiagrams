@@ -319,9 +319,9 @@ class EdgesContext(list):
         """
             Add reference edges to a set of resources.
         """
-        for resource in query_path(self.resource, path, []):
+        for ridx, resource in enumerate(query_path(self.resource, path, [])):
             self.add_edge_to(
-                path,
+                f"{path}[{ridx}]",
                 resource[name_path],
                 resource.get(namespace_path, self.namespace),
                 kind,
@@ -468,9 +468,9 @@ class EdgesContext(list):
         """
             Add reference edges to volume claim templates.
         """
-        for vct in query_path(self.resource, path, []):
+        for idx, vct in enumerate(query_path(self.resource, path, [])):
             self.add_edge_to(
-                path,
+                f"{path}[{idx}]",
                 vct['metadata']['name'],
                 self.namespace,
                 "PersistentVolumeClaim",
@@ -482,7 +482,7 @@ class EdgesContext(list):
         """
             Add dependence edges between worload resources.
         """
-        for ic in query_path(self.resource, path, []):
+        for _, ic in enumerate(query_path(self.resource, path, [])):
             if ic.get("name") == "wait-for-services":
                 for arg in query_path(ic, "args", []):
                     if arg.startswith("-service="):
@@ -619,13 +619,13 @@ class EdgesContext(list):
             Add selector edges for ingress and egress rules.
         """
         selected_nodes = [e[0] for e in self]
-        for ingress_rule in query_path(self.resource, "spec.ingress", []):
-            for ingress_from in query_path(ingress_rule, "from", []):
+        for _, ingress_rule in enumerate(query_path(self.resource, "spec.ingress", [])):
+            for _, ingress_from in enumerate(query_path(ingress_rule, "from", [])):
                 if "podSelector" not in ingress_from:
                     continue # skip this ingress_from item
                 current_index = len(self)
                 self.add_all_workload_resources(
-                    "spec.ingress",
+                    "spec.ingress[{ridx}].from[{fidx}]",
                     query_path(ingress_from, "podSelector.matchLabels"),
                     edge_kind="INVISIBLE"
                 )
@@ -768,9 +768,9 @@ class EdgesContext(list):
                     self.warning(f"{path}:k8s.v1.cni.cncf.io/networks",
                             f"Invalid JSON '{networks}'")
                     return
-                for network in networks:
+                for nidx, network in enumerate(networks):
                     self.add_edge_to(
-                        path + ":k8s.v1.cni.cncf.io/networks",
+                        f"{path}:k8s.v1.cni.cncf.io/networks[{nidx}]",
                         network['name'],
                         get_namespace(self.resource),
                         "NetworkAttachmentDefinition",
