@@ -68,6 +68,7 @@ def report(kind, resource, path, msg, end):
     if path is not None:
         rm += f":{path}"
     rm += f" - {msg}{end}"
+    # GOOD: it is fine to log data that is not sensitive
     print(rm)
 
 def info(resource, path, msg):
