@@ -277,6 +277,29 @@ By default, **KubeDiagrams** generates diagrams from data contained into Kuberne
 This previous diagram contains three custom clusters labelled with `Amazon Web Service`, `Account: Philippe Merle` and `My Elastic Kubernetes Cluster`, three custom nodes labelled with `Users`, `Elastic Kubernetes Services`, and `Philippe Merle`, and two custom edges labelled with `use` and `calls`. The rest of this custom diagram is generated from actual cluster state for a deployed WordPress application automatically.
 See [examples/wordpress/custom_diagram.kd](examples/wordpress/custom_diagram.kd) to define custom diagrams, clusters, nodes and edges declaratively.
 
+### GitHub Action
+
+You can use Kube Diagrams (and Helm Diagrams) in your GitHub Action workflows.
+
+```yaml
+name: "Your GitHub Action Name"
+on:
+  workflow_dispatch: # add your specific triggers (https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/events-that-trigger-workflows)
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Generate diagram from Helm chart"
+        uses: mahyarmirrashed/action-kube-diagrams@main
+        with:
+          type: "helm"
+          args: 'https://charts.jetstack.io/cert-manager'
+```
+
 ## What do they say about it?
 
 ### Talks
