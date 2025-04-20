@@ -1,0 +1,24 @@
+name: "Kube Diagrams"
+description: "Generate architecture diagrams from Kubernetes manifests and Helm charts."
+
+inputs:
+  type:
+    description: "Input type"
+    required: true
+    default: "kubernetes"
+  args:
+    description: "Arguments to pass into the tool"
+    required: true
+    default: ""
+
+runs:
+  using: "docker"
+  image: "philippemerle/kubediagrams:0.2.0"
+  args:
+    - /bin/sh
+    - -c
+    - ${{ format('{0} {1}', inputs.type == 'helm' && 'helm-diagrams' || 'kube-diagrams', inputs.args) }}
+
+branding:
+  icon: "image"
+  color: "blue"
