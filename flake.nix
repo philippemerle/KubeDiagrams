@@ -44,11 +44,15 @@
           ] ++ runtimeEnv;
         };
 
-        packages.default = pkgs.dockerTools.buildLayeredImage {
-          name = "ghcr.io/philippemerle/kubediagrams";
-          tag = "latest";
-          contents = runtimeEnv;
-          created = "now";
+        packages = {
+          default = kube-diagrams;
+          kube-diagrams = kube-diagrams;
+          docker = pkgs.dockerTools.buildLayeredImage {
+            name = "ghcr.io/philippemerle/kubediagrams";
+            tag = "latest";
+            contents = runtimeEnv;
+            created = "now";
+          };
         };
       }
     );
