@@ -991,31 +991,6 @@ def process_edges():
                             " by K8s clusters.")
                     continue # skip this edge as the resource is provided by K8s clusters.
                 error(resource, None, f"{ke} resource not found")
-                # TODO: remove later
-                # tmp = str(edge_to).split("/")
-                # #TODO: avoid specific cases
-                # if tmp[2] in ["ServiceAccount", "Service", "ConfigMap", "Secret",
-                #         "PersistentVolumeClaim", "Role", "Issuer", "Deployment"]:
-                #     rsrc = {
-                #         "apiVersion": "/".join(tmp[3:]),
-                #         "kind": tmp[2],
-                #         "metadata": {
-                #             "name": tmp[1] + "/" + tmp[0]
-                #         }
-                #     }
-                # else:
-                #     rsrc = {
-                #         "apiVersion": "/".join(tmp[2:]),
-                #         "kind": tmp[1],
-                #         "metadata": {
-                #             "name": tmp[0]
-                #         }
-                #     }
-                # diagram_node = undefined_nodes.get(edge_to)
-                # if diagram_node is None:
-                #     diagram_node = create_diagram_node(rsrc, UNDEFINED_EDGE.get("color"))
-                #     undefined_nodes[edge_to] = diagram_node
-                # _ = diagram_nodes[edge_from] >> Edge(**UNDEFINED_EDGE) >> diagram_node
 
 def create_nodes(cluster):
     """
@@ -1072,8 +1047,6 @@ with Diagram("", filename=args.output, show=False, direction="TB", outformat=arg
     create_custom_clusters_nodes(None, query_path(config, "diagram", {}))
 
     # Generate diagram edges
-    undefined_nodes = {}
-    UNDEFINED_EDGE = query_path(config, "edges.UNDEFINED", {})
     process_edges()
 
     # Create custom edges
