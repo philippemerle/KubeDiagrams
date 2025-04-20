@@ -1,0 +1,22 @@
+name: "Update Examples"
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  update-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+      - name: "Update examples used in repository"
+        uses: mahyarmirrashed/action-kube-diagrams@main
+        with:
+          type: "kubernetes"
+          args: "-o examples/cassandra/cassandra.png examples/cassandra/cassandra.yml"
+      - name: "Commit changes"
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update example diagrams"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          file_pattern: "examples/cassandra/*.png"
