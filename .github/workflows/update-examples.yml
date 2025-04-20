@@ -1,6 +1,7 @@
 name: "Update Examples"
 on:
   push:
+  workflow_dispatch:
 
 jobs:
   update-examples:
