@@ -1017,14 +1017,15 @@ def create_custom_node(node_id, node_def):
             module = importlib.import_module(diagram_node_classname[:idx])
             # Get diagram node class
             diagram_node_class = getattr(module, diagram_node_classname[idx+1:])
-    diagram_nodes[node_id] = diagram_node_class(node_def.get("name",""))
+    node_label = node_def.get("name","")
+    diagram_nodes[node_id] = diagram_node_class(node_label, tooltip=node_label)
 
 def create_custom_cluster(cluster_id, cluster_def):
     """
         Create a custom cluster.
     """
     cluster_name = query_path(cluster_def, "name")
-    with Cluster(cluster_name):
+    with Cluster(cluster_name, graph_attr={"tooltip":cluster_name}):
         create_custom_clusters_nodes(cluster_id, cluster_def)
 
 def create_custom_clusters_nodes(container_id, container_def):
@@ -1062,6 +1063,7 @@ with Diagram("", filename=args.output, show=False, direction="TB", outformat=arg
             print(f"Warning: {args.config}:diagram.edges[{edge_idx}].to:"
                     f" Node '{custom_edge_to}' undefined!")
         if from_node is not None and to_node is not None:
-            _ = from_node >> Edge(**custom_edge) >> to_node
+            edge_tooltip = f"from: {custom_edge_from}\nto: {custom_edge_to}"
+            _ = from_node >> Edge(**custom_edge, tooltip=edge_tooltip) >> to_node
 
 print(f"{args.output}.{args.format} generated.")
