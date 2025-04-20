@@ -1,0 +1,28 @@
+name: "Test Action"
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout repository"
+        uses: actions/checkout@v4
+
+      - name: "Generate diagram from Helm chart"
+        uses: ./
+        with:
+          type: "helm"
+          args: 'https://charts.jetstack.io/cert-manager'
+
+      - name: "Upload diagram artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: cert-manager.png
+          path: cert-manager.png
+          if-no-files-found: error
+          retention-days: 1

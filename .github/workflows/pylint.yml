@@ -6,6 +6,10 @@ on:
       - .pylintrc
       - bin/kube-diagrams
       - '**.py'
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
