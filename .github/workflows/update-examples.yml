@@ -1,7 +1,11 @@
 name: "Update Examples"
+
 on:
   push:
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   update-examples:
