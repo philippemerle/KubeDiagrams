@@ -1,0 +1,17 @@
+clusters:
+- label: namespace-policy
+  title: "Namespace Policies"
+  graph_attr:
+    bgcolor: ivory
+- label: api-server-plugin
+  title: "API Server Plugins"
+  graph_attr:
+    bgcolor: beige
+- label: cluster-service
+  title: "Cluster {} Service"
+  graph_attr:
+    bgcolor: beige
+- label: rbac
+  title: "{} RBAC"
+  graph_attr:
+    bgcolor: ivory

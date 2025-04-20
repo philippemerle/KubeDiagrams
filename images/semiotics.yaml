@@ -1,0 +1,815 @@
+kind: APIService
+apiVersion: apiregistration.k8s.io/v1
+metadata:
+  name : api-service
+  labels:
+    api-server-plugin:
+spec:
+  service:
+    name: service
+    namespace: api-service
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name : service
+  namespace: api-service
+spec:
+  ports:
+    - port: 43210
+  selector:
+    pod: api-service-pod
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod
+  namespace: api-service
+  labels:
+    pod: api-service-pod
+spec:
+  serviceAccountName: service-account
+  nodeName: minikube
+
+---
+
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name : service-account
+  namespace: api-service
+
+---
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: role
+  namespace: api-service
+  labels:
+    rbac: API Service
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: role-binding
+  namespace: api-service
+  labels:
+    rbac: API Service
+roleRef:
+  name: role
+  kind: Role
+subjects:
+  - name: service-account
+    kind: ServiceAccount
+    apiVersion: v1
+  
+---
+
+kind: CustomResourceDefinition
+apiVersion: apiextensions.k8s.io/v1
+metadata:
+  name : custom-resource-definition
+  labels:
+    api-server-plugin:
+
+---
+
+kind: ValidatingWebhookConfiguration
+apiVersion: admissionregistration.k8s.io/v1
+metadata:
+  name: validating-webhook-configuration
+  labels:
+    api-server-plugin:
+webhooks:
+  - clientConfig:
+      service:
+        name: service
+        namespace: operator
+
+---
+
+kind: MutatingWebhookConfiguration
+apiVersion: admissionregistration.k8s.io/v1
+metadata:
+  name: mwc
+  labels:
+    api-server-plugin:
+webhooks:
+  - clientConfig:
+      service:
+        name: service
+        namespace: operator
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name : service
+  namespace: operator
+spec:
+  ports:
+    - port: 56789
+  selector:
+    pod: operator-pod
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod
+  namespace: operator
+  labels:
+    pod: operator-pod
+spec:
+  serviceAccountName: service-account
+  nodeName: minikube
+
+---
+
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name : service-account
+  namespace: operator
+
+---
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: role
+  namespace: operator
+  labels:
+    rbac: Operator
+
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: role-binding
+  namespace: operator
+  labels:
+    rbac: Operator
+roleRef:
+  name: role
+  kind: Role
+subjects:
+  - name: service-account
+    kind: ServiceAccount
+    apiVersion: v1
+
+---
+
+
+
+
+
+
+
+
+---
+  
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name : cluster-role
+  labels:
+    rbac: Cluster
+aggregationRule:
+  clusterRoleSelectors:
+    - matchLabels:
+        role: role
+
+---
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name : another-cluster-role
+  labels:
+    role: role
+    rbac: Cluster
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name : cluster-role-binding
+  labels:
+    rbac: Cluster
+roleRef:
+  name: cluster-role
+  kind: ClusterRole
+subjects:
+  - name: service-account
+    namespace: api-service
+    kind: ServiceAccount
+    apiVersion: v1
+  - name: service-account
+    namespace: operator
+    kind: ServiceAccount
+    apiVersion: v1
+  - name: group
+    kind: Group
+    apiVersion: rbac.authorization.k8s.io/v1
+  - name: user
+    kind: User
+    apiVersion: rbac.authorization.k8s.io/v1
+
+---
+
+kind: User
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: user
+  labels:
+    rbac: Cluster
+
+---
+
+kind: Group
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: group
+  labels:
+    rbac: Cluster
+
+---
+
+
+
+
+
+
+
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: semiotics
+
+---
+
+kind: LimitRange
+apiVersion: v1
+metadata:
+  name: limit-range
+  namespace: semiotics
+  labels:
+    namespace-policy:
+
+---
+  
+kind: PodDisruptionBudget
+apiVersion: policy/v1
+metadata:
+  name: pod-disruption-budget
+  namespace: semiotics
+spec:
+  selector:
+    matchLabels:
+      pod: pod
+
+---
+
+kind: PodSecurityPolicy
+apiVersion: policy/v1
+metadata:
+  name: pod-security-policy
+  namespace: semiotics
+  labels:
+    namespace-policy:
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name : config-map
+  namespace: semiotics
+
+---
+
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name : cron-job
+  namespace: semiotics
+
+# TODO
+#    edges: |
+#      edges.add_owned_resources()
+#      edges.add_service_account("spec.jobTemplate.spec.template.spec")
+#      edges.add_all_volume_resources("spec.jobTemplate.spec.template.spec.volumes")
+#      edges.add_containers_env_value_from("spec.jobTemplate.spec.template.spec.containers")
+#      edges.add_wait_for_services("spec.jobTemplate.spec.template.spec.initContainers")
+#      edges.add_networks("spec.jobTemplate.spec.template.metadata.annotations")
+#      edges.add_priority_class("spec.jobTemplate.spec.template.spec.priorityClassName")
+#      runtimeClassName = query_path(resource, "spec.jobTemplate.spec.template.spec.runtimeClassName")
+#      if runtimeClassName != None:
+#        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+
+
+---
+
+kind: CSIDriver
+apiVersion: storage.k8s.io/v1
+metadata:
+  name : csi-driver
+  labels:
+    cluster-service: Storage
+
+---
+
+kind: CSINode
+apiVersion: storage.k8s.io/v1
+metadata:
+  name : csi-node
+  labels:
+    cluster-service: Storage
+  ownerReferences:
+    - apiVersion: v1
+      kind: Node
+      name: minikube
+      uid: b8b1c5e1-cd8e-4514-b95a-f2005a1f80b6
+spec:
+  drivers:
+    - name: csi-driver
+
+---
+
+kind: CSIStorageCapacity
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: csi-storage-capacity
+  namespace: semiotics
+  labels:
+    namespace-policy:
+    cluster-service: Storage
+storageClassName: storage-class
+
+---
+
+kind: DaemonSet
+apiVersion: apps/v1
+metadata:
+  name: daemon-set
+  namespace: semiotics
+
+# TODO
+#    edges: |
+#      edges.add_owned_resources()
+#      edges.add_service_account("spec.template.spec")
+#      edges.add_all_volume_resources("spec.template.spec.volumes")
+#      edges.add_containers_env_value_from("spec.template.spec.containers")
+#      edges.add_wait_for_services("spec.template.spec.initContainers")
+#      edges.add_networks("spec.template.metadata.annotations")
+#      edges.add_priority_class("spec.template.spec.priorityClassName")
+#      runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
+#      if runtimeClassName != None:
+#        edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+
+---
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: deployment
+  namespace: semiotics
+
+# TODO
+    # edges: |
+    #   edges.add_owned_resources()
+    #   edges.add_service_account("spec.template.spec")
+    #   edges.add_all_volume_resources("spec.template.spec.volumes")
+    #   edges.add_containers_env_value_from("spec.template.spec.containers")
+    #   edges.add_wait_for_services("spec.template.spec.initContainers")
+    #   edges.add_networks("spec.template.metadata.annotations")
+    #   edges.add_priority_class("spec.template.spec.priorityClassName")
+    #   runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
+    #   if runtimeClassName != None:
+    #     edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+
+---
+
+kind: Endpoints
+apiVersion: v1
+metadata:
+  name: endpoints
+  namespace: semiotics
+
+    # edges: |
+    #     for subset in resource.get("subsets", []):
+    #       for address in subset.get("addresses", []):
+    #         if "targetRef" in address:
+    #           target = address["targetRef"]
+    #           edges.append([
+    #             "%s/%s/%s/%s" % (
+    #               target["name"],
+    #               target["namespace"],
+    #               target["kind"],
+    #               "v1",
+    #             ),
+    #             "REFERENCE"
+    #           ])
+
+---
+
+kind: EndpointSlice
+apiVersion: discovery.k8s.io/v1
+metadata:
+  name: endpoint-slice
+  namespace: semiotics
+
+# TODO
+    # edges: |
+    #     for endpoint in resource.get("endpoints", []):
+    #       if "targetRef" in endpoint:
+    #         target = endpoint["targetRef"]
+    #         edges.add_edge_to(
+    #           "endpoints.targetRef",
+    #           target["name"],
+    #           target["namespace"],
+    #           target["kind"],
+    #           "v1",
+    #           "REFERENCE"
+    #         )
+
+---
+
+
+
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v1
+metadata:
+  name: hpa
+  namespace: semiotics
+spec:
+  scaleTargetRef:
+    name: deployment
+    kind: Deployment
+    apiVersion: apps/v1
+
+---
+
+kind: Ingress
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ingress
+  namespace: semiotics
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              service:
+                name: service
+  ingressClassName: ingress-class
+
+---
+
+kind: IngressClass
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ingress-class
+  labels:
+    cluster-service: Network
+
+---
+
+kind: Job
+apiVersion: batch/v1
+metadata:
+  name: job
+  namespace: semiotics
+
+#TODO
+    # edges: |
+    #   edges.add_owned_resources()
+    #   edges.add_service_account("spec.template.spec")
+    #   edges.add_all_volume_resources("spec.template.spec.volumes")
+    #   edges.add_containers_env_value_from("spec.template.spec.containers")
+    #   edges.add_wait_for_services("spec.template.spec.initContainers")
+    #   edges.add_networks("spec.template.metadata.annotations")
+    #   edges.add_priority_class("spec.template.spec.priorityClassName")
+    #   runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
+    #   if runtimeClassName != None:
+    #     edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+
+---
+
+kind: Lease
+apiVersion: coordination.k8s.io/v1
+metadata:
+  name: lease
+  namespace: semiotics
+
+---
+
+
+
+
+
+# Commented as this is a custom resource!
+# kind: NetworkAttachmentDefinition
+# apiVersion: k8s.cni.cncf.io/v1
+# metadata:
+#   name: nad
+#   namespace: semiotics
+
+---
+
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: network-policy
+  namespace: semiotics
+spec:
+  podSelector:
+    matchLabels:
+      pod: pod
+# TODO
+    # edges: |
+    #   edges.add_ingress_and_egress_rules()
+
+---
+
+kind: Node
+apiVersion: v1
+metadata:
+  name: minikube
+  labels:
+    cluster-service: Compute
+  uid: b8b1c5e1-cd8e-4514-b95a-f2005a1f80b6
+
+---
+
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: persistent-volume
+  labels:
+    cluster-service: Storage
+spec:
+  storageClassName: storage-class
+
+---
+
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pvc
+  namespace: semiotics
+spec:
+  storageClassName: storage-class
+  volumeName: persistent-volume
+
+---
+
+kind: PriorityClass
+apiVersion: scheduling.k8s.io/v1
+metadata:
+  name: priority-class
+  labels:
+    cluster-service: Compute
+
+---
+
+kind: Pod
+apiVersion: v1
+metadata:
+  name: pod
+  namespace: semiotics
+  labels:
+    pod: pod
+spec:
+  serviceAccountName: service-account
+  #TODO    edges.add_all_volume_resources("spec.volumes")
+  #TODO    edges.add_containers_env_value_from("spec.containers")
+  #TODO    edges.add_wait_for_services("spec.initContainers")
+  nodeName: minikube
+  #TODO    edges.add_networks("metadata.annotations")
+  priorityClassName: priority-class
+  runtimeClassName: runtime-class
+
+---
+
+---
+
+kind: PodTemplate
+apiVersion: v1
+metadata:
+  name: pod-template
+  namespace: semiotics
+
+#TODO
+    # edges: |
+    #   edges.add_service_account("template.spec")
+    #   edges.add_all_volume_resources("template.spec.volumes")
+    #   edges.add_containers_env_value_from("template.spec.containers")
+    #   edges.add_wait_for_services("template.spec.initContainers")
+    #   nid = "%s/Node/v1" % (
+    #     query_path(resource, "template.spec.nodeName"),
+    #   )
+    #   if nid in resources:
+    #     edges.append([nid, "REFERENCE"])
+    #   edges.add_networks("template.metadata.annotations")
+    #   edges.add_priority_class("template.spec.priorityClassName")
+    #   runtimeClassName = query_path(resource, "template.spec.runtimeClassName")
+    #   if runtimeClassName != None:
+    #     edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+
+---
+
+kind: ReplicaSet
+apiVersion: apps/v1
+metadata:
+  name: replica-set
+  namespace: semiotics
+
+#TODO
+    # edges: |
+    #   edges.add_owned_resources()
+    #   edges.add_service_account("spec.template.spec")
+    #   edges.add_all_volume_resources("spec.template.spec.volumes")
+    #   edges.add_containers_env_value_from("spec.template.spec.containers")
+    #   edges.add_wait_for_services("spec.template.spec.initContainers")
+    #   edges.add_networks("spec.template.metadata.annotations")
+    #   edges.add_priority_class("spec.template.spec.priorityClassName")
+    #   runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
+    #   if runtimeClassName != None:
+    #     edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+
+---
+
+kind: ReplicationController
+apiVersion: v1
+metadata:
+  name: replication-controller
+  namespace: semiotics
+
+#TODO
+    # edges: |
+    #   edges.add_owned_resources()
+    #   edges.add_service_account("spec.template.spec")
+    #   edges.add_all_volume_resources("spec.template.spec.volumes")
+    #   edges.add_containers_env_value_from("spec.template.spec.containers")
+    #   edges.add_wait_for_services("spec.template.spec.initContainers")
+    #   edges.add_networks("spec.template.metadata.annotations")
+    #   edges.add_priority_class("spec.template.spec.priorityClassName")
+    #   runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
+    #   if runtimeClassName != None:
+    #     edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+
+---
+
+kind: ResourceQuota
+apiVersion: v1
+metadata:
+  name: resource-quota
+  namespace: semiotics
+  labels:
+    namespace-policy:
+
+---
+
+      
+---
+
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: stateful-set
+  namespace: semiotics
+spec:
+  volumeClaimTemplates:
+    - metadata:
+        name: volume-claim
+
+#TODO
+    # nodes: |
+    #   namespace = resource["metadata"].get("namespace")
+    #   for vct in query_path(resource, "", []):
+    #     pvc = {
+    #       "kind": "PersistentVolumeClaim",
+    #       "apiVersion": "v1",
+    #       **vct
+    #     }
+    #     pvc["metadata"]["name"] = f'{pvc["metadata"]["name"]}-{resource["metadata"]["name"]}'
+    #     if namespace != None:
+    #       pvc["metadata"]["namespace"] = namespace
+    #     nodes.append(pvc)
+    # edges: |
+    #   edges.add_owned_resources()
+    #   edges.add_service_account("spec.template.spec")
+    #   edges.add_all_volume_resources("spec.template.spec.volumes")
+    #   edges.add_containers_env_value_from("spec.template.spec.containers")
+    #   edges.add_wait_for_services("spec.template.spec.initContainers")
+    #   edges.add_networks("spec.template.metadata.annotations")
+    #   edges.add_priority_class("spec.template.spec.priorityClassName")
+    #   runtimeClassName = query_path(resource, "spec.template.spec.runtimeClassName")
+    #   if runtimeClassName != None:
+    #     edges.append([f"{runtimeClassName}/RuntimeClass/node.k8s.io/v1", "REFERENCE"])
+    #   edges.add_volume_claim_templates("spec.volumeClaimTemplates")
+    #   edges.add_service("spec.serviceName")
+
+---
+
+
+kind: RuntimeClass
+apiVersion: node.k8s.io/v1
+metadata:
+  name: runtime-class
+  labels:
+    cluster-service: Compute
+
+---
+
+kind: Secret
+apiVersion: v1
+metadata:
+  name : secret
+  namespace: semiotics
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name : service
+  namespace: semiotics
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    pod: pod
+
+---
+
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name : service-account
+  namespace: semiotics
+
+---
+
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: storage-class
+  labels:
+    cluster-service: Storage
+provisioner: csi-driver
+
+---
+
+kind: VerticalPodAutoscaler
+apiVersion: autoscaling.k8s.io/v1
+metadata:
+  name: vertical-pod-autoscaler
+  namespace: semiotics
+spec:
+  targetRef:
+    name: pod
+    kind: Pod
+    apiVersion: v1
+
+---
+
+kind: VolumeAttachment
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: volume-attachment
+  labels:
+    cluster-service: Storage
+spec:
+  nodeName: minikube
