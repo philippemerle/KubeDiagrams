@@ -131,7 +131,7 @@ def get_namespace(resource):
     """
     return query_path(resource, "metadata.namespace", config.get("default_namespace", "default"))
 
-def create_diagram_node(resource, fontcolor="black"):
+def create_diagram_node(resource):
     """
         Create a diagram node from a Kubernetes resource.
     """
@@ -160,6 +160,12 @@ def create_diagram_node(resource, fontcolor="black"):
             if separator in node_label:
                 node_label = split_node_label(node_label, separator)
                 break
+    # Format node tooltip
+    tooltip = f"kind: {resource.get('kind')}\n" \
+            + f"apiVersion: {resource.get('apiVersion')}\n" \
+            + "metadata:\n" \
+            + f"  name: {get_name(resource)}\n" \
+            + "..."
     # Search diagram node class
     diagram_node_class = ManagedServices # default diagram node class
     node_config = get_node_config(resource)
@@ -169,7 +175,7 @@ def create_diagram_node(resource, fontcolor="black"):
             return Custom(
                 node_label,
                 os.path.abspath(custom_icon.replace("$KD", DIRNAME)),
-                fontcolor=fontcolor
+                tooltip=tooltip
             )
         # Get diagram node class name
         diagram_node_classname = node_config.get("diagram_node_classname")
@@ -181,19 +187,20 @@ def create_diagram_node(resource, fontcolor="black"):
                 # Get diagram node class
                 diagram_node_class = getattr(module, diagram_node_classname[idx+1:])
     # Create a diagram node
-    return diagram_node_class(node_label, fontcolor=fontcolor)
+    return diagram_node_class(node_label, tooltip=tooltip)
 
 class ResourceCluster:
     """
         Hierarchical clustering of Kubernetes resources.
     """
-    def __init__(self):
+    def __init__(self, name):
         """
             Initialize a ResourceCluster instance.
         """
+        self.name = name
         self.resources = {} # dict<str, resource>
         self.clusters = {} # dict<str, Cluster>
-        self.graph_attr = {}
+        self.graph_attr = { "tooltip": name }
 
     def get_or_create_cluster(self, name):
         """
@@ -201,7 +208,7 @@ class ResourceCluster:
         """
         cluster = self.clusters.get(name)
         if cluster is None:
-            cluster = ResourceCluster()
+            cluster = ResourceCluster(name)
             self.clusters[name] = cluster
         return cluster
 
@@ -246,10 +253,15 @@ class EdgesContext(list):
         """
         error(self.resource, path, msg)
 
-    def add_edge(self, edge):
+    def add_edge(self, path, edge):
         """
             Add an edge.
         """
+        edge_kind = edge[-1]
+        if isinstance(edge_kind, str):
+            edge_kind = dict(get_edge_config(edge_kind))
+        edge_kind["tooltip"] = path
+        edge[-1] = edge_kind
         self.append(edge)
 
     def add_edge_to_rid(self, path, rid, edge_kind):
@@ -257,7 +269,7 @@ class EdgesContext(list):
             Add an edge to a resource identifier.
         """
         if rid in resources:
-            self.add_edge([rid, edge_kind])
+            self.add_edge(path, [rid, edge_kind])
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"'{rid}' provided by Kubernetes cluster")
@@ -280,7 +292,7 @@ class EdgesContext(list):
         else:
             rid = f"{name}/{kind}/{api_version}"
         if rid in resources:
-            self.add_edge([rid, edge_kind])
+            self.add_edge(path, [rid, edge_kind])
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"{kind} '{name}' provided by Kubernetes cluster")
@@ -321,6 +333,7 @@ class EdgesContext(list):
             self,
             kind,
             path,
+            match_labels=None,
             data=None,
             resource_labels_path="metadata.labels",
             edge_kind="SELECTOR"
@@ -330,12 +343,8 @@ class EdgesContext(list):
         """
         if data is None:
             data = self.resource
-        if isinstance(path, str):
+        if match_labels is None:
             match_labels = query_path(data, path)
-        elif isinstance(path, dict):
-            match_labels = path
-        else:
-            match_labels = None
         if match_labels is None:
             return False
         resource_found = False
@@ -351,7 +360,7 @@ class EdgesContext(list):
                     found = False
                     break
             if found:
-                self.add_edge_to_rid(None, rid, edge_kind)
+                self.add_edge_to_rid(path, rid, edge_kind)
                 resource_found = True
         return resource_found
 
@@ -597,7 +606,7 @@ class EdgesContext(list):
             else:
                 namespace = None
             self.add_edge_to(
-                None,
+                "owns",
                 resource['metadata']['name'],
                 namespace,
                 resource['kind'],
@@ -616,7 +625,7 @@ class EdgesContext(list):
                     continue # skip this ingress_from item
                 current_index = len(self)
                 self.add_all_workload_resources(
-                    None,
+                    "spec.ingress",
                     query_path(ingress_from, "podSelector.matchLabels"),
                     edge_kind="INVISIBLE"
                 )
@@ -631,7 +640,7 @@ class EdgesContext(list):
                 }
                 for rid_from in [e[0] for e in self[current_index:]]:
                     for rid_to in selected_nodes:
-                        self.add_edge([rid_from, rid_to, edge])
+                        self.add_edge("spec.ingress", [rid_from, rid_to, edge])
 
         for egress_rule in query_path(self.resource, "spec.egress", []):
             for egress_to in query_path(egress_rule, "to", []):
@@ -639,7 +648,7 @@ class EdgesContext(list):
                     continue # skip this egress_to item
                 current_index = len(self)
                 self.add_all_workload_resources(
-                    None,
+                    "spec.egress",
                     query_path(egress_to, "podSelector.matchLabels"),
                     edge_kind="INVISIBLE"
                 )
@@ -654,7 +663,7 @@ class EdgesContext(list):
                 }
                 for rid_to in [e[0] for e in self[current_index:]]:
                     for rid_from in selected_nodes:
-                        self.add_edge([rid_from, rid_to, edge])
+                        self.add_edge("spec.egress", [rid_from, rid_to, edge])
 
     def add_webhooks(self):
         """
@@ -675,18 +684,17 @@ class EdgesContext(list):
     def add_all_workload_resources(
         self,
         path,
+        selector=None,
         default_selector=None,
         edge_kind="SELECTOR"
     ):
         """
             Add selector edges to all workload resources.
         """
-        if path is not None:
+        if selector is None:
             selector = query_path(self.resource, path, default_selector)
             if selector is None:
                 return
-        else:
-            selector = default_selector
         build_in_workload_resources = {
             "Pod": "metadata.labels",
             "PodTemplate": "template.metadata.labels",
@@ -701,6 +709,7 @@ class EdgesContext(list):
         for kind, label in build_in_workload_resources.items():
             if self.add_all_resources_matching_labels(
                     kind,
+                    path,
                     selector,
                     resource_labels_path=label,
                     edge_kind=edge_kind):
@@ -733,6 +742,7 @@ class EdgesContext(list):
         self.add_all_workload_resources("spec.selector", edge_kind=edge)
         self.add_all_resources_matching_labels(
                 "EndpointSlice",
+                "endpoint_slice",
                 {
                     "kubernetes.io/service-name":
                         query_path(self.resource, "metadata.name")
@@ -741,7 +751,7 @@ class EdgesContext(list):
         rid = f"{query_path(self.resource, 'metadata.name')}" \
                 f"/{get_namespace(self.resource)}/Endpoints/v1"
         if rid in resources:
-            self.add_edge([rid, "SELECTOR"])
+            self.add_edge("owns", [rid, "OWNER"])
 
     def add_networks(self, path):
         """
@@ -840,7 +850,7 @@ if args.config is not None:
 
 # Load the Kubernetes manifest file.
 resources = {} # a map of all resources
-resource_cluster = ResourceCluster() # Clustering resources
+resource_cluster = ResourceCluster("ROOT") # Clustering resources
 
 def process_resource(resource):
     """
@@ -880,7 +890,7 @@ def process_resource(resource):
                     else:
                         cluster_name = cluster_config_title.format(labels[label])
                     cluster = cluster.get_or_create_cluster(cluster_name)
-                    cluster.graph_attr = cluster_config.get("graph_attr", {})
+                    cluster.graph_attr.update(cluster_config.get("graph_attr", {}))
                     clusters.remove(cluster_config)
                     return process_clusters(cluster, resource, clusters)
         return cluster

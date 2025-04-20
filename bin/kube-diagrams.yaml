@@ -79,7 +79,7 @@ nodes:
     diagram_node_classname: diagrams.k8s.rbac.CRole
     edges: |
       for clusterRoleSelector in query_path(resource, "aggregationRule.clusterRoleSelectors", []):
-        edges.add_all_resources_matching_labels("ClusterRole", "matchLabels", clusterRoleSelector)
+        edges.add_all_resources_matching_labels("ClusterRole", "matchLabels", data=clusterRoleSelector)
   ClusterRole/rbac.authorization.k8s.io/v1beta1: ClusterRole/rbac.authorization.k8s.io/v1
   ClusterRoleBinding/rbac.authorization.k8s.io/v1:
     scope: Cluster
@@ -308,7 +308,7 @@ nodes:
     edges: |
       edges.add_all_workload_resources(
         "spec.podSelector.matchLabels",
-        {},
+        default_selector={},
         edge_kind="SELECTOR-UP"
       )
       edges.add_ingress_and_egress_rules()
