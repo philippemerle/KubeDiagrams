@@ -268,6 +268,24 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 
 New mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2),  [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), and [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2)) and provided to **KubeDiagrams** via the `--config` command-line option.
 
+### Kubernetes resource relationships
+
+With **KubeDiagrams**, each relationship between Kubernetes resources is represented by a visual edge between visual nodes.
+Following table lists the predefined edges as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L3) file (see the `edges` list).
+
+| Edge Kind | Edge Style | Edge Color | Meaning |
+| :--------: | :--------: | :-------: |
+| `REFERENCE` | `solid` | `black` | Used when a resource refers to another resource directly |
+| `SELECTOR` | `dashed` | `black` | Used when a resource refers to other resources via a selector |
+| `OWNER` | `dotted` | `black` | Used when a resource owns another resource |
+| `COMMUNICATION` | `solid` | `brown` | Used to represent ingress and egress networking policies between pods |
+
+New edges can be easily defined or redefined in custom configuration files, and provided to **KubeDiagrams** via the `--config` command-line option.
+
+Following diagram illustrates all the visual nodes, edges, and clusters supported by default by **KubeDiagrams**.
+
+![semiotics.png](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/semiotics.png)
+
 ### Custom diagrams
 
 By default, **KubeDiagrams** generates diagrams from data contained into Kubernetes manifest files, actual cluster state, kustomization files, or Helm charts automatically. But sometimes, users would like to customize generated diagrams by adding their own clusters, nodes and edges as illustrated in the following diagram:
