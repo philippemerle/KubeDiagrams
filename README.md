@@ -271,7 +271,7 @@ New mappings can be easily defined in custom configuration files (see [examples/
 ### Kubernetes resource relationships
 
 With **KubeDiagrams**, each relationship between Kubernetes resources is represented by a visual edge between visual nodes.
-Following table lists the predefined edges as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L3) file (see the `edges` list).
+Following table lists the predefined edges as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L3) file (see the `edges` map).
 
 | Edge Kind  | Edge Style | Edge Color | Meaning |
 | :--------: | :--------: | :-------:  | :-------: |
