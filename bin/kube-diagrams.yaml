@@ -212,7 +212,7 @@ nodes:
           if "targetRef" in endpoint:
             target = endpoint["targetRef"]
             edges.add_edge_to(
-              "endpoints[{idx}].targetRef",
+              f"endpoints[{idx}].targetRef",
               target["name"],
               target["namespace"],
               target["kind"],
