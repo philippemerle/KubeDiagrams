@@ -1,0 +1,117 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: tensorrt
+spec:
+  replicas: 1
+  leaderWorkerTemplate:
+    size: 2
+    leaderTemplate:
+      metadata:
+        labels:
+          role: leader
+      spec:
+        serviceAccountName: tensorrt-sa
+        containers:
+          - name: leader
+            image: <image> # image built from dockerfile
+            command:
+            - sh 
+            - -c
+            - "./install_model.sh; python3 ./server.py leader --stateful_set_group_key=${GROUP_KEY} --pp=8 --tp=2 --gpu_per_node=8 --triton_model_repo_dir=/data/tensorrtllm_backend/all_models/inflight_batcher_llm/"
+            env:
+            - name: GROUP_KEY
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['leaderworkerset.sigs.k8s.io/group-key']
+            - name: HUGGING_FACE_HUB_TOKEN
+              value: <your-hf-token>
+            resources:
+              limits:
+                nvidia.com/gpu: "8"
+            ports:
+              - containerPort: 8000
+            volumeMounts:
+              - mountPath: /dev/shm
+                name: dshm
+        volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+    workerTemplate:
+      spec:
+        serviceAccountName: tensorrt-sa
+        containers:
+          - name: worker
+            image: <image> # image built from dockerfile
+            command:
+            - sh 
+            - -c
+            - "./install_model.sh; python3 ./server.py worker --triton_model_repo_dir=/data/tensorrtllm_backend/all_models/inflight_batcher_llm/"
+            resources:
+              limits:
+                nvidia.com/gpu: "8"
+            volumeMounts:
+              - mountPath: /dev/shm
+                name: dshm
+            env:
+            - name: HUGGING_FACE_HUB_TOKEN
+              value: <your-hf-token>
+        volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tensorrt-service
+spec:
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+  selector:
+    leaderworkerset.sigs.k8s.io/name: tensorrt
+    role: leader
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: tensorrt-sa
+rules:
+- apiGroups:
+  - ''
+  - apps
+  - batch
+  resources:
+  - deployments
+  - jobs
+  - pods
+  - pods/status
+  - services
+  verbs:
+  - get
+  - list
+- apiGroups: ['']
+  resources:
+  - pods/exec
+  verbs:
+  - create
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tensorrt-sa
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tensorrt-sa
+subjects:
+- kind: ServiceAccount
+  name: tensorrt-sa
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: tensorrt-sa

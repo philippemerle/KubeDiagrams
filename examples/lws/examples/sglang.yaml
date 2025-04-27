@@ -1,0 +1,102 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: sglang
+spec:
+  replicas: 2
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          role: leader
+      spec:
+        containers:
+          - name: sglang-leader
+            image: lmsysorg/sglang:latest
+            env:
+              - name: HUGGING_FACE_HUB_TOKEN
+                value: <your-hf-token>
+            command:
+              - python3
+              - -m
+              - sglang.launch_server
+              - --model-path
+              - meta-llama/Meta-Llama-3.1-8B-Instruct
+              - --tp
+              - "2" # Size of Tensor Parallelism
+              - --dist-init-addr
+              - $(LWS_LEADER_ADDRESS):20000
+              - --nnodes
+              - $(LWS_GROUP_SIZE)
+              - --node-rank
+              - $(LWS_WORKER_INDEX)
+              - --trust-remote-code
+              - --host
+              - "0.0.0.0"
+              - --port
+              - "40000"
+            resources:
+              limits:
+                nvidia.com/gpu: "1"
+            ports:
+              - containerPort: 40000
+            readinessProbe:
+              tcpSocket:
+                port: 40000
+              initialDelaySeconds: 15
+              periodSeconds: 10
+            volumeMounts:
+              - mountPath: /dev/shm
+                name: dshm
+        volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+    workerTemplate:
+      spec:
+        containers:
+          - name: sglang-worker
+            image: lmsysorg/sglang:latest
+            env:
+            - name: HUGGING_FACE_HUB_TOKEN
+              value: <your-hf-token>
+            command:
+              - python3
+              - -m
+              - sglang.launch_server
+              - --model-path
+              - meta-llama/Meta-Llama-3.1-8B-Instruct
+              - --tp
+              - "2" # Size of Tensor Parallelism
+              - --dist-init-addr
+              - $(LWS_LEADER_ADDRESS):20000
+              - --nnodes
+              - $(LWS_GROUP_SIZE)
+              - --node-rank
+              - $(LWS_WORKER_INDEX)
+              - --trust-remote-code
+            resources:
+              limits:
+                nvidia.com/gpu: "1"
+            volumeMounts:
+              - mountPath: /dev/shm
+                name: dshm
+        volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sglang-leader
+spec:
+  selector:
+    leaderworkerset.sigs.k8s.io/name: sglang
+    role: leader
+  ports:
+    - protocol: TCP
+      port: 40000
+      targetPort: 40000

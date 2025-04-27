@@ -1,0 +1,120 @@
+apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: saxml-multi-host
+  annotations:
+    leaderworkerset.sigs.k8s.io/exclusive-topology: cloud.google.com/gke-nodepool
+spec:
+  replicas: 2
+  leaderWorkerTemplate:
+    size: 9
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+# PM: Replaced
+#            app: saxml-admin
+# by
+            appL: saxml-admin
+# as app is a clustering label already managed by KubeDiagrams!
+      spec:
+        serviceAccountName: sax-sa
+        nodeSelector:
+          cloud.google.com/gke-tpu-topology: 4x8
+          cloud.google.com/gke-tpu-accelerator: tpu-v5-lite-podslice
+        tolerations: 
+        - key: "google.com/tpu"
+          operator: "Exists"
+          effect: "NoSchedule"
+        containers:
+        - name: sax-admin-server
+          image: us-docker.pkg.dev/cloud-tpu-images/inference/sax-admin-server:nightly
+          securityContext:
+            privileged: true
+          ports:
+          - containerPort: 10000
+          env:
+          - name: SAX_REPLICA_NAME
+            valueFrom:
+              fieldRef: 
+                fieldPath: metadata.name 
+          - name: SAX_GCS_BUCKET
+            value: GCS_BUCKET
+        - name: sax-http
+          image: us-docker.pkg.dev/cloud-tpu-images/inference/sax-http:nightly
+          volumeMounts:
+            - name: publish-config
+              mountPath: /publish/config 
+          ports:
+          - containerPort: 8888
+          env:
+          - name: SAX_REPLICA_NAME
+            valueFrom:
+              fieldRef: 
+                fieldPath: metadata.name 
+          - name: SAX_GCS_BUCKET
+            value: GCS_BUCKET
+        volumes:
+        - name: publish-config
+          configMap:
+            name: saxml-model
+    workerTemplate:
+      spec:
+        serviceAccountName: sax-sa
+        nodeSelector:
+          cloud.google.com/gke-tpu-accelerator: tpu-v5-lite-podslice
+          cloud.google.com/gke-tpu-topology: 4x8
+        containers:
+        - name: sax-model-server
+          image: us-docker.pkg.dev/cloud-tpu-images/inference/sax-model-server:nightly
+          args: ["--port=10001", "--platform_chip=tpuv5e"]
+          ports:
+          - containerPort: 10001
+          - containerPort: 8471
+          securityContext:
+            privileged: true
+          env:
+          - name: SAX_REPLICA_NAME
+            valueFrom:
+              fieldRef: 
+                fieldPath: metadata.annotations['leaderworkerset.sigs.k8s.io/leader-name'] 
+          - name: SAX_GCS_BUCKET
+            value: GCS_BUCKET
+          resources:
+            requests:
+              google.com/tpu: 4
+            limits:
+              google.com/tpu: 4
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: saxml
+spec:
+  selector:
+# PM: Replaced
+#    app: leader-pod
+# by
+    appL: saxml-admin
+# as app is a clustering label already managed by KubeDiagrams
+# and leader pods are labelled by saxml-admin instead of leader-pod!
+  ports:
+  - protocol: TCP
+    port: 8888
+    targetPort: 8888
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: saxml-model
+data:
+  publish.conf: |
+    model_path=saxml.server.pax.lm.params.lm_cloud.LmCloudSpmd175B32Test
+    checkpoint=None
+---
+# PM: Following object is missed!
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sax-sa

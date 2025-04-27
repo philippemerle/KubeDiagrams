@@ -1,0 +1,153 @@
+clusters:
+  - label: leaderworkerset.sigs.k8s.io/name
+    title: "LWS Name: {}"
+    recommended: true
+  - label: leaderworkerset.sigs.k8s.io/group-index
+    title: "LWS Group {}"
+    recommended: true
+    graph_attr:
+      style: dashed
+      bgcolor: transparent
+  - label: leaderworkerset.sigs.k8s.io/subgroup-index
+    title: "LWS Subgroup {}"
+    recommended: true
+    graph_attr:
+      style: dashed
+      bgcolor: transparent
+nodes:
+  LeaderWorkerSet/leaderworkerset.x-k8s.io/v1:
+    scope: Namespaced
+    custom_icon: icons/lws.png
+    nodes: |
+      # get some resource data
+      lws_name = get_name(resource)
+      lws_namespace = query_path(resource, "metadata.namespace")
+      lws_replicas = query_path(resource, "spec.replicas", 1)
+      lws_size = query_path(resource, "spec.leaderWorkerTemplate.size", 1)
+      lws_leader_labels = query_path(resource, "spec.leaderWorkerTemplate.leaderTemplate.metadata.labels", {})
+      # add StatefulSet for leader pods
+      nodes.append({
+        "kind": "StatefulSet",
+        "apiVersion": "apps/v1",
+        "metadata": {
+          "name": f"{lws_name}",
+          "namespace": lws_namespace,
+          "labels": {
+            "leaderworkerset.sigs.k8s.io/name": lws_name,
+          },
+          "uid": f"{lws_name}-uid",
+        },
+        "spec": {
+          "replicas": lws_replicas,
+          "template": {
+            "metadata": {
+              "labels": {
+                "leaderworkerset.sigs.k8s.io/name": lws_name,
+                **lws_leader_labels
+              }
+            }
+          },
+          "serviceName": lws_name
+        }
+      })
+      # add Service for StatefulSet objects
+      nodes.append({
+        "kind": "Service",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": lws_name,
+          "namespace": lws_namespace,
+          "labels": {
+            "leaderworkerset.sigs.k8s.io/name": lws_name,
+          }
+        },
+        "spec": {
+        }
+      })
+      for gi in range(0, lws_replicas):
+        # add leader pod
+        nodes.append({
+          "kind": "Pod",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": f"{name}-{gi}",
+            "namespace": lws_namespace,
+            "labels": {
+              "leaderworkerset.sigs.k8s.io/name": lws_name,
+              **lws_leader_labels
+            },
+            "ownerReferences": [
+              {
+                "uid": f"{lws_name}-uid"
+              }
+            ]
+          },
+          "spec": query_path(resource, "spec.leaderWorkerTemplate.leaderTemplate.spec")
+        })
+        # add StatefulSet for worker pods
+        nodes.append({
+          "kind": "StatefulSet",
+          "apiVersion": "apps/v1",
+          "metadata": {
+            "name": f"{name}-{gi}",
+            "namespace": lws_namespace,
+            "labels": {
+              "leaderworkerset.sigs.k8s.io/name": lws_name,
+              "leaderworkerset.sigs.k8s.io/group-index": gi,
+            },
+            "uid": f"{name}-{gi}-uid"
+          },
+          "spec": {
+            "replicas": lws_size - 1,
+            "template": {
+              "metadata": {
+                "labels": {
+                  "leaderworkerset.sigs.k8s.io/name": lws_name,
+                  "leaderworkerset.sigs.k8s.io/group-index": gi,
+                }
+              }
+            },
+            "serviceName": lws_name
+          }
+        })
+        # add worker pods
+        for j in range(1, lws_size):
+          nodes.append({
+            "kind": "Pod",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": f"{name}-{gi}-{j}",
+              "namespace": lws_namespace,
+              "labels": {
+                "leaderworkerset.sigs.k8s.io/name": lws_name,
+                "leaderworkerset.sigs.k8s.io/group-index": gi,
+              },
+              "ownerReferences": [
+                {
+                  "uid": f"{name}-{gi}-uid"
+                }
+              ]
+            },
+            "spec": query_path(resource, "spec.leaderWorkerTemplate.workerTemplate.spec")
+          })
+    edges: |
+      # get resource data
+      lws_name = get_name(resource)
+      lws_namespace = get_namespace(resource)
+      lws_replicas = query_path(resource, "spec.replicas", 1)
+      # add edge from LWS to StatefulSet for leader pods
+      edges.add_edge_to(
+        "spec",
+        f"{lws_name}",
+        lws_namespace,
+        "StatefulSet",
+        "apps/v1",
+        "OWNER"
+      )
+      for gi in range(0, lws_replicas):
+        # add edge from leader pod to StatefulSet for worker pods
+        edges.append([
+          f"{lws_name}-{gi}/{lws_namespace}/Pod/v1",
+          f"{lws_name}-{gi}/{lws_namespace}/StatefulSet/apps/v1",
+          "REFERENCE"
+        ])
