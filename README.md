@@ -292,10 +292,10 @@ Following diagram illustrates all the visual nodes, edges, and clusters supporte
 
 By default, **KubeDiagrams** generates diagrams from data contained into Kubernetes manifest files, actual cluster state, kustomization files, or Helm charts automatically. But sometimes, users would like to customize generated diagrams by adding their own clusters, nodes and edges as illustrated in the following diagram:
 
-[![Custom diagram](examples/wordpress/wordpress_deployed_in_aws_eks.png)](examples/wordpress/wordpress_deployed_in_aws_eks.png)
+[![Custom diagram](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/wordpress_deployed_in_aws_eks.png)](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/wordpress_deployed_in_aws_eks.png)
 
 This previous diagram contains three custom clusters labelled with `Amazon Web Service`, `Account: Philippe Merle` and `My Elastic Kubernetes Cluster`, three custom nodes labelled with `Users`, `Elastic Kubernetes Services`, and `Philippe Merle`, and two custom edges labelled with `use` and `calls`. The rest of this custom diagram is generated from actual cluster state for a deployed WordPress application automatically.
-See [examples/wordpress/custom_diagram.kd](examples/wordpress/custom_diagram.kd) to define custom diagrams, clusters, nodes and edges declaratively.
+See [examples/wordpress/custom_diagram.kd](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/custom_diagram.kd) to define custom diagrams, clusters, nodes and edges declaratively.
 
 ### GitHub Action
 
@@ -319,6 +319,12 @@ jobs:
           type: "helm"
           args: 'https://charts.jetstack.io/cert-manager'
 ```
+
+## Architecture
+
+Following figure shows the software architecture of **KubeDiagrams**.
+
+![Architecture.png](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/Architecture.png)
 
 ## What do they say about it?
 
