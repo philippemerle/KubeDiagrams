@@ -838,7 +838,15 @@ if args.config is not None:
             if custom_config.get("edges"):
                 config["edges"].update(custom_config["edges"])
             if custom_config.get("clusters"):
-                config["clusters"].extend(custom_config["clusters"])
+                for cluster_custom_config in custom_config["clusters"]:
+                    cluster_label = cluster_custom_config.get("label")
+                    for cluster_config in config["clusters"]:
+                        if cluster_config.get("label") == cluster_label:
+                            cluster_config.update(cluster_custom_config)
+                            cluster_label = None
+                            break
+                    if cluster_label is not None:
+                        config["clusters"].append(cluster_custom_config)
             if custom_config.get("nodes"):
                 for k, v in custom_config["nodes"].items():
                     previous = config["nodes"].get(k)
@@ -877,6 +885,8 @@ def process_resource(resource):
             Process a resource.
         """
         for cluster_config in clusters:
+            if cluster_config.get("show", True) is False:
+                continue # skip this cluster
             if "label" in cluster_config:
                 label = cluster_config["label"]
                 labels = query_path(resource, "metadata.labels")
