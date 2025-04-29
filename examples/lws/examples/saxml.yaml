@@ -12,11 +12,7 @@ spec:
     leaderTemplate:
       metadata:
         labels:
-# PM: Replaced
-#            app: saxml-admin
-# by
-            appL: saxml-admin
-# as app is a clustering label already managed by KubeDiagrams!
+            app: saxml-admin
       spec:
         serviceAccountName: sax-sa
         nodeSelector:
@@ -95,9 +91,8 @@ spec:
 # PM: Replaced
 #    app: leader-pod
 # by
-    appL: saxml-admin
-# as app is a clustering label already managed by KubeDiagrams
-# and leader pods are labelled by saxml-admin instead of leader-pod!
+    app: saxml-admin
+# as leader pods are labelled by saxml-admin instead of leader-pod!
   ports:
   - protocol: TCP
     port: 8888

@@ -10,11 +10,7 @@ spec:
     leaderTemplate:
       metadata:
         labels:
-# PM: Replaced
-#          app: llamacpp-llama3-8b-instruct-bartowski-q5km
-# by
-          appL: llamacpp-llama3-8b-instruct-bartowski-q5km
-# as app is a clustering label already managed by KubeDiagrams!
+          app: llamacpp-llama3-8b-instruct-bartowski-q5km
       spec:
         containers:
         - name: llamacpp-leader
@@ -35,11 +31,7 @@ metadata:
   name: llamacpp
 spec:
   selector:
-# PM: Replaced
-#    app: llamacpp-llama3-8b-instruct-bartowski-q5km
-# by
-    appL: llamacpp-llama3-8b-instruct-bartowski-q5km
-# as app is a clustering label already managed by KubeDiagrams!
+    app: llamacpp-llama3-8b-instruct-bartowski-q5km
   ports:
     - protocol: TCP
       port: 80

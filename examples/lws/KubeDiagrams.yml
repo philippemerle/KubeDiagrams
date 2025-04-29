@@ -1,4 +1,6 @@
 clusters:
+  - label: app
+    show: false # Disable clustering for app label
   - label: leaderworkerset.sigs.k8s.io/name
     title: "LWS Name: {}"
     recommended: true
