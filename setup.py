@@ -7,7 +7,7 @@ from setuptools import setup
 with open("README.md", encoding="utf-8") as readme:
     setup(
         name="KubeDiagrams",
-        version="0.2.0",
+        version="0.3.0",
         author="Philippe Merle",
         author_email="philippe.merle@inria.fr",
         maintainer="Philippe Merle",
@@ -18,11 +18,11 @@ with open("README.md", encoding="utf-8") as readme:
             "and actual cluster state",
         long_description=readme.read(),
         long_description_content_type="text/markdown",
+        license="GPL-3.0-only",
         classifiers=[
             "Topic :: Software Development :: Documentation",
             "Topic :: Utilities",
             "Development Status :: 5 - Production/Stable",
-            "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
             "Programming Language :: Python :: 3.9",
             "Programming Language :: Python :: 3.10",
             "Programming Language :: Python :: 3.11",
