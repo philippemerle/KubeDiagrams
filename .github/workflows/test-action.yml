@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Generate diagram from Helm chart"
-        uses: ./
+        uses: philippemerle/KubeDiagrams@main
         with:
           type: "helm"
           args: 'https://charts.jetstack.io/cert-manager'
