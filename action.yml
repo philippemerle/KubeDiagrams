@@ -13,7 +13,7 @@ inputs:
 
 runs:
   using: "docker"
-  image: "philippemerle/kubediagrams:0.2.0"
+  image: "docker://philippemerle/kubediagrams:0.2.0"
   args:
     - /bin/sh
     - -c
