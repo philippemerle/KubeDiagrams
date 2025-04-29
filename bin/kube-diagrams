@@ -840,9 +840,9 @@ if args.config is not None:
             if custom_config.get("clusters"):
                 for cluster_custom_config in custom_config["clusters"]:
                     cluster_label = cluster_custom_config.get("label")
-                    for cluster_config in config["clusters"]:
-                        if cluster_config.get("label") == cluster_label:
-                            cluster_config.update(cluster_custom_config)
+                    for config_cluster in config["clusters"]:
+                        if config_cluster.get("label") == cluster_label:
+                            config_cluster.update(cluster_custom_config)
                             cluster_label = None
                             break
                     if cluster_label is not None:
