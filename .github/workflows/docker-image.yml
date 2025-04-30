@@ -39,4 +39,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
-          tags: adamab/kubediagrams:latest
+          tags: philippemerle/kubediagrams:latest

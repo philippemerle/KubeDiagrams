@@ -1,4 +1,4 @@
-# Configuration of kube-diagrams # TODO REVERT CHANGE &
+# Configuration of kube-diagrams
 default_namespace: default
 edges:
   REFERENCE:
