@@ -6,15 +6,19 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
+  outputs = {
+    self,
+    nixpkgs,
+    flake-utils,
+  }:
+    flake-utils.lib.eachDefaultSystem (
+      system: let
         pkgs = nixpkgs.legacyPackages.${system};
-        pythonEnv = pkgs.python312.withPackages (ps: [ ps.pyyaml ps.diagrams ]);
+        pythonEnv = pkgs.python312.withPackages (ps: [ps.pyyaml ps.diagrams]);
 
-        kube-diagrams = pkgs.stdenv.mkDerivation rec {
+        kube-diagrams = pkgs.stdenv.mkDerivation {
           pname = "kube-diagrams";
-          version = "0.2.0";
+          version = "0.3.0";
           src = self;
           postPatch = ''
             substituteInPlace bin/kube-diagrams \
@@ -27,31 +31,34 @@
           '';
         };
 
-        runtimeEnv = with pkgs; [
-          busybox
-          cacert
-          graphviz
-          kubernetes-helm
-          kube-diagrams
-          pythonEnv
-        ];
+        runtimeEnv = with pkgs;
+          [
+            cacert
+            graphviz
+            kubernetes-helm
+            kube-diagrams
+            pythonEnv
+          ]
+          ++ lib.optionals pkgs.stdenv.isLinux [busybox];
       in {
         devShells.default = pkgs.mkShell {
-          packages = with pkgs; [
-            git
-            lazygit
-            nodePackages.prettier
-          ] ++ runtimeEnv;
+          packages = with pkgs;
+            [
+              git
+              lazygit
+              nodePackages.prettier
+            ]
+            ++ runtimeEnv;
         };
 
         packages = {
           default = kube-diagrams;
           kube-diagrams = kube-diagrams;
-          docker = pkgs.dockerTools.buildLayeredImage {
+          docker = pkgs.dockerTools.buildImage {
             name = "ghcr.io/philippemerle/kubediagrams";
             tag = "latest";
-            contents = runtimeEnv;
-            created = "now";
+            copyToRoot = runtimeEnv;
+            created = builtins.substring 0 8 self.lastModifiedDate;
           };
         };
       }
