@@ -89,6 +89,15 @@ def error(resource, path, msg):
     """
     report("Error", resource, path, msg, '!')
 
+def get_node_config_of_resource_type(resource_type):
+    """
+        Get the configuration for a Kubernetes resource type.
+    """
+    node_config = config.get("nodes", {}).get(resource_type)
+    while isinstance(node_config, str):
+        node_config = config.get("nodes", {}).get(node_config)
+    return node_config
+
 # Get config associated to a resource.
 already_warned_node_configs = set()
 def get_node_config(resource):
@@ -297,7 +306,8 @@ class EdgesContext(list):
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"{kind} '{name}' provided by Kubernetes cluster")
-            elif not config.get("nodes", {}).get(f"{kind}/{api_version}", {}).get("show", True):
+            elif not (get_node_config_of_resource_type(f"{kind}/{api_version}") or {}) \
+                        .get("show", True):
                 self.info(path, f"{kind} '{name}' hidden")
             else:
                 self.warning(path, f"{kind} '{name}' undefined")
@@ -620,14 +630,14 @@ class EdgesContext(list):
             Add selector edges for ingress and egress rules.
         """
         selected_nodes = [e[0] for e in self]
-        for _, ingress_rule in enumerate(query_path(self.resource, "spec.ingress", [])):
-            for _, ingress_from in enumerate(query_path(ingress_rule, "from", [])):
+        for ridx, ingress_rule in enumerate(query_path(self.resource, "spec.ingress", [])):
+            for fidx, ingress_from in enumerate(query_path(ingress_rule, "from", [])):
                 if "podSelector" not in ingress_from:
                     continue # skip this ingress_from item
                 current_index = len(self)
                 self.add_all_workload_resources(
-                    "spec.ingress[{ridx}].from[{fidx}]",
-                    query_path(ingress_from, "podSelector.matchLabels"),
+                    f"spec.ingress[{ridx}].from[{fidx}]",
+                    query_path(ingress_from, "podSelector.matchLabels", {}),
                     edge_kind="INVISIBLE"
                 )
                 ports = [
@@ -650,7 +660,7 @@ class EdgesContext(list):
                 current_index = len(self)
                 self.add_all_workload_resources(
                     "spec.egress",
-                    query_path(egress_to, "podSelector.matchLabels"),
+                    query_path(egress_to, "podSelector.matchLabels", {}),
                     edge_kind="INVISIBLE"
                 )
                 ports = [
