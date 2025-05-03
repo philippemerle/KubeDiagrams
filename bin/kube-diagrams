@@ -12,7 +12,8 @@ import traceback
 from pprint import pprint
 import sys
 import yaml
-from diagrams import Diagram, Edge, Cluster
+import diagrams
+from diagrams import Edge, Cluster
 from diagrams.aws.enablement import ManagedServices
 from diagrams.custom import Custom
 
@@ -22,6 +23,23 @@ from diagrams.custom import Custom
 # when loading a string equals to the unquoted value '='.
 # A proposed fix is
 yaml.SafeLoader.yaml_implicit_resolvers.pop("=")
+
+#
+# Extensions of diagrams framework
+#
+
+# All dot output formats are listed in https://graphviz.org/docs/outputs/
+# If you need a format not listed below, just add it below.
+SUPPORTED_OUTPUT_FORMATS = (
+    "dot", "dot_json", "gif", "jp2", "jpe", "jpeg", "jpg", "pdf", "png",
+    "svg", "tif", "tiff"
+)
+class Diagram(diagrams.Diagram):
+    """
+        Enhancement of the Diagram class to add new output formats.
+    """
+    # pylint: disable-next=unused-private-member
+    __outformats = SUPPORTED_OUTPUT_FORMATS
 
 # Maximum length for diagram node labels
 MAX_NODE_LABEL_LENGTH = 16
@@ -811,7 +829,9 @@ parser.add_argument("filename", nargs='+',
 parser.add_argument("-o", "--output", type=str,
     help="output diagram filename")
 parser.add_argument("-f", "--format", type=str,
-    help="output format, allowed formats are png (default), jpg, svg, pdf, and dot",
+    help="output format, allowed formats are " \
+        + ", ".join(SUPPORTED_OUTPUT_FORMATS) \
+        + ", set to png by default",
     default="png")
 parser.add_argument("-c", "--config", type=str,
     help="custom kube-diagrams configuration file")
@@ -832,9 +852,8 @@ else:
         args.format = args.output[dot_idx+1:]
         args.output = args.output[:dot_idx]
 
-SUPPORTED_OUTPUT_FORMATS = ["png", "jpg", "svg", "pdf", "dot"]
-SOF = "' or '".join(SUPPORTED_OUTPUT_FORMATS)
 if args.format not in SUPPORTED_OUTPUT_FORMATS:
+    SOF = "' or '".join(SUPPORTED_OUTPUT_FORMATS)
     print(f"Error: '{args.format}' output format unsupported,"
             f" use '{SOF}' instead!", file=sys.stderr)
     sys.exit(1)

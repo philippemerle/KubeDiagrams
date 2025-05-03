@@ -103,12 +103,9 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -o OUTPUT, --output OUTPUT
-                        output diagram filename
-  -f FORMAT, --format FORMAT
-                        output format, allowed formats are png (default), jpg, svg, pdf, and dot
-  -c CONFIG, --config CONFIG
-                        custom kube-diagrams configuration file
+  -o, --output OUTPUT   output diagram filename
+  -f, --format FORMAT   output format, allowed formats are dot, dot_json, gif, jp2, jpe, jpeg, jpg, pdf, png, svg, tif, tiff, set to png by default
+  -c, --config CONFIG   custom kube-diagrams configuration file
   -v, --verbose         verbosity, set to false by default
   --without-namespace   disable namespace cluster generation
 ```
