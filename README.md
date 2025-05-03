@@ -283,7 +283,9 @@ New edges can be easily defined or redefined in custom configuration files, and 
 
 Following diagram illustrates all the visual nodes, edges, and clusters supported by default by **KubeDiagrams**.
 
-![semiotics.png](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/semiotics.png)
+![semiotics.png](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/semiotics.png).
+
+Generated SVG diagrams contain tooltips for each cluster/node/edge as illustrated in [images/semiotics.svg](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/semiotics.svg)
 
 ### Custom diagrams
 
