@@ -368,6 +368,10 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 1. [Cloud Native Landscape](https://landscape.cncf.io/)
 
+1. [Awesome-Kubernetes](https://github.com/ramitsurana/awesome-kubernetes)
+
+1. [Awesome Kubernetes Resources](https://github.com/tomhuang12/awesome-k8s-resources)
+
 1. [Awesome Open Source K8s And Container Tools](https://github.com/vilaca/awesome-k8s-tools)
 
 1. [Kubetools - Curated List of Kubernetes Tools](https://github.com/collabnix/kubetools/)
