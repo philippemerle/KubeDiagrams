@@ -346,6 +346,8 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 ### Social Networks
 
+1. [KubeDiagrams](https://app.daily.dev/posts/kubediagrams-e35zcloui) on Daily.dev, May 8, 2025.
+
 1. [KubeDiagrams 0.3.0 is out!](https://www.reddit.com/r/kubernetes/comments/1kapc3i/kubediagrams_030_is_out/) on Reddit, April 29, 2025.
 
 1. [JReuben1's post](https://x.com/jreuben1/status/1913635086047596736) on X, April 19, 2025.
@@ -390,6 +392,10 @@ Following figure shows the software architecture of **KubeDiagrams**.
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=philippemerle/KubeDiagrams&type=Date)](https://www.star-history.com/#philippemerle/KubeDiagrams&Date)
+
+## Issue Stats
+
+[Issue Stats](https://issues.ecosyste.ms/hosts/GitHub/repositories/philippemerle%2FKubeDiagrams)
 
 ## License
 
