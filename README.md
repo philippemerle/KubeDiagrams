@@ -11,7 +11,7 @@
 
 ![KubeDiagrams Logo](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams.png)
 
-Generate Kubernetes architecture diagrams from Kubernetes manifest files, kustomization files, Helm charts, and actual cluster state.
+Generate Kubernetes architecture diagrams from Kubernetes manifest files, kustomization files, Helm charts, helmfile descriptors, and actual cluster state.
 
 There are several tools to generate Kubernetes architecture diagrams (see **[here](https://github.com/philippemerle/Awesome-Kubernetes-Architecture-Diagrams)**).
 The main originality of **KubeDiagrams** is its **[configurability](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml)** allowing for instance to deal with custom Kubernetes resources.
@@ -68,6 +68,7 @@ All the examples are
 1. [Miscellaneous examples](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/miscellaneous/)
 1. [Some Helm charts](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helm-charts/)
 1. [LeaderWorkerSet API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/)
+1. [helmfile](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helmfile/)
 
 ## Prerequisites
 
@@ -117,6 +118,9 @@ kube-diagrams -o cassandra.png examples/cassandra/cassandra.yml
 # generate a diagram from a kustomize folder
 kubectl kustomize path_to_a_kustomize_folder | kube-diagrams - -o diagram.png
 
+# generate a diagram from a helmfile descriptor
+helmfile template -f helmfile.yaml | kube-diagrams - -o diagram.png
+
 # generate a diagram from the actual default namespace state
 kubectl get all -o yaml | kube-diagrams -o default-namespace.png -
 
@@ -154,6 +158,9 @@ docker run -v "$(pwd)":/work philippemerle/kubediagrams kube-diagrams -o cassand
 
 # generate a diagram from a kustomize folder
 kubectl kustomize path_to_a_kustomize_folder | docker run -v "$(pwd)":/work -i philippemerle/kubediagrams kube-diagrams - -o diagram.png
+
+# generate a diagram from a helmfile descriptor
+helmfile template -f helmfile.yaml | docker run -v "$(pwd)":/work -i philippemerle/kubediagrams kube-diagrams - -o diagram.png
 
 # generate a diagram from the actual default namespace state
 kubectl get all -o yaml | docker run -v "$(pwd)":/work -i philippemerle/kubediagrams kube-diagrams -o default-namespace.png -
