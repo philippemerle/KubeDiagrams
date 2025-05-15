@@ -34,5 +34,5 @@ then
   helm repo remove $rid >/dev/null
 else
   # Deal with local charts
-  helm template ${repository}/${chart} 2> /dev/null | kube-diagrams $KD_OPTS --without-namespace -o local-$chart -
+  helm template ${chart} ${repository}/${chart} 2> /dev/null | kube-diagrams $KD_OPTS --without-namespace -o local-$chart -
 fi
