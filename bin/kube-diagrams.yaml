@@ -34,30 +34,47 @@ clusters:
   - label: app.kubernetes.io/instance
     title: K8s Instance
     recommended: true
+    graph_attr:
+      bgcolor: "#E5F5FD"
   - label: release
     title: Release
     recommended: false
+    graph_attr:
+      bgcolor: "#E5F5FD"
   - label: helm.sh/chart
     title: Helm Chart
     recommended: true
+    graph_attr:
+      bgcolor: "#EBF3E7"
   - label: chart
     title: Chart
     recommended: false
+    graph_attr:
+      bgcolor: "#EBF3E7"
   - label: app.kubernetes.io/name
     title: K8s Application
     recommended: true
+    bgcolor: "#ECE8F6"
   - label: app
     title: Application
     recommended: false
+    graph_attr:
+      bgcolor: "#ECE8F6"
   - label: app.kubernetes.io/component
     title: K8s Component
     recommended: true
+    graph_attr:
+      bgcolor: "#FDF7E3"
   - label: service
     title: Microservice
     recommended: false
+    graph_attr:
+      bgcolor: "#FDF7E3"
   - label: tier
     title: Tier
     recommended: false
+    graph_attr:
+      bgcolor: "#FDF7E3"
 nodes:
   APIService/apiregistration.k8s.io/v1:
     scope: Cluster
