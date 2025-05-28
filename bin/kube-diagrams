@@ -16,6 +16,7 @@ import diagrams
 from diagrams import Edge, Cluster
 from diagrams.aws.enablement import ManagedServices
 from diagrams.custom import Custom
+from diagrams.k8s.group import Namespace
 
 # According to https://github.com/yaml/pyyaml/issues/89, PyYAML raises
 # yaml.constructor.ConstructorError: could not determine a constructor for
@@ -40,6 +41,34 @@ class Diagram(diagrams.Diagram):
     """
     # pylint: disable-next=unused-private-member
     __outformats = SUPPORTED_OUTPUT_FORMATS
+
+# Inspired from https://github.com/mingrammer/diagrams/pull/853
+def icon(node: object, label: str, size=64):
+    """
+    Function adds a Diagrams-compatible icon
+
+    :param node: Diagrams object, like VPC or Docker
+    :param label: Label text, like "subnet-a"
+    :param size: Icon size in px.
+    :returns: "Label prefixed with a specified icon"
+    """
+    # pylint: disable-next=too-few-public-methods
+    class Node(node):
+        """
+            Overloading Node class.
+        """
+        def __init__(self):
+            """
+                Initialisation.
+            """
+            # pass # do nothing!
+
+    # pylint: disable-next=protected-access
+    icon_path = Node()._load_icon()
+    return '<<table border="0" width="100%"><tr><td fixedsize="true" width="' \
+            + str(size) + '" height="' + str(size) \
+            + '"><img src="' + icon_path + '" /></td></tr><tr><td>' \
+            + label + '</td></tr></table>>'
 
 # Maximum length for diagram node labels
 MAX_NODE_LABEL_LENGTH = 16
@@ -908,6 +937,12 @@ def process_resource(resource):
             cluster = resource_cluster.get_or_create_cluster(
                         f"Namespace: {get_namespace(resource)}"
                     )
+            cluster.graph_attr.update({
+                "style": "rounded,dashed",
+                "bgcolor": "white",
+                "pencolor": "black",
+                "label": icon(Namespace, get_namespace(resource))
+            })
 
     def process_clusters(cluster, resource, clusters):
         """
@@ -1065,7 +1100,10 @@ def create_custom_cluster(cluster_id, cluster_def):
         Create a custom cluster.
     """
     cluster_name = query_path(cluster_def, "name")
-    with Cluster(cluster_name, graph_attr={"tooltip":cluster_name}):
+    with Cluster(cluster_name, graph_attr={
+            "tooltip": cluster_name,
+            **cluster_def.get("graph_attr", {})
+         }):
         create_custom_clusters_nodes(cluster_id, cluster_def)
 
 def create_custom_clusters_nodes(container_id, container_def):
