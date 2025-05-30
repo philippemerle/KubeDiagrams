@@ -330,6 +330,10 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 ## What do they say about it?
 
+### Papers
+
+1. [Visualizing Cloud-native Applications with KubeDiagrams](http://arxiv.org/abs/2505.22879). Philippe Merle and Fabio Petrillo. arXiv. May 28, 2025.
+
 ### Talks
 
 1. [Visualizing cloud-native applications with KubeDiagrams](https://mybox.inria.fr/f/61de0e6e5be94b7a941f/?dl=1), Philippe Merle, [PEPR Cloud Taranis Project](https://pepr-cloud.fr/en/project-taranis/), February 17, 2025.
