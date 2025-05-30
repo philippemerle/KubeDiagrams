@@ -350,6 +350,18 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 ### Social Networks
 
+1. [Donald Lutz’s post](https://www.linkedin.com/posts/donald-lutz-5a9b0b2_github-philippemerlekubediagrams-generate-activity-7334206152311791617-DONS/) on LinkedIn, May 30, 2025.
+
+1. [Dor Ben Dov’s post](https://www.linkedin.com/posts/dorbendov_visualizing-cloud-native-applications-with-activity-7334205615742873600-RUzT/) on LinkedIn, May 30, 2025.
+
+1. [박상길’s post](https://www.linkedin.com/posts/상길-박-b6ab145a_github-philippemerlekubediagrams-generate-activity-7334020967683264513-oBMC/) on LinkedIn, May 30, 2025.
+
+1. [Visualizing Cloud-native Applications with KubeDiagrams](https://www.reddit.com/r/kubernetes/comments/1kyvadz/visualizing_cloudnative_applications_with/) on Reddit, May 30, 2025.
+
+1. [Kubernetes Architect's post](https://www.linkedin.com/posts/kubernetes-architect_kubediagrams-is-a-tool-that-automatically-activity-7333935435754127381-LSV1/) on LinkedIn, May 29, 2025.
+
+1. [Kubernetes Architect's post](https://x.com/K8sArchitect/status/1928169735843180597) on X, May 29, 2025.
+
 1. [KubeDiagrams](https://app.daily.dev/posts/kubediagrams-e35zcloui) on Daily.dev, May 8, 2025.
 
 1. [KubeDiagrams 0.3.0 is out!](https://www.reddit.com/r/kubernetes/comments/1kapc3i/kubediagrams_030_is_out/) on Reddit, April 29, 2025.
@@ -360,6 +372,12 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 1. [DevOps Radar](https://www.linkedin.com/posts/devops-radar_kubernetes-devops-kubediagrams-activity-7310533737325174784-zEJi) on LinkedIn, April 1, 2025.
 
+1. [Gregory Lindner’s post](https://www.linkedin.com/posts/lindnergreg_kubernetes-helm-activity-7310607746469429250-RXKX/) on LinkedIn, March, 2025.
+
+1. [Vishnu Hari Dadhich’s post](https://www.linkedin.com/posts/vishnuhd_kubernetes-devops-kubediagrams-activity-7310533734376579073-y11N/) on LinkedIn, March, 2025.
+
+1. [Rino Rondan’s post] https://www.linkedin.com/posts/rondancesar_kubediagrams-020-makes-it-way-easier-to-activity-7310933226984787968-Tm4X) on LinkedIn, March, 2025.
+
 1. [Michael Cade's post](https://x.com/MichaelCade1/status/1905964723809427625) on X, March 29, 2025.
 
 1. [Paco Xu's post](https://x.com/xu_paco/status/1904807247206899941) on X, March 26, 2025.
@@ -367,7 +385,7 @@ Following figure shows the software architecture of **KubeDiagrams**.
 1. [KubeDiagrams 0.2.0 is out!](https://www.reddit.com/r/kubernetes/comments/1jjjw6j/kubediagrams_020_is_out/) on Reddit, March 25, 2025.
 
 1. [KubeDiagrams: Revolutionizing Cloud Cluster Management!
-](https://www.linkedin.com/posts/pepr-cloud_kubediagrams-activity-7307698605371379713-BqRp?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAAemi4BApQnQWOvw041B_9Tbc_ljWmw1-E) on LinkedIn, March 18, 2025.
+](https://www.linkedin.com/posts/pepr-cloud_kubediagrams-activity-7307698605371379713-BqRp/) on LinkedIn, March 18, 2025.
 
 1. [Anyone know of any repos/open source tools that can create k8 diagrams?](https://www.reddit.com/r/kubernetes/comments/1jabdoa/anyone_know_of_any_reposopen_source_tools_that/) on Reddit, March 13, 2025.
 
