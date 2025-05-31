@@ -1,0 +1,12 @@
+clusters:
+  - label: app.kubernetes.io/instance
+    show: false # clusters hidden.
+  - label: release
+    show: false # clusters hidden.
+  - label: helm.sh/chart
+    show: false # clusters hidden.
+  - label: chart
+    show: false # clusters hidden.
+nodes:
+  CustomResourceDefinition/apiextensions.k8s.io/v1:
+    show: false # CRD hidden.

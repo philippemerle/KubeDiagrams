@@ -1,0 +1,5 @@
+clusters:
+  - label: app.kubernetes.io/instance
+    show: false # clusters hidden.
+  - label: release
+    show: false # clusters hidden.

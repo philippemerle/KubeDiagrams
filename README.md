@@ -69,6 +69,7 @@ All the examples are
 1. [Some Helm charts](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helm-charts/)
 1. [LeaderWorkerSet API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/)
 1. [helmfile](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helmfile/)
+1. [Istio](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/istio/)
 
 ## Prerequisites
 

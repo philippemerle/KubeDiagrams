@@ -1,0 +1,23 @@
+repositories:
+- name: istio
+  url: https://istio-release.storage.googleapis.com/charts
+
+releases:
+- name: istio-base
+  chart: istio/base
+  namespace: istio-system
+- name: istiod
+  chart: istio/istiod
+  namespace: istio-system
+- name: istio-ingressgateway
+  chart: istio/gateway
+  namespace: istio-ingressgateway
+- name: istio-cni
+  chart: istio/cni
+  namespace: kube-system
+- name: ztunnel
+  chart: istio/ztunnel
+#- name: istiod-remote
+#  chart: istio/istiod-remote
+# - name: ambient
+#   chart: istio/ambient
