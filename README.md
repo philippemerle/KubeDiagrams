@@ -377,7 +377,7 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 1. [Vishnu Hari Dadhich’s post](https://www.linkedin.com/posts/vishnuhd_kubernetes-devops-kubediagrams-activity-7310533734376579073-y11N/) on LinkedIn, March, 2025.
 
-1. [Rino Rondan’s post] https://www.linkedin.com/posts/rondancesar_kubediagrams-020-makes-it-way-easier-to-activity-7310933226984787968-Tm4X) on LinkedIn, March, 2025.
+1. [Rino Rondan’s post](https://www.linkedin.com/posts/rondancesar_kubediagrams-020-makes-it-way-easier-to-activity-7310933226984787968-Tm4X) on LinkedIn, March, 2025.
 
 1. [Michael Cade's post](https://x.com/MichaelCade1/status/1905964723809427625) on X, March 29, 2025.
 
