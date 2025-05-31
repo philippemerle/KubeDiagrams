@@ -54,7 +54,8 @@ clusters:
   - label: app.kubernetes.io/name
     title: K8s Application
     recommended: true
-    bgcolor: "#ECE8F6"
+    graph_attr:
+      bgcolor: "#ECE8F6"
   - label: app
     title: Application
     recommended: false
