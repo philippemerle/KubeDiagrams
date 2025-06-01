@@ -236,7 +236,7 @@ docker run -v "$(pwd)":/work philippemerle/kubediagrams helm-diagrams oci://ghcr
 
 **Note**: The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/KubeDiagrams.yaml#L3), and [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L17).
 
-Currently, there are 15 unsupported Kubernetes resource types:
+Currently, there are 16 unsupported Kubernetes resource types:
 
 | Kind          | ApiGroup                    |
 | :--------: | :-------: |
@@ -247,6 +247,7 @@ Currently, there are 15 unsupported Kubernetes resource types:
 | `TokenReview` | `authentication.k8s.io`|
 | `LocalSubjectAccessReview` | `authorization.k8s.io` |
 | `SelfSubjectAccessReview` | `authorization.k8s.io` |
+| `SelfSubjectReview` | `authorization.k8s.io` |
 | `SelfSubjectRulesReview` | `authorization.k8s.io` |
 | `SubjectAccessReview` | `authorization.k8s.io`|
 | `CertificateSigningRequest` | `certificates.k8s.io` |
