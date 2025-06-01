@@ -341,6 +341,8 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 ### Blogs
 
+1. [[Literature Review] Visualizing Cloud-native Applications with KubeDiagrams](https://www.themoonlight.io/en/review/visualizing-cloud-native-applications-with-kubediagrams), Moonlight, May 27, 2025.
+
 1. [KubeDiagrams](https://blog.csdn.net/gitblog_00745/article/details/147113830), CSDN, April 10, 2025.
 
 1. [Generate Kubernetes Architecture Maps Directly from Your Cluster](https://blog.abhimanyu-saharan.com/posts/generate-kubernetes-architecture-maps-directly-from-your-cluster), Abhimanyu Saharan, March 29, 2025.
@@ -350,6 +352,8 @@ Following figure shows the software architecture of **KubeDiagrams**.
 1. [Visualising SQL Server in Kubernetes](https://dbafromthecold.com/2025/02/06/visualising-sql-server-in-kubernetes/), Andrew Pruski, February 6, 2025.
 
 ### Social Networks
+
+1. [Sebastian Sejzer’s post](https://www.facebook.com/groups/860938820648880/posts/9900239206718751/) on Facebook, May 30, 2025.
 
 1. [Donald Lutz’s post](https://www.linkedin.com/posts/donald-lutz-5a9b0b2_github-philippemerlekubediagrams-generate-activity-7334206152311791617-DONS/) on LinkedIn, May 30, 2025.
 
