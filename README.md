@@ -232,7 +232,7 @@ docker run -v "$(pwd)":/work philippemerle/kubediagrams helm-diagrams oci://ghcr
 | `VerticalPodAutoscaler` | `autoscaling.k8s.io` | `v1` | ![VerticalPodAutoscaler](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vpa.png) |
 | `VolumeAttachment` | `storage.k8s.io` | `v1` | ![VolumeAttachment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/vol-128.png) |
 
-**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L61).
+**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L85).
 
 **Note**: The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/KubeDiagrams.yaml#L3), and [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L17).
 
@@ -261,19 +261,25 @@ Currently, there are 16 unsupported Kubernetes resource types:
 
 With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L33) file (see the `clusters` list).
 
-| Label | Cluster Title |
+| Label Key | Cluster Title |
 | :--------: | :-------: |
-| `app.kubernetes.io/instance` | K8s Instance |
-| `release` | Release |
-| `helm.sh/chart` | Helm Chart |
-| `chart` | Chart |
-| `app.kubernetes.io/name` | K8s Application |
-| `app` | Application |
-| `app.kubernetes.io/component` | K8s Component |
-| `service` | Microservice |
-| `tier` | Tier |
+| `app.kubernetes.io/instance` | K8s Instance: `label value` |
+| `release` | Release: `label value` |
+| `helm.sh/chart` | Helm Chart: `label value` |
+| `chart` | Chart: `label value` |
+| `app.kubernetes.io/name` | K8s Application: `label value` |
+| `app` | Application: `label value` |
+| `app.kubernetes.io/component` | K8s Component: `label value` |
+| `service` | Microservice: `label value` |
+| `tier` | Tier: `label value` |
 
-New mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2),  [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2), and [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L1))
+Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys and cluster titles as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L79) file.
+
+| Annotation Key | Cluster Title |
+| :--------: | :-------: |
+| `helm.sh/hook` | `annotation value` |
+
+New label/annotation-based mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2),  [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2), and [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L1))
  and provided to **KubeDiagrams** via the `--config` command-line option.
 
 ### Kubernetes resource relationships

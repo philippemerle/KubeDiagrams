@@ -76,6 +76,12 @@ clusters:
     recommended: false
     graph_attr:
       bgcolor: "#FDF7E3"
+  - annotation: helm.sh/hook
+    title: "{}"
+    recommended: true
+    graph_attr:
+      bgcolor: "#EBF3E7"
+      style: dotted,rounded
 nodes:
   APIService/apiregistration.k8s.io/v1:
     scope: Cluster
