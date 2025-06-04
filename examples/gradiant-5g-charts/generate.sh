@@ -52,6 +52,9 @@ do
   helm2diagram $chart 2.2.0
 done
 
+kube-diagrams open5gs-corrected.yaml -o diagrams/gradiant-open5gs-corrected.png --without-namespace
+
+# RAN and UE
 helm2diagram iperf3 0.1.3
 helm2diagram jitsi 0.0.5
 helm2diagram oai-enb 0.1.1

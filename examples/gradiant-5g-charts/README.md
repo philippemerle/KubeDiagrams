@@ -135,6 +135,10 @@ Architecture diagram for Gradiant Open5GS Helm Chart:
 
 ![diagrams/gradiant-open5gs.png](diagrams/gradiant-open5gs.png)
 
+Architecture diagram for Gradiant Open5GS Helm Chart with some labels added:
+
+![diagrams/gradiant-open5gs-corrected.png](diagrams/gradiant-open5gs-corrected.png)
+
 ### RAN and UE
 
 Architecture diagram for Gradiant iperf3 Helm Chart:

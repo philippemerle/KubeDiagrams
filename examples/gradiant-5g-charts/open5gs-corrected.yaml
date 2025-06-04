@@ -1,0 +1,6146 @@
+---
+# Source: open5gs/charts/mongodb/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: open5gs-mongodb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mongodb
+    helm.sh/chart: mongodb-12.1.31
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mongodb #PM: Added
+secrets:
+  - name: open5gs-mongodb
+automountServiceAccountToken: true
+---
+# Source: open5gs/charts/amf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-amf
+  labels:
+    app.kubernetes.io/name: amf
+    helm.sh/chart: amf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  amf.yaml: |
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    amf:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+      ngap:
+        server:
+        - dev: eth0
+      guami:
+        -
+          amf_id:
+            region: 2
+            set: 1
+          plmn_id:
+            mcc: "999"
+            mnc: "70"
+      tai:
+        -
+          plmn_id:
+            mcc: "999"
+            mnc: "70"
+          tac:
+          - 1
+          - 2
+          - 3
+      plmn_support:
+        -
+          plmn_id:
+            mcc: "999"
+            mnc: "70"
+          s_nssai:
+          - sst: 1
+      security:
+        integrity_order: [NIA2, NIA1, NIA0]
+        ciphering_order: [NEA0, NEA1, NEA2]
+      network_name:
+        full: Gradiant
+      amf_name: open5gs-amf
+      time:
+        #    t3502:
+        #      value: 720   # 12 minutes * 60 = 720 seconds
+        t3512:
+          value: 540 # 9 minutes * 60 = 540 seconds
+    
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev:eth0
+    #        advertise: open5gs-amf.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/amf.key
+    #        cert: @sysconfdir@/open5gs/tls/amf.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: amf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/amf.key
+    #        cert: @sysconfdir@/open5gs/tls/amf.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/amf.key
+    #        client_cert: @sysconfdir@/open5gs/tls/amf.crt
+    #  sbi:
+    #    server:
+    #      - address: amf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    ################################################################################
+    # NGAP Server
+    ################################################################################
+    #  o Listen on address available in `eth0` interface
+    #  ngap:
+    #    server:
+    #      - dev: eth0
+    #
+    ################################################################################
+    # 3GPP Specification
+    ################################################################################
+    #  o GUAMI
+    #  guami:
+    #    - plmn_id:
+    #        mcc: 999
+    #        mnc: 70
+    #      amf_id:
+    #        region: 2
+    #        set: 1
+    #        pointer: 4
+    #    - plmn_id:
+    #        mcc: 001
+    #        mnc: 01
+    #      amf_id:
+    #        region: 5
+    #        set: 2
+    #
+    #  o TAI
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 001
+    #        mnc: 01
+    #      tac: [1, 3, 5]
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 002
+    #        mnc: 02
+    #      tac: [6-10, 15-18]
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 003
+    #        mnc: 03
+    #      tac: 20
+    #    - plmn_id:
+    #        mcc: 004
+    #        mnc: 04
+    #      tac: 21
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 005
+    #        mnc: 05
+    #      tac: [22, 28]
+    #    - plmn_id:
+    #        mcc: 006
+    #        mnc: 06
+    #      tac: [30-32, 34, 36-38, 40-42, 44, 46, 48]
+    #    - plmn_id:
+    #        mcc: 007
+    #        mnc: 07
+    #      tac: 50
+    #    - plmn_id:
+    #        mcc: 008
+    #        mnc: 08
+    #      tac: 60
+    #    - plmn_id:
+    #        mcc: 009
+    #        mnc: 09
+    #      tac: [70, 80]
+    #
+    #  o PLMN Support
+    #  plmn_support:
+    #    - plmn_id:
+    #        mcc: 999
+    #        mnc: 70
+    #      s_nssai:
+    #        - sst: 1
+    #          sd: 010000
+    #    - plmn_id:
+    #        mcc: 999
+    #        mnc: 70
+    #      s_nssai:
+    #        - sst: 1
+    #
+    #  o Access Control
+    #  access_control:
+    #    - default_reject_cause: 13
+    #    - plmn_id:
+    #        reject_cause: 15
+    #        mcc: 001
+    #        mnc: 01
+    #    - plmn_id:
+    #        mcc: 002
+    #        mnc: 02
+    #    - plmn_id:
+    #        mcc: 999
+    #        mnc: 70
+    #
+    #  o Relative Capacity
+    #  relative_capacity: 100
+---
+# Source: open5gs/charts/ausf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-ausf
+  labels:
+    app.kubernetes.io/name: ausf
+    helm.sh/chart: ausf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  ausf.yaml: |
+    
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    ausf:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+    
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-ausf.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/ausf.key
+    #        cert: @sysconfdir@/open5gs/tls/ausf.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: ausf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/ausf.key
+    #        cert: @sysconfdir@/open5gs/tls/ausf.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/ausf.key
+    #        client_cert: @sysconfdir@/open5gs/tls/ausf.crt
+    #  sbi:
+    #    server:
+    #      - address: ausf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+---
+# Source: open5gs/charts/bsf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-bsf
+  labels:
+    app.kubernetes.io/name: bsf
+    helm.sh/chart: bsf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  bsf.yaml: |
+    
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    bsf:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+    
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-bsf.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/bsf.key
+    #        cert: @sysconfdir@/open5gs/tls/bsf.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: bsf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/bsf.key
+    #        cert: @sysconfdir@/open5gs/tls/bsf.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/bsf.key
+    #        client_cert: @sysconfdir@/open5gs/tls/bsf.crt
+    #  sbi:
+    #    server:
+    #      - address: bsf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+---
+# Source: open5gs/charts/hss/templates/configmap-diameter.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-hss-diameter
+  labels:
+    app.kubernetes.io/name: hss
+    helm.sh/chart: hss-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  hss.conf: |
+    
+    # This is a sample configuration file for freeDiameter daemon.
+    
+    # Most of the options can be omitted, as they default to reasonable values.
+    # Only TLS-related options must be configured properly in usual setups.
+    
+    # It is possible to use "include" keyword to import additional files
+    # e.g.: include "/etc/freeDiameter.d/*.conf"
+    # This is exactly equivalent as copy & paste the content of the included file(s)
+    # where the "include" keyword is found.
+    
+    
+    ##############################################################
+    ##  Peer identity and realm
+    
+    # The Diameter Identity of this daemon.
+    # This must be a valid FQDN that resolves to the local host.
+    # Default: hostname's FQDN
+    #Identity = "aaa.koganei.freediameter.net";
+    Identity = "hss.localdomain";
+    
+    # The Diameter Realm of this daemon.
+    # Default: the domain part of Identity (after the first dot).
+    #Realm = "koganei.freediameter.net";
+    Realm = "localdomain";
+    
+    ##############################################################
+    ##  Transport protocol configuration
+    
+    # The port this peer is listening on for incoming connections (TCP and SCTP).
+    # Default: 3868. Use 0 to disable.
+    Port = 3868;
+    
+    # The port this peer is listening on for incoming TLS-protected connections (TCP and SCTP).
+    # See TLS_old_method for more information about TLS flavours.
+    # Note: we use TLS/SCTP instead of DTLS/SCTP at the moment. This will change in future version of freeDiameter.
+    # Default: 5868. Use 0 to disable.
+    #SecPort = 5868;
+    
+    # Use RFC3588 method for TLS protection, where TLS is negociated after CER/CEA exchange is completed
+    # on the unsecure connection. The alternative is RFC6733 mechanism, where TLS protects also the
+    # CER/CEA exchange on a dedicated secure port.
+    # This parameter only affects outgoing connections.
+    # The setting can be also defined per-peer (see Peers configuration section).
+    # Default: use RFC6733 method with separate port for TLS.
+    #TLS_old_method;
+    
+    # Disable use of TCP protocol (only listen and connect over SCTP)
+    # Default : TCP enabled
+    #No_TCP;
+    
+    # Disable use of SCTP protocol (only listen and connect over TCP)
+    # Default : SCTP enabled
+    #No_SCTP;
+    # This option is ignored if freeDiameter is compiled with DISABLE_SCTP option.
+    
+    # Prefer TCP instead of SCTP for establishing new connections.
+    # This setting may be overwritten per peer in peer configuration blocs.
+    # Default : SCTP is attempted first.
+    #Prefer_TCP;
+    
+    # Default number of streams per SCTP associations.
+    # This setting may be overwritten per peer basis.
+    # Default : 30 streams
+    #SCTP_streams = 30;
+    
+    ##############################################################
+    ##  Endpoint configuration
+    
+    # Disable use of IP addresses (only IPv6)
+    # Default : IP enabled
+    #No_IP;
+    
+    # Disable use of IPv6 addresses (only IP)
+    # Default : IPv6 enabled
+    #No_IPv6;
+    
+    # Specify local addresses the server must bind to
+    # Default : listen on all addresses available.
+    #ListenOn = "202.249.37.5";
+    #ListenOn = "2001:200:903:2::202:1";
+    #ListenOn = "fe80::21c:5ff:fe98:7d62%eth0";
+    #ListenOn = "127.0.0.4";
+    
+    
+    ##############################################################
+    ##  Server configuration
+    
+    # How many Diameter peers are allowed to be connecting at the same time ?
+    # This parameter limits the number of incoming connections from the time
+    # the connection is accepted until the first CER is received.
+    # Default: 5 unidentified clients in paralel.
+    #ThreadsPerServer = 5;
+    
+    ##############################################################
+    ##  TLS Configuration
+    
+    # TLS is managed by the GNUTLS library in the freeDiameter daemon.
+    # You may find more information about parameters and special behaviors
+    # in the relevant documentation.
+    # http://www.gnu.org/software/gnutls/manual/
+    
+    # Credentials of the local peer
+    # The X509 certificate and private key file to use for the local peer.
+    # The files must contain PKCS-1 encoded RSA key, in PEM format.
+    # (These parameters are passed to gnutls_certificate_set_x509_key_file function)
+    # Default : NO DEFAULT
+    #TLS_Cred = "<x509 certif file.PEM>" , "<x509 private key file.PEM>";
+    #TLS_Cred = "/etc/ssl/certs/freeDiameter.pem", "/etc/ssl/private/freeDiameter.key";
+    TLS_Cred = "/opt/open5gs/etc/open5gs/tls/hss.crt", "/opt/open5gs/etc/open5gs/tls/hss.key";
+    
+    # Certificate authority / trust anchors
+    # The file containing the list of trusted Certificate Authorities (PEM list)
+    # (This parameter is passed to gnutls_certificate_set_x509_trust_file function)
+    # The directive can appear several times to specify several files.
+    # Default : GNUTLS default behavior
+    #TLS_CA = "<file.PEM>";
+    TLS_CA = "/opt/open5gs/etc/open5gs/tls/ca.crt";
+    
+    # Certificate Revocation List file
+    # The information about revoked certificates.
+    # The file contains a list of trusted CRLs in PEM format. They should have been verified before.
+    # (This parameter is passed to gnutls_certificate_set_x509_crl_file function)
+    # Note: openssl CRL format might have interoperability issue with GNUTLS format.
+    # Default : GNUTLS default behavior
+    #TLS_CRL = "<file.PEM>";
+    
+    # GNU TLS Priority string
+    # This string allows to configure the behavior of GNUTLS key exchanges
+    # algorithms. See gnutls_priority_init function documentation for information.
+    # You should also refer to the Diameter required TLS support here:
+    #   http://tools.ietf.org/html/rfc6733#section-13.1
+    # Default : "NORMAL"
+    # Example: TLS_Prio = "NONE:+VERS-TLS1.1:+AES-128-CBC:+RSA:+SHA1:+COMP-NULL";
+    #TLS_Prio = "NORMAL";
+    
+    # Diffie-Hellman parameters size
+    # Set the number of bits for generated DH parameters
+    # Valid value should be 768, 1024, 2048, 3072 or 4096.
+    # (This parameter is passed to gnutls_dh_params_generate2 function,
+    # it usually should match RSA key size)
+    # Default : 1024
+    #TLS_DH_Bits = 1024;
+    
+    # Alternatively, you can specify a file to load the PKCS#3 encoded
+    # DH parameters directly from. This accelerates the daemon start
+    # but is slightly less secure. If this file is provided, the
+    # TLS_DH_Bits parameters has no effect.
+    # Default : no default.
+    #TLS_DH_File = "<file.PEM>";
+    
+    
+    ##############################################################
+    ##  Timers configuration
+    
+    # The Tc timer of this peer.
+    # It is the delay before a new attempt is made to reconnect a disconnected peer.
+    # The value is expressed in seconds. The recommended value is 30 seconds.
+    # Default: 30
+    #TcTimer = 30;
+    
+    # The Tw timer of this peer.
+    # It is the delay before a watchdog message is sent, as described in RFC 3539.
+    # The value is expressed in seconds. The default value is 30 seconds. Value must
+    # be greater or equal to 6 seconds. See details in the RFC.
+    # Default: 30
+    #TwTimer = 30;
+    
+    ##############################################################
+    ##  Applications configuration
+    
+    # Disable the relaying of Diameter messages?
+    # For messages not handled locally, the default behavior is to forward the
+    # message to another peer if any is available, according to the routing
+    # algorithms. In addition the "0xffffff" application is advertised in CER/CEA
+    # exchanges.
+    # Default: Relaying is enabled.
+    #NoRelay;
+    
+    # Number of server threads that can handle incoming messages at the same time.
+    # Default: 4
+    #AppServThreads = 4;
+    
+    # Other applications are configured by loaded extensions.
+    
+    ##############################################################
+    ##  Extensions configuration
+    
+    #  The freeDiameter framework merely provides support for
+    # Diameter Base Protocol. The specific application behaviors,
+    # as well as advanced functions, are provided
+    # by loadable extensions (plug-ins).
+    #  These extensions may in addition receive the name of a
+    # configuration file, the format of which is extension-specific.
+    #
+    # Format:
+    #LoadExtension = "/path/to/extension" [ : "/optional/configuration/file" ] ;
+    #
+    # Examples:
+    #LoadExtension = "extensions/sample.fdx";
+    #LoadExtension = "extensions/sample.fdx":"conf/sample.conf";
+    
+    # Extensions are named as follow:
+    # dict_* for extensions that add content to the dictionary definitions.
+    # dbg_*  for extensions useful only to retrieve more information on the framework execution.
+    # acl_*  : Access control list, to control which peers are allowed to connect.
+    # rt_*   : routing extensions that impact how messages are forwarded to other peers.
+    # app_*  : applications, these extensions usually register callbacks to handle specific messages.
+    # test_* : dummy extensions that are useful only in testing environments.
+    
+    
+    # The dbg_msg_dump.fdx extension allows you to tweak the way freeDiameter displays some
+    # information about some events. This extension does not actually use a configuration file
+    # but receives directly a parameter in the string passed to the extension. Here are some examples:
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x1111"; # Removes all default hooks, very quiet even in case of errors.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x2222"; # Display all events with few details.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x0080"; # Dump complete information about sent and received messages.
+    # The four digits respectively control: connections, routing decisions, sent/received messages, errors.
+    # The values for each digit are:
+    #  0 - default - keep the default behavior
+    #  1 - quiet   - remove any specific log
+    #  2 - compact - display only a summary of the information
+    #  4 - full    - display the complete information on a single long line
+    #  8 - tree    - display the complete information in an easier to read format spanning several lines.
+    
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dbg_msg_dumps.fdx" : "0x8888";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_rfc5777.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_mip6i.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nasreq.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nas_mipv6.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca_3gpp.fdx";
+    
+    
+    ##############################################################
+    ##  Peers configuration
+    
+    #  The local server listens for incoming connections. By default,
+    # all unknown connecting peers are rejected. Extensions can override this behavior (e.g., acl_wl).
+    # 
+    #  In addition to incoming connections, the local peer can
+    # be configured to establish and maintain connections to some
+    # Diameter nodes and allow connections from these nodes.
+    #  This is achieved with the ConnectPeer directive described below.
+    #
+    # Note that the configured Diameter Identity MUST match
+    # the information received inside CEA, or the connection will be aborted.
+    #
+    # Format:
+    #ConnectPeer = "diameterid" [ { parameter1; parameter2; ...} ] ;
+    # Parameters that can be specified in the peer's parameter list:
+    #  No_TCP; No_SCTP; No_IP; No_IPv6; Prefer_TCP; TLS_old_method;
+    #  No_TLS;       # assume transparent security instead of TLS. DTLS is not supported yet (will change in future versions).
+    #  Port = 5868;  # The port to connect to
+    #  TcTimer = 30;
+    #  TwTimer = 30;
+    #  ConnectTo = "202.249.37.5";
+    #  ConnectTo = "2001:200:903:2::202:1";
+    #  TLS_Prio = "NORMAL";
+    #  Realm = "realm.net"; # Reject the peer if it does not advertise this realm.
+    # Examples:
+    #ConnectPeer = "aaa.wide.ad.jp";
+    #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
+    ConnectPeer = "mme.localdomain" { ConnectTo = "open5gs-mme-frdi"; TcTimer = 60; TwTimer = 30; No_TLS; Port=3868; };
+---
+# Source: open5gs/charts/hss/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-hss
+  labels:
+    app.kubernetes.io/name: hss
+    helm.sh/chart: hss-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  hss.yaml: |
+    logger:
+      level: info
+    parameter: {}
+    global:
+    hss:
+      freeDiameter: hss.conf
+---
+# Source: open5gs/charts/mme/templates/configmap-diameter.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-mme-diameter
+  labels:
+    app.kubernetes.io/name: mme
+    helm.sh/chart: mme-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  mme.conf: |
+    
+    # This is a sample configuration file for freeDiameter daemon.
+    
+    # Most of the options can be omitted, as they default to reasonable values.
+    # Only TLS-related options must be configured properly in usual setups.
+    
+    # It is possible to use "include" keyword to import additional files
+    # e.g.: include "/etc/freeDiameter.d/*.conf"
+    # This is exactly equivalent as copy & paste the content of the included file(s)
+    # where the "include" keyword is found.
+    
+    
+    ##############################################################
+    ##  Peer identity and realm
+    
+    # The Diameter Identity of this daemon.
+    # This must be a valid FQDN that resolves to the local host.
+    # Default: hostname's FQDN
+    #Identity = "aaa.koganei.freediameter.net";
+    Identity = "mme.localdomain";
+    
+    # The Diameter Realm of this daemon.
+    # Default: the domain part of Identity (after the first dot).
+    #Realm = "koganei.freediameter.net";
+    Realm = "localdomain";
+    
+    ##############################################################
+    ##  Transport protocol configuration
+    
+    # The port this peer is listening on for incoming connections (TCP and SCTP).
+    # Default: 3868. Use 0 to disable.
+    Port = 3868;
+    
+    # The port this peer is listening on for incoming TLS-protected connections (TCP and SCTP).
+    # See TLS_old_method for more information about TLS flavours.
+    # Note: we use TLS/SCTP instead of DTLS/SCTP at the moment. This will change in future version of freeDiameter.
+    # Default: 5868. Use 0 to disable.
+    #SecPort = 5868;
+    
+    # Use RFC3588 method for TLS protection, where TLS is negociated after CER/CEA exchange is completed
+    # on the unsecure connection. The alternative is RFC6733 mechanism, where TLS protects also the
+    # CER/CEA exchange on a dedicated secure port.
+    # This parameter only affects outgoing connections.
+    # The setting can be also defined per-peer (see Peers configuration section).
+    # Default: use RFC6733 method with separate port for TLS.
+    #TLS_old_method;
+    
+    # Disable use of TCP protocol (only listen and connect over SCTP)
+    # Default : TCP enabled
+    #No_TCP;
+    
+    # Disable use of SCTP protocol (only listen and connect over TCP)
+    # Default : SCTP enabled
+    #No_SCTP;
+    # This option is ignored if freeDiameter is compiled with DISABLE_SCTP option.
+    
+    # Prefer TCP instead of SCTP for establishing new connections.
+    # This setting may be overwritten per peer in peer configuration blocs.
+    # Default : SCTP is attempted first.
+    #Prefer_TCP;
+    
+    # Default number of streams per SCTP associations.
+    # This setting may be overwritten per peer basis.
+    # Default : 30 streams
+    #SCTP_streams = 30;
+    
+    ##############################################################
+    ##  Endpoint configuration
+    
+    # Disable use of IP addresses (only IPv6)
+    # Default : IP enabled
+    #No_IP;
+    
+    # Disable use of IPv6 addresses (only IP)
+    # Default : IPv6 enabled
+    #No_IPv6;
+    
+    # Specify local addresses the server must bind to
+    # Default : listen on all addresses available.
+    #ListenOn = "202.249.37.5";
+    #ListenOn = "2001:200:903:2::202:1";
+    #ListenOn = "fe80::21c:5ff:fe98:7d62%eth0";
+    #ListenOn = "127.0.0.2";
+    
+    
+    ##############################################################
+    ##  Server configuration
+    
+    # How many Diameter peers are allowed to be connecting at the same time ?
+    # This parameter limits the number of incoming connections from the time
+    # the connection is accepted until the first CER is received.
+    # Default: 5 unidentified clients in paralel.
+    #ThreadsPerServer = 5;
+    
+    ##############################################################
+    ##  TLS Configuration
+    
+    # TLS is managed by the GNUTLS library in the freeDiameter daemon.
+    # You may find more information about parameters and special behaviors
+    # in the relevant documentation.
+    # http://www.gnu.org/software/gnutls/manual/
+    
+    # Credentials of the local peer
+    # The X509 certificate and private key file to use for the local peer.
+    # The files must contain PKCS-1 encoded RSA key, in PEM format.
+    # (These parameters are passed to gnutls_certificate_set_x509_key_file function)
+    # Default : NO DEFAULT
+    #TLS_Cred = "<x509 certif file.PEM>" , "<x509 private key file.PEM>";
+    #TLS_Cred = "/etc/ssl/certs/freeDiameter.pem", "/etc/ssl/private/freeDiameter.key";
+    TLS_Cred = "/opt/open5gs/etc/open5gs/tls/mme.crt", "/opt/open5gs/etc/open5gs/tls/mme.key";
+    
+    # Certificate authority / trust anchors
+    # The file containing the list of trusted Certificate Authorities (PEM list)
+    # (This parameter is passed to gnutls_certificate_set_x509_trust_file function)
+    # The directive can appear several times to specify several files.
+    # Default : GNUTLS default behavior
+    #TLS_CA = "<file.PEM>";
+    TLS_CA = "/opt/open5gs/etc/open5gs/tls/ca.crt";
+    
+    # Certificate Revocation List file
+    # The information about revoked certificates.
+    # The file contains a list of trusted CRLs in PEM format. They should have been verified before.
+    # (This parameter is passed to gnutls_certificate_set_x509_crl_file function)
+    # Note: openssl CRL format might have interoperability issue with GNUTLS format.
+    # Default : GNUTLS default behavior
+    #TLS_CRL = "<file.PEM>";
+    
+    # GNU TLS Priority string
+    # This string allows to configure the behavior of GNUTLS key exchanges
+    # algorithms. See gnutls_priority_init function documentation for information.
+    # You should also refer to the Diameter required TLS support here:
+    #   http://tools.ietf.org/html/rfc6733#section-13.1
+    # Default : "NORMAL"
+    # Example: TLS_Prio = "NONE:+VERS-TLS1.1:+AES-128-CBC:+RSA:+SHA1:+COMP-NULL";
+    #TLS_Prio = "NORMAL";
+    
+    # Diffie-Hellman parameters size
+    # Set the number of bits for generated DH parameters
+    # Valid value should be 768, 1024, 2048, 3072 or 4096.
+    # (This parameter is passed to gnutls_dh_params_generate2 function,
+    # it usually should match RSA key size)
+    # Default : 1024
+    #TLS_DH_Bits = 1024;
+    
+    # Alternatively, you can specify a file to load the PKCS#3 encoded
+    # DH parameters directly from. This accelerates the daemon start
+    # but is slightly less secure. If this file is provided, the
+    # TLS_DH_Bits parameters has no effect.
+    # Default : no default.
+    #TLS_DH_File = "<file.PEM>";
+    
+    
+    ##############################################################
+    ##  Timers configuration
+    
+    # The Tc timer of this peer.
+    # It is the delay before a new attempt is made to reconnect a disconnected peer.
+    # The value is expressed in seconds. The recommended value is 30 seconds.
+    # Default: 30
+    #TcTimer = 30;
+    
+    # The Tw timer of this peer.
+    # It is the delay before a watchdog message is sent, as described in RFC 3539.
+    # The value is expressed in seconds. The default value is 30 seconds. Value must
+    # be greater or equal to 6 seconds. See details in the RFC.
+    # Default: 30
+    #TwTimer = 30;
+    
+    ##############################################################
+    ##  Applications configuration
+    
+    # Disable the relaying of Diameter messages?
+    # For messages not handled locally, the default behavior is to forward the
+    # message to another peer if any is available, according to the routing
+    # algorithms. In addition the "0xffffff" application is advertised in CER/CEA
+    # exchanges.
+    # Default: Relaying is enabled.
+    #NoRelay;
+    
+    # Number of server threads that can handle incoming messages at the same time.
+    # Default: 4
+    #AppServThreads = 4;
+    
+    # Other applications are configured by loaded extensions.
+    
+    ##############################################################
+    ##  Extensions configuration
+    
+    #  The freeDiameter framework merely provides support for
+    # Diameter Base Protocol. The specific application behaviors,
+    # as well as advanced functions, are provided
+    # by loadable extensions (plug-ins).
+    #  These extensions may in addition receive the name of a
+    # configuration file, the format of which is extension-specific.
+    #
+    # Format:
+    #LoadExtension = "/path/to/extension" [ : "/optional/configuration/file" ] ;
+    #
+    # Examples:
+    #LoadExtension = "extensions/sample.fdx";
+    #LoadExtension = "extensions/sample.fdx":"conf/sample.conf";
+    
+    # Extensions are named as follow:
+    # dict_* for extensions that add content to the dictionary definitions.
+    # dbg_*  for extensions useful only to retrieve more information on the framework execution.
+    # acl_*  : Access control list, to control which peers are allowed to connect.
+    # rt_*   : routing extensions that impact how messages are forwarded to other peers.
+    # app_*  : applications, these extensions usually register callbacks to handle specific messages.
+    # test_* : dummy extensions that are useful only in testing environments.
+    
+    
+    # The dbg_msg_dump.fdx extension allows you to tweak the way freeDiameter displays some
+    # information about some events. This extension does not actually use a configuration file
+    # but receives directly a parameter in the string passed to the extension. Here are some examples:
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x1111"; # Removes all default hooks, very quiet even in case of errors.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x2222"; # Display all events with few details.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x0080"; # Dump complete information about sent and received messages.
+    # The four digits respectively control: connections, routing decisions, sent/received messages, errors.
+    # The values for each digit are:
+    #  0 - default - keep the default behavior
+    #  1 - quiet   - remove any specific log
+    #  2 - compact - display only a summary of the information
+    #  4 - full    - display the complete information on a single long line
+    #  8 - tree    - display the complete information in an easier to read format spanning several lines.
+    
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dbg_msg_dumps.fdx" : "0x8888";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_rfc5777.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_mip6i.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nasreq.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nas_mipv6.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca_3gpp.fdx";
+    
+    
+    ##############################################################
+    ##  Peers configuration
+    
+    #  The local server listens for incoming connections. By default,
+    # all unknown connecting peers are rejected. Extensions can override this behavior (e.g., acl_wl).
+    #
+    #  In addition to incoming connections, the local peer can
+    # be configured to establish and maintain connections to some
+    # Diameter nodes and allow connections from these nodes.
+    #  This is achieved with the ConnectPeer directive described below.
+    #
+    # Note that the configured Diameter Identity MUST match
+    # the information received inside CEA, or the connection will be aborted.
+    #
+    # Format:
+    #ConnectPeer = "diameterid" [ { parameter1; parameter2; ...} ] ;
+    # Parameters that can be specified in the peer's parameter list:
+    #  No_TCP; No_SCTP; No_IP; No_IPv6; Prefer_TCP; TLS_old_method;
+    #  No_TLS;       # assume transparent security instead of TLS. DTLS is not supported yet (will change in future versions).
+    #  Port = 5868;  # The port to connect to
+    #  TcTimer = 30;
+    #  TwTimer = 30;
+    #  ConnectTo = "202.249.37.5";
+    #  ConnectTo = "2001:200:903:2::202:1";
+    #  TLS_Prio = "NORMAL";
+    #  Realm = "realm.net"; # Reject the peer if it does not advertise this realm.
+    # Examples:
+    #ConnectPeer = "aaa.wide.ad.jp";
+    #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
+    ConnectPeer = "hss.localdomain" { ConnectTo = "open5gs-hss-frdi"; TcTimer = 60; TwTimer = 30; No_TLS; Port=3868; };
+---
+# Source: open5gs/charts/mme/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-mme
+  labels:
+    app.kubernetes.io/name: mme
+    helm.sh/chart: mme-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  mme.yaml: |
+    
+    logger:
+      level: info
+    parameter: {}
+    
+    global:
+    
+    mme:
+      s1ap:
+        server:
+        - dev: "eth0"
+      gtpc:
+        server:
+        - dev: "eth0"
+        client:
+          sgwc:
+          - address: open5gs-sgwc-gtpc
+            tac: 1
+          smf:
+          - address: open5gs-smf-gtpc
+            tac: 1
+      freeDiameter: mme.conf
+      gummei:
+        -
+          mme_code: 1
+          mme_gid: 2
+          plmn_id:
+            mcc: "999"
+            mnc: "70"
+      tai:
+        -
+          plmn_id:
+            mcc: "999"
+            mnc: "70"
+          tac:
+          - 1
+      security:
+        integrity_order : [ EIA2, EIA1, EIA0 ]
+        ciphering_order : [ EEA0, EEA1, EEA2 ]
+      network_name:
+        full: Gradiant
+      mme_name: open5gs-mme
+      time:
+    #    t3402:
+    #      value: 720   # 12 minutes * 60 = 720 seconds
+    #    t3412:
+    #      value: 3240  # 54 minutes * 60 = 3240 seconds
+    #    t3423:
+    #      value: 720   # 12 minutes * 60 = 720 seconds
+    
+    ################################################################################
+    # S1AP Server
+    ################################################################################
+    #  o Listen on address available in `eth0` interface
+    #  ngap:
+    #    server:
+    #      - dev: eth0
+    #
+    ################################################################################
+    # GTP-C Server
+    ################################################################################
+    #  o Listen on IPv4 and IPv6
+    #  gtpc:
+    #    server:
+    #      - address: 127.0.0.2
+    #      - address: ::1
+    #
+    ################################################################################
+    # GTP-C Client
+    ################################################################################
+    #  o SGW selection by eNodeB TAC
+    #   (either single TAC or multiple TACs, DECIMAL representation)
+    #  gtpc:
+    #    client:
+    #      sgwc:
+    #        - address: 127.0.0.3
+    #          tac: 26000
+    #        - address: 127.0.2.2
+    #          tac: [25000, 27000, 28000]
+    #
+    #  o SGW selection by e_cell_id(28bit)
+    #   (either single or multiple e_cell_id, HEX representation)
+    #  gtpc:
+    #    client:
+    #      sgwc:
+    #        - address: 127.0.0.3
+    #          e_cell_id: abcde01
+    #        - address: 127.0.2.2
+    #          e_cell_id: [12345, a9413, 98765]
+    #
+    #  o SMF selection by APN
+    #  gtpc:
+    #    client:
+    #      smf:
+    #        - address: 127.0.0.4
+    #          apn: internet
+    #        - address: 127.0.0.5
+    #          apn: volte
+    #
+    #  o SMF selection by eNodeB TAC
+    #   (either single TAC or multiple TACs, DECIMAL representation)
+    #  gtpc:
+    #    client:
+    #      smf:
+    #        - address: 127.0.0.4
+    #          tac: 26000
+    #        - address: 127.0.2.4
+    #          tac: [25000, 27000, 28000]
+    #
+    #  o SMF selection by e_cell_id(28bit)
+    #   (either single or multiple e_cell_id, HEX representation)
+    #  gtpc:
+    #    client:
+    #      smf:
+    #        - address: 127.0.0.4
+    #          e_cell_id: abcde01
+    #        - address: 127.0.2.4
+    #          e_cell_id: [12345, a9413, 98765]
+    #
+    #  o One SGSN is defined.
+    #    If prefer_ipv4 is not true, [fd69:f21d:873c:fa::2] is selected.
+    #  gtpc:
+    #    client:
+    #      sgsn:
+    #        - address:
+    #          - 127.0.0.3
+    #          - fd69:f21d:873c:fa::2
+    #          routes:
+    #          - rai:
+    #              lai:
+    #                plmn_id:
+    #                  mcc: 001
+    #                  mnc: 01
+    #                lac: 43690
+    #              rac: 187
+    #            ci: 1223
+    #
+    #
+    #  o Two SGSNs are defined. Last one is used by default if no
+    #    matching RAI+CI route is found.
+    #  gtpc:
+    #    client:
+    #      sgsn:
+    #        - address:
+    #          - 127.0.0.3
+    #          - fd69:f21d:873c:fa::2
+    #          routes:
+    #          - rai:
+    #              lai:
+    #                plmn_id:
+    #                  mcc: 001
+    #                  mnc: 01
+    #                lac: 43690
+    #              rac: 187
+    #            ci: 1223
+    #        - name: sgsn3.open5gs.org
+    #          default_route: true
+    #
+    ################################################################################
+    # SGaAP Server
+    ################################################################################
+    #  o MSC/VLR
+    #  sgsap:
+    #    server:
+    #      - address: 127.0.0.2
+    #        map:
+    #          tai:
+    #            plmn_id:
+    #              mcc: 001
+    #              mnc: 01
+    #            tac: 4131
+    #          lai:
+    #            plmn_id:
+    #              mcc: 001
+    #              mnc: 01
+    #            lac: 43691
+    #        map:
+    #          tai:
+    #            plmn_id:
+    #              mcc: 002
+    #              mnc: 02
+    #            tac: 4132
+    #          lai:
+    #            plmn_id:
+    #              mcc: 002
+    #              mnc: 02
+    #            lac: 43692
+    #      - address: msc.open5gs.org
+    #        map:
+    #          tai:
+    #            plmn_id:
+    #              mcc: 001
+    #              mnc: 01
+    #            tac: 4133
+    #          lai:
+    #            plmn_id:
+    #              mcc: 002
+    #              mnc: 02
+    #            lac: 43693
+    #
+    ################################################################################
+    # 3GPP Specification
+    ################################################################################
+    #  o GUMMEI
+    #  gummei:
+    #    - plmn_id:
+    #        mcc: 001
+    #        mnc: 01
+    #      mme_gid: 2
+    #      mme_code: 1
+    #    - plmn_id:
+    #        - mcc: 002
+    #          mnc: 02
+    #        - mcc: 003
+    #          mnc: 03
+    #      mme_gid: [3, 4]
+    #      mme_code:
+    #        - 2
+    #        - 3
+    #
+    #  o TAI
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 001
+    #        mnc: 01
+    #      tac: [1, 3, 5]
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 002
+    #        mnc: 02
+    #      tac: [6-10, 15-18]
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 003
+    #        mnc: 03
+    #      tac: 20
+    #    - plmn_id:
+    #        mcc: 004
+    #        mnc: 04
+    #      tac: 21
+    #  tai:
+    #    - plmn_id:
+    #        mcc: 005
+    #        mnc: 05
+    #      tac: [22, 28]
+    #    - plmn_id:
+    #        mcc: 006
+    #        mnc: 06
+    #      tac: [30-32, 34, 36-38, 40-42, 44, 46, 48]
+    #    - plmn_id:
+    #        mcc: 007
+    #        mnc: 07
+    #      tac: 50
+    #    - plmn_id:
+    #        mcc: 008
+    #        mnc: 08
+    #      tac: 60
+    #    - plmn_id:
+    #        mcc: 009
+    #        mnc: 09
+    #      tac: [70, 80]
+    #
+    #  o Access Control
+    #  access_control:
+    #    - default_reject_cause: 13
+    #    - plmn_id:
+    #        reject_cause: 15
+    #        mcc: 001
+    #        mnc: 01
+    #    - plmn_id:
+    #        mcc: 002
+    #        mnc: 02
+    #    - plmn_id:
+    #        mcc: 999
+    #        mnc: 70
+    #
+    #  o Relative Capacity
+    #  relative_capacity: 100
+---
+# Source: open5gs/charts/mongodb/templates/common-scripts-cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-mongodb-common-scripts
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mongodb
+    helm.sh/chart: mongodb-12.1.31
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mongodb
+data:
+  startup-probe.sh: |
+    #!/bin/bash
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+  readiness-probe.sh: |
+    #!/bin/bash
+    # Run the proper check depending on the version
+    [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
+    . /opt/bitnami/scripts/libversion.sh
+    VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
+    VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
+    VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
+    if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
+        mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep -q 'true'
+    else
+        mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep -q 'true'
+    fi
+  ping-mongodb.sh: |
+    #!/bin/bash
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
+---
+# Source: open5gs/charts/nrf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-nrf
+  labels:
+    app.kubernetes.io/name: nrf
+    helm.sh/chart: nrf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  nrf.yaml: |
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    nrf:
+      serving: # 5G roaming requires PLMN in NRF
+      - plmn_id:
+          mcc: 999
+          mnc: 70
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+    
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-nrf.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/nrf.key
+    #        cert: @sysconfdir@/open5gs/tls/nrf.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/nrf.key
+    #        cert: @sysconfdir@/open5gs/tls/nrf.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/nrf.key
+    #        client_cert: @sysconfdir@/open5gs/tls/nrf.crt
+    #  sbi:
+    #    server:
+    #      - address: nrf.localdomain
+---
+# Source: open5gs/charts/nssf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-nssf
+  labels:
+    app.kubernetes.io/name: nssf
+    helm.sh/chart: nssf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  nssf.yaml: |
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+      max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    nssf:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+          nsi:
+          - uri: http://open5gs-nrf-sbi:7777
+            s_nssai:
+              sst: "1"
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-nssf.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Network Slice Instance(NSI)
+    #   1. NRF[http://::1:7777/nnrf-nfm/v1/nf-instances]
+    #      S-NSSAI[SST:1]
+    #   2. NRF[http://127.0.0.19:7777/nnrf-nfm/v1/nf-instances]
+    #      NSSAI[SST:1, SD:000080]
+    #   3. NRF[http://127.0.0.10:7777/nnrf-nfm/v1/nf-instances]
+    #      NSSAI[SST:1, SD:009000]
+    #
+    #  sbi:
+    #    client:
+    #      nsi:
+    #        - uri: http://[::1]:7777
+    #          s_nssai:
+    #            sst: 1
+    #        - uri: http://127.0.0.19:7777
+    #          s_nssai:
+    #            sst: 1
+    #            sd: 000080
+    #        - uri: http://127.0.0.10:7777
+    #          s_nssai:
+    #            sst: 1
+    #            sd: 009000
+    #
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/nssf.key
+    #        cert: @sysconfdir@/open5gs/tls/nssf.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: nssf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #      nsi:
+    #        - uri: https://nrf.localdomain
+    #          s_nssai:
+    #            sst: 1
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/nssf.key
+    #        cert: @sysconfdir@/open5gs/tls/nssf.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/nssf.key
+    #        client_cert: @sysconfdir@/open5gs/tls/nssf.crt
+    #  sbi:
+    #    server:
+    #      - address: nssf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #      nsi:
+    #        - uri: https://nrf.localdomain
+    #          s_nssai:
+    #            sst: 1
+---
+# Source: open5gs/charts/pcf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-pcf
+  labels:
+    app.kubernetes.io/name: pcf
+    helm.sh/chart: pcf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  pcf.yaml: |
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    pcf:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+    
+    ################################################################################
+    # Locally configured policy
+    # - The PCF in the VPLMN uses locally configured policies
+    #   according to the roaming agreement with the HPLMN operator
+    #   as input for PCC Rule generation.
+    ################################################################################
+    #
+    #  o You don't have to use MongoDB if you use the policy configuration as below.
+    #
+    #  policy:
+    #    - plmn_id:
+    #        mcc: 999
+    #        mnc: 70
+    #      slice:
+    #        - sst: 1  # 1,2,3,4
+    #          default_indicator: true
+    #          session:
+    #            - name: internet
+    #              type: 3  # 1:IPv4, 2:IPv6, 3:IPv4v6
+    #              ambr:
+    #                downlink:
+    #                  value: 1
+    #                  unit: 3  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                uplink:
+    #                  value: 1
+    #                  unit: 3
+    #              qos:
+    #                index: 9  # 1, 2, 3, 4, 65, 66, 67, 75, 71, 72, 73, 74, 76, 5, 6, 7, 8, 9, 69, 70, 79, 80, 82, 83, 84, 85, 86
+    #                arp:
+    #                  priority_level: 8  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    #                  pre_emption_vulnerability: 1  # 1: Disabled, 2:Enabled
+    #                  pre_emption_capability: 1  # 1: Disabled, 2:Enabled
+    #            - name: ims
+    #              type: 3  # 1:IPv4, 2:IPv6, 3:IPv4v6
+    #              ambr:
+    #                downlink:
+    #                  value: 1
+    #                  unit: 3  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                uplink:
+    #                  value: 1
+    #                  unit: 3  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #              qos:
+    #                index: 5  # 1, 2, 3, 4, 65, 66, 67, 75, 71, 72, 73, 74, 76, 5, 6, 7, 8, 9, 69, 70, 79, 80, 82, 83, 84, 85, 86
+    #                arp:
+    #                  priority_level: 1  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    #                  pre_emption_vulnerability: 1  # 1: Disabled, 2:Enabled
+    #                  pre_emption_capability: 1  # 1: Disabled, 2:Enabled
+    #              pcc_rule:
+    #                - qos:
+    #                    index: 1  # 1, 2, 3, 4, 65, 66, 67, 75, 71, 72, 73, 74, 76, 5, 6, 7, 8, 9, 69, 70, 79, 80, 82, 83, 84, 85, 86
+    #                    arp:
+    #                      priority_level: 1  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    #                      pre_emption_vulnerability: 1   # 1: Disabled, 2:Enabled
+    #                      pre_emption_capability: 1   # 1: Disabled, 2:Enabled
+    #                    mbr:
+    #                      downlink:
+    #                        value: 82
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                      uplink:
+    #                        value: 82
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                    gbr:
+    #                      downlink:
+    #                        value: 82
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                      uplink:
+    #                        value: 82
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                  flow:
+    #                    - direction: 2
+    #                      description: "permit out icmp from any to assigned"
+    #                    - direction: 1
+    #                      description: "permit out icmp from any to assigned"
+    #                    - direction: 2
+    #                      description: "permit out udp from 10.200.136.98/32 23455 to assigned 1-65535"
+    #                    - direction: 1
+    #                      description: "permit out udp from 10.200.136.98/32 1-65535 to assigned 50021"
+    #                - qos:
+    #                    index: 2  # 1, 2, 3, 4, 65, 66, 67, 75, 71, 72, 73, 74, 76, 5, 6, 7, 8, 9, 69, 70, 79, 80, 82, 83, 84, 85, 86
+    #                    arp:
+    #                      priority_level: 4  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    #                      pre_emption_vulnerability: 2   # 1: Disabled, 2:Enabled
+    #                      pre_emption_capability: 2   # 1: Disabled, 2:Enabled
+    #                    mbr:
+    #                      downlink:
+    #                        value: 802
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                      uplink:
+    #                        value: 802
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                    gbr:
+    #                      downlink:
+    #                        value: 802
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                      uplink:
+    #                        value: 802
+    #                        unit: 1  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #    - plmn_id:
+    #        mcc: 001
+    #        mnc: 01
+    #      slice:
+    #        - sst: 1  # 1,2,3,4
+    #          sd: 000001
+    #          default_indicator: true
+    #          session:
+    #            - name: internet
+    #              type: 3  # 1:IPv4, 2:IPv6, 3:IPv4v6
+    #              ambr:
+    #                downlink:
+    #                  value: 1
+    #                  unit: 3  # 0:bps, 1:Kbps, 2:Mbps, 3:Gbps, 4:Tbps
+    #                uplink:
+    #                  value: 1
+    #                  unit: 3
+    #              qos:
+    #                index: 9  # 1, 2, 3, 4, 65, 66, 67, 75, 71, 72, 73, 74, 76, 5, 6, 7, 8, 9, 69, 70, 79, 80, 82, 83, 84, 85, 86
+    #                arp:
+    #                  priority_level: 8  # 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    #                  pre_emption_vulnerability: 1  # 1: Disabled, 2:Enabled
+    #                  pre_emption_capability: 1  # 1: Disabled, 2:Enabled
+    #
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-pcf.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/pcf.key
+    #        cert: @sysconfdir@/open5gs/tls/pcf.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: pcf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/pcf.key
+    #        cert: @sysconfdir@/open5gs/tls/pcf.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/pcf.key
+    #        client_cert: @sysconfdir@/open5gs/tls/pcf.crt
+    #  sbi:
+    #    server:
+    #      - address: pcf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+---
+# Source: open5gs/charts/pcrf/templates/configmap-diameter.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-pcrf-diameter
+  labels:
+    app.kubernetes.io/name: pcrf
+    helm.sh/chart: pcrf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  pcrf.conf: |
+    
+    # This is a sample configuration file for freeDiameter daemon.
+    
+    # Most of the options can be omitted, as they default to reasonable values.
+    # Only TLS-related options must be configured properly in usual setups.
+    
+    # It is possible to use "include" keyword to import additional files
+    # e.g.: include "/etc/freeDiameter.d/*.conf"
+    # This is exactly equivalent as copy & paste the content of the included file(s)
+    # where the "include" keyword is found.
+    
+    
+    ##############################################################
+    ##  Peer identity and realm
+    
+    # The Diameter Identity of this daemon.
+    # This must be a valid FQDN that resolves to the local host.
+    # Default: hostname's FQDN
+    #Identity = "aaa.koganei.freediameter.net";
+    Identity = "pcrf.localdomain";
+    
+    # The Diameter Realm of this daemon.
+    # Default: the domain part of Identity (after the first dot).
+    #Realm = "koganei.freediameter.net";
+    Realm = "localdomain";
+    
+    ##############################################################
+    ##  Transport protocol configuration
+    
+    # The port this peer is listening on for incoming connections (TCP and SCTP).
+    # Default: 3868. Use 0 to disable.
+    Port = 3868;
+    
+    # The port this peer is listening on for incoming TLS-protected connections (TCP and SCTP).
+    # See TLS_old_method for more information about TLS flavours.
+    # Note: we use TLS/SCTP instead of DTLS/SCTP at the moment. This will change in future version of freeDiameter.
+    # Default: 5868. Use 0 to disable.
+    #SecPort = 5868;
+    
+    # Use RFC3588 method for TLS protection, where TLS is negociated after CER/CEA exchange is completed
+    # on the unsecure connection. The alternative is RFC6733 mechanism, where TLS protects also the
+    # CER/CEA exchange on a dedicated secure port.
+    # This parameter only affects outgoing connections.
+    # The setting can be also defined per-peer (see Peers configuration section).
+    # Default: use RFC6733 method with separate port for TLS.
+    #TLS_old_method;
+    
+    # Disable use of TCP protocol (only listen and connect over SCTP)
+    # Default : TCP enabled
+    #No_TCP;
+    
+    # Disable use of SCTP protocol (only listen and connect over TCP)
+    # Default : SCTP enabled
+    #No_SCTP;
+    # This option is ignored if freeDiameter is compiled with DISABLE_SCTP option.
+    
+    # Prefer TCP instead of SCTP for establishing new connections.
+    # This setting may be overwritten per peer in peer configuration blocs.
+    # Default : SCTP is attempted first.
+    #Prefer_TCP;
+    
+    # Default number of streams per SCTP associations.
+    # This setting may be overwritten per peer basis.
+    # Default : 30 streams
+    #SCTP_streams = 30;
+    
+    ##############################################################
+    ##  Endpoint configuration
+    
+    # Disable use of IP addresses (only IPv6)
+    # Default : IP enabled
+    #No_IP;
+    
+    # Disable use of IPv6 addresses (only IP)
+    # Default : IPv6 enabled
+    #No_IPv6;
+    
+    # Specify local addresses the server must bind to
+    # Default : listen on all addresses available.
+    #ListenOn = "202.249.37.5";
+    #ListenOn = "2001:200:903:2::202:1";
+    #ListenOn = "fe80::21c:5ff:fe98:7d62%eth0";
+    #ListenOn = "127.0.0.5";
+    
+    
+    ##############################################################
+    ##  Server configuration
+    
+    # How many Diameter peers are allowed to be connecting at the same time ?
+    # This parameter limits the number of incoming connections from the time
+    # the connection is accepted until the first CER is received.
+    # Default: 5 unidentified clients in paralel.
+    #ThreadsPerServer = 5;
+    
+    ##############################################################
+    ##  TLS Configuration
+    
+    # TLS is managed by the GNUTLS library in the freeDiameter daemon.
+    # You may find more information about parameters and special behaviors
+    # in the relevant documentation.
+    # http://www.gnu.org/software/gnutls/manual/
+    
+    # Credentials of the local peer
+    # The X509 certificate and private key file to use for the local peer.
+    # The files must contain PKCS-1 encoded RSA key, in PEM format.
+    # (These parameters are passed to gnutls_certificate_set_x509_key_file function)
+    # Default : NO DEFAULT
+    #TLS_Cred = "<x509 certif file.PEM>" , "<x509 private key file.PEM>";
+    #TLS_Cred = "/etc/ssl/certs/freeDiameter.pem", "/etc/ssl/private/freeDiameter.key";
+    TLS_Cred = "/opt/open5gs/etc/open5gs/tls/pcrf.crt", "/opt/open5gs/etc/open5gs/tls/pcrf.key";
+    
+    # Certificate authority / trust anchors
+    # The file containing the list of trusted Certificate Authorities (PEM list)
+    # (This parameter is passed to gnutls_certificate_set_x509_trust_file function)
+    # The directive can appear several times to specify several files.
+    # Default : GNUTLS default behavior
+    #TLS_CA = "<file.PEM>";
+    TLS_CA = "/opt/open5gs/etc/open5gs/tls/ca.crt";
+    # Certificate Revocation List file
+    # The information about revoked certificates.
+    # The file contains a list of trusted CRLs in PEM format. They should have been verified before.
+    # (This parameter is passed to gnutls_certificate_set_x509_crl_file function)
+    # Note: openssl CRL format might have interoperability issue with GNUTLS format.
+    # Default : GNUTLS default behavior
+    #TLS_CRL = "<file.PEM>";
+    
+    # GNU TLS Priority string
+    # This string allows to configure the behavior of GNUTLS key exchanges
+    # algorithms. See gnutls_priority_init function documentation for information.
+    # You should also refer to the Diameter required TLS support here:
+    #   http://tools.ietf.org/html/rfc6733#section-13.1
+    # Default : "NORMAL"
+    # Example: TLS_Prio = "NONE:+VERS-TLS1.1:+AES-128-CBC:+RSA:+SHA1:+COMP-NULL";
+    #TLS_Prio = "NORMAL";
+    
+    # Diffie-Hellman parameters size
+    # Set the number of bits for generated DH parameters
+    # Valid value should be 768, 1024, 2048, 3072 or 4096.
+    # (This parameter is passed to gnutls_dh_params_generate2 function,
+    # it usually should match RSA key size)
+    # Default : 1024
+    #TLS_DH_Bits = 1024;
+    
+    # Alternatively, you can specify a file to load the PKCS#3 encoded
+    # DH parameters directly from. This accelerates the daemon start
+    # but is slightly less secure. If this file is provided, the
+    # TLS_DH_Bits parameters has no effect.
+    # Default : no default.
+    #TLS_DH_File = "<file.PEM>";
+    
+    
+    ##############################################################
+    ##  Timers configuration
+    
+    # The Tc timer of this peer.
+    # It is the delay before a new attempt is made to reconnect a disconnected peer.
+    # The value is expressed in seconds. The recommended value is 30 seconds.
+    # Default: 30
+    #TcTimer = 30;
+    
+    # The Tw timer of this peer.
+    # It is the delay before a watchdog message is sent, as described in RFC 3539.
+    # The value is expressed in seconds. The default value is 30 seconds. Value must
+    # be greater or equal to 6 seconds. See details in the RFC.
+    # Default: 30
+    #TwTimer = 30;
+    
+    ##############################################################
+    ##  Applications configuration
+    
+    # Disable the relaying of Diameter messages?
+    # For messages not handled locally, the default behavior is to forward the
+    # message to another peer if any is available, according to the routing
+    # algorithms. In addition the "0xffffff" application is advertised in CER/CEA
+    # exchanges.
+    # Default: Relaying is enabled.
+    #NoRelay;
+    
+    # Number of server threads that can handle incoming messages at the same time.
+    # Default: 4
+    #AppServThreads = 4;
+    
+    # Other applications are configured by loaded extensions.
+    
+    ##############################################################
+    ##  Extensions configuration
+    
+    #  The freeDiameter framework merely provides support for
+    # Diameter Base Protocol. The specific application behaviors,
+    # as well as advanced functions, are provided
+    # by loadable extensions (plug-ins).
+    #  These extensions may in addition receive the name of a
+    # configuration file, the format of which is extension-specific.
+    #
+    # Format:
+    #LoadExtension = "/path/to/extension" [ : "/optional/configuration/file" ] ;
+    #
+    # Examples:
+    #LoadExtension = "extensions/sample.fdx";
+    #LoadExtension = "extensions/sample.fdx":"conf/sample.conf";
+    
+    # Extensions are named as follow:
+    # dict_* for extensions that add content to the dictionary definitions.
+    # dbg_*  for extensions useful only to retrieve more information on the framework execution.
+    # acl_*  : Access control list, to control which peers are allowed to connect.
+    # rt_*   : routing extensions that impact how messages are forwarded to other peers.
+    # app_*  : applications, these extensions usually register callbacks to handle specific messages.
+    # test_* : dummy extensions that are useful only in testing environments.
+    
+    
+    # The dbg_msg_dump.fdx extension allows you to tweak the way freeDiameter displays some
+    # information about some events. This extension does not actually use a configuration file
+    # but receives directly a parameter in the string passed to the extension. Here are some examples:
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x1111"; # Removes all default hooks, very quiet even in case of errors.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x2222"; # Display all events with few details.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x0080"; # Dump complete information about sent and received messages.
+    # The four digits respectively control: connections, routing decisions, sent/received messages, errors.
+    # The values for each digit are:
+    #  0 - default - keep the default behavior
+    #  1 - quiet   - remove any specific log
+    #  2 - compact - display only a summary of the information
+    #  4 - full    - display the complete information on a single long line
+    #  8 - tree    - display the complete information in an easier to read format spanning several lines.
+    
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dbg_msg_dumps.fdx" : "0x8888";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_rfc5777.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_mip6i.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nasreq.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nas_mipv6.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca_3gpp.fdx";
+    
+    
+    ##############################################################
+    ##  Peers configuration
+    
+    #  The local server listens for incoming connections. By default,
+    # all unknown connecting peers are rejected. Extensions can override this behavior (e.g., acl_wl).
+    #
+    #  In addition to incoming connections, the local peer can
+    # be configured to establish and maintain connections to some
+    # Diameter nodes and allow connections from these nodes.
+    #  This is achieved with the ConnectPeer directive described below.
+    #
+    # Note that the configured Diameter Identity MUST match
+    # the information received inside CEA, or the connection will be aborted.
+    #
+    # Format:
+    #ConnectPeer = "diameterid" [ { parameter1; parameter2; ...} ] ;
+    # Parameters that can be specified in the peer's parameter list:
+    #  No_TCP; No_SCTP; No_IP; No_IPv6; Prefer_TCP; TLS_old_method;
+    #  No_TLS;       # assume transparent security instead of TLS. DTLS is not supported yet (will change in future versions).
+    #  Port = 5868;  # The port to connect to
+    #  TcTimer = 30;
+    #  TwTimer = 30;
+    #  ConnectTo = "202.249.37.5";
+    #  ConnectTo = "2001:200:903:2::202:1";
+    #  TLS_Prio = "NORMAL";
+    #  Realm = "realm.net"; # Reject the peer if it does not advertise this realm.
+    # Examples:
+    #ConnectPeer = "aaa.wide.ad.jp";
+    #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
+    ConnectPeer = "smf.localdomain" { ConnectTo = "open5gs-smf-frdi"; TcTimer = 60; TwTimer = 30; No_TLS; Port=3868; };
+---
+# Source: open5gs/charts/pcrf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-pcrf
+  labels:
+    app.kubernetes.io/name: pcrf
+    helm.sh/chart: pcrf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  pcrf.yaml: |
+    logger:
+      level: info
+    parameter: {}
+    global:
+    pcrf:
+      freeDiameter: pcrf.conf
+---
+# Source: open5gs/charts/scp/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-scp
+  labels:
+    app.kubernetes.io/name: scp
+    helm.sh/chart: scp-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  scp.yaml: |
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    scp:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          nrf:
+          - uri: http://open5gs-nrf-sbi:7777
+    
+    ################################################################################
+    # SCP Info
+    ################################################################################
+    #  o SCP port number(s) WITHOUT SCP Domain
+    #   - If no SCP port information is present in ScpInfo or
+    #     in ScpDomainInfo for a specific SCP domain,
+    #     the HTTP client shall use the default HTTP port number,
+    #     i.e. TCP port 80 for "http" URIs or TCP port 443
+    #     for "https" URIs as specified in IETF RFC 7540 [9]
+    #     when sending a request to the SCP within the specific SCP domain.
+    #  info:
+    #    port:
+    #      http: 7777
+    #      https: 8888
+    #
+    #  o SCP port number(s) WITH SCP Domain
+    #   - If this attribute is present,
+    #     it has precedence over the scpPorts attribute of ScpInfo.
+    #  info:
+    #    domain:
+    #      - name: SCP_Domain_1
+    #        fqdn: scp.localdomain
+    #        port:
+    #          http: 7777
+    #          https: 8888
+    #
+    #  o Complex Example
+    #  info:
+    #    port:
+    #      http: 7777
+    #      https: 8888
+    #    domain:
+    #      - name: SCP_Domain_1
+    #        fqdn: scp.hplmndomain
+    #        port:
+    #          http: 3333
+    #          https: 4444
+    #      - name: SCP_Domain_2
+    #        fqdn: scp.vplmndomain
+    #        port:
+    #          http: 5555
+    #          https: 6666
+    #
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-scp.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+---
+# Source: open5gs/charts/sgwc/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-sgwc
+  labels:
+    app.kubernetes.io/name: sgwc
+    helm.sh/chart: sgwc-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  sgwc.yaml: |
+    
+    
+    logger:
+      level: info
+    parameter: {}
+    global:
+    sgwc:
+      gtpc:
+        server:
+        - dev: "eth0"
+      pfcp:
+        server:
+        - dev: "eth0"
+        client:
+          sgwu:
+          - address: open5gs-sgwu-pfcp
+            apn: [internet]
+---
+# Source: open5gs/charts/sgwu/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-sgwu
+  labels:
+    app.kubernetes.io/name: sgwu
+    helm.sh/chart: sgwu-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  sgwu.yaml: |
+    
+    
+    logger:
+      level: info
+    parameter: {}
+    global:
+    sgwu:
+      pfcp:
+        server:
+        - dev: "eth0"
+        client:
+          sgwc:
+          - address: open5gs-sgwc-pfcp
+      gtpu:
+        server:
+        - dev:  eth0
+---
+# Source: open5gs/charts/smf/templates/configmap-diameter.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-smf-diameter
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  smf.conf: |
+    
+    # This is a sample configuration file for freeDiameter daemon.
+    
+    # Most of the options can be omitted, as they default to reasonable values.
+    # Only TLS-related options must be configured properly in usual setups.
+    
+    # It is possible to use "include" keyword to import additional files
+    # e.g.: include "/etc/freeDiameter.d/*.conf"
+    # This is exactly equivalent as copy & paste the content of the included file(s)
+    # where the "include" keyword is found.
+    
+    
+    ##############################################################
+    ##  Peer identity and realm
+    
+    # The Diameter Identity of this daemon.
+    # This must be a valid FQDN that resolves to the local host.
+    # Default: hostname's FQDN
+    #Identity = "aaa.koganei.freediameter.net";
+    Identity = "smf.localdomain";
+    
+    # The Diameter Realm of this daemon.
+    # Default: the domain part of Identity (after the first dot).
+    #Realm = "koganei.freediameter.net";
+    Realm = "localdomain";
+    
+    ##############################################################
+    ##  Transport protocol configuration
+    
+    # The port this peer is listening on for incoming connections (TCP and SCTP).
+    # Default: 3868. Use 0 to disable.
+    Port = 3868;
+    
+    # The port this peer is listening on for incoming TLS-protected connections (TCP and SCTP).
+    # See TLS_old_method for more information about TLS flavours.
+    # Note: we use TLS/SCTP instead of DTLS/SCTP at the moment. This will change in future version of freeDiameter.
+    # Default: 5868. Use 0 to disable.
+    #SecPort = 5868;
+    
+    # Use RFC3588 method for TLS protection, where TLS is negociated after CER/CEA exchange is completed
+    # on the unsecure connection. The alternative is RFC6733 mechanism, where TLS protects also the
+    # CER/CEA exchange on a dedicated secure port.
+    # This parameter only affects outgoing connections.
+    # The setting can be also defined per-peer (see Peers configuration section).
+    # Default: use RFC6733 method with separate port for TLS.
+    #TLS_old_method;
+    
+    # Disable use of TCP protocol (only listen and connect over SCTP)
+    # Default : TCP enabled
+    #No_TCP;
+    
+    # Disable use of SCTP protocol (only listen and connect over TCP)
+    # Default : SCTP enabled
+    #No_SCTP;
+    #No_SCTP;
+    # This option is ignored if freeDiameter is compiled with DISABLE_SCTP option.
+    
+    # Prefer TCP instead of SCTP for establishing new connections.
+    # This setting may be overwritten per peer in peer configuration blocs.
+    # Default : SCTP is attempted first.
+    #Prefer_TCP;
+    
+    # Default number of streams per SCTP associations.
+    # This setting may be overwritten per peer basis.
+    # Default : 30 streams
+    #SCTP_streams = 30;
+    
+    ##############################################################
+    ##  Endpoint configuration
+    
+    # Disable use of IP addresses (only IPv6)
+    # Default : IP enabled
+    #No_IP;
+    
+    # Disable use of IPv6 addresses (only IP)
+    # Default : IPv6 enabled
+    #No_IPv6;
+    
+    # Specify local addresses the server must bind to
+    # Default : listen on all addresses available.
+    #ListenOn = "202.249.37.5";
+    #ListenOn = "2001:200:903:2::202:1";
+    #ListenOn = "fe80::21c:5ff:fe98:7d62%eth0";
+    #ListenOn = "127.0.0.3";
+    
+    
+    ##############################################################
+    ##  Server configuration
+    
+    # How many Diameter peers are allowed to be connecting at the same time ?
+    # This parameter limits the number of incoming connections from the time
+    # the connection is accepted until the first CER is received.
+    # Default: 5 unidentified clients in paralel.
+    #ThreadsPerServer = 5;
+    
+    ##############################################################
+    ##  TLS Configuration
+    
+    # TLS is managed by the GNUTLS library in the freeDiameter daemon.
+    # You may find more information about parameters and special behaviors
+    # in the relevant documentation.
+    # http://www.gnu.org/software/gnutls/manual/
+    
+    # Credentials of the local peer
+    # The X509 certificate and private key file to use for the local peer.
+    # The files must contain PKCS-1 encoded RSA key, in PEM format.
+    # (These parameters are passed to gnutls_certificate_set_x509_key_file function)
+    # Default : NO DEFAULT
+    #TLS_Cred = "<x509 certif file.PEM>" , "<x509 private key file.PEM>";
+    #TLS_Cred = "/etc/ssl/certs/freeDiameter.pem", "/etc/ssl/private/freeDiameter.key";
+    TLS_Cred = "/opt/open5gs/etc/open5gs/tls/smf.crt", "/opt/open5gs/etc/open5gs/tls/smf.key";
+    
+    # Certificate authority / trust anchors
+    # The file containing the list of trusted Certificate Authorities (PEM list)
+    # (This parameter is passed to gnutls_certificate_set_x509_trust_file function)
+    # The directive can appear several times to specify several files.
+    # Default : GNUTLS default behavior
+    #TLS_CA = "<file.PEM>";
+    TLS_CA = "/opt/open5gs/etc/open5gs/tls/ca.crt";
+    
+    # Certificate Revocation List file
+    # The information about revoked certificates.
+    # The file contains a list of trusted CRLs in PEM format. They should have been verified before.
+    # (This parameter is passed to gnutls_certificate_set_x509_crl_file function)
+    # Note: openssl CRL format might have interoperability issue with GNUTLS format.
+    # Default : GNUTLS default behavior
+    #TLS_CRL = "<file.PEM>";
+    
+    # GNU TLS Priority string
+    # This string allows to configure the behavior of GNUTLS key exchanges
+    # algorithms. See gnutls_priority_init function documentation for information.
+    # You should also refer to the Diameter required TLS support here:
+    #   http://tools.ietf.org/html/rfc6733#section-13.1
+    # Default : "NORMAL"
+    # Example: TLS_Prio = "NONE:+VERS-TLS1.1:+AES-128-CBC:+RSA:+SHA1:+COMP-NULL";
+    #TLS_Prio = "NORMAL";
+    
+    # Diffie-Hellman parameters size
+    # Set the number of bits for generated DH parameters
+    # Valid value should be 768, 1024, 2048, 3072 or 4096.
+    # (This parameter is passed to gnutls_dh_params_generate2 function,
+    # it usually should match RSA key size)
+    # Default : 1024
+    #TLS_DH_Bits = 1024;
+    
+    # Alternatively, you can specify a file to load the PKCS#3 encoded
+    # DH parameters directly from. This accelerates the daemon start
+    # but is slightly less secure. If this file is provided, the
+    # TLS_DH_Bits parameters has no effect.
+    # Default : no default.
+    #TLS_DH_File = "<file.PEM>";
+    
+    
+    ##############################################################
+    ##  Timers configuration
+    
+    # The Tc timer of this peer.
+    # It is the delay before a new attempt is made to reconnect a disconnected peer.
+    # The value is expressed in seconds. The recommended value is 30 seconds.
+    # Default: 30
+    #TcTimer = 30;
+    
+    # The Tw timer of this peer.
+    # It is the delay before a watchdog message is sent, as described in RFC 3539.
+    # The value is expressed in seconds. The default value is 30 seconds. Value must
+    # be greater or equal to 6 seconds. See details in the RFC.
+    # Default: 30
+    #TwTimer = 30;
+    
+    ##############################################################
+    ##  Applications configuration
+    
+    # Disable the relaying of Diameter messages?
+    # For messages not handled locally, the default behavior is to forward the
+    # message to another peer if any is available, according to the routing
+    # algorithms. In addition the "0xffffff" application is advertised in CER/CEA
+    # exchanges.
+    # Default: Relaying is enabled.
+    #NoRelay;
+    
+    # Number of server threads that can handle incoming messages at the same time.
+    # Default: 4
+    #AppServThreads = 4;
+    
+    # Other applications are configured by loaded extensions.
+    
+    ##############################################################
+    ##  Extensions configuration
+    
+    #  The freeDiameter framework merely provides support for
+    # Diameter Base Protocol. The specific application behaviors,
+    # as well as advanced functions, are provided
+    # by loadable extensions (plug-ins).
+    #  These extensions may in addition receive the name of a
+    # configuration file, the format of which is extension-specific.
+    #
+    # Format:
+    #LoadExtension = "/path/to/extension" [ : "/optional/configuration/file" ] ;
+    #
+    # Examples:
+    #LoadExtension = "extensions/sample.fdx";
+    #LoadExtension = "extensions/sample.fdx":"conf/sample.conf";
+    
+    # Extensions are named as follow:
+    # dict_* for extensions that add content to the dictionary definitions.
+    # dbg_*  for extensions useful only to retrieve more information on the framework execution.
+    # acl_*  : Access control list, to control which peers are allowed to connect.
+    # rt_*   : routing extensions that impact how messages are forwarded to other peers.
+    # app_*  : applications, these extensions usually register callbacks to handle specific messages.
+    # test_* : dummy extensions that are useful only in testing environments.
+    
+    
+    # The dbg_msg_dump.fdx extension allows you to tweak the way freeDiameter displays some
+    # information about some events. This extension does not actually use a configuration file
+    # but receives directly a parameter in the string passed to the extension. Here are some examples:
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x1111"; # Removes all default hooks, very quiet even in case of errors.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x2222"; # Display all events with few details.
+    ## LoadExtension = "dbg_msg_dumps.fdx" : "0x0080"; # Dump complete information about sent and received messages.
+    # The four digits respectively control: connections, routing decisions, sent/received messages, errors.
+    # The values for each digit are:
+    #  0 - default - keep the default behavior
+    #  1 - quiet   - remove any specific log
+    #  2 - compact - display only a summary of the information
+    #  4 - full    - display the complete information on a single long line
+    #  8 - tree    - display the complete information in an easier to read format spanning several lines.
+    
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dbg_msg_dumps.fdx" : "0x8888";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_rfc5777.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_mip6i.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nasreq.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_nas_mipv6.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca.fdx";
+    LoadExtension = "/opt/open5gs/lib/x86_64-linux-gnu/freeDiameter/dict_dcca_3gpp.fdx";
+    
+    
+    ##############################################################
+    ##  Peers configuration
+    
+    #  The local server listens for incoming connections. By default,
+    # all unknown connecting peers are rejected. Extensions can override this behavior (e.g., acl_wl).
+    #
+    #  In addition to incoming connections, the local peer can
+    # be configured to establish and maintain connections to some
+    # Diameter nodes and allow connections from these nodes.
+    #  This is achieved with the ConnectPeer directive described below.
+    #
+    # Note that the configured Diameter Identity MUST match
+    # the information received inside CEA, or the connection will be aborted.
+    #
+    # Format:
+    #ConnectPeer = "diameterid" [ { parameter1; parameter2; ...} ] ;
+    # Parameters that can be specified in the peer's parameter list:
+    #  No_TCP; No_SCTP; No_IP; No_IPv6; Prefer_TCP; TLS_old_method;
+    #  No_TLS;       # assume transparent security instead of TLS. DTLS is not supported yet (will change in future versions).
+    #  Port = 5868;  # The port to connect to
+    #  TcTimer = 30;
+    #  TwTimer = 30;
+    #  ConnectTo = "202.249.37.5";
+    #  ConnectTo = "2001:200:903:2::202:1";
+    #  TLS_Prio = "NORMAL";
+    #  Realm = "realm.net"; # Reject the peer if it does not advertise this realm.
+    # Examples:
+    #ConnectPeer = "aaa.wide.ad.jp";
+    #ConnectPeer = "old.diameter.serv" { TcTimer = 60; TLS_old_method; No_SCTP; Port=3868; } ;
+    #ConnectPeer = "pcrf.openverso" { ConnectTo = "${PCRF_HOSTNAME}"; No_TLS; };
+    ConnectPeer = "pcrf.localdomain" { ConnectTo = "open5gs-pcrf-frdi"; TcTimer = 60; TwTimer = 30; No_TLS; Port=3868; };
+---
+# Source: open5gs/charts/smf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-smf
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  smf.yaml: |
+    
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    smf:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+      pfcp:
+        server:
+        - dev: eth0
+        client:
+          upf:
+          - address: open5gs-upf-pfcp
+      gtpc:
+        server:
+        - dev: eth0
+      gtpu:
+        server:
+        - dev: eth0
+      session:
+        -
+          dnn: internet
+          subnet: 10.45.0.1/16
+      dns:
+        -
+          8.8.8.8
+        -
+          8.8.4.4
+        -
+          2001:4860:4860::8888
+        -
+          2001:4860:4860::8844
+      mtu: 1400
+      #  p-cscf:
+      #    - 127.0.0.1
+      #    - ::1
+      ctf:
+        enabled: auto # auto(default)|yes|no
+      freeDiameter: smf.conf
+    ################################################################################
+    # SMF Info
+    ################################################################################
+    #  <SMF Selection - 5G Core only>
+    #  1. SMF sends SmfInfo(S-NSSAI, DNN, TAI) to the NRF
+    #  2. NRF responds to AMF with SmfInfo during NF-Discovery.
+    #  3. AMF selects SMF based on S-NSSAI, DNN and TAI in SmfInfo.
+    #
+    #  Note that if there is no SmfInfo, any AMF can select this SMF.
+    #
+    #  o S-NSSAI[SST:1] and DNN[internet] - At least 1 DNN is required in S-NSSAI
+    #  info:
+    #    - s_nssai:
+    #        - sst: 1
+    #          dnn:
+    #            - internet
+    #
+    #  o S-NSSAI[SST:1 SD:009000] and DNN[internet or ims]
+    #  info:
+    #    - s_nssai:
+    #        - sst: 1
+    #          sd: 009000
+    #          dnn:
+    #            - internet
+    #            - ims
+    #
+    #  o S-NSSAI[SST:1] and DNN[internet] and TAI[PLMN-ID:99970 TAC:1]
+    #  info:
+    #    - s_nssai:
+    #        - sst: 1
+    #          dnn:
+    #            - internet
+    #      tai:
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac: 1
+    #
+    #  o If any of conditions below are met:
+    #   - S-NSSAI[SST:1] and DNN[internet] and TAI[PLMN-ID:99970 TAC:1-9]
+    #   - S-NSSAI[SST:2 SD:000080] and DNN[internet or ims]
+    #   - S-NSSAI[SST:4] and DNN[internet] and TAI[PLMN-ID:99970 TAC:10-20,30-40]
+    #  info:
+    #    - s_nssai:
+    #        - sst: 1
+    #          dnn:
+    #            - internet
+    #      tai:
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac:
+    #            - 1-9
+    #    - s_nssai:
+    #        - sst: 2
+    #          sd: 000080
+    #          dnn:
+    #            - internet
+    #            - ims
+    #    - s_nssai:
+    #        - sst: 4
+    #          dnn:
+    #            - internet
+    #      tai:
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac:
+    #            - 10-20
+    #            - 30-40
+    #
+    #  o Complex Example
+    #  info:
+    #    - s_nssai:
+    #        - sst: 1
+    #          dnn:
+    #            - internet
+    #        - sst: 1
+    #          sd: 000080
+    #          dnn:
+    #            - internet
+    #            - ims
+    #        - sst: 1
+    #          sd: 009000
+    #          dnn:
+    #            [internet, ims]
+    #        - sst: 2
+    #          dnn:
+    #            - internet
+    #        - sst: 3
+    #          sd: 123456
+    #          dnn:
+    #            - internet
+    #      tai:
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac: [1, 2, 3]
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac: 4
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac:
+    #            - 5
+    #            - 6
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac:
+    #            - 100-200
+    #            - 300-400
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac:
+    #            - 500-600
+    #            - 700-800
+    #            - 900-1000
+    #    - s_nssai:
+    #        - sst: 4
+    #          dnn:
+    #            - internet
+    #      tai:
+    #        - plmn_id:
+    #            mcc: 999
+    #            mnc: 70
+    #          tac: 99
+    #
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-smf.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/smf.key
+    #        cert: @sysconfdir@/open5gs/tls/smf.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: smf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/smf.key
+    #        cert: @sysconfdir@/open5gs/tls/smf.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/smf.key
+    #        client_cert: @sysconfdir@/open5gs/tls/smf.crt
+    #  sbi:
+    #    server:
+    #      - address: smf.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    ################################################################################
+    # PFCP Server
+    ################################################################################
+    #  o Override PFCP address to be advertised to UPF in PFCP association
+    #  pfcp:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-smf.svc.local
+    #
+    ################################################################################
+    # PFCP Client
+    ################################################################################
+    #  o UPF selection by eNodeB TAC
+    #   (either single TAC or multiple TACs, DECIMAL representation)
+    #  pfcp:
+    #    client:
+    #      upf:
+    #        - address: 127.0.0.7
+    #          tac: 1
+    #        - address: 127.0.0.12
+    #          tac: [3,5,8]
+    #
+    #  o UPF selection by UE's DNN/APN (either single DNN/APN or multiple DNNs/APNs)
+    #  pfcp:
+    #    client:
+    #      upf:
+    #        - address: 127.0.0.7
+    #          dnn: ims
+    #        - address: 127.0.0.12
+    #          dnn: [internet, web]
+    #
+    #  o UPF selection by CellID(e_cell_id: 28bit, nr_cell_id: 36bit)
+    #    (either single enb_id or multiple enb_ids, HEX representation)
+    #  pfcp:
+    #    client:
+    #      upf:
+    #        - address: 127.0.0.7
+    #          e_cell_id: 463
+    #        - address: 127.0.0.12
+    #          nr_cell_id: [123456789, 9413]
+    #
+    ################################################################################
+    # GTP-C Server
+    ################################################################################
+    #  o Listen on IPv4 and IPv6
+    #  gtpc:
+    #    server:
+    #      - address: 127.0.0.4
+    #      - address: fd69:f21d:873c:fa::3
+    #
+    ################################################################################
+    # GTP-U Server
+    ################################################################################
+    #  o Listen on IPv4 and IPv6
+    #  gtpu:
+    #    server:
+    #      - address: 127.0.0.4
+    #      - address: ::1
+    #
+    ################################################################################
+    # 3GPP Specification
+    ################################################################################
+    #  o Specific DNN/APN(e.g 'ims') uses 10.46.0.1/16, 2001:db8:babe::1/48
+    #   (If the UE has unknown DNN/APN(not internet/ims), SMF/UPF will crash.)
+    #  session:
+    #    - subnet: 10.45.0.1/16
+    #      dnn: internet
+    #    - subnet: 2001:db8:cafe::1/48
+    #      dnn: internet
+    #    - subnet: 10.46.0.1/16
+    #      dnn: ims
+    #    - subnet: 2001:db8:babe::1/48
+    #      dnn: ims
+    #
+    #  o Pool Range
+    #  session:
+    #    - subnet: 10.45.0.1/16
+    #      range:
+    #        - 10.45.0.100-10.45.0.200
+    #        - 10.45.1.100-
+    #        - -10.45.0.200
+    #    - subnet: 2001:db8:cafe::1/48
+    #      range:
+    #        - 2001:db8:cafe:a0::0-2001:db8:cafe:b0::0
+    #        - 2001:db8:cafe:c0::0-2001:db8:cafe:d0::0
+    #
+    #  o Security Indication(5G Core only)
+    #  security_indication:
+    #    integrity_protection_indication: required|preferred|not-needed
+    #    confidentiality_protection_indication: required|preferred|not-needed
+    #    maximum_integrity_protected_data_rate_uplink: bitrate64kbs|maximum-UE-rate
+    #    maximum_integrity_protected_data_rate_downlink: bitrate64kbs|maximum-UE-rate
+---
+# Source: open5gs/charts/udm/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-udm
+  labels:
+    app.kubernetes.io/name: udm
+    helm.sh/chart: udm-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  udm.yaml: |
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    udm:
+      hnet:
+      - id: 1
+        scheme: 1
+        key: /opt/open5gs/etc/open5gs/hnet/curve25519-1.key
+      - id: 2
+        scheme: 2
+        key: /opt/open5gs/etc/open5gs/hnet/secp256r1-2.key
+      - id: 3
+        scheme: 1
+        key: /opt/open5gs/etc/open5gs/hnet/curve25519-3.key
+      - id: 4
+        scheme: 2
+        key: /opt/open5gs/etc/open5gs/hnet/secp256r1-4.key
+      - id: 5
+        scheme: 1
+        key: /opt/open5gs/etc/open5gs/hnet/curve25519-5.key
+      - id: 6
+        scheme: 2
+        key: /opt/open5gs/etc/open5gs/hnet/secp256r1-6.key
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+    
+    #
+    ################################################################################
+    # Home Network Public Key
+    ################################################################################
+    #  o Generate the private key as below.
+    #  $ openssl genpkey -algorithm X25519 -out /etc/open5gs/hnet/curve25519-1.key
+    #  $ openssl ecparam -name prime256v1 -genkey -conv_form compressed -out /etc/open5gs/hnet/secp256r1-2.key
+    #
+    #  o The private and public keys can be viewed with the command.
+    #    The public key is used when creating the SIM.
+    #  $ openssl pkey -in /etc/open5gs/hnet/curve25519-1.key -text
+    #  $ openssl ec -in /etc/open5gs/hnet/secp256r1-2.key -conv_form compressed -text
+    #
+    #  o Home network public key identifier(PKI) value : 1
+    #    Protection scheme identifier : ECIES scheme profile A
+    #  hnet:
+    #    - id: 1
+    #      scheme: 1
+    #      key: /etc/open5gs/hnet/curve25519-1.key
+    #
+    #  o Home network public key identifier(PKI) value : 2
+    #    Protection scheme identifier : ECIES scheme profile B
+    #  hnet:
+    #    - id: 2
+    #      scheme: 2
+    #      key: /etc/open5gs/hnet/secp256r1-2.key
+    #
+    #  o Home network public key identifier(PKI) value : 3
+    #    Protection scheme identifier : ECIES scheme profile A
+    #  hnet:
+    #    - id: 3
+    #      scheme: 1
+    #      key: /etc/open5gs/hnet/curve25519-1.key
+    #
+    #  o Home network public key identifier(PKI) value : 4
+    #    Protection scheme identifier : ECIES scheme profile B
+    #  hnet:
+    #    - id: 4
+    #      scheme: 2
+    #      key: /etc/open5gs/hnet/secp256r1-2.key
+    #
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-udm.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/udm.key
+    #        cert: @sysconfdir@/open5gs/tls/udm.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: udm.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/udm.key
+    #        cert: @sysconfdir@/open5gs/tls/udm.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/udm.key
+    #        client_cert: @sysconfdir@/open5gs/tls/udm.crt
+    #  sbi:
+    #    server:
+    #      - address: udm.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+---
+# Source: open5gs/charts/udr/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-udr
+  labels:
+    app.kubernetes.io/name: udr
+    helm.sh/chart: udr-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  udr.yaml: |
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024 # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    udr:
+      sbi:
+        server:
+        - dev: eth0
+          port: 7777
+        client:
+          scp:
+          - uri: http://open5gs-scp-sbi:7777
+    
+    ################################################################################
+    # SBI Server
+    ################################################################################
+    #  o Override SBI address to be advertised to NRF
+    #  sbi:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-udr.svc.local
+    #
+    #  sbi:
+    #    server:
+    #      - address: localhost
+    #        advertise:
+    #          - 127.0.0.99
+    #          - ::1
+    #
+    ################################################################################
+    # SBI Client
+    ################################################################################
+    #  o Direct communication with NRF interaction
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #
+    #  o Indirect communication with delegated discovery
+    #  sbi:
+    #    client:
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #
+    #  o Indirect communication without delegated discovery
+    #  sbi:
+    #    client:
+    #      nrf:
+    #        - uri: http://127.0.0.10:7777
+    #      scp:
+    #        - uri: http://127.0.0.200:7777
+    #  discovery:
+    #    delegated: no
+    #
+    ################################################################################
+    # HTTPS scheme with TLS
+    ################################################################################
+    #  o Set as default if not individually set
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/udr.key
+    #        cert: @sysconfdir@/open5gs/tls/udr.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #  sbi:
+    #    server:
+    #      - address: udr.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+    #
+    #  o Add client TLS verification
+    #  default:
+    #    tls:
+    #      server:
+    #        scheme: https
+    #        private_key: @sysconfdir@/open5gs/tls/udr.key
+    #        cert: @sysconfdir@/open5gs/tls/udr.crt
+    #        verify_client: true
+    #        verify_client_cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #      client:
+    #        scheme: https
+    #        cacert: @sysconfdir@/open5gs/tls/ca.crt
+    #        client_private_key: @sysconfdir@/open5gs/tls/udr.key
+    #        client_cert: @sysconfdir@/open5gs/tls/udr.crt
+    #  sbi:
+    #    server:
+    #      - address: udr.localdomain
+    #    client:
+    #      nrf:
+    #        - uri: https://nrf.localdomain
+---
+# Source: open5gs/charts/upf/templates/configmap-entrypoint.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-upf-entrypoint
+  labels:
+    app.kubernetes.io/name: upf
+    helm.sh/chart: upf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  k8s-entrypoint.sh: |
+    #!/bin/bash
+    set -e
+    
+    echo "Executing k8s customized entrypoint.sh"
+    echo "Creating net device ogstun"
+    if grep "ogstun" /proc/net/dev > /dev/null; then
+        echo "Warnin: Net device ogstun already exists! may you need to set createDev: false";
+        exit 1
+    fi
+    
+    ip tuntap add name ogstun mode tun
+    ip link set ogstun up
+    echo "Setting IP 10.45.0.1/16 to device ogstun"
+    ip addr add 10.45.0.1/16 dev ogstun;
+    sysctl -w net.ipv4.ip_forward=1;
+    echo "Enable NAT for 10.45.0.1/16 and device ogstun"
+    iptables -t nat -A POSTROUTING -s 10.45.0.1/16 ! -o ogstun -j MASQUERADE;
+    
+    $@
+---
+# Source: open5gs/charts/upf/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-upf
+  labels:
+    app.kubernetes.io/name: upf
+    helm.sh/chart: upf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  upf.yaml: |
+    
+    
+    logger:
+      level: info
+    #  level: info   # fatal|error|warn|info(default)|debug|trace
+    
+    global:
+    # max:
+    #   ue: 1024  # The number of UE can be increased depending on memory size.
+    #    peer: 64
+    
+    upf:
+      pfcp:
+        server:
+        - dev: eth0
+        client:
+      gtpu:
+        server:
+        - dev: eth0
+      session:
+        -
+          dev: ogstun
+          dnn: internet
+          subnet: 10.45.0.1/16
+    
+    ################################################################################
+    # PFCP Server
+    ################################################################################
+    # o Override PFCP address to be advertised to SMF in PFCP association
+    #  pfcp:
+    #    server:
+    #      - dev: eth0
+    #        advertise: open5gs-upf.svc.local
+    #
+    ################################################################################
+    # GTP-U Server
+    ################################################################################
+    #  o Override SGW-U GTP-U address to be advertised inside S1AP messages 
+    #  gtpu:
+    #    server:
+    #      - dev: ens3
+    #        advertise: upf1.5gc.mnc001.mcc001.3gppnetwork.org
+    #
+    #  o User Plane IP Resource information
+    #  gtpu:
+    #    server:
+    #      - address:
+    #        - 127.0.0.7
+    #        - ::1
+    #        teid_range_indication: 4
+    #        teid_range: 10
+    #        network_instance: internet
+    #        source_interface: 0
+    #      - address: 127.0.10.4
+    #        teid_range_indication: 4
+    #        teid_range: 5
+    #        network_instance: ims
+    #        source_interface: 1
+    #
+    ################################################################################
+    # 3GPP Specification
+    ################################################################################
+    #
+    #  o Specific DNN/APN(e.g 'ims') uses 10.46.0.1/16, 2001:db8:babe::1/48
+    #  $ sudo ip addr add 10.45.0.1/16 dev ogstun
+    #  $ sudo ip addr add 2001:db8:cafe::1/48 dev ogstun2
+    #  $ sudo ip addr add 10.46.0.1/16 dev ogstun3
+    #  $ sudo ip addr add 2001:db8:babe::1/48 dev ogstun3
+    #
+    #  session:
+    #    - subnet: 10.45.0.1/16
+    #      dnn: internet
+    #    - subnet: 2001:db8:cafe::1/48
+    #      dnn: internet
+    #      dev: ogstun2
+    #    - subnet: 10.46.0.1/16
+    #      dnn: ims
+    #      dev: ogstun3
+    #    - subnet: 2001:db8:babe::1/48
+    #      dnn: ims
+    #      dev: ogstun3
+---
+# Source: open5gs/charts/webui/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: open5gs-webui
+  labels:
+    app.kubernetes.io/name: webui
+    helm.sh/chart: webui-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+data:
+  add_admin.sh: |-
+    #!/bin/bash
+    
+    set -e
+    
+    echo "add admin user with password 1423 if no users"
+    
+    cat << EOF > /tmp/account.js
+    db = db.getSiblingDB('open5gs')
+    cursor = db.accounts.find()
+    if ( cursor.count() == 0 ) {
+        db.accounts.insert({ salt: 'f5c15fa72622d62b6b790aa8569b9339729801ab8bda5d13997b5db6bfc1d997', hash: '402223057db5194899d2e082aeb0802f6794622e1cbc47529c419e5a603f2cc592074b4f3323b239ffa594c8b756d5c70a4e1f6ecd3f9f0d2d7328c4cf8b1b766514effff0350a90b89e21eac54cd4497a169c0c7554a0e2cd9b672e5414c323f76b8559bc768cba11cad2ea3ae704fb36abc8abc2619231ff84ded60063c6e1554a9777a4a464ef9cfdfa90ecfdacc9844e0e3b2f91b59d9ff024aec4ea1f51b703a31cda9afb1cc2c719a09cee4f9852ba3cf9f07159b1ccf8133924f74df770b1a391c19e8d67ffdcbbef4084a3277e93f55ac60d80338172b2a7b3f29cfe8a36738681794f7ccbe9bc98f8cdeded02f8a4cd0d4b54e1d6ba3d11792ee0ae8801213691848e9c5338e39485816bb0f734b775ac89f454ef90992003511aa8cceed58a3ac2c3814f14afaaed39cbaf4e2719d7213f81665564eec02f60ede838212555873ef742f6666cc66883dcb8281715d5c762fb236d72b770257e7e8d86c122bb69028a34cf1ed93bb973b440fa89a23604cd3fefe85fbd7f55c9b71acf6ad167228c79513f5cfe899a2e2cc498feb6d2d2f07354a17ba74cecfbda3e87d57b147e17dcc7f4c52b802a8e77f28d255a6712dcdc1519e6ac9ec593270bfcf4c395e2531a271a841b1adefb8516a07136b0de47c7fd534601b16f0f7a98f1dbd31795feb97da59e1d23c08461cf37d6f2877d0f2e437f07e25015960f63', username: 'admin', roles: [ 'admin' ], "__v" : 0})
+    }
+    EOF
+    
+    mongo $DB_URI /tmp/account.js
+    rm -f /tmp/account.js
+---
+# Source: open5gs/charts/mongodb/templates/standalone/pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: open5gs-mongodb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mongodb
+    helm.sh/chart: mongodb-12.1.31
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mongodb
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "8Gi"
+---
+# Source: open5gs/charts/amf/templates/service-ngap.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-amf-ngap
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: amf
+    helm.sh/chart: amf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: ngap
+      port: 38412
+      targetPort: ngap
+      protocol: SCTP
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: amf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/amf/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-amf-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: amf
+    helm.sh/chart: amf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: amf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/ausf/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-ausf-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: ausf
+    helm.sh/chart: ausf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: ausf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/bsf/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-bsf-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: bsf
+    helm.sh/chart: bsf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: bsf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/hss/templates/service-frdi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-hss-frdi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: hss
+    helm.sh/chart: hss-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: frdi
+      port: 3868
+      targetPort: frdi
+      protocol: SCTP
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: hss
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/mme/templates/service-frdi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-mme-frdi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mme
+    helm.sh/chart: mme-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: frdi
+      port: 3868
+      targetPort: frdi
+      protocol: SCTP
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: mme
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/mme/templates/service-gtpc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-mme-gtpc
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mme
+    helm.sh/chart: mme-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: gtpc
+      port: 2123
+      targetPort: gtpc
+      protocol: UDP
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: mme
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/mme/templates/service-s1ap.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-mme-s1ap
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mme
+    helm.sh/chart: mme-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: s1ap
+      port: 36412
+      targetPort: s1ap
+      protocol: SCTP
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: mme
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/mongodb/templates/standalone/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-mongodb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mongodb
+    helm.sh/chart: mongodb-12.1.31
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mongodb
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: "mongodb"
+      port: 27017
+      targetPort: mongodb
+      nodePort: null
+  selector:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/component: mongodb
+---
+# Source: open5gs/charts/nrf/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-nrf-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: nrf
+    helm.sh/chart: nrf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: nrf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/nssf/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-nssf-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: nssf
+    helm.sh/chart: nssf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: nssf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/pcf/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-pcf-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: pcf
+    helm.sh/chart: pcf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: pcf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/pcrf/templates/service-frdi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-pcrf-frdi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: pcrf
+    helm.sh/chart: pcrf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: frdi
+      port: 3868
+      targetPort: frdi
+      protocol: SCTP
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: pcrf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/scp/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-scp-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: scp
+    helm.sh/chart: scp-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: scp
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/sgwc/templates/service-gtpc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-sgwc-gtpc
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: sgwc
+    helm.sh/chart: sgwc-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: gtpc
+      port: 2123
+      protocol: UDP
+      targetPort: gtpc
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: sgwc
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/sgwc/templates/service-pfcp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-sgwc-pfcp
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: sgwc
+    helm.sh/chart: sgwc-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: pfcp
+      port: 8805
+      protocol: UDP
+      targetPort: pfcp
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: sgwc
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/sgwu/templates/service-gtpu.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-sgwu-gtpu
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: sgwu
+    helm.sh/chart: sgwu-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: gtpu
+      port: 2152
+      protocol: UDP
+      targetPort: gtpu
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: sgwu
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/sgwu/templates/service-pfcp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-sgwu-pfcp
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: sgwu
+    helm.sh/chart: sgwu-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: pfcp
+      port: 8805
+      protocol: UDP
+      targetPort: pfcp
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: sgwu
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/smf/templates/service-frdi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-smf-frdi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: frdi
+      port: 3868
+      targetPort: frdi
+      protocol: SCTP
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: smf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/smf/templates/service-gtpc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-smf-gtpc
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: gtpc
+      port: 2123
+      protocol: UDP
+      targetPort: gtpc
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: smf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/smf/templates/service-gtpu.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-smf-gtpu
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: gtpu
+      port: 2152
+      protocol: UDP
+      targetPort: gtpu
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: smf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/smf/templates/service-pfcp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-smf-pfcp
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: pfcp
+      port: 8805
+      protocol: UDP
+      targetPort: pfcp
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: smf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/smf/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-smf-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: smf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/udm/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-udm-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: udm
+    helm.sh/chart: udm-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: udm
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/udr/templates/service-sbi.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-udr-sbi
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: udr
+    helm.sh/chart: udr-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: sbi
+      port: 7777
+      targetPort: sbi
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: udr
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/upf/templates/service-gtpu.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-upf-gtpu
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: upf
+    helm.sh/chart: upf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: gtpu
+      port: 2152
+      protocol: UDP
+      targetPort: gtpu
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: upf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/upf/templates/service-pfcp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-upf-pfcp
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: upf
+    helm.sh/chart: upf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: pfcp
+      port: 8805
+      protocol: UDP
+      targetPort: pfcp
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: upf
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/webui/templates/service-http.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: open5gs-webui
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: webui
+    helm.sh/chart: webui-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 9999
+      protocol: TCP
+      targetPort: http
+      nodePort: null
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/name: webui
+    app.kubernetes.io/instance: open5gs
+---
+# Source: open5gs/charts/amf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-amf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: amf
+    helm.sh/chart: amf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: amf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: amf
+        helm.sh/chart: amf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: amf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-amf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-amfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+            - name: metrics
+              containerPort: 9090
+            - name: ngap
+              containerPort: 38412
+              protocol: SCTP
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/amf.yaml
+              subPath: "amf.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-amf
+---
+# Source: open5gs/charts/ausf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-ausf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: ausf
+    helm.sh/chart: ausf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ausf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ausf
+        helm.sh/chart: ausf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: ausf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-ausf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-ausfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/ausf.yaml
+              subPath: "ausf.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-ausf
+---
+# Source: open5gs/charts/bsf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-bsf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: bsf
+    helm.sh/chart: bsf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: bsf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: bsf
+        helm.sh/chart: bsf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: bsf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-bsf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-bsfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/bsf.yaml
+              subPath: "bsf.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-bsf
+---
+# Source: open5gs/charts/hss/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-hss
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: hss
+    helm.sh/chart: hss-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: hss
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: hss
+        helm.sh/chart: hss-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: hss
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-hss
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-hssd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: DB_URI
+              value: mongodb://open5gs-mongodb/open5gs
+          envFrom:
+          ports:
+            - name: frdi
+              containerPort: 3868
+              protocol: SCTP
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: diameter-config
+              mountPath: /opt/open5gs/etc/freeDiameter/hss.conf
+              subPath: "hss.conf"
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/hss.yaml
+              subPath: "hss.yaml"
+      volumes:
+        - name: diameter-config
+          configMap:
+            name: open5gs-hss-diameter
+        - name: config
+          configMap:
+            name: open5gs-hss
+---
+# Source: open5gs/charts/mme/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-mme
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mme
+    helm.sh/chart: mme-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mme
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mme
+        helm.sh/chart: mme-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: mme
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-mme
+          image: docker.io/openverso/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-mmed"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: frdi
+              containerPort: 3868
+              protocol: SCTP
+            - name: s1ap
+              containerPort: 36412
+              protocol: SCTP
+            - name: gtpc
+              containerPort: 2123
+              protocol: UDP
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: diameter-config
+              mountPath: /opt/open5gs/etc/freeDiameter/mme.conf
+              subPath: "mme.conf"
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/mme.yaml
+              subPath: "mme.yaml"
+      volumes:
+        - name: diameter-config
+          configMap:
+            name: open5gs-mme-diameter
+        - name: config
+          configMap:
+            name: open5gs-mme
+---
+# Source: open5gs/charts/mongodb/templates/standalone/dep-sts.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-mongodb
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: mongodb
+    helm.sh/chart: mongodb-12.1.31
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mongodb
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mongodb
+      app.kubernetes.io/instance: open5gs
+      app.kubernetes.io/component: mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mongodb
+        helm.sh/chart: mongodb-12.1.31
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: mongodb
+    spec:
+      
+      serviceAccountName: open5gs-mongodb
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: mongodb
+                    app.kubernetes.io/instance: open5gs
+                    app.kubernetes.io/component: mongodb
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        sysctls: []
+      
+      containers:
+        - name: mongodb
+          image: docker.io/bitnami/mongodb:5.0.10-debian-11-r3
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: MONGODB_SYSTEM_LOG_VERBOSITY
+              value: "0"
+            - name: MONGODB_DISABLE_SYSTEM_LOG
+              value: "no"
+            - name: MONGODB_DISABLE_JAVASCRIPT
+              value: "no"
+            - name: MONGODB_ENABLE_JOURNAL
+              value: "yes"
+            - name: MONGODB_PORT_NUMBER
+              value: "27017"
+            - name: MONGODB_ENABLE_IPV6
+              value: "no"
+            - name: MONGODB_ENABLE_DIRECTORY_PER_DB
+              value: "no"
+          ports:
+            - name: mongodb
+              containerPort: 27017
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 30
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 10
+            exec:
+              command:
+                - /bitnami/scripts/ping-mongodb.sh
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            exec:
+              command:
+                - /bitnami/scripts/readiness-probe.sh
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: datadir
+              mountPath: /bitnami/mongodb
+              subPath: 
+            - name: common-scripts
+              mountPath: /bitnami/scripts
+      volumes:
+        - name: common-scripts
+          configMap:
+            name: open5gs-mongodb-common-scripts
+            defaultMode: 0550
+        - name: datadir
+          persistentVolumeClaim:
+            claimName: open5gs-mongodb
+---
+# Source: open5gs/charts/nrf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-nrf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: nrf
+    helm.sh/chart: nrf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nrf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nrf
+        helm.sh/chart: nrf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: nrf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-nrf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-nrfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/nrf.yaml
+              subPath: "nrf.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-nrf
+---
+# Source: open5gs/charts/nssf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-nssf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: nssf
+    helm.sh/chart: nssf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: nssf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: nssf
+        helm.sh/chart: nssf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: nssf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-nssf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-nssfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/nssf.yaml
+              subPath: "nssf.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-nssf
+---
+# Source: open5gs/charts/pcf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-pcf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: pcf
+    helm.sh/chart: pcf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pcf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pcf
+        helm.sh/chart: pcf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: pcf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-pcf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-pcfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: DB_URI
+              value: mongodb://open5gs-mongodb/open5gs
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+            - name: metrics
+              containerPort: 9090
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/pcf.yaml
+              subPath: "pcf.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-pcf
+---
+# Source: open5gs/charts/pcrf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-pcrf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: pcrf
+    helm.sh/chart: pcrf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: pcrf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: pcrf
+        helm.sh/chart: pcrf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: pcrf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-pcrf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-pcrfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: DB_URI
+              value: mongodb://open5gs-mongodb/open5gs
+          envFrom:
+          ports:
+            - name: frdi
+              containerPort: 3868
+              protocol: SCTP
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: diameter-config
+              mountPath: /opt/open5gs/etc/freeDiameter/pcrf.conf
+              subPath: "pcrf.conf"
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/pcrf.yaml
+              subPath: "pcrf.yaml"
+      volumes:
+        - name: diameter-config
+          configMap:
+            name: open5gs-pcrf-diameter
+        - name: config
+          configMap:
+            name: open5gs-pcrf
+---
+# Source: open5gs/charts/scp/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-scp
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: scp
+    helm.sh/chart: scp-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: scp
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: scp
+        helm.sh/chart: scp-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: scp
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-scp
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-scpd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: DB_URI
+              value: mongodb://open5gs-mongodb/open5gs
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/scp.yaml
+              subPath: "scp.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-scp
+---
+# Source: open5gs/charts/sgwc/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-sgwc
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: sgwc
+    helm.sh/chart: sgwc-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sgwc
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sgwc
+        helm.sh/chart: sgwc-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: sgwc
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-sgwc
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-sgwcd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: pfcp
+              containerPort: 8805
+              protocol: UDP
+            - name: gtpc
+              containerPort: 2123
+              protocol: UDP
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/sgwc.yaml
+              subPath: "sgwc.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-sgwc
+---
+# Source: open5gs/charts/sgwu/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-sgwu
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: sgwu
+    helm.sh/chart: sgwu-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: sgwu
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: sgwu
+        helm.sh/chart: sgwu-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: sgwu
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-sgwu
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-sgwud"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: pfcp
+              containerPort: 8805
+              protocol: UDP
+            - name: gtpu
+              containerPort: 2152
+              protocol: UDP
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/sgwu.yaml
+              subPath: "sgwu.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-sgwu
+---
+# Source: open5gs/charts/smf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-smf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: smf
+    helm.sh/chart: smf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: smf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: smf
+        helm.sh/chart: smf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: smf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-smf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-smfd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+            - name: metrics
+              containerPort: 9090
+            - name: pfcp
+              containerPort: 8805
+              protocol: UDP
+            - name: gtpc
+              containerPort: 2123
+              protocol: UDP
+            - name: gtpu
+              containerPort: 2152
+              protocol: UDP
+            - name: frdi
+              containerPort: 3868
+              protocol: SCTP
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: diameter-config
+              mountPath: /opt/open5gs/etc/freeDiameter/smf.conf
+              subPath: "smf.conf"
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/smf.yaml
+              subPath: "smf.yaml"
+      volumes:
+        - name: diameter-config
+          configMap:
+            name: open5gs-smf-diameter
+        - name: config
+          configMap:
+            name: open5gs-smf
+---
+# Source: open5gs/charts/udm/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-udm
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: udm
+    helm.sh/chart: udm-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: udm
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: udm
+        helm.sh/chart: udm-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: udm
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-udm
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-udmd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/udm.yaml
+              subPath: "udm.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-udm
+---
+# Source: open5gs/charts/udr/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-udr
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: udr
+    helm.sh/chart: udr-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: udr
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: udr
+        helm.sh/chart: udr-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: udr
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      containers:
+        - name: open5gs-udr
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          args: 
+            - "open5gs-udrd"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: DB_URI
+              value: mongodb://open5gs-mongodb/open5gs
+          envFrom:
+          ports:
+            - name: sbi
+              containerPort: 7777
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: sbi
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/udr.yaml
+              subPath: "udr.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-udr
+---
+# Source: open5gs/charts/upf/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-upf
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: upf
+    helm.sh/chart: upf-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: upf
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: upf
+        helm.sh/chart: upf-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+      
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: upf
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      initContainers:
+        - name: tun-create
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          command:
+            - "/bin/bash" 
+            - "-c"
+            - "/k8s-entrypoint.sh"
+          securityContext:
+            privileged: true
+            capabilities:
+              add: ["NET_ADMIN"]
+          volumeMounts:
+            - name: entrypoint
+              mountPath:  /k8s-entrypoint.sh
+              subPath: k8s-entrypoint.sh
+      containers:
+        - name: open5gs-upf
+          image: docker.io/gradiant/open5gs:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          command:
+            - "open5gs-upfd"
+          securityContext:
+            capabilities:
+              add:
+              - NET_ADMIN
+            privileged: true
+            runAsNonRoot: false
+          envFrom:
+          ports:
+            - name: pfcp
+              containerPort: 8805
+              protocol: UDP
+            - name: gtpu
+              containerPort: 2152
+              protocol: UDP
+            - name: metrics
+              containerPort: 9090
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: config
+              mountPath:  /opt/open5gs/etc/open5gs/upf.yaml
+              subPath: "upf.yaml"
+      volumes:
+        - name: config
+          configMap:
+            name: open5gs-upf
+        - name: entrypoint
+          configMap:
+            name: open5gs-upf-entrypoint
+            defaultMode: 0777
+---
+# Source: open5gs/charts/webui/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-webui
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: webui
+    helm.sh/chart: webui-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: webui
+      app.kubernetes.io/instance: open5gs
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: webui
+        helm.sh/chart: webui-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+    spec:
+            
+      securityContext:
+        fsGroup: 1001
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: webui
+                    app.kubernetes.io/instance: open5gs
+                namespaces:
+                  - "default"
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      serviceAccountName: default
+      priorityClassName: ""
+      initContainers:
+        - name: init
+          image: bitnami/mongodb:4.4.1-debian-10-r39
+          env:
+          - name: DB_URI
+            value: mongodb://open5gs-mongodb/open5gs
+          command: 
+            - /bin/bash
+            - /add_admin.sh
+          volumeMounts:
+          - name: populate
+            mountPath: /add_admin.sh
+            subPath: add_admin.sh
+      containers:
+        - name: open5gs-webui
+          image: docker.io/gradiant/open5gs-webui:2.7.0
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1001
+          env:
+            - name: DB_URI
+              value: mongodb://open5gs-mongodb/open5gs
+          envFrom:
+          ports:
+            - name: http
+              containerPort: 9999
+          livenessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 600
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+          # Using tcpSocket instead of httpGet because open5gs only support HTTP/2
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            limits: {}
+            requests: {}
+          volumeMounts:
+            - name: populate
+              mountPath:  /opt/open5gs/etc/open5gs/
+      volumes:
+        - name: populate
+          configMap:
+            name: open5gs-webui
+---
+# Source: open5gs/templates/populate-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open5gs-populate
+  namespace: "default"
+  labels:
+    app.kubernetes.io/name: open5gs
+    helm.sh/chart: open5gs-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: populate
+spec:
+  selector:
+    matchLabels: 
+      app.kubernetes.io/name: open5gs
+      app.kubernetes.io/instance: open5gs
+      app.kubernetes.io/component: populate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: open5gs
+        helm.sh/chart: open5gs-2.2.0
+        app.kubernetes.io/instance: open5gs
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/component: populate
+    spec:
+      
+      initContainers:
+      - name: init
+        image: docker.io/gradiant/open5gs-dbctl:0.10.3
+        imagePullPolicy: 
+        env:
+        - name: DB_URI
+          value: mongodb://open5gs-mongodb/open5gs
+        command: 
+        - /bin/bash
+        - -c
+        - ""
+      containers:
+      - name: populate
+        image: docker.io/gradiant/open5gs-dbctl:0.10.3
+        imagePullPolicy: 
+        env:
+        - name: DB_URI
+          value: mongodb://open5gs-mongodb/open5gs
+        command: 
+        - /bin/bash
+        - -c
+        - "tail -f /dev/null"
+---
+# Source: open5gs/charts/amf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-amf
+  labels: #PM: Added
+    app.kubernetes.io/name: amf #PM: Added
+    helm.sh/chart: amf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-amf
+---
+# Source: open5gs/charts/ausf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-ausf
+  labels: #PM: Added
+    app.kubernetes.io/name: ausf #PM: Added
+    helm.sh/chart: ausf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-ausf
+---
+# Source: open5gs/charts/bsf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-bsf
+  labels: #PM: Added
+    app.kubernetes.io/name: bsf #PM: Added
+    helm.sh/chart: bsf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-bsf
+---
+# Source: open5gs/charts/hss/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-hss
+  labels: #PM: Added
+    app.kubernetes.io/name: hss #PM: Added
+    helm.sh/chart: hss-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-hss
+---
+# Source: open5gs/charts/mme/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-mme
+  labels: #PM: Added
+    app.kubernetes.io/name: mme #PM: Added
+    helm.sh/chart: mme-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-mme
+---
+# Source: open5gs/charts/nrf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-nrf
+  labels: #PM: Added
+    app.kubernetes.io/name: nrf #PM: Added
+    helm.sh/chart: nrf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-nrf
+---
+# Source: open5gs/charts/nssf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-nssf
+  labels: #PM: Added
+    app.kubernetes.io/name: nssf #PM: Added
+    helm.sh/chart: nssf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-nssf
+---
+# Source: open5gs/charts/pcf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-pcf
+  labels: #PM: Added
+    app.kubernetes.io/name: pcf #PM: Added
+    helm.sh/chart: pcf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-pcf
+---
+# Source: open5gs/charts/pcrf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-pcrf
+  labels: #PM: Added
+    app.kubernetes.io/name: pcrf #PM: Added
+    helm.sh/chart: pcrf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-pcrf
+---
+# Source: open5gs/charts/scp/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-scp
+  labels: #PM: Added
+    app.kubernetes.io/name: scp #PM: Added
+    helm.sh/chart: scp-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-scp
+---
+# Source: open5gs/charts/sgwc/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-sgwc
+  labels: #PM: Added
+    app.kubernetes.io/name: sgwc #PM: Added
+    helm.sh/chart: sgwc-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-sgwc
+---
+# Source: open5gs/charts/sgwu/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-sgwu
+  labels: #PM: Added
+    app.kubernetes.io/name: sgwu #PM: Added
+    helm.sh/chart: sgwu-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-sgwu
+---
+# Source: open5gs/charts/smf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-smf
+  labels: #PM: Added
+    app.kubernetes.io/name: smf #PM: Added
+    helm.sh/chart: smf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-smf
+---
+# Source: open5gs/charts/udm/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-udm
+  labels: #PM: Added
+    app.kubernetes.io/name: udm #PM: Added
+    helm.sh/chart: udm-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-udm
+---
+# Source: open5gs/charts/udr/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-udr
+  labels: #PM: Added
+    app.kubernetes.io/name: udr #PM: Added
+    helm.sh/chart: udr-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-udr
+---
+# Source: open5gs/charts/upf/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: open5gs-upf
+  labels: #PM: Added
+    app.kubernetes.io/name: upf #PM: Added
+    helm.sh/chart: upf-2.2.0 #PM: Added
+    app.kubernetes.io/instance: open5gs #PM: Added
+    app.kubernetes.io/managed-by: Helm #PM: Added
+spec:
+  maxReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: open5gs-upf
+---
+# Source: open5gs/charts/webui/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: open5gs-webui
+  labels:
+    app.kubernetes.io/name: webui
+    helm.sh/chart: webui-2.2.0
+    app.kubernetes.io/instance: open5gs
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+spec:
+  rules:
+    - host: open5gs-default.ingress.lab5g.gradiant.org
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend: 
+              service:
+                name: open5gs-webui
+                port: 
+                  name: http
