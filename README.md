@@ -436,6 +436,6 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 ## License
 
-This project is licensed under the GPL-3.0 license - see the [LICENSE](https://github.com/philippemerle/KubeDiagrams/blob/main/LICENSE) file for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/philippemerle/KubeDiagrams/blob/main/LICENSE) file for details.
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fphilippemerle%2FKubeDiagrams.svg?type=large&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fphilippemerle%2FKubeDiagrams?ref=badge_large&issueType=license)
