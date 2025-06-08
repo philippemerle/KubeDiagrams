@@ -1,0 +1,69 @@
+clusters:
+  - annotation: argocd.argoproj.io/sync-wave
+    title: "Argo CD Sync Wave: {}"
+    recommended: true
+    graph_attr:
+      bgcolor: transparent
+      style: dotted,rounded
+  - annotation: argocd.argoproj.io/hook
+    title: "Argo CD Hook: {}"
+    recommended: true
+    graph_attr:
+      bgcolor: transparent
+      style: dotted,rounded
+nodes:
+  Application/argoproj.io/v1alpha1:
+    scope: Namespaced
+    custom_icon: icons/Application.png
+    edges: |
+      edges.add_edge_to(
+        "spec.destination.namespace",
+        ".",
+        None,
+        "Namespace",
+        "v1",
+        "REFERENCE"
+      )
+      edges.add_edge_to(
+        "spec.source",
+        "github.com",
+        None,
+        "GitHub",
+        "v1",
+        "REFERENCE-UP"
+      )
+    nodes: |
+      nodes.append({
+        "apiVersion": "v1",
+        "kind": "GitHub",
+        "metadata": {
+          "name": "github.com"
+        }
+      })
+  Rollout/argoproj.io/v1alpha1:
+    scope: Namespaced
+    custom_icon: icons/Rollout.png
+    edges: |
+      edges.add_edge_to(
+        "spec.strategy.blueGreen.activeService",
+        ".",
+        edges.namespace,
+        "Service",
+        "v1",
+        "REFERENCE-UP"
+      )
+      edges.add_edge_to(
+        "spec.strategy.blueGreen.previewService",
+        ".",
+        edges.namespace,
+        "Service",
+        "v1",
+        "REFERENCE-UP"
+      )
+  Workflow/argoproj.io/v1alpha1:
+    scope: Namespaced
+    custom_icon: icons/Workflow.png
+  GitHub/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.onprem.vcs.Github
+    
