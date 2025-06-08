@@ -111,7 +111,7 @@ def report(kind, resource, path, msg, end):
     """
     rm = f"[{kind}] " \
         + query_path(resource, "kind", "NO-KIND") + ":" \
-        + query_path(resource, "metadata.name", "NO-NAME")
+        + get_name(resource)
     if path is not None:
         rm += f":{path}"
     rm += f" - {msg}{end}"
@@ -175,10 +175,12 @@ def get_name(resource):
     """
         Get the name of a Kubernetes resource.
     """
-    name = query_path(resource, "metadata.name")
+    name = query_path(resource, "metadata.name") \
+        or query_path(resource, "metadata.generateName")
     if name is None:
         warning(resource, "metadata.name", "Not set or set to null")
         name = "NO-NAME"
+        resource["metadata"]["name"] = name
     return name
 
 def get_namespace(resource):
@@ -317,7 +319,13 @@ class EdgesContext(list):
         edge_kind = edge[-1]
         if isinstance(edge_kind, str):
             edge_kind = dict(get_edge_config(edge_kind))
-        edge_kind["tooltip"] = path
+        if "tooltip" not in edge_kind:
+            data = query_path(self.resource, path)
+            if data is None:
+                tooltip = path
+            else:
+                tooltip = yaml.dump({path: data}, default_flow_style=False)[:-1]
+            edge_kind["tooltip"] = tooltip
         edge[-1] = edge_kind
         self.append(edge)
 
@@ -897,14 +905,26 @@ if args.config is not None:
                 config["edges"].update(custom_config["edges"])
             if custom_config.get("clusters"):
                 for cluster_custom_config in custom_config["clusters"]:
-                    cluster_label = cluster_custom_config.get("label")
-                    for config_cluster in config["clusters"]:
-                        if config_cluster.get("label") == cluster_label:
-                            config_cluster.update(cluster_custom_config)
-                            cluster_label = None
-                            break
-                    if cluster_label is not None:
-                        config["clusters"].append(cluster_custom_config)
+                    if "label" in cluster_custom_config:
+                        cluster_label = cluster_custom_config["label"]
+                        for config_cluster in config["clusters"]:
+                            if config_cluster.get("label") == cluster_label:
+                                config_cluster.update(cluster_custom_config)
+                                cluster_label = None
+                                break
+                        if cluster_label is not None:
+                            config["clusters"].append(cluster_custom_config)
+                    elif "annotation" in cluster_custom_config:
+                        cluster_annotation = cluster_custom_config["annotation"]
+                        for config_cluster in config["clusters"]:
+                            if config_cluster.get("annotation") == cluster_annotation:
+                                config_cluster.update(cluster_custom_config)
+                                cluster_annotation = None
+                                break
+                        if cluster_annotation is not None:
+                            config["clusters"].append(cluster_custom_config)
+                    else:
+                        print("ISSUE on", cluster_custom_config)
             if custom_config.get("nodes"):
                 for k, v in custom_config["nodes"].items():
                     previous = config["nodes"].get(k)
@@ -926,11 +946,16 @@ def process_resource(resource):
     """
     cluster = resource_cluster
     name = get_name(resource)
-    if get_node_config(resource).get("scope") == "Cluster":
+    resource_scope = get_node_config(resource).get("scope")
+    if resource_scope == "Outside":
         rid = name + "/" + get_type(resource)
         resources[rid] = resource
-        if not(args.without_namespace) and resource.get("kind") == "Namespace":
-            cluster = resource_cluster.get_or_create_cluster(f"Namespace: {name}")
+    elif resource_scope == "Cluster":
+        rid = name + "/" + get_type(resource)
+        resources[rid] = resource
+#TBR: commented to avoid to create a cluster
+#        if not(args.without_namespace) and resource.get("kind") == "Namespace":
+#            cluster = resource_cluster.get_or_create_cluster(f"Namespace: {name}")
     else: # scope = Namespaced
         rid = name + "/" + get_namespace(resource) + "/" + get_type(resource)
         resources[rid] = resource
@@ -945,11 +970,11 @@ def process_resource(resource):
                 "label": icon(Namespace, get_namespace(resource))
             })
 
-    def process_clusters(cluster, resource, clusters):
+    def process_clusters(cluster, resource, cluster_configs):
         """
             Process a resource.
         """
-        for cluster_config in clusters:
+        for cluster_config in cluster_configs:
             if cluster_config.get("show", True) is False:
                 continue # skip this cluster
             if "annotation" in cluster_config:
@@ -960,9 +985,9 @@ def process_resource(resource):
                     cluster_name = cluster_config_title.format(annotations[annotation])
                     cluster = cluster.get_or_create_cluster(cluster_name)
                     cluster.graph_attr.update(cluster_config.get("graph_attr", {}))
-                    clusters.remove(cluster_config)
-                    return process_clusters(cluster, resource, clusters)
-            if "label" in cluster_config:
+                    cluster_configs.remove(cluster_config)
+                    return process_clusters(cluster, resource, cluster_configs)
+            elif "label" in cluster_config:
                 label = cluster_config["label"]
                 labels = query_path(resource, "metadata.labels")
                 if isinstance(labels, dict) and label in labels:
@@ -977,8 +1002,8 @@ def process_resource(resource):
                         cluster_name = cluster_config_title.format(labels[label])
                     cluster = cluster.get_or_create_cluster(cluster_name)
                     cluster.graph_attr.update(cluster_config.get("graph_attr", {}))
-                    clusters.remove(cluster_config)
-                    return process_clusters(cluster, resource, clusters)
+                    cluster_configs.remove(cluster_config)
+                    return process_clusters(cluster, resource, cluster_configs)
         return cluster
 
     cluster = process_clusters(
