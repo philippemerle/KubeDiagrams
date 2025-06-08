@@ -319,7 +319,7 @@ class EdgesContext(list):
         edge_kind = edge[-1]
         if isinstance(edge_kind, str):
             edge_kind = dict(get_edge_config(edge_kind))
-        if "tooltip" not in edge_kind:
+        if "tooltip" not in edge_kind and path is not None:
             data = query_path(self.resource, path)
             if data is None:
                 tooltip = path
