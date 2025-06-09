@@ -53,6 +53,9 @@ Architecture diagram for **NetworkPolicy** resources: ![network_policies.png](ht
 Architecture diagram for an **Argo CD** example:
 ![argoproj-argocd-example-apps-apps.png](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/diagrams/argoproj-argocd-example-apps-apps.png)
 
+Architecture diagram for an **Argo Events** example:
+![argoproj-argo-events-examples.png](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/diagrams/argoproj-argo-events-examples.png)
+
 Many other architecture diagrams are available into [examples/](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/).
 
 All the examples are
