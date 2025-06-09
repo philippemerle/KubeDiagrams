@@ -164,6 +164,17 @@ def get_node_config(resource):
             already_warned_node_configs.add(resource_type)
     return node_config if node_config else {}
 
+class Resource(dict):
+    """
+        Kubernetes resource.
+    """
+    def __init__(self, data, fn):
+        """
+            Initialize a Kubernetes resource.
+        """
+        dict.__init__(self, data)
+        self.filename = fn
+
 def get_type(resource):
     """
         Get the type of a Kubernetes resource, i.e., "kind/apiVersion".
@@ -949,16 +960,13 @@ def process_resource(resource):
     resource_scope = get_node_config(resource).get("scope")
     if resource_scope == "Outside":
         rid = name + "/" + get_type(resource)
-        resources[rid] = resource
     elif resource_scope == "Cluster":
         rid = name + "/" + get_type(resource)
-        resources[rid] = resource
 #TBR: commented to avoid to create a cluster
 #        if not(args.without_namespace) and resource.get("kind") == "Namespace":
 #            cluster = resource_cluster.get_or_create_cluster(f"Namespace: {name}")
     else: # scope = Namespaced
         rid = name + "/" + get_namespace(resource) + "/" + get_type(resource)
-        resources[rid] = resource
         if not args.without_namespace:
             cluster = resource_cluster.get_or_create_cluster(
                         f"Namespace: {get_namespace(resource)}"
@@ -969,6 +977,11 @@ def process_resource(resource):
                 "pencolor": "black",
                 "label": icon(Namespace, get_namespace(resource))
             })
+
+    if rid not in resources:
+        resources[rid] = resource
+    else:
+        error(resource, None, f"Already declared in {resources[rid].filename}")
 
     def process_clusters(cluster, resource, cluster_configs):
         """
@@ -1026,7 +1039,7 @@ def process_resource(resource):
             pprint(resource)
             raise
         for node in nodes:
-            process_resource(node)
+            process_resource(Resource(node, resource.filename))
 
 for filename in args.filename:
     try:
@@ -1037,9 +1050,9 @@ for filename in args.filename:
                     continue # Skip empty YAML content
                 if yaml_data.get("kind") == "List":
                     for r in yaml_data["items"]:
-                        process_resource(r)
+                        process_resource(Resource(r, filename))
                 else:
-                    process_resource(yaml_data)
+                    process_resource(Resource(yaml_data, filename))
     except FileNotFoundError:
         print(f"Error: file '{filename}' not found!")
         if len(args.filename) == 1:
