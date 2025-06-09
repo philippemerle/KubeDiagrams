@@ -1,3 +1,11 @@
+edges:
+  REFERENCE: {}
+  REFERENCE-UP:
+    direction: up
+  OWNER-UP:
+    color: black
+    style: dotted
+    direction: up
 clusters:
   - annotation: argocd.argoproj.io/sync-wave
     title: "Argo CD Sync Wave: {}"
@@ -16,6 +24,7 @@ nodes:
     scope: Namespaced
     custom_icon: icons/Application.png
     edges: |
+      # spec.destination.namespace
       edges.add_edge_to(
         "spec.destination.namespace",
         ".",
@@ -24,6 +33,7 @@ nodes:
         "v1",
         "REFERENCE"
       )
+      # spec.source
       edges.add_edge_to(
         "spec.source",
         "github.com",
@@ -33,6 +43,7 @@ nodes:
         "REFERENCE-UP"
       )
     nodes: |
+      # spec.source
       nodes.append({
         "apiVersion": "v1",
         "kind": "GitHub",
@@ -40,10 +51,76 @@ nodes:
           "name": "github.com"
         }
       })
+  EventBus/argoproj.io/v1alpha1:
+    scope: Namespaced
+    custom_icon: icons/EventBus.png
+  EventSource/argoproj.io/v1alpha1:
+    scope: Namespaced
+    custom_icon: icons/EventSource.png
+    edges: |
+      # eventBusName
+      edges.add_edge_to(
+        "eventBusName",
+        resource.get("eventBusName", "default"),
+        edges.namespace,
+        "EventBus",
+        "argoproj.io/v1alpha1",
+        "REFERENCE"
+      )
+      # spec.template
+      san = query_path(resource, "spec.template.serviceAccountName")
+      if san is not None:
+        edges.add_edge_to(
+          "spec.template.serviceAccountName",
+          ".",
+          edges.namespace,
+          "ServiceAccount",
+          "v1",
+          "OWNER-UP"
+        )
+      # spec.service
+      service = query_path(resource, "spec.service")
+      if service is not None:
+        edges.add_edge_to(
+          "service",
+          get_name(resource),
+          edges.namespace,
+          "Service",
+          "v1",
+          "OWNER-UP"
+        )
+    nodes: |
+      # spec.template.serviceAccountName
+      san = query_path(resource, "spec.template.serviceAccountName")
+      if san is not None:
+        nodes.append({
+          "apiVersion": "v1",
+          "kind": "ServiceAccount",
+          "metadata": {
+            "name": san,
+            "labels": query_path(resource, "metadata.labels")
+          }
+        })
+      # spec.service
+      service = query_path(resource, "spec.service")
+      if service is not None:
+        nodes.append({
+          "apiVersion": "v1",
+          "kind": "Service",
+          "metadata": {
+            "name": get_name(resource),
+            "labels": query_path(resource, "metadata.labels")
+          },
+          "spec": {
+            **service,
+            "selector": {}
+          }
+        })
   Rollout/argoproj.io/v1alpha1:
     scope: Namespaced
     custom_icon: icons/Rollout.png
     edges: |
+      # spec.strategy
       edges.add_edge_to(
         "spec.strategy.blueGreen.activeService",
         ".",
@@ -60,6 +137,40 @@ nodes:
         "v1",
         "REFERENCE-UP"
       )
+  Sensor/argoproj.io/v1alpha1:
+    scope: Namespaced
+    custom_icon: icons/Sensor.png
+    edges: |
+      # eventBusName
+      edges.add_edge_to(
+        "eventBusName",
+        resource.get("eventBusName", "default"),
+        edges.namespace,
+        "EventBus",
+        "argoproj.io/v1alpha1",
+        "REFERENCE-UP"
+      )
+      # spec.dependencies
+      for dependency in query_path(resource, "spec.dependencies", []):
+        edges.add_edge_to(
+          "spec.dependencies",
+          dependency.get("eventSourceName"),
+          edges.namespace,
+          "EventSource",
+          "argoproj.io/v1alpha1",
+          "REFERENCE-UP"
+        )
+      # spec.template
+      san = query_path(resource, "spec.template.serviceAccountName")
+      if san is not None:
+        edges.add_edge_to(
+          "spec.template.serviceAccountName",
+          ".",
+          edges.namespace,
+          "ServiceAccount",
+          "v1",
+          "REFERENCE"
+        )
   Workflow/argoproj.io/v1alpha1:
     scope: Namespaced
     custom_icon: icons/Workflow.png

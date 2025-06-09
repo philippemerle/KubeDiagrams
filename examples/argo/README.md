@@ -83,3 +83,7 @@ Architecture diagram for [Argo Events Helm Chart](https://artifacthub.io/package
 Architecture diagram for [Argo Events Install Manifest](https://github.com/argoproj/argo-events/blob/master/manifests/install.yaml):
 
 ![diagrams/argoproj-argo-events-manifests-install.png](diagrams/argoproj-argo-events-manifests-install.png)
+
+Architecture diagram for [Argo Events Examples](https://github.com/argoproj/argo-events/tree/master/examples):
+
+![diagrams/argoproj-argo-events-examples.png](diagrams/argoproj-argo-events-examples.png)
