@@ -369,6 +369,8 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 ### Social Networks
 
+1. [Mathieu Acher's post](https://x.com/acherm/status/1932032555424928036) on X, June 9, 2025.
+
 1. [KubeDiagrams moved from GPL-3.0 to Apache 2.0 License](https://www.reddit.com/r/kubernetes/comments/1l4djek/kubediagrams_moved_from_gpl30_to_apache_20_license/) on Reddit, June 6, 2025.
 
 1. [Jimmy Song's post](https://x.com/jimmysongio/status/1930073443866722570) on X, June 4, 2025.
