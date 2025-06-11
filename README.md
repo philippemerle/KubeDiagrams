@@ -369,7 +369,14 @@ Following figure shows the software architecture of **KubeDiagrams**.
 
 ### Social Networks
 
+
+1. [Christophe Gourdin's post](https://www.linkedin.com/feed/update/urn:li:activity:7338139783220617216/) on LinkedIn, June 10, 2025.
+
+1. [Preview: Kubernetes Content Performance Analysis Report for May 2025](https://www.linkedin.com/posts/amitjayshah_preview-kubernetes-content-performance-activity-7337803162893885440-Z_Ws/), LinkedIn, June 9, 2025. [Full Report Preview](https://drive.google.com/file/d/1Et8ZnCttdvjhj8cHOwcqVJFZ2iLzIMu_/view).
+
 1. [Mathieu Acher's post](https://x.com/acherm/status/1932032555424928036) on X, June 9, 2025.
+
+1. [Philippe Merle's post](https://www.linkedin.com/feed/update/urn:li:activity:7337365803010338817/) on LinkedIn, June 9, 2025.
 
 1. [KubeDiagrams moved from GPL-3.0 to Apache 2.0 License](https://www.reddit.com/r/kubernetes/comments/1l4djek/kubediagrams_moved_from_gpl30_to_apache_20_license/) on Reddit, June 6, 2025.
 
