@@ -18,7 +18,7 @@ with open("README.md", encoding="utf-8") as readme:
             "and actual cluster state",
         long_description=readme.read(),
         long_description_content_type="text/markdown",
-        license="GPL-3.0-only",
+        license="Apache-2.0",
         classifiers=[
             "Topic :: Software Development :: Documentation",
             "Topic :: Utilities",
