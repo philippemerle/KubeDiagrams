@@ -141,6 +141,30 @@ kubectl get all -o yaml | kube-diagrams -o default-namespace.png -
 kubectl get all --all-namespaces -o yaml | kube-diagrams -o all-namespaces.png -
 ```
 
+#### 🧩 `kubectl` Plugin Support
+
+You can use KubeDiagrams as a `kubectl` plugin as well for a more integrated Kubernetes workflow. This allows you to run commands like:
+
+```sh
+kubectl graph -o diagram.png
+```
+
+To enable this, simply symlink or copy the [`kubectl-graph`](./bin/kubectl-graph) script onto your `$PATH`:
+
+```sh
+ln -s $(which kube-diagrams) /usr/local/bin/kubectl-diagrams
+```
+
+> [!NOTE]
+>
+> You will also already need `kube-diagrams` on your `$PATH` as well for this to work.
+
+You can alternatively install it via Nix:
+
+```sh
+nix shell github:philippemerle/KubeDiagrams#kubectl-graph
+```
+
 ### `helm-diagrams`
 
 `helm-diagrams` generates a Kubernetes architecture diagram from an Helm chart.
