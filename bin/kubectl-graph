@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# kubectl-graph: A kubectl plugin to generate a diagram of Kubernetes resources
+# using kube-diagrams from the output of 'kubectl get all -o yaml'
+
+# Check if kube-diagrams is installed
+if ! command -v kube-diagrams &>/dev/null; then
+  echo "Error: kube-diagrams is not installed. Please install it first."
+  exit 1
+fi
+
+# Check if kubectl is installed
+if ! command -v kubectl &>/dev/null; then
+  echo "Error: kubectl is not installed. Please install it first."
+  exit 1
+fi
+
+# Initialize variables
+NAMESPACE=""
+KUBE_DIAGRAMS_ARGS=("-") # Default to stdin indicator
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -n | --namespace)
+    if [[ -n "$2" ]]; then
+      NAMESPACE="$2"
+      shift 2
+    else
+      echo "Error: --namespace requires a value"
+      exit 1
+    fi
+    ;;
+  *)
+    KUBE_DIAGRAMS_ARGS+=("$1")
+    shift
+    ;;
+  esac
+done
+
+# Construct kubectl command as an array
+KUBECTL_ARGS=("get" "all" "-o" "yaml")
+if [[ -n "$NAMESPACE" ]]; then
+  KUBECTL_ARGS=("-n" "$NAMESPACE" "${KUBECTL_ARGS[@]}")
+fi
+
+# Execute kubectl and pipe to kube-diagrams with arguments
+kubectl "${KUBECTL_ARGS[@]}" | kube-diagrams "${KUBE_DIAGRAMS_ARGS[@]}"
+EXIT_CODE=$?
+
+if [[ $EXIT_CODE -eq 0 ]]; then
+  echo "Diagram generated successfully"
+else
+  echo "Error: Failed to generate diagram"
+  exit 1
+fi
