@@ -55,6 +55,8 @@
               git
               lazygit
               nodePackages.prettier
+              # Install kube-diagrams as a kubectl plugin
+              (writeShellScriptBin "kubectl-graph" (builtins.readFile ./bin/kubectl-graph))
             ]
             ++ runtimeEnv;
         };
