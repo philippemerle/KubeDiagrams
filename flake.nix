@@ -36,6 +36,12 @@
           '';
         };
 
+        kubectl-graph = pkgs.writeShellApplication {
+          name = "kubectl-graph";
+          runtimeInputs = [ kube-diagrams ];
+          text = builtins.readFile ./bin/kubectl-graph;
+        };
+
         runtimeEnv =
           with pkgs;
           [
@@ -43,6 +49,7 @@
             graphviz
             kubernetes-helm
             kube-diagrams
+            kubectl-graph
             pythonEnv
           ]
           ++ lib.optionals pkgs.stdenv.isLinux [ busybox ];
@@ -55,8 +62,6 @@
               git
               lazygit
               nodePackages.prettier
-              # Install kube-diagrams as a kubectl plugin
-              (writeShellScriptBin "kubectl-graph" (builtins.readFile ./bin/kubectl-graph))
             ]
             ++ runtimeEnv;
         };
@@ -64,6 +69,7 @@
         packages = {
           default = kube-diagrams;
           kube-diagrams = kube-diagrams;
+          kubectl-graph = kubectl-graph;
           docker = pkgs.dockerTools.buildImage {
             name = "ghcr.io/philippemerle/kubediagrams";
             tag = "latest";
