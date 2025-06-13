@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # kubectl-diagrams: A kubectl plugin to generate a diagram of Kubernetes resources
-# using kube-diagrams from the output of 'kubectl get all -o yaml'
+# using kube-diagrams from the output of 'kubectl get <resources> -o yaml'
 
 # Check if kube-diagrams is installed
 if ! command -v kube-diagrams &>/dev/null; then
@@ -16,36 +16,53 @@ if ! command -v kubectl &>/dev/null; then
 fi
 
 # Initialize variables
-NAMESPACE=""
 KUBE_DIAGRAMS_ARGS=("-") # Default to stdin indicator
+KUBECTL_ARGS=()
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
   case "$1" in
   -n | --namespace)
     if [[ -n "$2" ]]; then
-      NAMESPACE="$2"
+      KUBECTL_ARGS+=("-n" "$2")
       shift 2
     else
       echo "Error: --namespace requires a value"
       exit 1
     fi
     ;;
-  *)
+  -o | --output | -f | --format | --without-namespace)
     KUBE_DIAGRAMS_ARGS+=("$1")
+    if [[ "$1" == "-o" || "$1" == "--output" || "$1" == "-f" || "$1" == "--format" ]]; then
+      if [[ -n "$2" ]]; then
+        KUBE_DIAGRAMS_ARGS+=("$2")
+        shift 2
+      else
+        echo "Error: $1 requires a value"
+        exit 1
+      fi
+    else
+      shift
+    fi
+    ;;
+  *)
+    KUBECTL_ARGS+=("$1")
     shift
     ;;
   esac
 done
 
-# Construct kubectl command as an array
-KUBECTL_ARGS=("get" "all" "-o" "yaml")
-if [[ -n "$NAMESPACE" ]]; then
-  KUBECTL_ARGS=("-n" "$NAMESPACE" "${KUBECTL_ARGS[@]}")
+# Check if any resources were specified
+if [[ ${#KUBECTL_ARGS[@]} -eq 0 ]]; then
+  echo "Error: At least one resource kind must be specified (e.g., pod, service, deployment)"
+  exit 1
 fi
 
+# Add default output format for kubectl
+KUBECTL_ARGS+=("-o" "yaml")
+
 # Execute kubectl and pipe to kube-diagrams with arguments
-kubectl "${KUBECTL_ARGS[@]}" | kube-diagrams "${KUBE_DIAGRAMS_ARGS[@]}"
+kubectl get "${KUBECTL_ARGS[@]}" | kube-diagrams "${KUBE_DIAGRAMS_ARGS[@]}"
 EXIT_CODE=$?
 
 if [[ $EXIT_CODE -eq 0 ]]; then
