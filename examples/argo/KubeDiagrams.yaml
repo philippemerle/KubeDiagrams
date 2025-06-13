@@ -76,7 +76,7 @@ nodes:
           edges.namespace,
           "ServiceAccount",
           "v1",
-          "OWNER-UP"
+          "OWNER"
         )
       # spec.service
       service = query_path(resource, "spec.service")
@@ -87,7 +87,128 @@ nodes:
           edges.namespace,
           "Service",
           "v1",
-          "OWNER-UP"
+          "OWNER"
+        )
+      # spec.amqp
+      amqp = query_path(resource, "spec.amqp")
+      if amqp is not None:
+        edges.add_edge_to(
+          "spec.amqp",
+          get_name(resource),
+          None,
+          "MessageQueue",
+          "amqp/v1",
+          "REFERENCE-UP"
+        )
+      # spec.sns
+      sns = query_path(resource, "spec.sns")
+      if sns is not None:
+        edges.add_edge_to(
+          "spec.sns",
+          get_name(resource),
+          None,
+          "SnsTopic",
+          "aws/v1",
+          "REFERENCE-UP"
+        )
+      # spec.sqs
+      sqs = query_path(resource, "spec.sqs")
+      if sqs is not None:
+        edges.add_edge_to(
+          "spec.sqs",
+          get_name(resource),
+          None,
+          "SqsQueue",
+          "aws/v1",
+          "REFERENCE-UP"
+        )
+      # spec.azureEventsHub
+      azureEventsHub = query_path(resource, "spec.azureEventsHub")
+      if azureEventsHub is not None:
+        edges.add_edge_to(
+          "spec.azureEventsHub",
+          get_name(resource),
+          None,
+          "EventHubs",
+          "azure/v1",
+          "REFERENCE-UP"
+        )
+      # spec.azureQueueStorage
+      azureQueueStorage = query_path(resource, "spec.azureQueueStorage")
+      if azureQueueStorage is not None:
+        edges.add_edge_to(
+          "spec.azureQueueStorage",
+          get_name(resource),
+          None,
+          "QueueStorage",
+          "azure/v1",
+          "REFERENCE-UP"
+        )
+      # spec.azureServiceBus
+      azureServiceBus = query_path(resource, "spec.azureServiceBus")
+      if azureServiceBus is not None:
+        edges.add_edge_to(
+          "spec.azureServiceBus",
+          get_name(resource),
+          None,
+          "ServiceBus",
+          "azure/v1",
+          "REFERENCE-UP"
+        )
+      # spec.bitbucket
+      bitbucket = query_path(resource, "spec.bitbucket")
+      if bitbucket is not None:
+        edges.add_edge_to(
+          "spec.bitbucket",
+          get_name(resource),
+          None,
+          "BitBucket",
+          "v1",
+          "REFERENCE-UP"
+        )
+      # spec.bitbucketserver
+      bitbucketserver = query_path(resource, "spec.bitbucketserver")
+      if bitbucketserver is not None:
+        edges.add_edge_to(
+          "spec.bitbucketserver",
+          get_name(resource),
+          None,
+          "BitBucketServer",
+          "v1",
+          "REFERENCE-UP"
+        )
+      # spec.emitter
+      emitter = query_path(resource, "spec.emitter")
+      if emitter is not None:
+        edges.add_edge_to(
+          "spec.emitter",
+          get_name(resource),
+          None,
+          "Emitter",
+          "v1",
+          "REFERENCE-UP"
+        )
+      # spec.file
+      file = query_path(resource, "spec.file")
+      if file is not None:
+        edges.add_edge_to(
+          "spec.file",
+          get_name(resource),
+          None,
+          "File",
+          "v1",
+          "REFERENCE-UP"
+        )
+      # spec.pubSub
+      pubSub = query_path(resource, "spec.pubSub")
+      if pubSub is not None:
+        edges.add_edge_to(
+          "spec.pubSub",
+          get_name(resource),
+          None,
+          "PubSub",
+          "gcp/v1",
+          "REFERENCE-UP"
         )
     nodes: |
       # spec.template.serviceAccountName
@@ -113,8 +234,118 @@ nodes:
           },
           "spec": {
             **service,
-            "selector": {}
+            "selector": { "POD": "POD"} #TODO
           }
+        })
+      # spec.amqp
+      amqp = query_path(resource, "spec.amqp")
+      if amqp is not None:
+        nodes.append({
+          "apiVersion": "amqp/v1",
+          "kind": "MessageQueue",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.sns
+      sns = query_path(resource, "spec.sns")
+      if sns is not None:
+        nodes.append({
+          "apiVersion": "aws/v1",
+          "kind": "SnsTopic",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.sqs
+      sqs = query_path(resource, "spec.sqs")
+      if sqs is not None:
+        nodes.append({
+          "apiVersion": "aws/v1",
+          "kind": "SqsQueue",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.azureEventsHub
+      azureEventsHub = query_path(resource, "spec.azureEventsHub")
+      if azureEventsHub is not None:
+        nodes.append({
+          "apiVersion": "azure/v1",
+          "kind": "EventHubs",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.azureQueueStorage
+      azureQueueStorage = query_path(resource, "spec.azureQueueStorage")
+      if azureQueueStorage is not None:
+        nodes.append({
+          "apiVersion": "azure/v1",
+          "kind": "QueueStorage",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.azureServiceBus
+      azureServiceBus = query_path(resource, "spec.azureServiceBus")
+      if azureServiceBus is not None:
+        nodes.append({
+          "apiVersion": "azure/v1",
+          "kind": "ServiceBus",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.bitbucket
+      bitbucket = query_path(resource, "spec.bitbucket")
+      if bitbucket is not None:
+        nodes.append({
+          "apiVersion": "v1",
+          "kind": "BitBucket",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.bitbucketserver
+      bitbucketserver = query_path(resource, "spec.bitbucketserver")
+      if bitbucketserver is not None:
+        nodes.append({
+          "apiVersion": "v1",
+          "kind": "BitBucketServer",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.emitter
+      emitter = query_path(resource, "spec.emitter")
+      if emitter is not None:
+        nodes.append({
+          "apiVersion": "v1",
+          "kind": "Emitter",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.file
+      file = query_path(resource, "spec.file")
+      if file is not None:
+        nodes.append({
+          "apiVersion": "v1",
+          "kind": "File",
+          "metadata": {
+            "name": get_name(resource),
+          },
+        })
+      # spec.pubSub
+      pubSub = query_path(resource, "spec.pubSub")
+      if pubSub is not None:
+        nodes.append({
+          "apiVersion": "gcp/v1",
+          "kind": "PubSub",
+          "metadata": {
+            "name": get_name(resource),
+          },
         })
   Rollout/argoproj.io/v1alpha1:
     scope: Namespaced
@@ -171,10 +402,290 @@ nodes:
           "v1",
           "REFERENCE"
         )
+      # spec.triggers
+      for tidx, trigger in enumerate(query_path(resource, "spec.triggers", [])):
+        template_name = query_path(trigger, "template.name")
+        # template.k8s
+        template_k8s = query_path(trigger, "template.k8s")
+        if template_k8s is not None:
+          template_k8s_source_resource = query_path(trigger, "template.k8s.source.resource")
+          if template_k8s_source_resource is not None:
+            edges.add_edge_to(
+              "trigger",
+              get_name(template_k8s_source_resource),
+              get_namespace(template_k8s_source_resource),
+              query_path(template_k8s_source_resource, "kind"),
+              query_path(template_k8s_source_resource, "apiVersion"),
+              {
+                "color": "black",
+                "style": "dotted",
+                "xlabel": query_path(trigger, "template.k8s.operation")
+              }
+            )
+        # template.awsLambda
+        template_aws_lambda = query_path(trigger, "template.awsLambda")
+        if template_aws_lambda is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "LambdaFunction",
+              "aws/v1",
+              "REFERENCE"
+            )
+        # template.azureEventHubs
+        template_azureEventHubs = query_path(trigger, "template.azureEventHubs")
+        if template_azureEventHubs is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "EventHubs",
+              "azure/v1",
+              "REFERENCE"
+            )
+        # template.azureServiceBus
+        template_azureServiceBus = query_path(trigger, "template.azureServiceBus")
+        if template_azureServiceBus is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "ServiceBus",
+              "azure/v1",
+              "REFERENCE"
+            )
+        # template.custom
+        template_custom = query_path(trigger, "template.custom")
+        if template_custom is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "GRPC",
+              "v1",
+              "REFERENCE"
+            )
+        # template.email
+        template_email = query_path(trigger, "template.email")
+        if template_email is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "Email",
+              "v1",
+              "REFERENCE"
+            )
+        # template.http
+        template_http = query_path(trigger, "template.http")
+        if template_http is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "HTTP",
+              "v1",
+              "REFERENCE"
+            )
+        # template.slack
+        template_slack = query_path(trigger, "template.slack")
+        if template_slack is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "Slack",
+              "v1",
+              "REFERENCE"
+            )
+        # template.nats
+        template_nats = query_path(trigger, "template.nats")
+        if template_nats is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "Nats",
+              "v1",
+              "REFERENCE"
+            )
+        # template.openwhisk
+        template_openwhisk = query_path(trigger, "template.openwhisk")
+        if template_openwhisk is not None:
+            edges.add_edge_to(
+              "trigger",
+              f"{template_name}-{get_name(resource)}-{tidx}",
+              None,
+              "OpenWhisk",
+              "apache/v1",
+              "REFERENCE"
+            )
+    nodes: |
+      # spec.triggers
+      for tidx, trigger in enumerate(query_path(resource, "spec.triggers", [])):
+        template_name = query_path(trigger, "template.name")
+        # template.k8s
+        template_k8s_source_resource = query_path(trigger, "template.k8s.source.resource")
+        if template_k8s_source_resource is not None:
+          template_k8s_source_resource["metadata"]["name"] = f"{get_name(template_k8s_source_resource)}{get_name(resource)}-{tidx}"
+          nodes.append(template_k8s_source_resource)
+        # template.awsLambda
+        template_aws_lambda = query_path(trigger, "template.awsLambda")
+        if template_aws_lambda is not None:
+          nodes.append({
+            "kind": "LambdaFunction",
+            "apiVersion": "aws/v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.azureEventHubs
+        template_azure_event_hubs = query_path(trigger, "template.azureEventHubs")
+        if template_azure_event_hubs is not None:
+          nodes.append({
+            "kind": "EventHubs",
+            "apiVersion": "azure/v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.azureServiceBus
+        template_azureServiceBus = query_path(trigger, "template.azureServiceBus")
+        if template_azureServiceBus is not None:
+          nodes.append({
+            "kind": "ServiceBus",
+            "apiVersion": "azure/v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.custom
+        template_custom = query_path(trigger, "template.custom")
+        if template_custom is not None:
+          nodes.append({
+            "kind": "GRPC",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.email
+        template_email = query_path(trigger, "template.email")
+        if template_email is not None:
+          nodes.append({
+            "kind": "Email",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.http
+        template_http = query_path(trigger, "template.http")
+        if template_http is not None:
+          nodes.append({
+            "kind": "HTTP",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.slack
+        template_slack = query_path(trigger, "template.slack")
+        if template_slack is not None:
+          nodes.append({
+            "kind": "Slack",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.nats
+        template_nats = query_path(trigger, "template.nats")
+        if template_nats is not None:
+          nodes.append({
+            "kind": "Nats",
+            "apiVersion": "v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
+        # template.openwhisk
+        template_openwhisk = query_path(trigger, "template.openwhisk")
+        if template_openwhisk is not None:
+          nodes.append({
+            "kind": "OpenWhisk",
+            "apiVersion": "apache/v1",
+            "metadata": {
+              "name": f"{template_name}-{get_name(resource)}-{tidx}"
+            }
+          })
   Workflow/argoproj.io/v1alpha1:
     scope: Namespaced
     custom_icon: icons/Workflow.png
+  # Apache
+  OpenWhisk/apache/v1:
+    scope: Outside
+    custom_icon: icons/apache-openwhisk-logo-only.png
+  # AWS
+  LambdaFunction/aws/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.aws.compute.LambdaFunction
+  SnsTopic/aws/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.aws.integration.SimpleNotificationServiceSnsTopic
+  SqsQueue/aws/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.aws.integration.SimpleQueueServiceSqsQueue
+  # Azure
+  QueueStorage/azure/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.azure.storage.QueuesStorage
+  EventHubs/azure/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.azure.analytics.EventHubs
+  ServiceBus/azure/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.azure.integration.ServiceBus
+  # GCP
+  PubSub/gcp/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.gcp.analytics.Pubsub
+  # GitHub
   GitHub/v1:
     scope: Outside
     diagram_node_classname: diagrams.onprem.vcs.Github
-    
+  # Other
+  BitBucket/v1:
+    scope: Outside
+    custom_icon: icons/bitbucket.png
+  BitBucketServer/v1:
+    scope: Outside
+    custom_icon: icons/bitbucket.png
+  Email/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.oci.monitoring.Email
+  Emitter/v1:
+    scope: Outside
+    custom_icon: icons/emitter.png
+  File/v1:
+    scope: Outside
+    custom_icon: icons/file.png
+  HTTP/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.aws.iot.IotHttp
+  GRPC/v1:
+    scope: Outside
+    custom_icon: icons/grpc-logo.png
+  MessageQueue/amqp/v1:
+    scope: Outside
+    custom_icon: icons/amqp-message-queue.png
+  Nats/v1:
+    scope: Outside
+    diagram_node_classname: diagrams.onprem.queue.Nats
+  Slack/v1:
+    scope: Outside
+    custom_icon: icons/slack.png
+# TODO:
+# - template.log
+# - template.argoWorkflow

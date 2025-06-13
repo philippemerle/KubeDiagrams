@@ -51,4 +51,4 @@ $BIN/kube-diagrams downloads/argocd-example-apps/sync-waves/manifests.yaml -c Ku
 
 # Generate the Kubernetes architecture diagrams for Argo Events
 $BIN/kube-diagrams downloads/argoproj-argo-events-manifests-install.yaml -o diagrams/argoproj-argo-events-manifests-install.png
-$BIN/kube-diagrams -o diagrams/argoproj-argo-events-examples -c KubeDiagrams.yaml downloads/argo-events/examples/*/*.yaml
+$BIN/kube-diagrams -o diagrams/argoproj-argo-events-examples -c KubeDiagrams.yaml --without-namespace downloads/argo-events/examples/*/*.yaml
