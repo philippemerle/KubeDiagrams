@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# kubectl-graph: A kubectl plugin to generate a diagram of Kubernetes resources
+# kubectl-diagrams: A kubectl plugin to generate a diagram of Kubernetes resources
 # using kube-diagrams from the output of 'kubectl get all -o yaml'
 
 # Check if kube-diagrams is installed

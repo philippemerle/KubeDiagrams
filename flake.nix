@@ -36,10 +36,10 @@
           '';
         };
 
-        kubectl-graph = pkgs.writeShellApplication {
-          name = "kubectl-graph";
+        kubectl-diagrams = pkgs.writeShellApplication {
+          name = "kubectl-diagrams";
           runtimeInputs = [ kube-diagrams ];
-          text = builtins.readFile ./bin/kubectl-graph;
+          text = builtins.readFile ./bin/kubectl-diagrams;
         };
 
         runtimeEnv =
@@ -49,7 +49,7 @@
             graphviz
             kubernetes-helm
             kube-diagrams
-            kubectl-graph
+            kubectl-diagrams
             pythonEnv
           ]
           ++ lib.optionals pkgs.stdenv.isLinux [ busybox ];
@@ -69,7 +69,7 @@
         packages = {
           default = kube-diagrams;
           kube-diagrams = kube-diagrams;
-          kubectl-graph = kubectl-graph;
+          kubectl-diagrams = kubectl-diagrams;
           docker = pkgs.dockerTools.buildImage {
             name = "ghcr.io/philippemerle/kubediagrams";
             tag = "latest";
