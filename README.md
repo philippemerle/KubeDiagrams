@@ -96,6 +96,12 @@ Following command installs **KubeDiagrams** and all its Python dependencies, i.e
 pip install KubeDiagrams
 ```
 
+Alternatively, you can install via Nix:
+
+```sh
+nix shell github:philippemerle/KubeDiagrams
+```
+
 ## Usage
 
 **KubeDiagrams** provides two commands: `kube-diagrams` and `helm-diagrams`.
