@@ -59,6 +59,7 @@ Architecture diagram for an **Argo Events** example:
 Many other architecture diagrams are available into [examples/](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/).
 
 All the examples are
+
 1. [official Kubernetes WordPress tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/wordpress/)
 1. [official Kubernetes ZooKeeper tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/zookeeper/)
 1. [official Kubernetes Cassandra tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cassandra/)
@@ -82,8 +83,9 @@ All the examples are
 ## Prerequisites
 
 Following software must be installed:
-* [Python](https://www.python.org) 3.9 or higher
-* `dot` command ([Graphviz](https://www.graphviz.org/))
+
+- [Python](https://www.python.org) 3.9 or higher
+- `dot` command ([Graphviz](https://www.graphviz.org/))
 
 ## Getting Started
 
@@ -119,8 +121,10 @@ options:
   -v, --verbose         verbosity, set to false by default
   --without-namespace   disable namespace cluster generation
 ```
+
 Examples:
-```ssh
+
+```sh
 # generate a diagram from a manifest
 kube-diagrams -o cassandra.png examples/cassandra/cassandra.yml
 
@@ -144,6 +148,7 @@ kubectl get all --all-namespaces -o yaml | kube-diagrams -o all-namespaces.png -
 `helm-diagrams` takes only one argument - the URL of the Helm chart - but requires that the `helm` command was installed.
 
 Examples:
+
 ```ssh
 # generate a diagram for the Helm chart 'cert-manager' available in HTTP repository 'charts.jetstack.io'
 helm-diagrams https://charts.jetstack.io/cert-manager
