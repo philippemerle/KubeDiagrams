@@ -152,7 +152,7 @@ kubectl get all --all-namespaces -o yaml | kube-diagrams -o all-namespaces.png -
 You can use KubeDiagrams as a `kubectl` plugin as well for a more integrated Kubernetes workflow. This allows you to run commands like:
 
 ```sh
-kubectl graph -o diagram.png
+kubectl diagrams all -o diagram.png
 ```
 
 To enable this, simply symlink or copy the [`kubectl-diagrams`](./bin/kubectl-diagrams) script onto your `$PATH`:
@@ -426,6 +426,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 1. [Visualising SQL Server in Kubernetes](https://dbafromthecold.com/2025/02/06/visualising-sql-server-in-kubernetes/), Andrew Pruski, February 6, 2025.
 
 ### Social Networks
+
+1. [Mahyar Mirrashed's post](https://www.linkedin.com/feed/update/urn:li:activity:7339156177529774080/) on LinkedIn, June 13, 2025.
 
 1. [Christophe Gourdin's post](https://www.linkedin.com/feed/update/urn:li:activity:7338139783220617216/) on LinkedIn, June 10, 2025.
 
