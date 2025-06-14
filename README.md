@@ -447,6 +447,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [KubeDiagrams Interactive Viewer](https://www.reddit.com/r/kubernetes/comments/1lbba70/kubediagrams_interactive_viewer/) on Reddit, June 14, 2025.
+
 1. [Mahyar Mirrashed's post](https://www.linkedin.com/feed/update/urn:li:activity:7339156177529774080/) on LinkedIn, June 13, 2025.
 
 1. [Christophe Gourdin's post](https://www.linkedin.com/feed/update/urn:li:activity:7338139783220617216/) on LinkedIn, June 10, 2025.
