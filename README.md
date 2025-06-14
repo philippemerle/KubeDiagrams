@@ -382,7 +382,7 @@ jobs:
 kube-diagrams examples/wordpress/*.yaml -o wordpress.dot_json
 ```
 
-Diagrams in the `dot json` format can be viewed and manipulated interactively thanks to **Kube Diagrams Interactive Viewer**. For instance, type:
+Diagrams in the `dot_json` format can be viewed and manipulated interactively thanks to **KubeDiagrams Interactive Viewer**. For instance, type:
 
 ```sh
 open interactive_viewer/index.html
@@ -392,7 +392,7 @@ Then open the `wordpress.dot_json` file:
 
 ![KubeDiagrams Interactive Viewer](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-Interactive-Viewer.png)
 
-**Kube Diagrams Interactive Viewer** allows users to zoom in/out diagrams, to see cluster/node/edge tooltips, open/close clusters, move clusters/nodes interactively, and save as PNG/JPG images.
+**KubeDiagrams Interactive Viewer** allows users to zoom in/out diagrams, to see cluster/node/edge tooltips, open/close clusters, move clusters/nodes interactively, and save as PNG/JPG images.
 
 ## Architecture
 
