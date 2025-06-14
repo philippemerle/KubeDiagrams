@@ -388,9 +388,9 @@ Diagrams in the `dot json` format can be viewed and manipulated interactively th
 open interactive_viewer/index.html
 ```
 
-Then open the `wordpress.dot_json` diagram
+Then open the `wordpress.dot_json` file:
 
-![KubeDiagrams Interactive Viewer](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/Kubernetes-Interactive-Viewer.png)
+![KubeDiagrams Interactive Viewer](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-Interactive-Viewer.png)
 
 **Kube Diagrams Interactive Viewer** allows users to zoom in/out diagrams, to see cluster/node/edge tooltips, open/close clusters, move clusters/nodes interactively, and save as PNG/JPG images.
 
