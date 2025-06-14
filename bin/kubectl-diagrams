@@ -1,0 +1,104 @@
+#!/bin/bash
+
+# kubectl diagrams: A kubectl plugin to generate a diagram of Kubernetes resources
+# using kube-diagrams from the output of 'kubectl get <resources> -o yaml'
+
+# Version
+VERSION="0.1.0"
+
+# Check if kube-diagrams is installed
+if ! command -v kube-diagrams &>/dev/null; then
+  echo "Error: kube-diagrams is not installed. Please install it first."
+  exit 1
+fi
+
+# Check if kubectl is installed
+if ! command -v kubectl &>/dev/null; then
+  echo "Error: kubectl is not installed. Please install it first."
+  exit 1
+fi
+
+# Display help message
+show_help() {
+  echo "Usage: kubectl diagrams [OPTIONS] <resource1,resource2,...>"
+  echo ""
+  echo "A kubectl plugin to generate diagrams of Kubernetes resources using kube-diagrams."
+  echo ""
+  echo "Options:"
+  echo "  -n, --namespace <namespace>  Specify the namespace to query resources from"
+  echo "  -o, --output <file>          Specify the output file for the diagram"
+  echo "  -f, --format <format>        Specify the output format (e.g., png, svg)"
+  echo "      --without-namespace      Exclude namespace from the diagram"
+  echo "      --version                Display the version number"
+  echo "      --help                   Display this help message"
+  echo ""
+  echo "Examples:"
+  echo "  kubectl diagrams pod,service -n my-namespace -o diagram.png"
+  echo "  kubectl diagrams deployment --without-namespace -f svg"
+  echo "  kubectl diagrams --version"
+  exit 0
+}
+
+# Initialize variables
+KUBE_DIAGRAMS_ARGS=("-") # Default to stdin indicator
+KUBECTL_ARGS=()
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  --version)
+    echo "kubectl diagrams version $VERSION"
+    exit
+    ;;
+  --help)
+    show_help
+    ;;
+  -n | --namespace)
+    if [[ -n "$2" ]]; then
+      KUBECTL_ARGS+=("-n" "$2")
+      shift 2
+    else
+      echo "Error: --namespace requires a value"
+      exit 64
+    fi
+    ;;
+  -o | --output | -f | --format | --without-namespace)
+    KUBE_DIAGRAMS_ARGS+=("$1")
+    if [[ "$1" == "-o" || "$1" == "--output" || "$1" == "-f" || "$1" == "--format" ]]; then
+      if [[ -n "$2" ]]; then
+        KUBE_DIAGRAMS_ARGS+=("$2")
+        shift 2
+      else
+        echo "Error: $1 requires a value"
+        exit 64
+      fi
+    else
+      shift
+    fi
+    ;;
+  *)
+    KUBECTL_ARGS+=("$1")
+    shift
+    ;;
+  esac
+done
+
+# Check if any resources were specified
+if [[ ${#KUBECTL_ARGS[@]} -eq 0 ]]; then
+  echo "Error: At least one resource kind must be specified (e.g., pod, service, deployment)"
+  exit 64
+fi
+
+# Add default output format for kubectl
+KUBECTL_ARGS+=("-o" "yaml")
+
+# Execute kubectl and pipe to kube-diagrams with arguments
+kubectl get "${KUBECTL_ARGS[@]}" | kube-diagrams "${KUBE_DIAGRAMS_ARGS[@]}"
+EXIT_CODE=$?
+
+if [[ $EXIT_CODE -eq 0 ]]; then
+  echo "Diagram generated successfully"
+else
+  echo "Error: Failed to generate diagram"
+  exit 1
+fi

@@ -6,15 +6,20 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = {
-    self,
-    nixpkgs,
-    flake-utils,
-  }:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
     flake-utils.lib.eachDefaultSystem (
-      system: let
+      system:
+      let
         pkgs = nixpkgs.legacyPackages.${system};
-        pythonEnv = pkgs.python312.withPackages (ps: [ps.pyyaml ps.diagrams]);
+        pythonEnv = pkgs.python312.withPackages (ps: [
+          ps.pyyaml
+          ps.diagrams
+        ]);
 
         kube-diagrams = pkgs.stdenv.mkDerivation {
           pname = "kube-diagrams";
@@ -31,18 +36,28 @@
           '';
         };
 
-        runtimeEnv = with pkgs;
+        kubectl-diagrams = pkgs.writeShellApplication {
+          name = "kubectl-diagrams";
+          runtimeInputs = [ kube-diagrams ];
+          text = builtins.readFile ./bin/kubectl-diagrams;
+        };
+
+        runtimeEnv =
+          with pkgs;
           [
             cacert
             graphviz
             kubernetes-helm
             kube-diagrams
+            kubectl-diagrams
             pythonEnv
           ]
-          ++ lib.optionals pkgs.stdenv.isLinux [busybox];
-      in {
+          ++ lib.optionals pkgs.stdenv.isLinux [ busybox ];
+      in
+      {
         devShells.default = pkgs.mkShell {
-          packages = with pkgs;
+          packages =
+            with pkgs;
             [
               git
               lazygit
@@ -54,6 +69,7 @@
         packages = {
           default = kube-diagrams;
           kube-diagrams = kube-diagrams;
+          kubectl-diagrams = kubectl-diagrams;
           docker = pkgs.dockerTools.buildImage {
             name = "ghcr.io/philippemerle/kubediagrams";
             tag = "latest";
