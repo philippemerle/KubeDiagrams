@@ -12,6 +12,7 @@
 #layoutButtons {
     display: flex;
     gap: 4px;
+    margin-bottom: 2px;
 }
 #tooltip {
     position: absolute;

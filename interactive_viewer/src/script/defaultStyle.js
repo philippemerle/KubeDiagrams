@@ -2,7 +2,7 @@ let clusterStyleList = [];
 let nodeStyleList = [];
 let edgeStyleList = [];
 
-function getDefaultGlobalNodeStyleFromNodeValues(node) {
+export function getDefaultGlobalNodeStyleFromNodeValues(node) {
     return {
         selector : ".nodeStyle" + nodeStyleList.length,
         style : {
@@ -13,7 +13,7 @@ function getDefaultGlobalNodeStyleFromNodeValues(node) {
     };
 }
 
-function getDefaultClusterStyleFromClusterValues(cluster) {
+export function getDefaultClusterStyleFromClusterValues(cluster) {
     return {
             selector : ".clusterStyle" + clusterStyleList.length, 
             style : {
@@ -24,7 +24,7 @@ function getDefaultClusterStyleFromClusterValues(cluster) {
         };
 } 
 
-function getDefaultEdgeStyleFromEdgeValues(edge) {
+export function getDefaultEdgeStyleFromEdgeValues(edge) {
     return {
             selector : ".edgeStyle" + edgeStyleList.length, 
             style : {
@@ -39,7 +39,7 @@ function getDefaultEdgeStyleFromEdgeValues(edge) {
         };
 }
 
-const clusterClosedStyle = {
+export const clusterClosedStyle = {
                     'text-wrap': 'wrap',
                     'text-max-width': '100px',
                     'text-valign': 'center',
@@ -49,14 +49,14 @@ const clusterClosedStyle = {
                     'height': 20,
                 }
 
-const clusterOpenStyle = {
+export const clusterOpenStyle = {
                     'text-valign': 'top',
                     'text-wrap': 'none',
                     'text-margin-y': 15, 
                     'padding': '15px',
                 }
 
-const defaultGroupNodeStyle = {
+export const defaultGroupNodeStyle = {
                     'background-fit': 'cover',
                     'background-image': 'data(image)',      
                     'background-opacity': 0,
@@ -67,12 +67,12 @@ const defaultGroupNodeStyle = {
                     'text-wrap': 'wrap',
                 }
 
-const defaultGlobalNodeStyle = {
+export const defaultGlobalNodeStyle = {
                     'content': 'data(label)',
                     'min-zoomed-font-size': '8'
                 }
 
-const defaultEdgeStyle = {
+export const defaultEdgeStyle = {
                     'source-endpoint': 'outside-to-node-or-label',
                     'target-endpoint': 'outside-to-node-or-label', 
                     'width': 1,
@@ -81,12 +81,12 @@ const defaultEdgeStyle = {
                     'min-zoomed-font-size': '8',
                 }
 
-const defaultEdgeDirForward = {
+export const defaultEdgeDirForward = {
                     'target-arrow-shape': 'triangle',
                     'target-arrow-fill': 'filled',
                 }
 
-const defaultEdgeDirBack = {
+export const defaultEdgeDirBack = {
                     'source-arrow-shape': 'triangle',
                     'source-arrow-fill': 'filled',
                 }

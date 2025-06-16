@@ -1,4 +1,6 @@
-const layoutDagre = {name: 'dagre',
+const layoutDagre = {
+        id: 0,
+        name: 'dagre',
         rankDir: 'TB', 
         ranker: 'network-simplex',
         nodeSep: 25,
@@ -7,6 +9,7 @@ const layoutDagre = {name: 'dagre',
 }
 
 const layoutKlay = {
+    id: 1,
     name: 'klay',
     klay: {
         direction: 'DOWN',
@@ -20,3 +23,4 @@ const layoutKlay = {
 }
 
 const layoutList = [layoutDagre, layoutKlay];
+export default layoutList;

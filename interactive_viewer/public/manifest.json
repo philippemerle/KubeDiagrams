@@ -1,0 +1,6 @@
+{
+  "name": "KubeDiagrams Interactive Viewer",
+  "icons": [],
+  "start_url": ".",
+  "display": "standalone"
+}
