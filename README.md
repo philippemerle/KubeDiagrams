@@ -447,6 +447,9 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Out Now: Kubernetes Content Performance Analysis Report, May 2025
+](https://www.linkedin.com/posts/amitjayshah_out-now-kubernetes-content-performance-activity-7340339887239274496-8Td3/), LinkedIn, June 17, 2025. [Full Report](https://drive.google.com/file/d/1Et8ZnCttdvjhj8cHOwcqVJFZ2iLzIMu_/view).
+
 1. [KubeDiagrams Interactive Viewer](https://www.reddit.com/r/kubernetes/comments/1lbba70/kubediagrams_interactive_viewer/) on Reddit, June 14, 2025.
 
 1. [Mahyar Mirrashed's post](https://www.linkedin.com/feed/update/urn:li:activity:7339156177529774080/) on LinkedIn, June 13, 2025.
