@@ -528,6 +528,10 @@ nodes:
         pvc["metadata"]["name"] = f'{pvc["metadata"]["name"]}-{resource["metadata"]["name"]}'
         if namespace is not None:
           pvc["metadata"]["namespace"] = namespace
+        pvc["metadata"]["labels"] = {
+          **query_path(resource, "metadata.labels", {}),
+          **query_path(pvc, "metadata.labels", {})
+        }
         nodes.append(pvc)
     edges: |
       edges.add_owned_resources()
