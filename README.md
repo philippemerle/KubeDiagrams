@@ -374,6 +374,26 @@ jobs:
           args: "https://charts.jetstack.io/cert-manager"
 ```
 
+## KubeDiagrams Interactive Viewer
+
+**KubeDiagrams** could output diagrams in the `dot_json` format. For instance, type:
+
+```sh
+kube-diagrams examples/wordpress/*.yaml -o wordpress.dot_json
+```
+
+Diagrams in the `dot_json` format can be viewed and manipulated interactively thanks to **KubeDiagrams Interactive Viewer**. For instance, type:
+
+```sh
+open interactive_viewer/index.html
+```
+
+Then open the `wordpress.dot_json` file:
+
+![KubeDiagrams Interactive Viewer](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-Interactive-Viewer.png)
+
+**KubeDiagrams Interactive Viewer** allows users to zoom in/out diagrams, to see cluster/node/edge tooltips, open/close clusters, move clusters/nodes interactively, and save as PNG/JPG images.
+
 ## Architecture
 
 Following figure shows the software architecture of **KubeDiagrams**.
@@ -426,6 +446,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 1. [Visualising SQL Server in Kubernetes](https://dbafromthecold.com/2025/02/06/visualising-sql-server-in-kubernetes/), Andrew Pruski, February 6, 2025.
 
 ### Social Networks
+
+1. [KubeDiagrams Interactive Viewer](https://www.reddit.com/r/kubernetes/comments/1lbba70/kubediagrams_interactive_viewer/) on Reddit, June 14, 2025.
 
 1. [Mahyar Mirrashed's post](https://www.linkedin.com/feed/update/urn:li:activity:7339156177529774080/) on LinkedIn, June 13, 2025.
 
