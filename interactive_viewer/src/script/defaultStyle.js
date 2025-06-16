@@ -2,6 +2,8 @@ let clusterStyleList = [];
 let nodeStyleList = [];
 let edgeStyleList = [];
 
+export { clusterStyleList, nodeStyleList, edgeStyleList };
+
 export function getDefaultGlobalNodeStyleFromNodeValues(node) {
     return {
         selector : ".nodeStyle" + nodeStyleList.length,

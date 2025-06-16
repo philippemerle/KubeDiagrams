@@ -1,4 +1,6 @@
-const itemOpenClose = {
+import { clusterOpenStyle, clusterClosedStyle } from "./defaultStyle";
+
+export const itemOpenClose = {
         id: 'co',
         content: 'close/open',
         tooltipText: 'close/open',

@@ -2,24 +2,30 @@ import React from "react";
 import cytoscape from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import klay from 'cytoscape-klay';
-// import contextMenus from 'cytoscape-context-menus';
+import contextMenus from 'cytoscape-context-menus';
 
 import layoutList from "../script/layout";
 import * as style from "../script/defaultStyle"
+import  { clusterStyleList, nodeStyleList, edgeStyleList } from '../script/defaultStyle';
+import { itemOpenClose } from "../script/itemAndFunctionMenus";
 
 import LayoutButtons from "./layout/LayoutButtons";
+import SaveImgButtons from "./saver/SaveImgButtons";
+import ToolTip from "./Tooltip/ToolTip";
 
 
 cytoscape.use(dagre);
 cytoscape.use(klay);
-// cytoscape.use(contextMenus);
+cytoscape.use(contextMenus);
 
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {layoutList : layoutList, currentLayout : layoutList[0]};
+    this.state = {layoutList : layoutList, 
+                  currentLayout : layoutList[0]};
     this.cyRef = React.createRef();
+    this.tooltipRef = React.createRef();
     this.cy = null;
     this.readFileAndloadCytoscapeGraph = this.readFileAndloadCytoscapeGraph.bind(this);
     this.switch_layout = this.load_layout.bind(this);
@@ -62,6 +68,7 @@ export default class App extends React.Component {
           }
       ]
       });
+      this.forceUpdate();
   }
   
   componentWillUnmount() {
@@ -99,9 +106,7 @@ export default class App extends React.Component {
   load_cytoscape(elements) {
       this.cy.nodes().remove();
       this.cy.add(elements);
-      // createTooltip("node");
-      // createTooltip("edge");
-      // createAndGetContextMenu(cy);
+      this.createAndGetContextMenu(this.cy);
       this.cy.layout(this.state.currentLayout).run();
   }
 
@@ -154,7 +159,7 @@ export default class App extends React.Component {
                 parent[sub] = nodesJson[i]._gvid;
             }
         }
-        // addClassToElement(node);
+        this.addClassToElement(node);
         elements.push(node);
     }
 
@@ -184,7 +189,7 @@ export default class App extends React.Component {
                 tooltip: edgesJson[e].tooltip ?? '',
             }
         }
-        // addClassToElement(edge);
+        this.addClassToElement(edge);
         elements.push(edge);
     }
   }
@@ -222,6 +227,94 @@ export default class App extends React.Component {
     }
   }
 
+  /**
+   * Create and return a context menus for the cytoscape instance 
+   * @param {*} cy 
+   * @returns 
+   */
+  createAndGetContextMenu(cy) {
+      return this.cy.contextMenus({
+          evtType: 'cxttap',
+          menuItems: [itemOpenClose]
+      })
+  }
+
+  /**
+ * Check the element's group and then add a style class based on the group and his values.
+ * @param {*} element 
+ */
+addClassToElement(element) {
+    let classesName = [];
+    let currentStyle; 
+    if (element.data.group === "edge") {
+        currentStyle = style.getDefaultEdgeStyleFromEdgeValues(element);
+        classesName.push(this.findAndGetClassStyle(currentStyle, edgeStyleList).selector.replace(/^\./, ''));
+    }
+    else {
+        currentStyle = style.getDefaultGlobalNodeStyleFromNodeValues(element);
+        classesName.push(this.findAndGetClassStyle(currentStyle, nodeStyleList).selector.replace(/^\./, ''));
+        if (element.data.group === "cluster") {
+            currentStyle = style.getDefaultClusterStyleFromClusterValues(element);
+            classesName.push(this.findAndGetClassStyle(currentStyle, clusterStyleList).selector.replace(/^\./, ''))
+        }
+    }
+    element.classes = classesName.join(' ');
+}
+
+/**
+ * Look for a style class similar to the styleTarget in the styleList. if a style class is founded, 
+ * so the method return the style class founded otherwise add the styleTarget in the cytoscape instance and 
+ * in the styleList then return the styleTarget
+ * @param {*} styleTarget 
+ * @param {*} styleList 
+ * @returns 
+ */
+findAndGetClassStyle(styleTarget, styleList) {
+    for (let style of styleList) {
+        if (this.equals(styleTarget.style, style.style)) {
+            return style;
+        }
+    }
+    this.addStyleToCytoscapeGraph(styleTarget);
+    styleList.push(styleTarget);
+    return styleTarget;
+}
+
+/**
+ * Add a new style in the style attribute of the cytoscape instance. 
+ * @param {*} style 
+ */
+addStyleToCytoscapeGraph(style) {
+    const existingStyle = this.cy.style().json();
+    this.cy.style([...existingStyle, style]);
+}
+
+/**
+ * Check if two object are similar.
+ * @param {*} o1 
+ * @param {*} o2 
+ * @returns 
+ */
+equals(o1, o2) {
+  if (o1 === o2) return true;
+  if (typeof o1 !== "object" || typeof o2 !== "object" || o1 == null || o2 == null) {
+    return false;
+  }
+
+  const k1 = Object.keys(o1);
+  const k2 = Object.keys(o2);
+
+  if (k1.length !== k2.length) return false;
+
+  for (let k of k1) {
+    if (!k2.includes(k) || !this.equals(o1[k], o2[k])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
   render() {
     return (
       <div>
@@ -230,8 +323,12 @@ export default class App extends React.Component {
           <input type="file" onChange={this.readFileAndloadCytoscapeGraph} />
           Choose a layout
           <LayoutButtons layoutList={this.state.layoutList} switch_layout={this.switch_layout}/>
+          Save as 
+          {this.cy !== null &&  <SaveImgButtons cy={this.cy} /> }
         </div>
         <div id="paper" ref={this.cyRef}></div>
+        {this.cy !== null && <ToolTip cy={this.cy} elementType="edge"/>}
+        {this.cy !== null &&  <ToolTip cy={this.cy} elementType="node"/>}
       </div>
     );
   }

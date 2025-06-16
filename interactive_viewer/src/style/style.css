@@ -9,12 +9,12 @@
     display: flex;
     gap: 10px;
 }
-#layoutButtons {
+#layoutButtons, #saveImgButtons{
     display: flex;
     gap: 4px;
     margin-bottom: 2px;
 }
-#tooltip {
+.tooltip {
     position: absolute;
     display: none;
     background: white;
