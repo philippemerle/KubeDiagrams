@@ -1210,30 +1210,31 @@ if args.format in ("svg", "dot_json"):
     KUBEDIAGRAMS_URL = \
         "https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main"
     if args.format == "svg":
-        what_to_search = "image xlink:href"
-        what_regex_to_search = r'image xlink:href="([^"]+)"'
+        what_to_search = [
+            r'image xlink:href="([^"]+)"',
+        ]
     elif args.format == "dot_json":
         DIAGRAMS_PATH = DIAGRAMS_PATH.replace("/", "\\/")
         KUBEDIAGRAMS_PATH = KUBEDIAGRAMS_PATH.replace("/", "\\/")
-        what_to_search = '"image": "'
-        what_regex_to_search = r'"image": "([^"]+)"'
+        what_to_search = [
+            r'"image": "([^"]+)"',
+            r'img src=\\"([^"]+)\\"',
+        ]
     else:
-        what_to_search = None
-        what_regex_to_search = None
+        what_to_search = []
     # rewrite all the lines of the generated file
     with open(filename, "wt", encoding="utf-8") as fs:
         for line in lines:
-            if what_to_search in line:
-                # replace absolute paths by urls
-                if DIAGRAMS_PATH in line:
-                    line = line.replace(DIAGRAMS_PATH, DIAGRAMS_URL)
-                elif KUBEDIAGRAMS_PATH in line:
-                    line = line.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
-                else:
-                    # embed the image
-                    import re
-                    img_paths = re.findall(what_regex_to_search, line)
-                    for img_path in img_paths:
+            for wts in what_to_search:
+                import re
+                img_paths = re.findall(wts, line)
+                for img_path in img_paths:
+                    # replace absolute paths by urls
+                    if DIAGRAMS_PATH in line:
+                        line = line.replace(DIAGRAMS_PATH, DIAGRAMS_URL)
+                    elif KUBEDIAGRAMS_PATH in line:
+                        line = line.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
+                    else:
                         full_img_path = Path(img_path.replace("\\/", "/"))
                         if full_img_path.exists():
                             # read the image
