@@ -114,13 +114,13 @@ function addNodesElementsParsedFromNodesJson(elements, nodesJson) {
                 isClose : false,
                 label: (nodesJson[i].label.includes('<') && nodesJson[i].label.includes('>')) ? nodesJson[i].tooltip : nodesJson[i].label, 
                 bs: getCorrespondingBorderStyle(nodesJson[i].style),
-                bgcolor: nodesJson[i].bgcolor ?? 'blue',
+                bgcolor: getCorrespondingColor(nodesJson[i].bgcolor ?? 'blue'),
                 bc: nodesJson[i].pencolor ?? 'gray',
                 parent: parent[nodesJson[i]._gvid] ?? '',
                 fontsize: nodesJson[i].fontsize ?? '',
                 fontfamily: nodesJson[i].fontname ?? '',
                 fontcolor: nodesJson[i].fontcolor ?? '',
-                image: (nodesJson[i].image) ? getURLImage(nodesJson[i].image) : '',
+                image: (nodesJson[i].image) ? nodesJson[i].image : '',
                 tooltip: nodesJson[i].tooltip ?? ''
             }
         }
@@ -186,22 +186,12 @@ function getCorrespondingBorderStyle(style) {
 }
 
 /**
- * Get the corresponding url image based on the local url of the image parameter get from a dot_jon file. 
- * @param {*} image 
+ * Get the corresponding color.
+ * @param {*} color
  * @returns 
  */
-function getURLImage(image) {
-    let idx = image.indexOf("resources\/")
-    if(idx != -1) {
-      return "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/" + image.slice(image.indexOf("resources"))
-    } else {
-      idx = image.indexOf("bin\/icons\/")
-      if(idx != -1) {
-        return "https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/" + image.slice(image.indexOf("bin\/icons\/"))
-      } else {
-        return image
-      }
-    }
+function getCorrespondingColor(color) {
+  return (color == 'transparent') ? '#ffffff00' : color;
 }
 
 /**
