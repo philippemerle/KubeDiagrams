@@ -1,0 +1,56 @@
+nodes:
+  ServiceAccount/v1:
+    show: false # ServiceAccount hidden
+diagram:
+  edges: # dependencies from deployments to services
+    - from: checkoutservice/default/Deployment/apps/v1
+      to: productcatalogservice/default/Service/v1
+      color: brown
+    - from: checkoutservice/default/Deployment/apps/v1
+      to: shippingservice/default/Service/v1
+      color: brown
+    - from: checkoutservice/default/Deployment/apps/v1
+      to: paymentservice/default/Service/v1
+      color: brown
+    - from: checkoutservice/default/Deployment/apps/v1
+      to: emailservice/default/Service/v1
+      color: brown
+    - from: checkoutservice/default/Deployment/apps/v1
+      to: currencyservice/default/Service/v1
+      color: brown
+    - from: checkoutservice/default/Deployment/apps/v1
+      to: cartservice/default/Service/v1
+      color: brown
+    - from: recommendationservice/default/Deployment/apps/v1
+      to: productcatalogservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: productcatalogservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: currencyservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: cartservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: recommendationservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: shippingservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: checkoutservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: adservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: shoppingassistantservice/default/Service/v1
+      color: brown
+    - from: loadgenerator/default/Deployment/apps/v1
+      to: frontend/default/Service/v1
+      color: brown
+    - from: cartservice/default/Deployment/apps/v1
+      to: redis-cart/default/Service/v1
+      color: brown

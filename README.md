@@ -79,6 +79,7 @@ All the examples are
 1. [helmfile](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helmfile/)
 1. [Istio](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/istio/)
 1. [Argo](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/)
+1. [Online Boutique](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/online-boutique/)
 
 ## Prerequisites
 
@@ -353,7 +354,7 @@ By default, **KubeDiagrams** generates diagrams from data contained into Kuberne
 [![Custom diagram](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/wordpress_deployed_in_aws_eks.png)](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/wordpress_deployed_in_aws_eks.png)
 
 This previous diagram contains three custom clusters labelled with `Amazon Web Service`, `Account: Philippe Merle` and `My Elastic Kubernetes Cluster`, three custom nodes labelled with `Users`, `Elastic Kubernetes Services`, and `Philippe Merle`, and two custom edges labelled with `use` and `calls`. The rest of this custom diagram is generated from actual cluster state for a deployed WordPress application automatically.
-See [examples/wordpress/custom_diagram.kd](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/custom_diagram.kd) to define custom diagrams, clusters, nodes and edges declaratively.
+Have a look to [examples/wordpress/custom_diagram.kd](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/custom_diagram.kd) and [examples/online-boutique/custom_diagram.kd](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/online-boutique/custom_diagram.kd) to see how to define custom diagrams, clusters, nodes and edges declaratively.
 
 ### GitHub Action
 
