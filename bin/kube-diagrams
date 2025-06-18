@@ -1194,3 +1194,61 @@ with Diagram("", filename=args.output, show=False, direction="TB", outformat=arg
             _ = from_node >> Edge(**custom_edge, tooltip=edge_tooltip) >> to_node
 
 print(f"{args.output}.{args.format} generated.")
+
+if args.format in ("svg", "dot_json"):
+    filename = f"{args.output}.{args.format}"
+    print("Replace absolute paths by urls...")
+    # read all the lines of the generated file
+    with open(filename, "rt", encoding="utf-8") as fs:
+        lines = fs.readlines()
+    # compute absolute paths to be replaced by urls
+    from pathlib import Path
+    DIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(diagrams.__file__))).parent)
+    DIAGRAMS_URL = \
+        "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master"
+    KUBEDIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(__file__))).parent)
+    KUBEDIAGRAMS_URL = \
+        "https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main"
+    if args.format == "svg":
+        what_to_search = [
+            r'image xlink:href="([^"]+)"',
+        ]
+    elif args.format == "dot_json":
+        DIAGRAMS_PATH = DIAGRAMS_PATH.replace("/", "\\/")
+        KUBEDIAGRAMS_PATH = KUBEDIAGRAMS_PATH.replace("/", "\\/")
+        what_to_search = [
+            r'"image": "([^"]+)"',
+            r'img src=\\"([^"]+)\\"',
+        ]
+    else:
+        what_to_search = []
+    # rewrite all the lines of the generated file
+    with open(filename, "wt", encoding="utf-8") as fs:
+        for line in lines:
+            for wts in what_to_search:
+                import re
+                img_paths = re.findall(wts, line)
+                for img_path in img_paths:
+                    # replace absolute paths by urls
+                    if DIAGRAMS_PATH in line:
+                        line = line.replace(DIAGRAMS_PATH, DIAGRAMS_URL)
+                    elif KUBEDIAGRAMS_PATH in line:
+                        line = line.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
+                    else:
+                        full_img_path = Path(img_path.replace("\\/", "/"))
+                        if full_img_path.exists():
+                            # read the image
+                            with open(full_img_path, 'rb') as img_file:
+                                img_data = img_file.read()
+                            # encode the image in base64
+                            import base64
+                            mime_type = 'image/png'
+                            b64_data = base64.b64encode(img_data).decode('ascii')
+                            data_uri = f"data:{mime_type};base64,{b64_data}"
+                            # replace absolute path by image encoded in base64
+                            line = line.replace(img_path, data_uri)
+                        else:
+                            print(f"Warning: Image not found: {full_img_path}")
+            # write the line
+            fs.write(line)
+    print(f"{filename} saved.")
