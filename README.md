@@ -410,6 +410,7 @@ Following provides links to real-world use cases.
 **KubeDiagrams** could be used to generate architectural diagrams documenting your Kubernetes applications (manifests, Helm charts, helmfiles, or cluster state). See following links:
 
 - [duoan/tinyurl](https://github.com/duoan/tinyurl?tab=readme-ov-file#deployment-kubernetes)
+- [Daniel-Makhoba-Emmanuel/Full-stack-k8s-lab](https://github.com/Daniel-Makhoba-Emmanuel/Full-stack-k8s-lab)
 
 ### Architectural defects identification
 
@@ -435,6 +436,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 1. [Visualizing cloud-native applications with KubeDiagrams](https://mybox.inria.fr/f/61de0e6e5be94b7a941f/?dl=1), Philippe Merle, [PEPR Cloud Taranis Project](https://pepr-cloud.fr/en/project-taranis/), February 17, 2025.
 
 ### Blogs
+
+1. [KubeDiagrams: Automating your Kubernetes Architecture](https://medium.com/@iamdanielemmanuelmark5/kubediagrams-automating-your-kubernetes-architecture-9f9b305a7bb4), Daniel Makhoba Emmanuel, Medium, June 19, 2025.
 
 1. [[Literature Review] Visualizing Cloud-native Applications with KubeDiagrams](https://www.themoonlight.io/en/review/visualizing-cloud-native-applications-with-kubediagrams), Moonlight, May 27, 2025.
 
