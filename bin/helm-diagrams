@@ -1,38 +1,117 @@
-#! /bin/sh
+#!/bin/bash
 
-# $1 contains the Helm Chart URL.
-repository=$(dirname $1)
-chart=$(basename $1)
+# helm-diagrams: A script to generate a diagram of an Helm chart
+# using kube-diagrams from the output of 'helm template <name> <chart>'
+
+# Check if kube-diagrams is installed
+if ! command -v kube-diagrams &>/dev/null; then
+  echo "Error: kube-diagrams is not installed. Please install it first."
+  exit 1
+fi
+
+# Check if helm is installed
+if ! command -v helm &>/dev/null; then
+  echo "Error: helm is not installed. Please install it first."
+  exit 1
+fi
+
+# Display help message
+show_help() {
+  echo "Usage: helm-diagrams <helm-chart-url> [OPTIONS]"
+  echo ""
+  echo "A script to generate a diagram of an Helm chart using kube-diagrams."
+  echo ""
+  echo "Options:"
+  echo "  -o, --output <file>          Specify the output file for the diagram"
+  echo "  -f, --format <format>        Specify the output format (e.g., png, svg)"
+  echo "  -c, --config <file>          Specify the custom kube-diagrams configuration file"
+  echo "  -h, --help                   Display this help message"
+  echo ""
+  echo "Examples:"
+  echo "  helm-diagrams https://charts.jetstack.io/cert-manager -o diagram.png"
+  echo "  helm-diagrams oci://ghcr.io/argoproj/argo-helm/argo-cd -f svg"
+  echo "  helm-diagrams --help"
+  exit 0
+}
+
+# Initialize variables
+HELM_CHART_URL=""
+HELM_ARGS=()
+KUBE_DIAGRAMS_ARGS=("-" "--without-namespace") # Default to stdin indicator
 
 # Use the KubeDiagrams custom configuration if exist.
 KD_CC="KubeDiagrams.yaml"
 if [ -e $KD_CC ]
 then
-  KD_OPTS="-c $KD_CC"
-else
-  KD_OPTS=""
+  KUBE_DIAGRAMS_ARGS+=("--config" "$KD_CC")
 fi
 
-echo Download $1...
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+  -h | --help)
+    show_help
+    ;;
+  -o | --output | -f | --format | -c | --config)
+    KUBE_DIAGRAMS_ARGS+=("$1")
+    if [[ -n "$2" ]]; then
+      KUBE_DIAGRAMS_ARGS+=("$2")
+      shift 2
+    else
+      echo "Error: $1 requires a value!"
+      exit 64
+    fi
+    ;;
+  *)
+    if [ -z "${HELM_CHART_URL}" ]; then
+      HELM_CHART_URL=$1
+      repository=$(dirname ${HELM_CHART_URL})
+      name=$(basename ${HELM_CHART_URL})
+      KUBE_DIAGRAMS_ARGS+=("--output" "${name}")
+    else
+      HELM_ARGS+=("$1")
+    fi
+    shift
+    ;;
+  esac
+done
 
-if [[ ${repository} == oci* ]]
-then
+# Check if any Helm chart url was specified
+if [ -z "${HELM_CHART_URL}" ]; then
+  echo "Error: At least one Helm chart URL must be specified!"
+  exit 64
+fi
+
+echo Download ${HELM_CHART_URL}...
+
+if [[ ${repository} == oci* ]]; then
   # Deal with OCI registries.
-  helm template ${chart} $1 2> /dev/null | kube-diagrams $KD_OPTS --without-namespace -o $chart -
-elif [[ ${repository} == http* ]]
-then
+  # Execute helm and pipe to kube-diagrams with arguments
+  helm template ${name} ${HELM_CHART_URL} "${HELM_ARGS[@]}" | kube-diagrams "${KUBE_DIAGRAMS_ARGS[@]}"
+  EXIT_CODE=$?
+elif [[ ${repository} == http* ]]; then
   # Deal with HTTP registries.
 
   # Add a Helm repository.
   rid=helm-diagrams-repo
   helm repo add $rid $repository --force-update >/dev/null
 
-  # Process the chart and generate the architecture diagram.
-  helm template $chart $rid/$chart | kube-diagrams $KD_OPTS --without-namespace -o $chart -
+  # Execute helm and pipe to kube-diagrams with arguments
+  helm template ${name} $rid/${name} "${HELM_ARGS[@]}" | kube-diagrams "${KUBE_DIAGRAMS_ARGS[@]}"
+  EXIT_CODE=$?
 
   # Remove the Helm repository.
   helm repo remove $rid >/dev/null
 else
   # Deal with local charts
-  helm template ${chart} ${repository}/${chart} 2> /dev/null | kube-diagrams $KD_OPTS --without-namespace -o local-$chart -
+  # Execute helm and pipe to kube-diagrams with arguments
+  helm template ${name} ${repository}/${name} "${HELM_ARGS[@]}" | kube-diagrams -o local-$name "${KUBE_DIAGRAMS_ARGS[@]}"
+  EXIT_CODE=$?
+fi
+
+if [[ $EXIT_CODE -eq 0 ]]; then
+  echo "Diagram generated successfully"
+else
+  echo "Error: Failed to generate diagram!"
+  exit 1
 fi

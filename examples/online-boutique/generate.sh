@@ -18,27 +18,27 @@ $BIN/kube-diagrams $MANIFESTS -c custom_diagram.kd -o diagrams/online-boutique-m
 
 # Generate diagrams from Online Boutique Helm Chart
 CHART=oci://us-docker.pkg.dev/online-boutique-ci/charts/onlineboutique
-helm template onlineboutique $CHART | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart.png
-helm template onlineboutique $CHART | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart.svg
-helm template onlineboutique $CHART | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart.dot_json
+$BIN/helm-diagrams $CHART -o diagrams/online-boutique-helm-chart.png
+$BIN/helm-diagrams $CHART -o diagrams/online-boutique-helm-chart.svg
+$BIN/helm-diagrams $CHART -o diagrams/online-boutique-helm-chart.dot_json
 # diagrams with network policies
-helm template onlineboutique $CHART --set networkPolicies.create=true | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart-with-network-policies.png
-helm template onlineboutique $CHART --set networkPolicies.create=true | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart-with-network-policies.svg
-helm template onlineboutique $CHART --set networkPolicies.create=true | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart-with-network-policies.dot_json
+$BIN/helm-diagrams $CHART --set networkPolicies.create=true -o diagrams/online-boutique-helm-chart-with-network-policies.png
+$BIN/helm-diagrams $CHART --set networkPolicies.create=true -o diagrams/online-boutique-helm-chart-with-network-policies.svg
+$BIN/helm-diagrams $CHART --set networkPolicies.create=true -o diagrams/online-boutique-helm-chart-with-network-policies.dot_json
 # TODO: diagrams with virtual services
-#helm template onlineboutique $CHART --set frontend.virtualService.create=true | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart-with-virtual-services.png
-#helm template onlineboutique $CHART --set frontend.virtualService=true | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart-with-virtual-services.svg
-#helm template onlineboutique $CHART --set frontend.virtualService.create=true | kube-diagrams - --without-namespace -o diagrams/online-boutique-helm-chart-with-virtual-services.dot_json
+#$BIN/helm-diagrams $CHART --set frontend.virtualService.create=true -o diagrams/online-boutique-helm-chart-with-virtual-services.png
+#$BIN/helm-diagrams $CHART --set frontend.virtualService=true -o diagrams/online-boutique-helm-chart-with-virtual-services.svg
+#$BIN/helm-diagrams $CHART --set frontend.virtualService.create=true -o diagrams/online-boutique-helm-chart-with-virtual-services.dot_json
 
 # Generate custom diagrams from Online Boutique Helm Chart
-helm template onlineboutique $CHART | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram.png
-helm template onlineboutique $CHART | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram.svg
-helm template onlineboutique $CHART | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram.dot_json
+$BIN/helm-diagrams $CHART -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram.png
+$BIN/helm-diagrams $CHART -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram.svg
+$BIN/helm-diagrams $CHART -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram.dot_json
 # diagrams with network policies
-helm template onlineboutique $CHART --set networkPolicies.create=true | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-network-policies.png
-helm template onlineboutique $CHART --set networkPolicies.create=true | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-network-policies.svg
-helm template onlineboutique $CHART --set networkPolicies.create=true | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-network-policies.dot_json
+$BIN/helm-diagrams $CHART --set networkPolicies.create=true -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-network-policies.png
+$BIN/helm-diagrams $CHART --set networkPolicies.create=true -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-network-policies.svg
+$BIN/helm-diagrams $CHART --set networkPolicies.create=true -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-network-policies.dot_json
 # TODO: diagrams with virtual services
-#helm template onlineboutique $CHART --set frontend.virtualService.create=true | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-virtual-services.png
-#helm template onlineboutique $CHART --set frontend.virtualService=true | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-virtual-services.svg
-#helm template onlineboutique $CHART --set frontend.virtualService.create=true | kube-diagrams - --without-namespace -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-virtual-services.dot_json
+#$BIN/helm-diagrams $CHART --set frontend.virtualService.create=true -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-virtual-services.png
+#$BIN/helm-diagrams $CHART --set frontend.virtualService=true -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-virtual-services.svg
+#$BIN/helm-diagrams $CHART --set frontend.virtualService.create=true -c custom_diagram.kd -o diagrams/online-boutique-helm-chart-custom-diagram-with-virtual-services.dot_json

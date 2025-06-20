@@ -176,7 +176,27 @@ nix shell github:philippemerle/KubeDiagrams#kubectl-diagrams
 
 `helm-diagrams` generates a Kubernetes architecture diagram from an Helm chart.
 
-`helm-diagrams` takes only one argument - the URL of the Helm chart - but requires that the `helm` command was installed.
+```sh
+helm-diagrams -h
+Usage: helm-diagrams <helm-chart-url> [OPTIONS]
+
+A script to generate a diagram of an Helm chart using kube-diagrams.
+
+Options:
+  -o, --output <file>          Specify the output file for the diagram
+  -f, --format <format>        Specify the output format (e.g., png, svg)
+  -c, --config <file>          Specify the custom kube-diagrams configuration file
+  -h, --help                   Display this help message
+
+Examples:
+  helm-diagrams https://charts.jetstack.io/cert-manager -o diagram.png
+  helm-diagrams oci://ghcr.io/argoproj/argo-helm/argo-cd -f svg
+  helm-diagrams --help
+```
+
+> [!NOTE]
+>
+> `helm-diagrams` requires that the `helm` command was installed.
 
 Examples:
 

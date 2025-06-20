@@ -22,14 +22,10 @@ curl https://raw.githubusercontent.com/argoproj/argo-events/refs/heads/master/ma
 git clone https://github.com/argoproj/argo-events.git downloads/argo-events
 
 # Generate the Kubernetes architecture diagrams for Argo Helm Charts
-$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-cd
-mv argo-cd.png diagrams/
-$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-workflows
-mv argo-workflows.png diagrams/
-$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-rollouts
-mv argo-rollouts.png diagrams/
-$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-events
-mv argo-events.png diagrams/
+$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-cd -o diagrams/argo-cd.png
+$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-workflows -o diagrams/argo-workflows.png
+$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-rollouts -o diagrams/argo-rollouts.png
+$BIN/helm-diagrams https://argoproj.github.io/argo-helm/argo-events -o diagrams/argo-events.png
 
 # Generate the Kubernetes architecture diagrams for Argo Workflows
 $BIN/kube-diagrams downloads/argoproj-argo-workflows-manifests-quick-start-minimal.yaml -o diagrams/argoproj-argo-workflows-manifests-quick-start-minimal.png
@@ -43,8 +39,8 @@ $BIN/kube-diagrams -c argo-cd.kd argo-cd-manifests-install-corrected.yaml --with
 $BIN/kube-diagrams -c argo-cd.kd downloads/argo-cd-manifests-ha-install.yaml -o diagrams/argo-cd-manifests-ha-install.png
 
 # Generate the Kubernetes architecture diagram for Argo CD Example Apps
-helm template downloads/argocd-example-apps/apps | $BIN/kube-diagrams - -c KubeDiagrams.yaml -o diagrams/argoproj-argocd-example-apps-apps.png
-helm template blue-green downloads/argocd-example-apps/blue-green | $BIN/kube-diagrams - -c KubeDiagrams.yaml -o diagrams/argoproj-argocd-example-apps-blue-green.png
+$BIN/helm-diagrams downloads/argocd-example-apps/apps -o diagrams/argoproj-argocd-example-apps-apps.png
+$BIN/helm-diagrams downloads/argocd-example-apps/blue-green -o diagrams/argoproj-argocd-example-apps-blue-green.png
 kubectl kustomize downloads/argocd-example-apps/pre-post-sync | $BIN/kube-diagrams - -c KubeDiagrams.yaml -o diagrams/argoproj-argocd-example-apps-pre-post-sync.png
 kubectl kustomize downloads/argocd-example-apps/sock-shop | $BIN/kube-diagrams - -o diagrams/argoproj-argocd-example-apps-sock-shop.png
 $BIN/kube-diagrams downloads/argocd-example-apps/sync-waves/manifests.yaml -c KubeDiagrams.yaml -o diagrams/argoproj-argocd-example-apps-sync-waves.png
