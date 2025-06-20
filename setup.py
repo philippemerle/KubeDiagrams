@@ -7,7 +7,7 @@ from setuptools import setup
 with open("README.md", encoding="utf-8") as readme:
     setup(
         name="KubeDiagrams",
-        version="0.3.0",
+        version="0.4.0",
         author="Philippe Merle",
         author_email="philippe.merle@inria.fr",
         maintainer="Philippe Merle",
@@ -15,7 +15,7 @@ with open("README.md", encoding="utf-8") as readme:
         url="https://github.com/philippemerle/KubeDiagrams",
         description="Generate Kubernetes architecture diagrams from "
             "Kubernetes manifest files, kustomization files, Helm charts, "
-            "and actual cluster state",
+            "helmfiles, and actual cluster state",
         long_description=readme.read(),
         long_description_content_type="text/markdown",
         license="Apache-2.0",
@@ -45,6 +45,7 @@ with open("README.md", encoding="utf-8") as readme:
         scripts=[
             "bin/kube-diagrams",
             "bin/helm-diagrams",
+            "bin/kubectl-diagrams",
         ],
         data_files=[
             ("bin", ["bin/kube-diagrams.yaml"]),
