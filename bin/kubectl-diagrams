@@ -28,6 +28,7 @@ show_help() {
   echo "  -n, --namespace <namespace>  Specify the namespace to query resources from"
   echo "  -o, --output <file>          Specify the output file for the diagram"
   echo "  -f, --format <format>        Specify the output format (e.g., png, svg)"
+  echo "  -c, --config <file>          Specify the custom kube-diagrams configuration file"
   echo "      --without-namespace      Exclude namespace from the diagram"
   echo "      --version                Display the version number"
   echo "      --help                   Display this help message"
@@ -62,9 +63,9 @@ while [[ $# -gt 0 ]]; do
       exit 64
     fi
     ;;
-  -o | --output | -f | --format | --without-namespace)
+  -o | --output | -f | --format | -c | --config | --without-namespace)
     KUBE_DIAGRAMS_ARGS+=("$1")
-    if [[ "$1" == "-o" || "$1" == "--output" || "$1" == "-f" || "$1" == "--format" ]]; then
+    if [[ "$1" == "-o" || "$1" == "--output" || "$1" == "-f" || "$1" == "--format" || "$1" == "-c" || "$1" == "--config" ]]; then
       if [[ -n "$2" ]]; then
         KUBE_DIAGRAMS_ARGS+=("$2")
         shift 2
