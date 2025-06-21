@@ -58,28 +58,40 @@ Architecture diagram for an **Argo Events** example:
 
 Many other architecture diagrams are available into [examples/](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/).
 
-All the examples are
+### Business Applications
 
-1. [official Kubernetes WordPress tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/wordpress/)
-1. [official Kubernetes ZooKeeper tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/zookeeper/)
-1. [official Kubernetes Cassandra tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cassandra/)
+1. [Official Kubernetes WordPress tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/wordpress/)
+1. [Official Kubernetes ZooKeeper tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/zookeeper/)
+1. [Official Kubernetes Cassandra tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cassandra/)
+1. [Online Boutique](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/online-boutique/)
 1. [Train Ticket](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/train-ticket/)
-1. [minikube architecture diagrams](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/)
-1. [k0s architecture diagrams](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/)
-1. [Kube Prometheus Stack](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/)
+
+### 5G Core Network Functions
+
 1. [free5gc-k8s](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/)
-1. [open5gs-k8s](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/)
-1. [Towards5GS-helm](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/)
-1. [OpenAirInterface 5G Core Network](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/oai-5g-cn/)
 1. [docker-open5gs](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/docker-open5gs/)
 1. [Gradiant 5G Charts](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/gradiant-5g-charts)
-1. [Miscellaneous examples](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/miscellaneous/)
-1. [Some Helm charts](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helm-charts/)
-1. [LeaderWorkerSet API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/)
-1. [helmfile](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helmfile/)
-1. [Istio](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/istio/)
+1. [open5gs-k8s](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/)
+1. [OpenAirInterface 5G Core Network](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/oai-5g-cn/)
+1. [Towards5GS-helm](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/)
+
+### Kubernetes Operators
+
 1. [Argo](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/)
-1. [Online Boutique](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/online-boutique/)
+1. [Istio](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/istio/)
+1. [Kube Prometheus Stack](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/)
+1. [LeaderWorkerSet API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/)
+
+### Kubernetes Control Planes
+
+1. [k0s architecture diagrams](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/)
+1. [minikube architecture diagrams](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/)
+
+### Other examples
+
+1. [Some Helm charts](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helm-charts/)
+1. [helmfile](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helmfile/)
+1. [Miscellaneous examples](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/miscellaneous/)
 
 ## Prerequisites
 
