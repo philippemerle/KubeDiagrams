@@ -1,0 +1,41 @@
+diagram:
+  edges: # dependencies from deployments to services
+    - from: teastore-persistence/default/Deployment/apps/v1
+      to: teastore-db/default/Service/v1
+      color: brown
+    - from: teastore-persistence/default/Deployment/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: teastore-auth/default/Deployment/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: teastore-auth/default/Deployment/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown
+    - from: teastore-image/default/Deployment/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: teastore-image/default/Deployment/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown
+    - from: teastore-recommender/default/Deployment/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: teastore-recommender/default/Deployment/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown
+    - from: teastore-webui/default/Deployment/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: teastore-webui/default/Deployment/apps/v1
+      to: teastore-auth/default/Service/v1
+      color: brown
+    - from: teastore-webui/default/Deployment/apps/v1
+      to: teastore-recommender/default/Service/v1
+      color: brown
+    - from: teastore-webui/default/Deployment/apps/v1
+      to: teastore-image/default/Service/v1
+      color: brown
+    - from: teastore-webui/default/Deployment/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown

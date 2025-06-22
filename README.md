@@ -64,6 +64,7 @@ Many other architecture diagrams are available into [examples/](https://github.c
 1. [Official Kubernetes ZooKeeper tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/zookeeper/)
 1. [Official Kubernetes Cassandra tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cassandra/)
 1. [Online Boutique](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/online-boutique/)
+1. [TeaStore](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/teastore/)
 1. [Train Ticket](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/train-ticket/)
 
 ### 5G Core Network Functions

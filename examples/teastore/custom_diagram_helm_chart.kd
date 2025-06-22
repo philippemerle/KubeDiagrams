@@ -1,0 +1,41 @@
+diagram:
+  edges: # dependencies from StatefulSets to services
+    - from: helm-teastore-persistence/default/StatefulSet/apps/v1
+      to: teastore-db/default/Service/v1
+      color: brown
+    - from: helm-teastore-persistence/default/StatefulSet/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: helm-teastore-auth/default/StatefulSet/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: helm-teastore-auth/default/StatefulSet/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown
+    - from: helm-teastore-image/default/StatefulSet/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: helm-teastore-image/default/StatefulSet/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown
+    - from: helm-teastore-recommender/default/StatefulSet/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: helm-teastore-recommender/default/StatefulSet/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown
+    - from: helm-teastore-webui/default/StatefulSet/apps/v1
+      to: teastore-registry/default/Service/v1
+      color: brown
+    - from: helm-teastore-webui/default/StatefulSet/apps/v1
+      to: teastore-auth/default/Service/v1
+      color: brown
+    - from: helm-teastore-webui/default/StatefulSet/apps/v1
+      to: teastore-recommender/default/Service/v1
+      color: brown
+    - from: helm-teastore-webui/default/StatefulSet/apps/v1
+      to: teastore-image/default/Service/v1
+      color: brown
+    - from: helm-teastore-webui/default/StatefulSet/apps/v1
+      to: teastore-persistence/default/Service/v1
+      color: brown
