@@ -580,6 +580,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 1. [Tool of the day](https://www.techopsexamples.com/p/understanding-kubernetes-etcd-locks), TechOps Examples, February 11, 2025.
 
+1. [Papers with Code](https://cs.paperswithcode.com/)
+
 ### Your own contributions
 
 Don't hesitate to submit your own papers, talks, blogs, social network posts, and referencing sites as [pull requests](https://github.com/philippemerle/KubeDiagrams/pulls).
