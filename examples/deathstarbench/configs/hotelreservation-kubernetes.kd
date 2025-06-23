@@ -1,0 +1,77 @@
+diagram:
+  edges:
+    - from: frontend/default/Deployment/apps/v1
+      to: search/default/Service/v1
+      color: brown
+    - from: search/default/Deployment/apps/v1
+      to: geo/default/Service/v1
+      color: brown
+    - from: geo/default/Deployment/apps/v1
+      to: mongodb-geo/default/Service/v1
+      color: brown
+    - from: search/default/Deployment/apps/v1
+      to: rate/default/Service/v1
+      color: brown
+    - from: rate/default/Deployment/apps/v1
+      to: mongodb-rate/default/Service/v1
+      color: brown
+    - from: rate/default/Deployment/apps/v1
+      to: memcached-rate/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: recommendation/default/Service/v1
+      color: brown
+    - from: recommendation/default/Deployment/apps/v1
+      to: mongodb-recommendation/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: reservation/default/Service/v1
+      color: brown
+    - from: reservation/default/Deployment/apps/v1
+      to: mongodb-reservation/default/Service/v1
+      color: brown
+    - from: reservation/default/Deployment/apps/v1
+      to: memcached-reserve/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: user/default/Service/v1
+      color: brown
+    - from: user/default/Deployment/apps/v1
+      to: mongodb-user/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: profile/default/Service/v1
+      color: brown
+    - from: profile/default/Deployment/apps/v1
+      to: mongodb-profile/default/Service/v1
+      color: brown
+    - from: profile/default/Deployment/apps/v1
+      to: memcached-profile/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: consul/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: jaeger/default/Service/v1
+      color: brown
+    - from: user-pvc/default/PersistentVolumeClaim/v1
+      to: user-pv/PersistentVolume/v1
+      color: black
+    - from: user-pvc/default/PersistentVolumeClaim/v1
+      to: user-pv/PersistentVolume/v1
+      color: black
+    - from: reservation-pvc/default/PersistentVolumeClaim/v1
+      to: reservation-pv/PersistentVolume/v1
+      color: black
+    - from: recommendation-pvc/default/PersistentVolumeClaim/v1
+      to: recommendation-pv/PersistentVolume/v1
+      color: black
+    - from: rate-pvc/default/PersistentVolumeClaim/v1
+      to: rate-pv/PersistentVolume/v1
+      color: black
+    - from: profile-pvc/default/PersistentVolumeClaim/v1
+      to: profile-pv/PersistentVolume/v1
+      color: black
+    - from: geo-pvc/default/PersistentVolumeClaim/v1
+      to: geo-pv/PersistentVolume/v1
+      color: black

@@ -1,0 +1,3 @@
+clusters:
+  - label: service
+    show: false # disable this clustering

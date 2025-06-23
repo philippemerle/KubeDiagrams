@@ -1,0 +1,4 @@
+nodes:
+  Service/serving.knative.dev/v1:
+    scope: Namespaced
+    custom_icon: icons/knative-service.png

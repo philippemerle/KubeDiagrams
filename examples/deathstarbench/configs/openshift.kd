@@ -1,0 +1,14 @@
+nodes:
+  Route/route.openshift.io/v1:
+    scope: Namespaced
+    custom_icon: icons/openshift-route.png
+    edges: |
+      # spec.to
+      edges.add_edge_to(
+        "spec.to.name",
+        ".",
+        get_namespace(resource),
+        "Service",
+        "v1",
+        "REFERENCE"
+      )

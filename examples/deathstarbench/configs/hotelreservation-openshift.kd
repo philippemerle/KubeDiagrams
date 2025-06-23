@@ -1,0 +1,84 @@
+clusters:
+  - label: app
+    show: false # disable
+  - label: death-star-project
+    title: "Death Star Project: {}"
+# Commented as too many labelling defects
+#  - label: app-name
+#    title: "Application: {}"
+nodes:
+  Route/route.openshift.io/v1:
+    scope: Namespaced
+    custom_icon: icons/openshift-route.png
+    edges: |
+      # spec.to
+      edges.add_edge_to(
+        "spec.to.name",
+        ".",
+        get_namespace(resource),
+        "Service",
+        "v1",
+        "REFERENCE"
+      )
+diagram:
+  edges:
+    - from: frontend-route/default/Route/route.openshift.io/v1
+      to: frontend/hotel-res/Service/v1
+      color: black
+    - from: hr-client/hotel-res/Deployment/apps/v1
+      to: frontend/hotel-res/Service/v1
+      color: brown
+    - from: frontend/hotel-res/Deployment/apps/v1
+      to: search/hotel-res/Service/v1
+      color: brown
+    - from: search/hotel-res/Deployment/apps/v1
+      to: geo/hotel-res/Service/v1
+      color: brown
+    - from: geo/hotel-res/Deployment/apps/v1
+      to: mongodb-geo/hotel-res/Service/v1
+      color: brown
+    - from: search/hotel-res/Deployment/apps/v1
+      to: rate/hotel-res/Service/v1
+      color: brown
+    - from: rate/hotel-res/Deployment/apps/v1
+      to: mongodb-rate/hotel-res/Service/v1
+      color: brown
+    - from: rate/hotel-res/Deployment/apps/v1
+      to: memcached-rate/hotel-res/Service/v1
+      color: brown
+    - from: frontend/hotel-res/Deployment/apps/v1
+      to: recommendation/hotel-res/Service/v1
+      color: brown
+    - from: recommendation/hotel-res/Deployment/apps/v1
+      to: mongodb-recommendation/hotel-res/Service/v1
+      color: brown
+    - from: frontend/hotel-res/Deployment/apps/v1
+      to: reservation/hotel-res/Service/v1
+      color: brown
+    - from: reservation/hotel-res/Deployment/apps/v1
+      to: mongodb-reservation/hotel-res/Service/v1
+      color: brown
+    - from: reservation/hotel-res/Deployment/apps/v1
+      to: memcached-reserve/hotel-res/Service/v1
+      color: brown
+    - from: frontend/hotel-res/Deployment/apps/v1
+      to: user/hotel-res/Service/v1
+      color: brown
+    - from: user/hotel-res/Deployment/apps/v1
+      to: mongodb-user/hotel-res/Service/v1
+      color: brown
+    - from: frontend/hotel-res/Deployment/apps/v1
+      to: profile/hotel-res/Service/v1
+      color: brown
+    - from: profile/hotel-res/Deployment/apps/v1
+      to: mongodb-profile/hotel-res/Service/v1
+      color: brown
+    - from: profile/hotel-res/Deployment/apps/v1
+      to: memcached-profile/hotel-res/Service/v1
+      color: brown
+    - from: frontend/hotel-res/Deployment/apps/v1
+      to: consul/hotel-res/Service/v1
+      color: brown
+    - from: frontend/hotel-res/Deployment/apps/v1
+      to: jaeger/hotel-res/Service/v1
+      color: brown

@@ -1,0 +1,81 @@
+nodes:
+  Service/serving.knative.dev/v1:
+    scope: Namespaced
+    custom_icon: icons/knative-service.png
+diagram:
+  edges:
+    - from: frontend/default/Deployment/apps/v1
+      to: srv-search/default/Service/serving.knative.dev/v1
+      color: brown
+    - from: srv-search/default/Service/serving.knative.dev/v1
+      to: srv-geo/default/Service/serving.knative.dev/v1
+      color: brown
+    - from: srv-geo/default/Service/serving.knative.dev/v1
+      to: mongodb-geo/default/Service/v1
+      color: brown
+    - from: srv-search/default/Service/serving.knative.dev/v1
+      to: srv-rate/default/Service/serving.knative.dev/v1
+      color: brown
+    - from: srv-rate/default/Service/serving.knative.dev/v1
+      to: mongodb-rate/default/Service/v1
+      color: brown
+    - from: srv-rate/default/Service/serving.knative.dev/v1
+      to: memcached-rate/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: srv-recommendation/default/Service/serving.knative.dev/v1
+      color: brown
+    - from: srv-recommendation/default/Service/serving.knative.dev/v1
+      to: mongodb-recommendation/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: srv-reservation/default/Service/serving.knative.dev/v1
+      color: brown
+    - from: srv-reservation/default/Service/serving.knative.dev/v1
+      to: mongodb-reservation/default/Service/v1
+      color: brown
+    - from: srv-reservation/default/Service/serving.knative.dev/v1
+      to: memcached-reserve/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: srv-user/default/Service/serving.knative.dev/v1
+      color: brown
+    - from: srv-user/default/Service/serving.knative.dev/v1
+      to: mongodb-user/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: srv-profile/default/Service/serving.knative.dev/v1
+      color: brown
+    - from: srv-profile/default/Service/serving.knative.dev/v1
+      to: mongodb-profile/default/Service/v1
+      color: brown
+    - from: srv-profile/default/Service/serving.knative.dev/v1
+      to: memcached-profile/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: consul/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: jaeger/default/Service/v1
+      color: brown
+    - from: user-pvc/default/PersistentVolumeClaim/v1
+      to: user-pv/PersistentVolume/v1
+      color: black
+    - from: user-pvc/default/PersistentVolumeClaim/v1
+      to: user-pv/PersistentVolume/v1
+      color: black
+    - from: reservation-pvc/default/PersistentVolumeClaim/v1
+      to: reservation-pv/PersistentVolume/v1
+      color: black
+    - from: recommendation-pvc/default/PersistentVolumeClaim/v1
+      to: recommendation-pv/PersistentVolume/v1
+      color: black
+    - from: rate-pvc/default/PersistentVolumeClaim/v1
+      to: rate-pv/PersistentVolume/v1
+      color: black
+    - from: profile-pvc/default/PersistentVolumeClaim/v1
+      to: profile-pv/PersistentVolume/v1
+      color: black
+    - from: geo-pvc/default/PersistentVolumeClaim/v1
+      to: geo-pv/PersistentVolume/v1
+      color: black
