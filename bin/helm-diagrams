@@ -24,6 +24,7 @@ show_help() {
   echo "Options:"
   echo "  -o, --output <file>          Specify the output file for the diagram"
   echo "  -f, --format <format>        Specify the output format (e.g., png, svg)"
+  echo "  --embed-all-icons            Embed all icons into svg or dot_json output diagrams"
   echo "  -c, --config <file>          Specify the custom kube-diagrams configuration file"
   echo "  -h, --help                   Display this help message"
   echo ""
@@ -61,6 +62,10 @@ while [[ $# -gt 0 ]]; do
       echo "Error: $1 requires a value!"
       exit 64
     fi
+    ;;
+  --embed-all-icons)
+    KUBE_DIAGRAMS_ARGS+=("$1")
+    shift
     ;;
   *)
     if [ -z "${HELM_CHART_URL}" ]; then

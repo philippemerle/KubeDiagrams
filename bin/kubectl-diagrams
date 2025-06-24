@@ -28,6 +28,7 @@ show_help() {
   echo "  -n, --namespace <namespace>  Specify the namespace to query resources from"
   echo "  -o, --output <file>          Specify the output file for the diagram"
   echo "  -f, --format <format>        Specify the output format (e.g., png, svg)"
+  echo "  --embed-all-icons            Embed all icons into svg or dot_json output diagrams"
   echo "  -c, --config <file>          Specify the custom kube-diagrams configuration file"
   echo "      --without-namespace      Exclude namespace from the diagram"
   echo "      --version                Display the version number"
@@ -76,6 +77,10 @@ while [[ $# -gt 0 ]]; do
     else
       shift
     fi
+    ;;
+  --embed-all-icons)
+    KUBE_DIAGRAMS_ARGS+=("$1")
+    shift
     ;;
   *)
     KUBECTL_ARGS+=("$1")

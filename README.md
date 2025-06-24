@@ -139,6 +139,7 @@ options:
   -h, --help            show this help message and exit
   -o, --output OUTPUT   output diagram filename
   -f, --format FORMAT   output format, allowed formats are dot, dot_json, gif, jp2, jpe, jpeg, jpg, pdf, png, svg, tif, tiff, set to png by default
+  --embed-all-icons     embed all icons into svg or dot_json output diagrams
   -c, --config CONFIG   custom kube-diagrams configuration file
   -v, --verbose         verbosity, set to false by default
   --without-namespace   disable namespace cluster generation
@@ -200,6 +201,7 @@ A script to generate a diagram of an Helm chart using kube-diagrams.
 Options:
   -o, --output <file>          Specify the output file for the diagram
   -f, --format <format>        Specify the output format (e.g., png, svg)
+  --embed-all-icons            Embed all icons into svg or dot_json output diagrams
   -c, --config <file>          Specify the custom kube-diagrams configuration file
   -h, --help                   Display this help message
 

@@ -881,6 +881,9 @@ parser.add_argument("-f", "--format", type=str,
         + ", ".join(SUPPORTED_OUTPUT_FORMATS) \
         + ", set to png by default",
     default="png")
+parser.add_argument("--embed-all-icons",
+    help="embed all icons into svg or dot_json output diagrams",
+    action="store_true", default=False)
 parser.add_argument("-c", "--config", type=str,
     help="custom kube-diagrams configuration file")
 parser.add_argument("-v", "--verbose",
@@ -905,6 +908,9 @@ if args.format not in SUPPORTED_OUTPUT_FORMATS:
     print(f"Error: '{args.format}' output format unsupported,"
             f" use '{SOF}' instead!", file=sys.stderr)
     sys.exit(1)
+
+if args.embed_all_icons and args.format not in ('svg', 'dot_json'):
+    print("Warning: --embed-all-icons only works with svg or dot_json output format!")
 
 if args.config is not None:
     with open(args.config, encoding="utf-8") as f:
@@ -1197,7 +1203,7 @@ print(f"{args.output}.{args.format} generated.")
 
 if args.format in ("svg", "dot_json"):
     filename = f"{args.output}.{args.format}"
-    print("Replace absolute paths by urls...")
+    print("Post-process paths of icons...")
     # read all the lines of the generated file
     with open(filename, "rt", encoding="utf-8") as fs:
         lines = fs.readlines()
@@ -1229,26 +1235,28 @@ if args.format in ("svg", "dot_json"):
                 import re
                 img_paths = re.findall(wts, line)
                 for img_path in img_paths:
-                    # replace absolute paths by urls
-                    if DIAGRAMS_PATH in line:
-                        line = line.replace(DIAGRAMS_PATH, DIAGRAMS_URL)
-                    elif KUBEDIAGRAMS_PATH in line:
-                        line = line.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
+                    if not args.embed_all_icons:
+                        # replace absolute paths by urls
+                        if DIAGRAMS_PATH in line:
+                            line = line.replace(DIAGRAMS_PATH, DIAGRAMS_URL)
+                            continue
+                        if KUBEDIAGRAMS_PATH in line:
+                            line = line.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
+                            continue
+                    full_img_path = Path(img_path.replace("\\/", "/"))
+                    if full_img_path.exists():
+                        # read the image
+                        with open(full_img_path, 'rb') as img_file:
+                            img_data = img_file.read()
+                        # encode the image in base64
+                        import base64
+                        mime_type = 'image/png'
+                        b64_data = base64.b64encode(img_data).decode('ascii')
+                        data_uri = f"data:{mime_type};base64,{b64_data}"
+                        # replace absolute path by image encoded in base64
+                        line = line.replace(img_path, data_uri)
                     else:
-                        full_img_path = Path(img_path.replace("\\/", "/"))
-                        if full_img_path.exists():
-                            # read the image
-                            with open(full_img_path, 'rb') as img_file:
-                                img_data = img_file.read()
-                            # encode the image in base64
-                            import base64
-                            mime_type = 'image/png'
-                            b64_data = base64.b64encode(img_data).decode('ascii')
-                            data_uri = f"data:{mime_type};base64,{b64_data}"
-                            # replace absolute path by image encoded in base64
-                            line = line.replace(img_path, data_uri)
-                        else:
-                            print(f"Warning: Image not found: {full_img_path}")
+                        print(f"Warning: Image not found: {full_img_path}")
             # write the line
             fs.write(line)
     print(f"{filename} saved.")
