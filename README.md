@@ -2,6 +2,7 @@
 
 [![license](https://img.shields.io/github/license/philippemerle/KubeDiagrams)](https://github.com/philippemerle/KubeDiagrams/blob/main/LICENSE)
 ![python version](https://img.shields.io/badge/python-%3E%3D%203.9-blue?logo=python)
+[![Socket Badge](https://socket.dev/api/badge/pypi/package/KubeDiagrams/0.4.0?artifact_id=tar-gz)](https://socket.dev/pypi/package/KubeDiagrams/overview/0.4.0/tar-gz)
 [![pypi version](https://badge.fury.io/py/KubeDiagrams.svg)](https://badge.fury.io/py/KubeDiagrams)
 [![PyPI Downloads](https://static.pepy.tech/badge/kubediagrams)](https://pepy.tech/projects/kubediagrams)
 [![Docker Stars](https://img.shields.io/docker/stars/philippemerle/kubediagrams)](https://hub.docker.com/r/philippemerle/kubediagrams)
