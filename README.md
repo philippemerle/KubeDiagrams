@@ -106,6 +106,8 @@ Following software must be installed:
 
 ## Getting Started
 
+### From PyPI
+
 Following command installs **KubeDiagrams** and all its Python dependencies, i.e., [PyYAML](https://pyyaml.org) and [Diagrams](https://diagrams.mingrammer.com/).
 
 ```ssh
@@ -113,11 +115,45 @@ Following command installs **KubeDiagrams** and all its Python dependencies, i.e
 pip install KubeDiagrams
 ```
 
+### From Nix
+
 Alternatively, you can install via Nix:
 
 ```sh
 nix shell github:philippemerle/KubeDiagrams
 ```
+
+### From Docker Hub
+
+**KubeDiagrams** container images are available in [Docker Hub](https://hub.docker.com/r/philippemerle/kubediagrams).
+You can download the latest container image via:
+
+```sh
+docker pull philippemerle/kubediagrams
+```
+
+### From source
+
+You can start directly from source:
+
+```sh
+# clone the KubeDiagrams repository
+git clone https://github.com/philippemerle/KubeDiagrams.git
+
+# install required Python packages
+pip install PyYAML diagrams
+
+# make KubeDiagrams commands available into $PATH
+PATH=$(pwd)/KubeDiagrams/bin:$PATH
+```
+
+### From Windows
+
+To use **KubeDiagrams** from Windows operating system, only the container image is supported currently.
+
+> [!NOTE]
+>
+> Any contribution would be welcome to translate KubeDiagrams' Unix-based scripts to Windows-based scripts.
 
 ## Usage
 
