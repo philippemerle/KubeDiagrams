@@ -406,23 +406,23 @@ Currently, there are 16 unsupported Kubernetes resource types:
 
 With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L33) file (see the `clusters` list).
 
-|           Label Key           |         Cluster Title          |
-| :---------------------------: | :----------------------------: |
-| `app.kubernetes.io/instance`  |  K8s Instance: `label value`   |
-|           `release`           |     Release: `label value`     |
-|        `helm.sh/chart`        |   Helm Chart: `label value`    |
-|            `chart`            |      Chart: `label value`      |
-|   `app.kubernetes.io/name`    | K8s Application: `label value` |
-|             `app`             |   Application: `label value`   |
-| `app.kubernetes.io/component` |  K8s Component: `label value`  |
-|           `service`           |  Microservice: `label value`   |
-|            `tier`             |      Tier: `label value`       |
+|           Label Key           |         Cluster Title          | Background Color | Recommended |
+| :---------------------------: | :----------------------------: | :----------------------------: | :----------------------------: |
+| `app.kubernetes.io/instance`  |  K8s Instance: `label value`   | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-E5F5FD) | Yes |
+|           `release`           |     Release: `label value`     | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-E5F5FD) | No |
+|        `helm.sh/chart`        |   Helm Chart: `label value`    | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-EBF3E7) | Yes |
+|            `chart`            |      Chart: `label value`      | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-EBF3E7) | No |
+|   `app.kubernetes.io/name`    | K8s Application: `label value` | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-ECE8F6) | Yes |
+|             `app`             |   Application: `label value`   | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-ECE8F6) | No |
+| `app.kubernetes.io/component` |  K8s Component: `label value`  | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | Yes |
+|           `service`           |  Microservice: `label value`   | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
+|            `tier`             |      Tier: `label value`       | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
 
 Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys and cluster titles as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L79) file.
 
-| Annotation Key |   Cluster Title    |
-| :------------: | :----------------: |
-| `helm.sh/hook` | `annotation value` |
+| Annotation Key |   Cluster Title    |  Background Color  |   Recommended   |
+| :------------: | :----------------: | :----------------: | :----------------: |
+| `helm.sh/hook` | `annotation value` | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-EBF3E7) | Yes |
 
 New label/annotation-based mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2), [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L1), and [examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L1))
 and provided to **KubeDiagrams** via the `--config` command-line option.
