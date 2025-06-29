@@ -378,9 +378,6 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 
 **Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L85).
 
-**Note**: The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/KubeDiagrams.yaml#L3), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L17), and
-[examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L14).
-
 Currently, there are 16 unsupported Kubernetes resource types:
 
 |             Kind             |            ApiGroup            |
@@ -402,9 +399,34 @@ Currently, there are 16 unsupported Kubernetes resource types:
 |        `NodeMetrics`         |        `metrics.k8s.io`        |
 |         `PodMetrics`         |        `metrics.k8s.io`        |
 
+The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/KubeDiagrams.yaml#L3), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L17), and
+[examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L14).
+Following lists some custom resources already supported in [examples](https://github.com/philippemerle/KubeDiagrams/blob/main/examples).
+
+|               Kind               |            ApiGroup            |           Versions            |                                                                          Icon                                                                          |
+| :------------------------------: | :----------------------------: | :---------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------: |
+|           `Application`           |    `argoproj.io`    |        `v1alpha1`         |                  ![Application](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/icons/Application.png)                  |
+|           `EventBus`           |    `argoproj.io`    |        `v1alpha1`         |                  ![EventBus](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/icons/EventBus.png)                  |
+|           `EventSource`           |    `argoproj.io`    |        `v1alpha1`         |                  ![EventSource](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/icons/EventSource.png)                  |
+|           `Rollout`           |    `argoproj.io`    |        `v1alpha1`         |                  ![Rollout](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/icons/Rollout.png)                  |
+|           `Sensor`           |    `argoproj.io`    |        `v1alpha1`         |                  ![Sensor](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/icons/Sensor.png)                  |
+|           `Workflow`           |    `argoproj.io`    |        `v1alpha1`         |                  ![Workflow](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/argo/icons/Workflow.png)                  |
+|           `Service`           |    `serving.knative.dev`    |        `v1`         |                  ![Service](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/deathstarbench/icons/knative-service.png)                  |
+|           `Route`           |    `route.openshift.io`    |        `v1`         |                  ![Route](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/deathstarbench/icons/openshift-route.png)                  |
+|           `Chart`           |    `helm.k0sproject.io`    |        `v1beta1`         |                  ![Chart](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/k0s/icons/k0s-Chart.png)                  |
+|           `ControlNode`           |    `autopilot.k0sproject.io`    |        `v1beta2`         |                  ![ControlNode](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/k0s/icons/k0s-ControlNode.png)                  |
+|           `EtcdMember`           |    `etcd.k0sproject.io`    |        `v1beta1`         |                  ![EtcdMember](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/k0s/icons/k0s-EtcdMember.png)                  |
+|           `Plan`           |    `autopilot.k0sproject.io`    |        `v1beta2`         |                  ![Plan](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/k0s/icons/k0s-Plan.png)                  |
+|           `UpdateConfig`           |    `autopilot.k0sproject.io`    |        `v1beta2`         |                  ![UpdateConfig](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/k0s/icons/k0s-UpdateConfig.png)                  |
+|           `Alertmanager`           |    `monitoring.coreos.com`    |        `v1`         |                  ![Alertmanager](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/kube-prometheus-stack/icons/Alertmanager.png)                  |
+|           `Prometheus`           |    `monitoring.coreos.com`    |        `v1`         |                  ![Prometheus](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/kube-prometheus-stack/icons/Prometheus.png)                  |
+|           `PrometheusRule`           |    `monitoring.coreos.com`    |        `v1`         |                  ![PrometheusRule](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/kube-prometheus-stack/icons/PrometheusRule.png)                  |
+|           `ServiceMonitor`           |    `monitoring.coreos.com`    |        `v1`         |                  ![ServiceMonitor](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/kube-prometheus-stack/icons/ServiceMonitor.png)                  |
+|           `LeaderWorkerSet`           |    `leaderworkerset.x-k8s.io`    |        `v1`         |                  ![LeaderWorkerSet](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/lws/icons/lws.png)                  |
+
 ### Kubernetes resources clustering
 
-With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L33) file (see the `clusters` list).
+With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L33) file (see the `clusters` list).
 
 |           Label Key           |         Cluster Title          | Background Color | Recommended |
 | :---------------------------: | :----------------------------: | :----------------------------: | :----------------------------: |
@@ -418,7 +440,7 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 |           `service`           |  Microservice: `label value`   | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
 |            `tier`             |      Tier: `label value`       | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
 
-Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys and cluster titles as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L79) file.
+Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L79) file.
 
 | Annotation Key |   Cluster Title    |  Background Color  |   Recommended   |
 | :------------: | :----------------: | :----------------: | :----------------: |
