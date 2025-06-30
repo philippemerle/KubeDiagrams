@@ -560,6 +560,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Kube Architect's post](https://x.com/K8sArchitect/status/1939401241953497488) on X, June 29, 2025.
+
 1. [Suman Chakraborty's post](https://www.linkedin.com/posts/schakraborty007_kubernetes-developers-devops-activity-7342764039833296897-0ICb/) on LinkedIn, June 23, 2025.
 
 1. [KubeDiagrams 0.4.0 is out!](https://www.reddit.com/r/kubernetes/comments/1lfzyly/kubediagrams_040_is_out/), Reddit, June 20, 2025.
