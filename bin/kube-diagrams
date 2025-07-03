@@ -886,6 +886,8 @@ parser.add_argument("--embed-all-icons",
     action="store_true", default=False)
 parser.add_argument("-c", "--config", type=str,
     help="custom kube-diagrams configuration file")
+parser.add_argument("-n", "--namespace", type=str,
+    help="visualize only the resources inside a given namespace")
 parser.add_argument("-v", "--verbose",
     help="verbosity, set to false by default",
     action="store_true", default=False)
@@ -964,6 +966,12 @@ def process_resource(resource):
     cluster = resource_cluster
     name = get_name(resource)
     resource_scope = get_node_config(resource).get("scope")
+    # Namespace filter
+    if args.namespace is not None and \
+        ( resource_scope != "Namespaced" \
+            or get_namespace(resource) != args.namespace):
+        return # skip this resource
+
     if resource_scope == "Outside":
         rid = name + "/" + get_type(resource)
     elif resource_scope == "Cluster":

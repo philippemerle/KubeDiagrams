@@ -177,6 +177,8 @@ options:
   -f, --format FORMAT   output format, allowed formats are dot, dot_json, gif, jp2, jpe, jpeg, jpg, pdf, png, svg, tif, tiff, set to png by default
   --embed-all-icons     embed all icons into svg or dot_json output diagrams
   -c, --config CONFIG   custom kube-diagrams configuration file
+  -n, --namespace NAMESPACE
+                        visualize only the resources inside a given namespace
   -v, --verbose         verbosity, set to false by default
   --without-namespace   disable namespace cluster generation
 ```
