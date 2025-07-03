@@ -560,6 +560,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [New Open-Source Tool Spotlight](https://www.instagram.com/p/DLk3_trO5wt/), Instagram, July 2, 2025.
+
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1939401241953497488) on X, June 29, 2025.
 
 1. [Suman Chakraborty's post](https://www.linkedin.com/posts/schakraborty007_kubernetes-developers-devops-activity-7342764039833296897-0ICb/) on LinkedIn, June 23, 2025.
