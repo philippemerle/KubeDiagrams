@@ -562,6 +562,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [KubeDiagrams](https://www.reddit.com/r/devops/comments/1lzvsb7/kubediagrams/), Reddit, July 14, 2025.
+
 1. [New Open-Source Tool Spotlight](https://www.instagram.com/p/DLk3_trO5wt/), Instagram, July 2, 2025.
 
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1939401241953497488) on X, June 29, 2025.
