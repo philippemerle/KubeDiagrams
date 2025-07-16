@@ -562,6 +562,10 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Learn Kubernetes Weekly Issue 140](https://www.linkedin.com/posts/danielepolencic_learn-kubernetes-weekly-140-hot-off-the-press-activity-7351213039926349824---gt/), LinkedIn, July 16, 2025.
+
+1. [Python Trending's post](https://x.com/pythontrending/status/1945434488441356341) on X, July 16, 2025.
+
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1945199450273501291) on X, July 15, 2025.
 
 1. [KubeDiagrams](https://www.reddit.com/r/devops/comments/1lzvsb7/kubediagrams/), Reddit, July 14, 2025.
