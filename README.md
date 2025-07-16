@@ -378,7 +378,7 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 |     `VerticalPodAutoscaler`      |      `autoscaling.k8s.io`      |             `v1`              |                ![VerticalPodAutoscaler](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vpa.png)                |
 |        `VolumeAttachment`        |        `storage.k8s.io`        |             `v1`              |         ![VolumeAttachment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/vol-128.png)          |
 
-**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L85).
+**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L83).
 
 Currently, there are 16 unsupported Kubernetes resource types:
 
@@ -428,7 +428,7 @@ Following lists some custom resources already supported in [examples](https://gi
 
 ### Kubernetes resources clustering
 
-With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L33) file (see the `clusters` list).
+With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L31) file (see the `clusters` list).
 
 |           Label Key           |         Cluster Title          | Background Color | Recommended |
 | :---------------------------: | :----------------------------: | :----------------------------: | :----------------------------: |
@@ -442,7 +442,7 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 |           `service`           |  Microservice: `label value`   | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
 |            `tier`             |      Tier: `label value`       | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
 
-Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L79) file.
+Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L77) file.
 
 | Annotation Key |   Cluster Title    |  Background Color  |   Recommended   |
 | :------------: | :----------------: | :----------------: | :----------------: |

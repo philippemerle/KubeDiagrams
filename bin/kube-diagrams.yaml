@@ -24,8 +24,6 @@ edges:
     color: brown
   DEPENDENCE:
     color: darkgrey
-  UNDEFINED:
-    color: red
   INVISIBLE:
     color: transparent
     style: invisible
