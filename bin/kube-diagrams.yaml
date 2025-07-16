@@ -191,6 +191,7 @@ nodes:
         "REFERENCE"
       )
   DaemonSet/apps/v1beta2: DaemonSet/apps/v1
+  DaemonSet/extensions/v1beta1: DaemonSet/apps/v1
   Deployment/apps/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.compute.Deploy
@@ -276,6 +277,7 @@ nodes:
         "REFERENCE"
       )
   Ingress/networking.k8s.io/v1beta1: Ingress/networking.k8s.io/v1
+  Ingress/extensions/v1beta1: Ingress/networking.k8s.io/v1
   IngressClass/networking.k8s.io/v1:
     scope: Cluster
     custom_icon: $KD/icons/ic.png
@@ -419,6 +421,7 @@ nodes:
     diagram_node_classname: diagrams.k8s.others.PSP
     # no edges
   PodSecurityPolicy/policy/v1beta1: PodSecurityPolicy/policy/v1
+  PodSecurityPolicy/extensions/v1beta1: PodSecurityPolicy/policy/v1
   PodTemplate/v1:
     scope: Namespaced
     custom_icon: $KD/icons/podtemplate.png
