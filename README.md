@@ -562,6 +562,10 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Christian Josef Aquino's post](https://www.linkedin.com/feed/update/urn:li:activity:7351589120986533889/) on LinkedIn, July 17, 2025.
+
+1. [Daniele Polencic's post](https://x.com/danielepolencic/status/1945447333694419110) on X, July 16, 2025.
+
 1. [Learn Kubernetes Weekly Issue 140](https://www.linkedin.com/posts/danielepolencic_learn-kubernetes-weekly-140-hot-off-the-press-activity-7351213039926349824---gt/), LinkedIn, July 16, 2025.
 
 1. [Python Trending's post](https://x.com/pythontrending/status/1945434488441356341) on X, July 16, 2025.
