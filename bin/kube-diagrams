@@ -347,6 +347,8 @@ class EdgesContext(list):
                 tooltip = path
             else:
                 tooltip = yaml.dump({path: data}, default_flow_style=False)[:-1]
+                if len(tooltip) > 16384: # dot parsing limit!
+                    tooltip = tooltip[:16380] + "\n..."
             edge_kind["tooltip"] = tooltip
         edge[-1] = edge_kind
         self.append(edge)
