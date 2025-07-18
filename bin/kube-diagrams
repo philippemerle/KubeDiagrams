@@ -199,7 +199,10 @@ def get_name(resource):
     if name is None:
         warning(resource, "metadata.name", "Not set or set to null")
         name = "NO-NAME"
-        resource["metadata"]["name"] = name
+        if "metadata" in resource:
+            resource["metadata"]["name"] = name
+        else:
+            resource["metadata"] = { "name": name }
     return name
 
 def get_namespace(resource):
