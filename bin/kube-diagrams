@@ -105,10 +105,17 @@ def get_edge_config(edge_kind):
         print(f"Error: {edge_kind} edge configuration not found!")
     return edge_config if edge_config else {}
 
+__REPORT_REENTRANCE__ = True
+
 def report(kind, resource, path, msg, end):
     """
         Report.
     """
+    # pylint: disable=global-statement
+    global __REPORT_REENTRANCE__
+    if not __REPORT_REENTRANCE__:
+        return
+    __REPORT_REENTRANCE__ = False
     rm = f"[{kind}] " \
         + query_path(resource, "kind", "NO-KIND") + ":" \
         + get_name(resource)
@@ -117,6 +124,7 @@ def report(kind, resource, path, msg, end):
     rm += f" - {msg}{end}"
     # GOOD: it is fine to log data that is not sensitive
     print(rm)
+    __REPORT_REENTRANCE__ = True
 
 def info(resource, path, msg):
     """
