@@ -6,6 +6,7 @@ on:
     paths:
       - 'bin/**'
       - Dockerfile
+      - .github/workflows/docker-image.yml
   pull_request:
     branches: [ "main" ]
     paths:
