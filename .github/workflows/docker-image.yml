@@ -5,10 +5,12 @@ on:
     branches: [ "main" ]
     paths:
       - 'bin/**'
+      - Dockerfile
   pull_request:
     branches: [ "main" ]
     paths:
       - 'bin/**'
+      - Dockerfile
 
 permissions:
   contents: read
