@@ -231,8 +231,7 @@ nix shell github:philippemerle/KubeDiagrams#kubectl-diagrams
 `helm-diagrams` generates a Kubernetes architecture diagram from an Helm chart.
 
 ```sh
-helm-diagrams -h
-Usage: helm-diagrams <helm-chart-url> [OPTIONS]
+Usage: helm-diagrams <helm-chart-url> [OPTIONS] [FLAGS]
 
 A script to generate a diagram of an Helm chart using kube-diagrams.
 
@@ -243,8 +242,22 @@ Options:
   -c, --config <file>          Specify the custom kube-diagrams configuration file
   -h, --help                   Display this help message
 
+Any flag supported by helm template, e.g.:
+  -g, --generate-name          Generate the name (and omit the NAME parameter)
+  --include-crds               Include CRDs in the templated output
+  -l, --labels stringToString  Labels that would be added to release metadata. Should be divided by comma. (default [])
+  --name-template string       Specify template used to name the release
+  --set stringArray            Set values on the command line (can specify multiple or separate values with commas: key1=val1,key2=val2)
+  --set-file stringArray       Set values from respective files specified via the command line (can specify multiple or separate values with commas: key1=path1,key2=path2)
+  --set-json stringArray       Set JSON values on the command line (can specify multiple or separate values with commas: key1=jsonval1,key2=jsonval2)
+  --set-literal stringArray    Set a literal STRING value on the command line
+  --set-string stringArray     Set STRING values on the command line (can specify multiple or separate values with commas: key1=val1,key2=val2)
+  -f, --values strings         Specify values in a YAML file or a URL (can specify multiple)
+  --version string             Specify a version constraint for the chart version to use. This constraint can be a specific tag (e.g. 1.1.1) or it may reference a valid range (e.g. ^2.0.0). If this is not specified, the latest version is used
+
 Examples:
   helm-diagrams https://charts.jetstack.io/cert-manager -o diagram.png
+  helm-diagrams https://charts.jetstack.io/cert-manager --set crds.enabled=true -o cert-manager.png
   helm-diagrams oci://ghcr.io/argoproj/argo-helm/argo-cd -f svg
   helm-diagrams --help
 ```
