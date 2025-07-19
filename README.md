@@ -562,6 +562,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Alain AIROM's post](https://www.linkedin.com/feed/update/urn:li:activity:7352351521562337280/) on LinkedIn, July 19, 2025.
+
 1. [Christian Josef Aquino's post](https://www.linkedin.com/feed/update/urn:li:activity:7351589120986533889/) on LinkedIn, July 17, 2025.
 
 1. [Daniele Polencic's post](https://x.com/danielepolencic/status/1945447333694419110) on X, July 16, 2025.
