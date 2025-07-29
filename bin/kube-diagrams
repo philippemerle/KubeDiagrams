@@ -107,6 +107,12 @@ def get_edge_config(edge_kind):
 
 __REPORT_REENTRANCE__ = True
 
+REPORT_COLORS = {
+    "Info": "\33[0m",
+    "Warning": "\33[33m",
+    "Error": "\33[31m"
+}
+
 def report(kind, resource, path, msg, end):
     """
         Report.
@@ -116,12 +122,12 @@ def report(kind, resource, path, msg, end):
     if not __REPORT_REENTRANCE__:
         return
     __REPORT_REENTRANCE__ = False
-    rm = f"[{kind}] " \
+    rm = f"{REPORT_COLORS[kind]}[{kind}] " \
         + query_path(resource, "kind", "NO-KIND") + ":" \
         + get_name(resource)
     if path is not None:
         rm += f":{path}"
-    rm += f" - {msg}{end}"
+    rm += f" - {msg}{end}\33[0m"
     # GOOD: it is fine to log data that is not sensitive
     print(rm)
     __REPORT_REENTRANCE__ = True
