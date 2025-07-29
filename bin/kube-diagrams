@@ -523,36 +523,64 @@ class EdgesContext(list):
         if volumes is not None:
             add_volumes(volumes, path)
 
-    def add_containers_env_value_from(self, path):
+    def add_containers_env_value_from_and_env_from(self, path):
         """
-            Add edges to resources referenced from containers.env.valueFrom.
+            Add edges to resources referenced from containers.env.valueFrom and envFrom.
         """
         containers = query_path(self.resource, path)
         if containers is None:
             return
         target_resources = set()
+        def process_optional_resource(
+            context,
+            kind,
+            name_path,
+            optional_path
+        ):
+            resource_name = query_path(context, name_path)
+            if resource_name is not None:
+                resource_id = f"{resource_name}/{self.namespace}/{kind}/v1"
+                if query_path(context, optional_path) is True:
+                    if resource_id not in resources:
+                        self.info(
+                            path,
+                            f"{kind} '{resource_name}' undefined but optional"
+                        )
+                        return
+                target_resources.add(
+                    resource_id
+                )
+
         for container in containers:
             container_env = query_path(container, "env")
-            if not isinstance(container_env, list):
-                continue # skip this container when env is not a list!
-            for env in container_env:
-                config_map_key_ref_name = query_path(env, "valueFrom.configMapKeyRef.name")
-                if config_map_key_ref_name is not None:
-                    target_resources.add(
-                        f"{config_map_key_ref_name}/{self.namespace}/ConfigMap/v1"
+            if isinstance(container_env, list):
+                for env in container_env:
+                    process_optional_resource(
+                        env,
+                        "ConfigMap",
+                        "valueFrom.configMapKeyRef.name",
+                        "valueFrom.configMapKeyRef.optional"
                     )
-                secret_key_ref_name = query_path(env, "valueFrom.secretKeyRef.name")
-                if secret_key_ref_name is not None:
-                    secret_id = f"{secret_key_ref_name}/{self.namespace}/Secret/v1"
-                    if query_path(env, "valueFrom.secretKeyRef.optional") is True:
-                        if secret_id not in resources:
-                            self.warning(
-                                path,
-                                f"Secret '{secret_key_ref_name}' undefined but optional"
-                            )
-                            continue # skip it
-                    target_resources.add(
-                        secret_id
+                    process_optional_resource(
+                        env,
+                        "Secret",
+                        "valueFrom.secretKeyRef.name",
+                        "valueFrom.secretKeyRef.optional"
+                    )
+            container_env_from = query_path(container, "envFrom")
+            if isinstance(container_env_from, list):
+                for env_from in container_env_from:
+                    process_optional_resource(
+                        env_from,
+                        "ConfigMap",
+                        "configMapRef.name",
+                        "configMapRef.optional"
+                    )
+                    process_optional_resource(
+                        env_from,
+                        "Secret",
+                        "secretRef.name",
+                        "secretRef.optional"
                     )
         for target_resource in target_resources:
             self.add_edge_to_rid(path, target_resource, "REFERENCE")
