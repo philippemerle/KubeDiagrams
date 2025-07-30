@@ -1112,7 +1112,7 @@ for filename in args.filename:
             for yaml_data in yaml.safe_load_all(f): # load YAML file
                 if yaml_data is None:
                     continue # Skip empty YAML content
-                if yaml_data.get("kind") == "List":
+                if yaml_data.get("kind", "NO-KIND").endswith("List") and "items" in yaml_data:
                     for r in yaml_data["items"]:
                         process_resource(Resource(r, filename))
                 else:
