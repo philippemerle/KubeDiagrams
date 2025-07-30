@@ -474,7 +474,7 @@ class EdgesContext(list):
                     config_map_id = f"{config_name}/{self.namespace}/ConfigMap/v1"
                     if config_map.get("optional") is True:
                         if config_map_id not in resources:
-                            self.warning(
+                            self.info(
                                 f"{path}[{idx}].configMap",
                                 f"ConfigMap '{config_name}' undefined but optional"
                             )
@@ -498,7 +498,7 @@ class EdgesContext(list):
                     secret_id = f"{secret_name}/{self.namespace}/Secret/v1"
                     if secret.get("optional") is True:
                         if secret_id not in resources:
-                            self.warning(
+                            self.info(
                                 f"{path}[{idx}].secret",
                                 f"Secret '{secret_name}' undefined but optional"
                             )
