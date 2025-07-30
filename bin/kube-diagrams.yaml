@@ -221,7 +221,7 @@ nodes:
             if "targetRef" in address:
               target = address["targetRef"]
               edges.add_edge_to(
-                f"subjects[{sidx}].addresses[{aidx}].targetRef",
+                f"subsets[{sidx}].addresses[{aidx}].targetRef",
                 target["name"],
                 target["namespace"],
                 target["kind"],
