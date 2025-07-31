@@ -536,8 +536,10 @@ class EdgesContext(list):
         containers = query_path(self.resource, path)
         if containers is None:
             return
+
         target_resources = set()
         def process_optional_resource(
+            path,
             context,
             kind,
             name_path,
@@ -549,7 +551,7 @@ class EdgesContext(list):
                 if query_path(context, optional_path) is True:
                     if resource_id not in resources:
                         self.info(
-                            path,
+                            f"{path}.{name_path}",
                             f"{kind} '{resource_name}' undefined but optional"
                         )
                         return
@@ -557,17 +559,19 @@ class EdgesContext(list):
                     resource_id
                 )
 
-        for container in containers:
+        for cidx, container in enumerate(containers):
             container_env = query_path(container, "env")
             if isinstance(container_env, list):
-                for env in container_env:
+                for eidx, env in enumerate(container_env):
                     process_optional_resource(
+                        f"{path}[{cidx}].env[{eidx}]",
                         env,
                         "ConfigMap",
                         "valueFrom.configMapKeyRef.name",
                         "valueFrom.configMapKeyRef.optional"
                     )
                     process_optional_resource(
+                        f"{path}[{cidx}].env[{eidx}]",
                         env,
                         "Secret",
                         "valueFrom.secretKeyRef.name",
@@ -575,19 +579,22 @@ class EdgesContext(list):
                     )
             container_env_from = query_path(container, "envFrom")
             if isinstance(container_env_from, list):
-                for env_from in container_env_from:
+                for eidx, env_from in enumerate(container_env_from):
                     process_optional_resource(
+                        f"{path}[{cidx}].envFrom[{eidx}]",
                         env_from,
                         "ConfigMap",
                         "configMapRef.name",
                         "configMapRef.optional"
                     )
                     process_optional_resource(
+                        f"{path}[{cidx}].envFrom[{eidx}]",
                         env_from,
                         "Secret",
                         "secretRef.name",
                         "secretRef.optional"
                     )
+
         for target_resource in target_resources:
             self.add_edge_to_rid(path, target_resource, "REFERENCE")
 
