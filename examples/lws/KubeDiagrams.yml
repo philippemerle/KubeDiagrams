@@ -72,7 +72,7 @@ nodes:
           "kind": "Pod",
           "apiVersion": "v1",
           "metadata": {
-            "name": f"{name}-{gi}",
+            "name": f"{lws_name}-{gi}",
             "namespace": lws_namespace,
             "labels": {
               "leaderworkerset.sigs.k8s.io/name": lws_name,
@@ -91,13 +91,13 @@ nodes:
           "kind": "StatefulSet",
           "apiVersion": "apps/v1",
           "metadata": {
-            "name": f"{name}-{gi}",
+            "name": f"{lws_name}-{gi}",
             "namespace": lws_namespace,
             "labels": {
               "leaderworkerset.sigs.k8s.io/name": lws_name,
               "leaderworkerset.sigs.k8s.io/group-index": gi,
             },
-            "uid": f"{name}-{gi}-uid"
+            "uid": f"{lws_name}-{gi}-uid"
           },
           "spec": {
             "replicas": lws_size - 1,
@@ -118,7 +118,7 @@ nodes:
             "kind": "Pod",
             "apiVersion": "v1",
             "metadata": {
-              "name": f"{name}-{gi}-{j}",
+              "name": f"{lws_name}-{gi}-{j}",
               "namespace": lws_namespace,
               "labels": {
                 "leaderworkerset.sigs.k8s.io/name": lws_name,
@@ -126,7 +126,7 @@ nodes:
               },
               "ownerReferences": [
                 {
-                  "uid": f"{name}-{gi}-uid"
+                  "uid": f"{lws_name}-{gi}-uid"
                 }
               ]
             },
