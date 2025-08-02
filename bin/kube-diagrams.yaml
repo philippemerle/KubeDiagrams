@@ -282,6 +282,15 @@ nodes:
         "networking.k8s.io/v1",
         "REFERENCE"
       )
+      for idx, tls in enumerate(query_path(resource, "spec.tls", [])):
+        edges.add_edge_to(
+          f"spec.tls[{idx}]",
+          tls.get("secretName"),
+          get_namespace(resource),
+          "Secret",
+          "v1",
+          "REFERENCE"
+        )
   Ingress/networking.k8s.io/v1beta1: Ingress/networking.k8s.io/v1
   Ingress/extensions/v1beta1: Ingress/networking.k8s.io/v1
   IngressClass/networking.k8s.io/v1:
