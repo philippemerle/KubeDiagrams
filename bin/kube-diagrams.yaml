@@ -368,14 +368,15 @@ nodes:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.storage.PVC
     edges: |
-      edges.add_edge_to(
-        "spec.storageClassName",
-        ".",
-        None,
-        "StorageClass",
-        "storage.k8s.io/v1",
-        "REFERENCE"
-      )
+      if query_path(resource, "spec.storageClassName") != "":
+        edges.add_edge_to(
+          "spec.storageClassName",
+          ".",
+          None,
+          "StorageClass",
+          "storage.k8s.io/v1",
+          "REFERENCE"
+        )
       edges.add_edge_to(
           "spec.volumeName",
           ".",

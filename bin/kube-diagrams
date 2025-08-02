@@ -642,6 +642,10 @@ class EdgesContext(list):
             service_account_name = pod_spec.get("serviceAccount")
             if service_account_name is not None:
                 self.warning(f"{path}.serviceAccount", "Deprecated")
+        # If << serviceAccountName: "" >> then no service account defined
+        if service_account_name == "":
+            return
+        # else add an edge to the ServiceAccount resource
         self.add_edge_to(
             f"{path}.serviceAccountName",
             service_account_name,
@@ -916,6 +920,10 @@ class EdgesContext(list):
         """
             Add a reference edge to a priority class resource.
         """
+        # If << priorityClassName: "" >> then no priority class defined
+        if query_path(self.resource, path) == "":
+            return
+        # else add an edge to the PriorityClass resource
         self.add_edge_to(
             path,
             ".",
