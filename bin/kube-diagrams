@@ -925,6 +925,104 @@ class EdgesContext(list):
             "REFERENCE"
         )
 
+    def add_rules_resource_names(self):
+        """
+            Add edges to rules resourceNames.
+        """
+        for ridx, rule in enumerate(query_path(self.resource, "rules", [])):
+            resource_names = query_path(rule, "resourceNames")
+            if resource_names is None:
+                continue # skip this rule as no resourceNames
+            api_groups = query_path(rule, "apiGroups")
+            if len(api_groups) != 1:
+                self.error(
+                    f"rules[{ridx}]",
+                    f"Field apiGroups ({api_groups}) should contain only one value"
+                )
+                continue # skip it
+            api_group = api_groups[0]
+            if api_group == "":
+                api_version = "v1"
+            else:
+                api_version = f"{api_group}/v1"
+            for resource in query_path(rule, "resources", []):
+                if '/' in resource:
+                    continue # skip subresources
+                kind = PLURAL2KINDS.get(resource, resource)
+                for rnidx, resource_name in enumerate(resource_names):
+                    if '*' in resource_name:
+                        continue # skip it
+                    scope = config["nodes"].get(f"{kind}/{api_version}", {}).get("scope")
+                    namespace = self.namespace if scope == "Namespaced" else None
+                    self.add_edge_to(
+                        f"rules[{ridx}].resourceNames[{rnidx}]",
+                        resource_name,
+                        namespace,
+                        kind,
+                        api_version,
+                        "REFERENCE-UP"
+                    )
+
+PLURAL2KINDS = {}
+for k, v in config["nodes"].items():
+    if not isinstance(v, dict):
+        continue # skip this aliased node
+    node_kind = k.split("/")[0]
+    plural = v.get("plural")
+    if plural is None:
+        plural = node_kind.lower() + "s"
+    PLURAL2KINDS[plural] = node_kind
+
+def create_node_for_role_rules_resource_names(role, nodes):
+    """
+        Create nodes for rules resourceNames.
+    """
+    for ridx, rule in enumerate(query_path(role, "rules", [])):
+        resource_names = query_path(rule, "resourceNames")
+        if resource_names is None:
+            continue # skip this rule as no resourceNames
+        api_groups = query_path(rule, "apiGroups")
+        if len(api_groups) != 1:
+            error(
+                role,
+                f"rules[{ridx}]",
+                f"Field apiGroups ({api_groups}) should contain only one value"
+            )
+            continue # skip it
+        api_group = api_groups[0]
+        if api_group == "":
+            api_version = "v1"
+        else:
+            api_version = f"{api_group}/v1"
+        for resource in query_path(rule, "resources", []):
+            if '/' in resource:
+                continue # skip subresources
+            resource_kind = PLURAL2KINDS.get(resource)
+            if resource_kind is None:
+                continue # skip it
+            for rnidx, resource_name in enumerate(resource_names):
+                if '*' in resource_name:
+                    continue # skip it
+                resource_id = f"{resource_name}/{get_namespace(role)}/{resource_kind}/{api_version}"
+                if resource_id in resources:
+                    continue # skip it
+                for rule1 in query_path(role, "rules", []):
+                    if api_group in rule1.get("apiGroups", []) \
+                        and resource in rule1.get("resources", []) \
+                        and "create" in rule1.get("verbs", []):
+                        new_node = {
+                            "kind": resource_kind,
+                            "apiVersion": api_version,
+                            "metadata": {
+                                "name": resource_name,
+                                "namespace": get_namespace(role),
+                                "labels": query_path(role, "metadata.labels")
+                            }
+                        }
+                        warning(role, f"rules[{ridx}].resourceNames[{rnidx}]", f"Create {new_node}")
+                        nodes.append(new_node)
+                        break
+
 # Parse arguments
 parser = argparse.ArgumentParser(
     prog="kube-diagrams",
@@ -1096,21 +1194,6 @@ def process_resource(resource):
                 copy.deepcopy(config.get("clusters", []))
             )
     cluster.resources[rid] = resource
-    nodes_script = get_node_config(resource).get("nodes")
-    if nodes_script is not None:
-        nodes = []
-        try:
-            # pylint: disable-next=exec-used
-            exec(nodes_script)
-        except Exception as exc:
-            print("Error:", type(exc), ":", exc.args)
-            traceback.print_exc()
-            print("Nodes script:\n", nodes_script)
-            print("Resource:")
-            pprint(resource)
-            raise
-        for node in nodes:
-            process_resource(Resource(node, resource.filename))
 
 for filename in args.filename:
     try:
@@ -1137,6 +1220,31 @@ for filename in args.filename:
 if args.verbose:
     print("Loaded Kubernetes resources:")
     resource_cluster.display()
+
+# Create new nodes
+def create_new_nodes():
+    """
+        Create new nodes
+    """
+    for _, resource in dict(resources).items():
+        nodes_script = get_node_config(resource).get("nodes")
+        if nodes_script is None:
+            continue # skip it
+        nodes = []
+        try:
+            # pylint: disable-next=exec-used
+            exec(nodes_script)
+        except Exception as exc:
+            print("Error:", type(exc), ":", exc.args)
+            traceback.print_exc()
+            print("Nodes script:\n", nodes_script)
+            print("Resource:")
+            pprint(resource)
+            raise
+        for node in nodes:
+            process_resource(Resource(node, resource.filename))
+
+create_new_nodes()
 
 def process_edges():
     """

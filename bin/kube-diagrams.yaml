@@ -102,6 +102,7 @@ nodes:
     edges: |
       for idx, clusterRoleSelector in enumerate(query_path(resource, "aggregationRule.clusterRoleSelectors", [])):
         edges.add_all_resources_matching_labels("ClusterRole", "matchLabels", data=clusterRoleSelector)
+      edges.add_rules_resource_names()
   ClusterRole/rbac.authorization.k8s.io/v1beta1: ClusterRole/rbac.authorization.k8s.io/v1
   ClusterRoleBinding/rbac.authorization.k8s.io/v1:
     scope: Cluster
@@ -220,6 +221,7 @@ nodes:
   Deployment/apps/v1beta2: Deployment/apps/v1
   Endpoints/v1:
     scope: Namespaced
+    plural: endpoints
     diagram_node_classname: diagrams.k8s.network.Endpoint
     edges: |
         for sidx, subset in enumerate(resource.get("subsets", [])):
@@ -426,6 +428,7 @@ nodes:
   PodDisruptionBudget/policy/v1beta1: PodDisruptionBudget/policy/v1
   PodSecurityPolicy/policy/v1:
     scope: Namespaced
+    plural: podsecuritypolicies
     diagram_node_classname: diagrams.k8s.others.PSP
     # no edges
   PodSecurityPolicy/policy/v1beta1: PodSecurityPolicy/policy/v1
@@ -507,7 +510,10 @@ nodes:
   Role/rbac.authorization.k8s.io/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.rbac.Role
-    # no edges
+    nodes: |
+      create_node_for_role_rules_resource_names(resource, nodes)
+    edges: |
+      edges.add_rules_resource_names()
   Role/rbac.authorization.k8s.io/v1beta1: Role/rbac.authorization.k8s.io/v1
   RoleBinding/rbac.authorization.k8s.io/v1:
     scope: Namespaced
