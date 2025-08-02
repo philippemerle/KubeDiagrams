@@ -1235,7 +1235,7 @@ def create_new_nodes():
         Create new nodes
     """
 
-    def create_nodes(resource):
+    def internal_create_new_nodes(resource):
         nodes_script = get_node_config(resource).get("nodes")
         if nodes_script is None:
             return # skip it
@@ -1251,12 +1251,12 @@ def create_new_nodes():
             pprint(resource)
             raise
         for node in nodes:
-            r = Resource(node, resource.filename)
-            process_resource(r)
-            create_nodes(r)
+            resource = Resource(node, resource.filename)
+            process_resource(resource)
+            internal_create_new_nodes(resource)
 
     for _, resource in dict(resources).items():
-        create_nodes(resource)
+        internal_create_new_nodes(resource)
 
 create_new_nodes()
 
