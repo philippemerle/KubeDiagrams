@@ -64,6 +64,31 @@
       ]
     },
     {
+      "name": "cluster_Application: checkoutservice",
+      "bgcolor": "#ECE8F6",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "12",
+      "label": "Application: checkoutservice",
+      "labeljust": "l",
+      "nodesep": "0.60",
+      "pad": "2.0",
+      "pencolor": "#AEB6BE",
+      "rankdir": "LR",
+      "ranksep": "0.75",
+      "shape": "box",
+      "splines": "ortho",
+      "style": "rounded",
+      "tooltip": "Application: checkoutservice",
+      "_gvid": 2,
+      "nodes": [
+        18,19
+      ],
+      "edges": [
+        5
+      ]
+    },
+    {
       "name": "cluster_Application: currencyservice",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
@@ -80,7 +105,7 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: currencyservice",
-      "_gvid": 2,
+      "_gvid": 3,
       "nodes": [
         20,21
       ],
@@ -105,7 +130,7 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: emailservice",
-      "_gvid": 3,
+      "_gvid": 4,
       "nodes": [
         22,23
       ],
@@ -130,7 +155,7 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: frontend",
-      "_gvid": 4,
+      "_gvid": 5,
       "nodes": [
         24,25
       ],
@@ -155,7 +180,7 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: paymentservice",
-      "_gvid": 5,
+      "_gvid": 6,
       "nodes": [
         26,27
       ],
@@ -180,7 +205,7 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: productcatalogservice",
-      "_gvid": 6,
+      "_gvid": 7,
       "nodes": [
         28,29
       ],
@@ -205,7 +230,7 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: recommendationservice",
-      "_gvid": 7,
+      "_gvid": 8,
       "nodes": [
         30,31
       ],
@@ -230,7 +255,7 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: shippingservice",
-      "_gvid": 8,
+      "_gvid": 9,
       "nodes": [
         32,33
       ],
@@ -255,39 +280,14 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: loadgenerator",
-      "_gvid": 9,
+      "_gvid": 10,
       "nodes": [
         34
       ]
     },
     {
-      "name": "cluster_Application: checkoutservice",
-      "bgcolor": "#ECE8F6",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "12",
-      "label": "Application: checkoutservice",
-      "labeljust": "l",
-      "nodesep": "0.60",
-      "pad": "2.0",
-      "pencolor": "#AEB6BE",
-      "rankdir": "LR",
-      "ranksep": "0.75",
-      "shape": "box",
-      "splines": "ortho",
-      "style": "rounded",
-      "tooltip": "Application: checkoutservice",
-      "_gvid": 10,
-      "nodes": [
-        18,19
-      ],
-      "edges": [
-        5
-      ]
-    },
-    {
       "_gvid": 11,
-      "name": "3d60cf6319024214b3e9815a18782829",
+      "name": "8650e06fc99c4eceb2e02fa00cf80c8f",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -304,7 +304,7 @@
     },
     {
       "_gvid": 12,
-      "name": "1c34286b08e1487eb1aaa60db8e2771f",
+      "name": "35a4bda0e0b149f797a0aac7a8021881",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -321,7 +321,7 @@
     },
     {
       "_gvid": 13,
-      "name": "e423442f1bc24b2ca87e45285c2eb167",
+      "name": "16f08f5ff19f4bc7ac453a611f9da403",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -338,7 +338,7 @@
     },
     {
       "_gvid": 14,
-      "name": "fa25e40e2a064c7a9557abc3a4cc2f2e",
+      "name": "7a87f149be5e462fb3715627c7a0708f",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -355,7 +355,7 @@
     },
     {
       "_gvid": 15,
-      "name": "202513a3abb24f62bad250667c008154",
+      "name": "4846978ea0dd4bdb88867a3473dde1e8",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -372,7 +372,7 @@
     },
     {
       "_gvid": 16,
-      "name": "377859766fb9414282ab21595c9a3539",
+      "name": "b53d0105f8e444a689e6a395c2825393",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -389,7 +389,7 @@
     },
     {
       "_gvid": 17,
-      "name": "b7a82125848d4cd998a78a0033c47add",
+      "name": "5fe630ff5b5842fb81ec34be492d5358",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -406,7 +406,7 @@
     },
     {
       "_gvid": 18,
-      "name": "6a0b6480c95c4413b5d4c812a0cf26c5",
+      "name": "ae77e5c9245245bb8778f29d1c58e616",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -423,7 +423,7 @@
     },
     {
       "_gvid": 19,
-      "name": "5bbe3e9aea3940139a6a0e3da06825b0",
+      "name": "9fe732fd4f9e490bb93f213e0ef611cd",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -440,7 +440,7 @@
     },
     {
       "_gvid": 20,
-      "name": "ed94ac2431fb4286a5874f47dcb6730a",
+      "name": "3ae644d9f2e34fdbaf9fc1ec81079b1b",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -457,7 +457,7 @@
     },
     {
       "_gvid": 21,
-      "name": "ef5391290fdd436a8b399da0f9a18618",
+      "name": "9f695b1b890b4f09909326511cf037d1",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -474,7 +474,7 @@
     },
     {
       "_gvid": 22,
-      "name": "ff20ca0294734de2beb00fab93bad362",
+      "name": "386a4c301e8a457798f1060c90ebd21f",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -491,7 +491,7 @@
     },
     {
       "_gvid": 23,
-      "name": "a1b537113ccf46328a560eb502e7c0c3",
+      "name": "d048c85046854012b07efb71669129c1",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -508,7 +508,7 @@
     },
     {
       "_gvid": 24,
-      "name": "3960aa842fed4b8d96df82a68994f016",
+      "name": "19aa85deb9714196af5eff235e143bda",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -525,7 +525,7 @@
     },
     {
       "_gvid": 25,
-      "name": "fb0c9d39cb994eceb301536ed6960972",
+      "name": "4688fd4b1c82418194dde6508a677167",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -542,7 +542,7 @@
     },
     {
       "_gvid": 26,
-      "name": "6ed6114155da4849a8da545d2fe2674d",
+      "name": "956f0aa8fce845d3a1502c3f96e65cd8",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -559,7 +559,7 @@
     },
     {
       "_gvid": 27,
-      "name": "894a806957ba4cba99cdb710b52d3a52",
+      "name": "a8da34193cd8497a994293deda921eac",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -576,7 +576,7 @@
     },
     {
       "_gvid": 28,
-      "name": "7198a863bdb9452d932c86fbc4769eaa",
+      "name": "0bdbfe6106be407a89055843ca75c3c4",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -593,7 +593,7 @@
     },
     {
       "_gvid": 29,
-      "name": "dbff9dca381f4e749e7e7c4c69bc5cd3",
+      "name": "e4f2a786da4e438585bf867da867e18a",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -610,7 +610,7 @@
     },
     {
       "_gvid": 30,
-      "name": "fbca547f095742eebdf312ec4be98f10",
+      "name": "75078575268343abb0329cf040a20cd5",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -627,7 +627,7 @@
     },
     {
       "_gvid": 31,
-      "name": "a6831af86f9e4b0abbd2fb1568794792",
+      "name": "3a0ae9514579497995793e47ed956488",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -644,7 +644,7 @@
     },
     {
       "_gvid": 32,
-      "name": "e9cc849919654482831580730b4ff73e",
+      "name": "35c5809f9e914e1b8109bdd8abce6138",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -661,7 +661,7 @@
     },
     {
       "_gvid": 33,
-      "name": "7fe8aab582e64f6792d7b94a65821200",
+      "name": "3d653ec447d04cdd84d64519197586f6",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -678,7 +678,7 @@
     },
     {
       "_gvid": 34,
-      "name": "5e2a21fffeed47faaa753eb8c077712f",
+      "name": "b2c76dd0677249fba497e0720c667756",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
