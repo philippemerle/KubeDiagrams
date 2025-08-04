@@ -1,0 +1,276 @@
+#
+# KubeDiagrams configuration for cert-manager resources
+# from API group cert-manager.io
+#
+edges:
+  CREATE:
+    xlabel: create
+    color: black
+    style: dotted
+  CREATE-UP:
+    xlabel: create
+    color: black
+    style: dotted
+    direction: up
+  INJECT-CA:
+    xlabel: inject ca
+    color: black
+    style: dotted
+nodes:
+  Certificate/cert-manager.io/v1:
+    scope: Namespaced
+    diagram_node_classname: diagrams.azure.web.AppServiceCertificates
+    nodes: |
+      secretName = query_path(resource, "spec.secretName")
+      if secretName != None:
+        node = {
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secretName,
+            "namespace": get_namespace(resource),
+            "labels": query_path(resource, "metadata.labels")
+          }
+        }
+        warning(resource, "spec.secretName", f"Create {node}")
+        nodes.append(node)
+    edges: |
+      issuerRef = query_path(resource, "spec.issuerRef")
+      if issuerRef != None:
+          kind = issuerRef.get("kind", "Issuer")
+          edges.add_edge_to(
+            "spec.issuerRef",
+            issuerRef["name"],
+            edges.namespace if kind == "Issuer" else None,
+            kind,
+            "cert-manager.io/v1",
+            "REFERENCE-UP"
+          )
+      edges.add_edge_to(
+        "spec.secretName",
+        ".",
+        edges.namespace,
+        "Secret",
+        "v1",
+        "CREATE"
+      )
+      inject_from = f"{get_namespace(resource)}/{resource['metadata']['name']}"
+      for _, r in resources.items():
+        if r["kind"] in ["MutatingWebhookConfiguration", "ValidatingWebhookConfiguration"]:
+          if r.get_metadata_annotation("cert-manager.io/inject-ca-from") == inject_from:
+            edges.add_edge_to(
+              "metadata.annotations.cert-manager.io/inject-ca-from",
+              get_name(r),
+              None,
+              r["kind"],
+              r["apiVersion"],
+              "INJECT-CA"
+            )
+  Certificate/certmanager.k8s.io/v1alpha1: Certificate/cert-manager.io/v1
+  Certificate/cert-manager.io/v1alpha2: Certificate/cert-manager.io/v1
+  ClusterIssuer/cert-manager.io/v1:
+    scope: Cluster
+    diagram_node_classname: diagrams.aws.security.CertificateAuthority
+    nodes: |
+      secretName = query_path(resource, "spec.ca.secretName")
+      if secretName != None:
+        node = {
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secretName,
+            "namespace": "cert-manager",
+            "labels": query_path(resource, "metadata.labels")
+          }
+        }
+        warning(resource, "spec.ca.secretName", f"Create {node}")
+        nodes.append(node)
+      secretName = query_path(resource, "spec.acme.privateKeySecretRef.name")
+      if secretName != None:
+        node = {
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secretName,
+            "namespace": "cert-manager",
+            "labels": query_path(resource, "metadata.labels")
+          }
+        }
+        warning(resource, "spec.acme.privateKeySecretRef.name", f"Create {node}")
+        nodes.append(node)
+    edges: |
+      edges.add_edge_to(
+        "spec.ca.secretName",
+        ".",
+        "cert-manager",
+        "Secret",
+        "v1",
+        "CREATE"
+      )
+      edges.add_edge_to(
+        "spec.acme.privateKeySecretRef.name",
+        ".",
+        "cert-manager",
+        "Secret",
+        "v1",
+        "CREATE"
+      )
+  ClusterIssuer/certmanager.k8s.io/v1alpha1: ClusterIssuer/cert-manager.io/v1
+  ClusterIssuer/cert-manager.io/v1alpha2: ClusterIssuer/cert-manager.io/v1
+  Issuer/cert-manager.io/v1:
+    scope: Namespaced
+    diagram_node_classname: diagrams.aws.security.CertificateAuthority
+    nodes: |
+      secretName = query_path(resource, "spec.ca.secretName")
+      if secretName != None:
+        node = {
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secretName,
+            "namespace": get_namespace(resource),
+            "labels": query_path(resource, "metadata.labels")
+          }
+        }
+        warning(resource, "spec.ca.secretName", f"Create {node}")
+        nodes.append(node)
+      secretName = query_path(resource, "spec.acme.privateKeySecretRef.name")
+      if secretName != None:
+        node = {
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secretName,
+            "namespace": get_namespace(resource),
+            "labels": query_path(resource, "metadata.labels")
+          }
+        }
+        warning(resource, "spec.acme.privateKeySecretRef.name", f"Create {node}")
+        nodes.append(node)
+    edges: |
+      edges.add_edge_to(
+        "spec.ca.secretName",
+        ".",
+        edges.namespace,
+        "Secret",
+        "v1",
+        "CREATE"
+      )
+      edges.add_edge_to(
+        "spec.acme.privateKeySecretRef.name",
+        ".",
+        edges.namespace,
+        "Secret",
+        "v1",
+        "CREATE"
+      )
+  Issuer/certmanager.k8s.io/v1alpha1: Issuer/cert-manager.io/v1
+  Issuer/cert-manager.io/v1alpha2: Issuer/cert-manager.io/v1
+
+  #
+  # Overloading Ingress
+  #
+  Ingress/networking.k8s.io/v1:
+    scope: Namespaced
+    diagram_node_classname: diagrams.k8s.network.Ing
+    nodes: | # NEW
+      issuer = resource.get_metadata_annotation("cert-manager.io/issuer")
+      if issuer is not None:
+        for tls in query_path(resource, "spec.tls", []):
+          node = {
+            "kind": "Certificate",
+            "apiVersion": "cert-manager.io/v1",
+            "metadata": {
+              "name": get_name(resource),
+              "namespace": get_namespace(resource),
+              "labels": query_path(resource, "metadata.labels")
+            },
+            "spec": {
+              "issuerRef": {
+                "kind": "Issuer",
+                "name": issuer
+              },
+              "secretName": tls.get("secretName")
+            }
+          }
+          warning(resource, "metadata.annotations.cert-manager.io/issuer", f"Create {node}")
+          nodes.append(node)
+      cluster_issuer = resource.get_metadata_annotation("cert-manager.io/cluster-issuer")
+      if cluster_issuer is not None:
+        for tls in query_path(resource, "spec.tls", []):
+          node = {
+            "kind": "Certificate",
+            "apiVersion": "cert-manager.io/v1",
+            "metadata": {
+              "name": get_name(resource),
+              "namespace": get_namespace(resource),
+              "labels": query_path(resource, "metadata.labels")
+            },
+            "spec": {
+              "issuerRef": {
+                "kind": "ClusterIssuer",
+                "name": cluster_issuer
+              },
+              "secretName": tls.get("secretName")
+            }
+          }
+          warning(resource, "metadata.annotations.cert-manager.io/issuer", f"Create {node}")
+          nodes.append(node)
+    edges: |
+      for ridx, rule in enumerate(query_path(resource, "spec.rules", [])):
+        for pidx, path in enumerate(query_path(rule, "http.paths", [])):
+          edges.add_service("backend.service.name", path)
+      edges.add_edge_to(
+        "spec.ingressClassName",
+        ".",
+        None,
+        "IngressClass",
+        "networking.k8s.io/v1",
+        "REFERENCE"
+      )
+      for idx, tls in enumerate(query_path(resource, "spec.tls", [])):
+        edges.add_edge_to(
+          f"spec.tls[{idx}].secretName",
+          tls.get("secretName"),
+          get_namespace(resource),
+          "Secret",
+          "v1",
+          "REFERENCE"
+        )
+      # NEW
+      issuer = resource.get_metadata_annotation("cert-manager.io/issuer")
+      if issuer is not None:
+        edges.add_edge_to(
+          "metadata.annotations.cert-manager.io/issuer",
+          issuer,
+          get_namespace(resource),
+          "Issuer",
+          "cert-manager.io/v1",
+          "REFERENCE-UP"
+        )
+        edges.add_edge_to(
+          "metadata.annotations.cert-manager.io/issuer",
+          get_name(resource),
+          get_namespace(resource),
+          "Certificate",
+          "cert-manager.io/v1",
+          "CREATE-UP"
+        )
+      cluster_issuer = resource.get_metadata_annotation("cert-manager.io/cluster-issuer")
+      if cluster_issuer is not None:
+        edges.add_edge_to(
+          "metadata.annotations.cert-manager.io/issuer",
+          cluster_issuer,
+          None,
+          "ClusterIssuer",
+          "cert-manager.io/v1",
+          "REFERENCE-UP"
+        )
+        edges.add_edge_to(
+          "metadata.annotations.cert-manager.io/issuer",
+          get_name(resource),
+          get_namespace(resource),
+          "Certificate",
+          "cert-manager.io/v1",
+          "CREATE-UP"
+        )

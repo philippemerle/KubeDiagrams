@@ -1,0 +1,191 @@
+---
+# Source: securitywiki/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: securitywiki
+  labels:
+    helm.sh/chart: securitywiki-1.0.1
+    app.kubernetes.io/name: securitywiki
+    app.kubernetes.io/instance: securitywiki
+    app.kubernetes.io/managed-by: Helm
+data:
+    ENVIRONMENT: stage
+    SITE_URL: https://securitywiki.allizom.org
+---
+# Source: securitywiki/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: securitywiki
+  labels:
+    helm.sh/chart: securitywiki-1.0.1
+    app.kubernetes.io/name: securitywiki
+    app.kubernetes.io/instance: securitywiki
+    app.kubernetes.io/managed-by: Helm
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - port: 80
+      name: http
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: securitywiki
+    app.kubernetes.io/instance: securitywiki
+  type: LoadBalancer
+---
+# Source: securitywiki/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securitywiki
+  labels:
+    helm.sh/chart: securitywiki-1.0.1
+    app.kubernetes.io/name: securitywiki
+    app.kubernetes.io/instance: securitywiki
+    app.kubernetes.io/managed-by: Helm
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: securitywiki
+      app.kubernetes.io/instance: securitywiki
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: "25%"
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: securitywiki
+        app.kubernetes.io/instance: securitywiki
+    spec:
+      initContainers:
+        - name: migrate
+          image: "783633885093.dkr.ecr.us-west-2.amazonaws.com/securitywiki:master-cccd24f1c4e62fef09ff2d0625f29ee91277a270"
+          imagePullPolicy: Always
+          command:
+            - "/bin/bash"
+            - "-c"
+            - "chown www-data:www-data /data/securitywiki && find /data/securitywiki \\! -user www-data -exec chown -R www-data:www-data {} \\;"
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: "128m"
+            limits:
+              memory: 128Mi
+              cpu: "128m"
+          volumeMounts:
+            - name: securitywiki-fs
+              mountPath: /data/securitywiki
+      containers:
+        - name: securitywiki
+          envFrom:
+            - configMapRef:
+                name: securitywiki
+          image: "783633885093.dkr.ecr.us-west-2.amazonaws.com/securitywiki:master-cccd24f1c4e62fef09ff2d0625f29ee91277a270"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health.php
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 5
+            successThreshold: 3
+            httpGet:
+              path: /health.php
+              port: http
+          resources:
+            limits:
+              cpu: 512m
+              memory: 512Mi
+            requests:
+              cpu: 256m
+              memory: 256Mi
+          volumeMounts:
+            - name: securitywiki-fs
+              mountPath: /data/securitywiki
+      volumes:
+        - name: securitywiki-fs
+          emptyDir: {}
+---
+# Source: securitywiki/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: securitywiki
+  labels:
+    helm.sh/chart: securitywiki-1.0.1
+    app.kubernetes.io/name: securitywiki
+    app.kubernetes.io/instance: securitywiki
+    app.kubernetes.io/managed-by: Helm
+spec:
+  maxReplicas: 4
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: securitywiki
+  targetCPUUtilizationPercentage: 80
+---
+# Source: securitywiki/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: securitywiki
+  annotations:
+    cert-manager.io/issuer: letsencrypt
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: SAMEORIGIN";
+      more_set_headers "Content-Security-Policy: frame-ancestors 'none'";
+  labels:
+    helm.sh/chart: securitywiki-1.0.1
+    app.kubernetes.io/name: securitywiki
+    app.kubernetes.io/instance: securitywiki
+    app.kubernetes.io/managed-by: Helm
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: "securitywiki.allizom.org"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: securitywiki
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - "securitywiki.allizom.org"
+      secretName: chart-securitywiki-allizom-org
+---
+# Source: securitywiki/templates/issuer.yaml
+apiVersion: cert-manager.io/v1 #PM: Commented: alpha2
+kind: Issuer
+metadata:
+  name: letsencrypt
+  labels: #PM: Added
+    helm.sh/chart: securitywiki-1.0.1
+    app.kubernetes.io/name: securitywiki
+    app.kubernetes.io/instance: securitywiki
+    app.kubernetes.io/managed-by: Helm
+spec:
+  acme:
+    email: it-se@mozilla.com
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt
+    solvers:
+      - http01:
+          ingress:
+            class: nginx

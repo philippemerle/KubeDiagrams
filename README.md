@@ -81,6 +81,7 @@ Many other architecture diagrams are available into [examples/](https://github.c
 ### Kubernetes Operators
 
 1. [Argo](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/)
+1. [cert-manager](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cert-manager/)
 1. [Istio](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/istio/)
 1. [Kube Prometheus Stack](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/)
 1. [LeaderWorkerSet API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/)
@@ -438,6 +439,9 @@ Following lists some custom resources already supported in [examples](https://gi
 |           `PrometheusRule`           |    `monitoring.coreos.com`    |        `v1`         |                  ![PrometheusRule](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/kube-prometheus-stack/icons/PrometheusRule.png)                  |
 |           `ServiceMonitor`           |    `monitoring.coreos.com`    |        `v1`         |                  ![ServiceMonitor](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/kube-prometheus-stack/icons/ServiceMonitor.png)                  |
 |           `LeaderWorkerSet`           |    `leaderworkerset.x-k8s.io`    |        `v1`         |                  ![LeaderWorkerSet](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/lws/icons/lws.png)                  |
+|           `Certificate`           |    `cert-manager.io`    |    `v1alpha1` `v1alpha2` `v1`    |                  ![Certificate](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/azure/web/app-service-certificates.png)                  |
+|           `ClusterIssuer`           |    `cert-manager.io`    |    `v1alpha1` `v1alpha2` `v1`    |                  ![ClusterIssuer](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/aws/security/certificate-authority.png)                  |
+|           `Issuer`           |    `cert-manager.io`    |    `v1alpha1` `v1alpha2` `v1`    |                  ![Issuer](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/aws/security/certificate-authority.png)                  |
 
 ### Kubernetes resources clustering
 

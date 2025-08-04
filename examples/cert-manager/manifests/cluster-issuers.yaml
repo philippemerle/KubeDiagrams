@@ -1,0 +1,49 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cluster-issuer-ca
+spec:
+  ca:
+    secretName: secret-cluster-issuer-ca
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cluster-issuer-acme
+spec:
+  acme:
+    privateKeySecretRef:
+      name: secret-cluster-issuer-acme
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate-ca
+spec:
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cluster-issuer-ca
+  secretName: secret-certificate-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate-acme
+spec:
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cluster-issuer-acme
+  secretName: secret-certificate-acme
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-ca
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-issuer-ca
+spec:
+  tls:
+    - secretName: secret-ingress-ca
