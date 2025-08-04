@@ -189,6 +189,12 @@ class Resource(dict):
         dict.__init__(self, data)
         self.filename = fn
 
+    def get_metadata_annotation(self, key):
+        """
+            Get a metadata annotation.
+        """
+        return query_path(self, "metadata.annotations", {}).get(key)
+
 def get_type(resource):
     """
         Get the type of a Kubernetes resource, i.e., "kind/apiVersion".
