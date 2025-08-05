@@ -839,16 +839,23 @@ class EdgesContext(list):
             selector = query_path(self.resource, path, default_selector)
             if selector is None:
                 return
-        build_in_workload_resources = {
-            "Pod": "metadata.labels",
-            "PodTemplate": "template.metadata.labels",
-            "Deployment": "spec.template.metadata.labels",
-            "ReplicaSet": "spec.template.metadata.labels",
-            "ReplicationController": "spec.template.metadata.labels",
-            "StatefulSet": "spec.template.metadata.labels",
-            "DaemonSet": "spec.template.metadata.labels",
-            "Job": "spec.template.metadata.labels",
-        }
+        if query_path(self.resource, "metadata.uid") is not None:
+            # If the resource is deployed then binds it to pods only.
+            build_in_workload_resources = {
+                "Pod": "metadata.labels",
+            }
+        else:
+            # If the resource is not deployed then binds it to workloads or pods.
+            build_in_workload_resources = {
+                "Deployment": "spec.template.metadata.labels",
+                "ReplicaSet": "spec.template.metadata.labels",
+                "ReplicationController": "spec.template.metadata.labels",
+                "StatefulSet": "spec.template.metadata.labels",
+                "DaemonSet": "spec.template.metadata.labels",
+                "Job": "spec.template.metadata.labels",
+                "PodTemplate": "template.metadata.labels",
+                "Pod": "metadata.labels",
+            }
         resource_not_found = True
         for kind, label in build_in_workload_resources.items():
             if self.add_all_resources_matching_labels(
