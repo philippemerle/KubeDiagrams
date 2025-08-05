@@ -271,6 +271,7 @@ nodes:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.network.Ing
     edges: |
+      edges.add_service("spec.defaultBackend.service.name")
       for ridx, rule in enumerate(query_path(resource, "spec.rules", [])):
         for pidx, path in enumerate(query_path(rule, "http.paths", [])):
           edges.add_service("backend.service.name", path)

@@ -217,6 +217,7 @@ nodes:
           warning(resource, "metadata.annotations.cert-manager.io/issuer", f"Create {node}")
           nodes.append(node)
     edges: |
+      edges.add_service("spec.defaultBackend.service.name")
       for ridx, rule in enumerate(query_path(resource, "spec.rules", [])):
         for pidx, path in enumerate(query_path(rule, "http.paths", [])):
           edges.add_service("backend.service.name", path)
