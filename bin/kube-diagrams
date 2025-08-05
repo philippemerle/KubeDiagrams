@@ -951,6 +951,8 @@ class EdgesContext(list):
             Add edges to rules resourceNames.
         """
         for ridx, rule in enumerate(query_path(self.resource, "rules", [])):
+            if not isinstance(rule, dict):
+                continue # skip this rule as it is not a dict as expected
             resource_names = query_path(rule, "resourceNames")
             if resource_names is None:
                 continue # skip this rule as no resourceNames
@@ -971,6 +973,8 @@ class EdgesContext(list):
                     continue # skip subresources
                 kind = PLURAL2KINDS.get(resource, resource)
                 for rnidx, resource_name in enumerate(resource_names):
+                    if not isinstance(resource_name, str):
+                        continue # skip it as a string is expected
                     if '*' in resource_name:
                         continue # skip it
                     scope = config["nodes"].get(f"{kind}/{api_version}", {}).get("scope")
@@ -999,6 +1003,8 @@ def create_node_for_role_rules_resource_names(role, nodes):
         Create nodes for rules resourceNames.
     """
     for ridx, rule in enumerate(query_path(role, "rules", [])):
+        if not isinstance(rule, dict):
+            continue # skip this rule as it is not a dict as expected
         resource_names = query_path(rule, "resourceNames")
         if resource_names is None:
             continue # skip this rule as no resourceNames
@@ -1022,6 +1028,8 @@ def create_node_for_role_rules_resource_names(role, nodes):
             if resource_kind is None:
                 continue # skip it
             for rnidx, resource_name in enumerate(resource_names):
+                if not isinstance(resource_name, str):
+                    continue # skip it as a string is expected
                 if '*' in resource_name:
                     continue # skip it
                 resource_id = f"{resource_name}/{get_namespace(role)}/{resource_kind}/{api_version}"
