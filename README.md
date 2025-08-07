@@ -579,6 +579,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [KubeDiagrams 0.5.0 is out!](https://www.reddit.com/r/kubernetes/comments/1mj1lo8/kubediagrams_050_is_out/), Reddit, August 7, 2025. Announce also available [here](https://www.reddit.com/r/devops/comments/1mj1t4p/kubediagrams_050_is_out/).
+
 1. [Python Hub's post](https://x.com/PythonHub/status/1948688533952082043) on X, July 25, 2025.
 
 1. [Alain AIROM's post](https://www.linkedin.com/feed/update/urn:li:activity:7352351521562337280/) on LinkedIn, July 19, 2025.
