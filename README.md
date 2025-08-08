@@ -455,9 +455,10 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 |            `chart`            |      Chart: `label value`      | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-EBF3E7) | No |
 |   `app.kubernetes.io/name`    | K8s Application: `label value` | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-ECE8F6) | Yes |
 |             `app`             |   Application: `label value`   | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-ECE8F6) | No |
+|            `tier`             |      Tier: `label value`       | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-ECE8F6) | No |
 | `app.kubernetes.io/component` |  K8s Component: `label value`  | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | Yes |
+| `component`                   |  Component: `label value`      | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
 |           `service`           |  Microservice: `label value`   | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
-|            `tier`             |      Tier: `label value`       | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-FDF7E3) | No |
 
 Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L77) file.
 

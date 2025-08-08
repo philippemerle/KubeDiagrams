@@ -59,18 +59,23 @@ clusters:
     recommended: false
     graph_attr:
       bgcolor: "#ECE8F6"
+  - label: tier
+    title: Tier
+    recommended: false
+    graph_attr:
+      bgcolor: "#ECE8F6"
   - label: app.kubernetes.io/component
     title: K8s Component
     recommended: true
     graph_attr:
       bgcolor: "#FDF7E3"
-  - label: service
-    title: Microservice
+  - label: component
+    title: Component
     recommended: false
     graph_attr:
       bgcolor: "#FDF7E3"
-  - label: tier
-    title: Tier
+  - label: service
+    title: Microservice
     recommended: false
     graph_attr:
       bgcolor: "#FDF7E3"
