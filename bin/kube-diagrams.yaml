@@ -236,7 +236,7 @@ nodes:
               edges.add_edge_to(
                 f"subsets[{sidx}].addresses[{aidx}].targetRef",
                 target["name"],
-                target["namespace"],
+                target.get("namespace"),
                 target["kind"],
                 "v1",
                 "REFERENCE"
