@@ -1204,14 +1204,7 @@ def process_resource(resource):
                 labels = query_path(resource, "metadata.labels")
                 if isinstance(labels, dict) and label in labels:
                     cluster_config_title = cluster_config['title']
-                    if cluster_config_title.find("{") == -1:
-                        metadata_label_value = labels[label]
-                        if metadata_label_value is not None:
-                            cluster_name = f"{cluster_config_title}: {metadata_label_value}"
-                        else:
-                            cluster_name = cluster_config_title
-                    else:
-                        cluster_name = cluster_config_title.format(labels[label])
+                    cluster_name = cluster_config_title.format(labels[label])
                     cluster = cluster.get_or_create_cluster(cluster_name)
                     cluster.graph_attr.update(cluster_config.get("graph_attr", {}))
                     cluster_configs.remove(cluster_config)

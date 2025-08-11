@@ -1,6 +1,6 @@
 # Configuration of kube-diagrams
 clusters:
   - label: k8s-app
-    title: K8s Application
+    title: "K8s Application: {}"
   - label: kubernetes.io/bootstrapping
-    title: K8s Bootstrapping
+    title: "K8s Bootstrapping: {}"

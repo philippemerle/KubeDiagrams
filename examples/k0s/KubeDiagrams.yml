@@ -4,9 +4,9 @@ edges:
     color: black # this is red by default
 clusters:
   - label: k0s.k0sproject.io/stack
-    title: K0s Stack
+    title: "K0s Stack: {}"
   - label: kubernetes.io/bootstrapping
-    title: K0s Bootstrapping
+    title: "K0s Bootstrapping: {}"
 nodes:
   Chart/helm.k0sproject.io/v1beta1:
     scope: Namespaced

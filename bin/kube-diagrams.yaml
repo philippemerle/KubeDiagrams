@@ -30,52 +30,52 @@ edges:
     direction: up
 clusters:
   - label: app.kubernetes.io/instance
-    title: K8s Instance
+    title: "K8s Instance: {}"
     recommended: true
     graph_attr:
       bgcolor: "#E5F5FD"
   - label: release
-    title: Release
+    title: "Release: {}"
     recommended: false
     graph_attr:
       bgcolor: "#E5F5FD"
   - label: helm.sh/chart
-    title: Helm Chart
+    title: "Helm Chart: {}"
     recommended: true
     graph_attr:
       bgcolor: "#EBF3E7"
   - label: chart
-    title: Chart
+    title: "Chart: {}"
     recommended: false
     graph_attr:
       bgcolor: "#EBF3E7"
   - label: app.kubernetes.io/name
-    title: K8s Application
+    title: "K8s Application: {}"
     recommended: true
     graph_attr:
       bgcolor: "#ECE8F6"
   - label: app
-    title: Application
+    title: "Application: {}"
     recommended: false
     graph_attr:
       bgcolor: "#ECE8F6"
   - label: tier
-    title: Tier
+    title: "Tier: {}"
     recommended: false
     graph_attr:
       bgcolor: "#ECE8F6"
   - label: app.kubernetes.io/component
-    title: K8s Component
+    title: "K8s Component: {}"
     recommended: true
     graph_attr:
       bgcolor: "#FDF7E3"
   - label: component
-    title: Component
+    title: "Component: {}"
     recommended: false
     graph_attr:
       bgcolor: "#FDF7E3"
   - label: service
-    title: Microservice
+    title: "Microservice: {}"
     recommended: false
     graph_attr:
       bgcolor: "#FDF7E3"

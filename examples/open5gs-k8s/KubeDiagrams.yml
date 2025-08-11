@@ -1,6 +1,6 @@
 # Configuration of kube-diagrams
 clusters:
   - label: nf
-    title: Network Function
+    title: "Network Function: {}"
   - label: name
-    title: Name
+    title: "Name: {}"
