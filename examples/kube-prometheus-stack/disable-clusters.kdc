@@ -1,0 +1,24 @@
+# Disable KubeDiagrams clusters
+clusters:
+- label: app.kubernetes.io/instance
+  show: false
+- label: release
+  show: false
+- label: helm.sh/chart
+  show: false
+- label: chart
+  show: false
+- label: app.kubernetes.io/name
+  show: false
+- label: app
+  show: false
+- label: tier
+  show: false
+- label: app.kubernetes.io/component
+  show: false
+- label: component
+  show: false
+- label: service
+  show: false
+- annotation: helm.sh/hook
+  show: false
