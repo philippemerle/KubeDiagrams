@@ -1,5 +1,34 @@
 # Configuration of kube-diagrams
-# no specific clusters
+clusters:
+  - label: grafana_dashboard
+    title: Grafana Dashboard
+    recommended: false
+    graph_attr:
+      bgcolor: tomato
+  - label: grafana_datasource
+    title: Grafana Data Source
+    recommended: false
+    graph_attr:
+      bgcolor: tomato
+diagram: # Customization of generated diagrams
+  edges: # Add following custom edges
+    - description: The Grafana test pod calls the Grafana service to test it
+      from: kube-prometheus-stack-grafana-test/default/Pod/v1
+      to: kube-prometheus-stack-grafana/default/Service/v1
+      color: brown
+      xlabel: test
+    - description: The patch job updates the validating webhook configuration
+      from: kube-prometheus-stack-admission-patch/default/Job/batch/v1
+      to: kube-prometheus-stack-admission/ValidatingWebhookConfiguration/admissionregistration.k8s.io/v1
+      color: black
+      taillabel: update
+      style: dotted
+    - description: The patch job updates the mutating webhook configuration
+      from: kube-prometheus-stack-admission-patch/default/Job/batch/v1
+      to: kube-prometheus-stack-admission/MutatingWebhookConfiguration/admissionregistration.k8s.io/v1
+      color: black
+      taillabel: update
+      style: dotted
 nodes:
   # Prometheus resources
   Alertmanager/monitoring.coreos.com/v1:
@@ -22,14 +51,16 @@ nodes:
               ),
               "REFERENCE"
           ])
-      edges.add_all_resources_matching_labels("ServiceMonitor", "spec.serviceMonitorSelector.matchLabels")
+      if not edges.add_all_resources_matching_labels("ServiceMonitor", "spec.serviceMonitorSelector.matchLabels"):
+        edges.warning("spec.serviceMonitorSelector.matchLabels", f"No service monitor matches metadata labels {query_path(resource, 'spec.serviceMonitorSelector.matchLabels')}")
       #TODO: spec.serviceMonitorNamespaceSelector
       #TODO: spec.podMonitorSelector
       #TODO: spec.podMonitorNamespaceSelector
       #TODO: spec.probeSelector
       #TODO: spec.probeNamespaceSelector
       #TODO: spec.ruleNamespaceSelector
-      edges.add_all_resources_matching_labels("PrometheusRule", "spec.ruleSelector.matchLabels")
+      if not edges.add_all_resources_matching_labels("PrometheusRule", "spec.ruleSelector.matchLabels"):
+        edges.warning("spec.ruleSelector.matchLabels", f"No Prometheus rule matches metadata labels {query_path(resource, 'spec.ruleSelector.matchLabels')}")
       #TODO: spec.scrapeConfigSelector
       #TODO: spec.scrapeConfigNamespaceSelector
   PrometheusRule/monitoring.coreos.com/v1:
@@ -40,5 +71,6 @@ nodes:
     scope: Namespaced
     custom_icon: icons/ServiceMonitor.png
     edges: |
-      edges.add_all_resources_matching_labels("Service", "spec.selector.matchLabels")
+      if not edges.add_all_resources_matching_labels("Service", "spec.selector.matchLabels"):
+        edges.warning("spec.selector.matchLabels", f"No service matches metadata labels {query_path(resource, 'spec.selector.matchLabels')}")
       #TODO: spec.namespaceSelector
