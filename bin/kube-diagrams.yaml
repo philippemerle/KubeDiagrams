@@ -79,6 +79,21 @@ clusters:
     recommended: false
     graph_attr:
       bgcolor: "#FDF7E3"
+  - label: rbac.authorization.k8s.io/aggregate-to-admin
+    title: "Admin ClusterRole Aggregation"
+    recommended: true
+    graph_attr:
+      bgcolor: transparent
+  - label: rbac.authorization.k8s.io/aggregate-to-edit
+    title: "Edit ClusterRole Aggregation"
+    recommended: true
+    graph_attr:
+      bgcolor: transparent
+  - label: rbac.authorization.k8s.io/aggregate-to-view
+    title: "View ClusterRole Aggregation"
+    recommended: true
+    graph_attr:
+      bgcolor: transparent
   - annotation: helm.sh/hook
     title: "{}"
     recommended: true
