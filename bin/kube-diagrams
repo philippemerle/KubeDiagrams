@@ -1068,7 +1068,7 @@ parser.add_argument("-f", "--format", type=str,
 parser.add_argument("--embed-all-icons",
     help="embed all icons into svg or dot_json output diagrams",
     action="store_true", default=False)
-parser.add_argument("-c", "--config", type=str,
+parser.add_argument("-c", "--config", type=str, action="append",
     help="custom kube-diagrams configuration file")
 parser.add_argument("-n", "--namespace", type=str,
     help="visualize only the resources inside a given namespace")
@@ -1099,44 +1099,45 @@ if args.embed_all_icons and args.format not in ('svg', 'dot_json'):
     print("Warning: --embed-all-icons only works with svg or dot_json output format!")
 
 if args.config is not None:
-    with open(args.config, encoding="utf-8") as f:
-        custom_config = yaml.safe_load(f) # load custom config file
-        if custom_config: # not empty file
-            if "default_namespace" in custom_config:
-                config["default_namespace"] = custom_config["default_namespace"]
-            if custom_config.get("edges"):
-                config["edges"].update(custom_config["edges"])
-            if custom_config.get("clusters"):
-                for cluster_custom_config in custom_config["clusters"]:
-                    if "label" in cluster_custom_config:
-                        cluster_label = cluster_custom_config["label"]
-                        for config_cluster in config["clusters"]:
-                            if config_cluster.get("label") == cluster_label:
-                                config_cluster.update(cluster_custom_config)
-                                cluster_label = None
-                                break
-                        if cluster_label is not None:
-                            config["clusters"].append(cluster_custom_config)
-                    elif "annotation" in cluster_custom_config:
-                        cluster_annotation = cluster_custom_config["annotation"]
-                        for config_cluster in config["clusters"]:
-                            if config_cluster.get("annotation") == cluster_annotation:
-                                config_cluster.update(cluster_custom_config)
-                                cluster_annotation = None
-                                break
-                        if cluster_annotation is not None:
-                            config["clusters"].append(cluster_custom_config)
-                    else:
-                        print("ISSUE on", cluster_custom_config)
-            if custom_config.get("nodes"):
-                for k, v in custom_config["nodes"].items():
-                    previous = config["nodes"].get(k)
-                    if previous is None:
-                        config["nodes"][k] = v
-                    else:
-                        previous.update(v)
-            if "diagram" in custom_config:
-                config["diagram"] = custom_config["diagram"]
+    for config_file in args.config:
+        with open(config_file, encoding="utf-8") as f:
+            custom_config = yaml.safe_load(f) # load custom config file
+            if custom_config: # not empty file
+                if "default_namespace" in custom_config:
+                    config["default_namespace"] = custom_config["default_namespace"]
+                if custom_config.get("edges"):
+                    config["edges"].update(custom_config["edges"])
+                if custom_config.get("clusters"):
+                    for cluster_custom_config in custom_config["clusters"]:
+                        if "label" in cluster_custom_config:
+                            cluster_label = cluster_custom_config["label"]
+                            for config_cluster in config["clusters"]:
+                                if config_cluster.get("label") == cluster_label:
+                                    config_cluster.update(cluster_custom_config)
+                                    cluster_label = None
+                                    break
+                            if cluster_label is not None:
+                                config["clusters"].append(cluster_custom_config)
+                        elif "annotation" in cluster_custom_config:
+                            cluster_annotation = cluster_custom_config["annotation"]
+                            for config_cluster in config["clusters"]:
+                                if config_cluster.get("annotation") == cluster_annotation:
+                                    config_cluster.update(cluster_custom_config)
+                                    cluster_annotation = None
+                                    break
+                            if cluster_annotation is not None:
+                                config["clusters"].append(cluster_custom_config)
+                        else:
+                            print("ISSUE on", cluster_custom_config)
+                if custom_config.get("nodes"):
+                    for k, v in custom_config["nodes"].items():
+                        previous = config["nodes"].get(k)
+                        if previous is None:
+                            config["nodes"][k] = v
+                        else:
+                            previous.update(v)
+                if "diagram" in custom_config:
+                    config["diagram"] = custom_config["diagram"]
 
 # Load the Kubernetes manifest file.
 resources = {} # a map of all resources
@@ -1396,12 +1397,12 @@ with Diagram("", filename=args.output, show=False, direction="TB", outformat=arg
         custom_edge_from = custom_edge.get("from")
         from_node = diagram_nodes.get(custom_edge_from)
         if from_node is None:
-            print(f"Warning: {args.config}:diagram.edges[{edge_idx}].from:"
+            print(f"Warning: diagram.edges[{edge_idx}].from:"
                     f" Node '{custom_edge_from}' undefined!")
         custom_edge_to = custom_edge.get("to")
         to_node = diagram_nodes.get(custom_edge_to)
         if to_node is None:
-            print(f"Warning: {args.config}:diagram.edges[{edge_idx}].to:"
+            print(f"Warning: diagram.edges[{edge_idx}].to:"
                     f" Node '{custom_edge_to}' undefined!")
         if from_node is not None and to_node is not None:
             edge_tooltip = f"from: {custom_edge_from}\nto: {custom_edge_to}"
