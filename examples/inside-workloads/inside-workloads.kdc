@@ -1,0 +1,270 @@
+clusters: # Node clustering
+- label: is_container
+  title: containers
+  graph_attr:
+    bgcolor: beige # transparent
+    pencolor: blue
+    style: dotted, rounded
+- label: is_init_container
+  title: initContainers
+  graph_attr:
+    bgcolor: beige # transparent
+    pencolor: blue
+    style: dotted, rounded
+- label: is_pod_volume
+  title: volumes
+  graph_attr:
+    bgcolor: beige # transparent
+    pencolor: red
+    style: dotted, rounded
+nodes: # Mapping from kind/apiVersion to visual nodes
+  Deployment/apps/v1:
+    nodes: |
+      # Create the ReplicaSet for this Deployment
+      nodes.append({
+        "kind": "ReplicaSet",
+        "apiVersion": "apps/v1",
+        "metadata": resource["metadata"], # same metadata
+        "spec": resource["spec"], # same spec
+      })
+    edges: |
+      # Create an edge from this Deployment to its ReplicaSet 
+      edges.add_edge_to(
+        "owner",
+        get_name(resource),
+        get_namespace(resource),
+        "ReplicaSet",
+        "apps/v1",
+        { # graphical attributes for this edge
+          "color": "gray",
+          "style": "dotted",
+          "xlabel": "has ReplicaSet"
+        }
+      )
+  ReplicaSet/apps/v1:
+    nodes: |
+      # Create the Pod for this ReplicaSet
+      nodes.append({
+        "kind": "Pod",
+        "apiVersion": "v1",
+        "metadata": {
+          **query_path(resource, "spec.template.metadata"),
+          "name": get_name(resource),
+        },
+        "spec": query_path(resource, "spec.template.spec"),
+      })
+    edges: |
+      # Create an edge from this ReplicaSet to its Pod
+      edges.add_edge_to(
+        "owner",
+        get_name(resource),
+        get_namespace(resource),
+        "Pod",
+        "v1",
+        { # graphical attributes for this edge
+          "color": "gray",
+          "style": "dotted",
+          "xlabel": "controls Pod"
+        }
+      )
+  Pod/v1:
+    nodes: |
+      # Create init containers for this Pod
+      for container in query_path(resource, "spec.initContainers", []):
+        nodes.append({
+          "kind": "Container",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": container.get("name"),
+            "namespace": get_namespace(resource),
+            "labels": {
+              **query_path(resource, "metadata.labels"),
+              "is_init_container": True
+            }
+          },
+          "spec": container,
+        })
+      # Create containers for this Pod
+      for container in query_path(resource, "spec.containers", []):
+        nodes.append({
+          "kind": "Container",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": container.get("name"),
+            "namespace": get_namespace(resource),
+            "labels": {
+              **query_path(resource, "metadata.labels"),
+              "is_container": True
+            }
+          },
+          "spec": container,
+        })
+      # Create volumes for this Pod
+      for volume in query_path(resource, "spec.volumes", []):
+        nodes.append({
+          "kind": "PodVolume",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": volume.get("name"),
+            "namespace": get_namespace(resource),
+            "labels": {
+              **query_path(resource, "metadata.labels"),
+              "is_pod_volume": True
+            }
+          },
+          "spec": volume,
+        })
+    edges: |
+      # Create an edge from this Pod to its ServiceAccount
+      edges.add_service_account("spec")
+      # Create edges from this Pod to its init containers
+      for container in query_path(resource, "spec.initContainers", []):
+        edges.add_edge_to(
+          "owner",
+          container.get("name"),
+          get_namespace(resource),
+          "Container",
+          "v1",
+          {
+            "color": "blue",
+            "style": "dotted",
+            # "xlabel": "has InitContainer"
+          }
+        )
+      # Create edges from this Pod to its containers
+      for container in query_path(resource, "spec.containers", []):
+        edges.add_edge_to(
+          "owner",
+          container.get("name"),
+          get_namespace(resource),
+          "Container",
+          "v1",
+          {
+            "color": "blue",
+            "style": "dotted",
+            # "xlabel": "has Container"
+          }
+        )
+      # Create edges from this Pod to its volumes
+      for volume in query_path(resource, "spec.volumes", []):
+        edges.add_edge_to(
+          "owner",
+          volume.get("name"),
+          get_namespace(resource),
+          "PodVolume",
+          "v1",
+          {
+            "color": "red",
+            "style": "dotted",
+            # "xlabel": "has Volume"
+          }
+        )
+  Container/v1:
+    # Containers are namescaped
+    scope: Namespaced
+    # Associate a custom icon to Container nodes
+    custom_icon: $KD/icons/container.png
+    edges: |
+      # Create edges from this Pod to both ConfigMap and Secret referenced by environment variables
+      for env in query_path(resource, "spec.env", []):
+        edges.add_edge_to(
+          None,
+          query_path(env, "valueFrom.configMapKeyRef.name"),
+          get_namespace(resource),
+          "ConfigMap",
+          "v1",
+          {
+            "color": "black",
+            # "xlabel": "Uses ConfigMap"
+          }
+        )
+        edges.add_edge_to(
+          None,
+          query_path(env, "valueFrom.secretKeyRef.name"),
+          get_namespace(resource),
+          "Secret",
+          "v1",
+          {
+            "color": "black",
+            # "xlabel": "uses Secret"
+          }
+        )
+      # Create edges from this Pod to both ConfigMap and Secret referenced by envFrom
+      for envFrom in query_path(resource, "spec.envFrom", []):
+        edges.add_edge_to(
+          None,
+          query_path(envFrom, "configMapRef.name"),
+          get_namespace(resource),
+          "ConfigMap",
+          "v1",
+          {
+            "color": "black",
+            # "xlabel": "Uses ConfigMap"
+          }
+        )
+        edges.add_edge_to(
+          None,
+          query_path(envFrom, "secretRef.name"),
+          get_namespace(resource),
+          "Secret",
+          "v1",
+          {
+            "color": "black",
+            # "xlabel": "uses Secret"
+          }
+        )
+      # Create edges from this Pod to mounted pod volumes
+      for volumeMount in query_path(resource, "spec.volumeMounts", []):
+        edges.add_edge_to(
+          None,
+          volumeMount.get("name"),
+          get_namespace(resource),
+          "PodVolume",
+          "v1",
+          {
+            "color": "red",
+            # "xlabel": "mounts Volume"
+          }
+        )
+  PodVolume/v1:
+    # Pod volumes are namescaped
+    scope: Namespaced
+    # Associate a diagrams icon class to PodVolume nodes
+    diagram_node_classname: diagrams.k8s.storage.Volume
+    edges: |
+      # Create an edge from this PodVolume to a referenced ConfigMap
+      edges.add_edge_to(
+        f"spec.configMap.name",
+        ".",
+        edges.namespace,
+        "ConfigMap",
+        "v1",
+        {
+          "color": "black",
+          # "xlabel": "uses ConfigMap"
+        }
+      )
+      # Create an edge from this PodVolume to a referenced Secret
+      edges.add_edge_to(
+        f"spec.secret.secretName",
+        ".",
+        edges.namespace,
+        "Secret",
+        "v1",
+        {
+          "color": "black",
+          # "xlabel": "uses Secret"
+        }
+      )
+      # Create an edge from this PodVolume to a referenced PersistentVolumeClaim
+      edges.add_edge_to(
+        f"spec.persistentVolumeClaim.claimName",
+        ".",
+        edges.namespace,
+        "PersistentVolumeClaim",
+        "v1",
+        {
+          "color": "black",
+          # "xlabel": "uses PVC"
+        }
+      )

@@ -1,0 +1,422 @@
+---
+# Source: hpa/templates/hpa.yaml
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: demo1
+spec:
+  maxReplicas: 1
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: demo1
+  targetCPUUtilizationPercentage: 80
+---
+# Source: demo-srv/templates/service-tcp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo1-srv-tcp
+  labels:
+     app: demo1
+     monitored: prometheus
+spec:
+  type: LoadBalancer
+  externalIPs:
+   - "x.x.x.x"
+  ports:
+   - name: demo1ext1
+     port: 21101
+     protocol: TCP
+     targetPort: 21101
+   - name: demo1ext4
+     port: 21104
+     protocol: TCP
+     targetPort: 21104
+   - name: demo1ext7
+     port: 21107
+     protocol: TCP
+     targetPort: 21107
+   - name: demo1ext9
+     port: 21109
+     protocol: TCP
+     targetPort: 21109
+   - name: demo1ext12
+     port: 21112
+     protocol: TCP
+     targetPort: 21112
+   - name: tools-node-exporter-port
+     port: 21113
+     protocol: TCP
+     targetPort: 21113
+  selector:
+    app: demo1
+---
+# Source: demo-srv/templates/service-udp.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo1-srv-udp
+  labels:
+     app: demo1
+spec:
+  type: LoadBalancer
+  externalIPs:
+   - "x.x.x.x"
+  ports:
+   - name: demo1ext2
+     port: 21102
+     protocol: UDP
+     targetPort: 21102
+   - name: demo1ext3
+     port: 21103
+     protocol: UDP
+     targetPort: 21103
+   - name: demo1ext5
+     port: 21105
+     protocol: UDP
+     targetPort: 21105
+   - name: demo1ext6
+     port: 21106
+     protocol: UDP
+     targetPort: 21106
+   - name: demo1ext8
+     port: 21108
+     protocol: UDP
+     targetPort: 21108
+   - name: demo1ext10
+     port: 21110
+     protocol: UDP
+     targetPort: 21110
+   - name: demo1ext11
+     port: 21111
+     protocol: UDP
+     targetPort: 21111
+  selector:
+    app: demo1
+---
+# Source: demo/templates/secret-demo-cpp-ssl.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: demo1-demo-cpp-ssl-config
+type: Opaque
+data:
+  ra-anchors.pem: |-
+    LS0
+  es_private.key: |-
+    LS0tL
+  es_public.crt: |-
+    LS0tLS1
+---
+# Source: demo/templates/secret-postgress-client-ssl.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: demo1-postgres-client-ssl-config
+type: Opaque
+data:
+  keystore_key.key: |-
+    LS0tL
+  root.crt: |-
+     LS0tLS1
+  cert-chain.pem: |-
+     LS0tLS1CRU
+---
+# Source: demo/templates/secret_ssh.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: demo1-sshsecret
+data:
+  id_rsa: |-
+    LS0t
+---
+# Source: demo/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo1
+  labels:
+    app: demo1
+    demo-ind: "yes"
+    app.kubernetes.io/part-of: XX
+    app.x.com/domain: DEMO
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: demo1
+  template:
+    metadata:
+       labels:
+         app: demo1
+         demo-ind: "yes"
+    spec:
+      serviceAccountName: tcserviceaccount
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            demo-ind: "yes"
+      initContainers:
+      - name: demo1-custom
+        image: "x:5001/centos/app/64og/demo/cust:2200G"
+        command: [ 'sh', '-c', '[[ -d /opt/x/abp ]] && cp -r /opt/x/abp/* /opt/x/custom/ || exit 0' ]
+        volumeMounts:
+        - mountPath: /opt/x/custom/
+          name: custom-volume
+      - name: demo1-init
+        image: "x:5001/centos/app/64og/demo/run_debug:x_"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DATABASE_TYPE
+          value: "PG"
+        - name: SHARED_PBIN_PATH
+          value: "/nfs-pv-var6/xpi1/SHARED_PBIN"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        envFrom:
+        - secretRef:
+              name: env-secrets
+        command: ["/opt/x/abp/core/bin/uid_entrypoint"]
+        args:
+         - /opt/x/abp/core/bin/initContainer.Sh
+
+        volumeMounts:
+        - name: ssh-volume
+          mountPath: /home/x/.ssh
+          readOnly: true
+        - mountPath: /nfs-pv-var6
+          name: var-nfs
+        - name: local-var-dir-volume
+          mountPath: /home/x/local-var/
+        - name: mmf-tmpfs-dir-volume
+          mountPath: /home/x/mmf-tmpfs-dir/
+        - mountPath: /home/x/GemFire
+          name: gemfire-dir-volume
+        - mountPath: /home/x/pbin/
+          name: pbin-dir-volume
+        - name: tns-volume
+          mountPath:  /etc/tnsnames.ora
+          subPath: tnsnames.ora
+        - name: consul-agent-config-volume
+          mountPath: /home/x/.config/x/centralconfiguration/
+        - name: consul-ccutil-config-volume
+          mountPath: /home/x/.config/ccutils/
+        - name: custom-volume
+          mountPath: /opt/x/custom/
+      containers:
+      - name: "demo-agent"
+        image: "x:5001/centos/app/64og/demo_agent/run_debug:x_PG"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DATABASE_TYPE
+          value: "PG"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        command: ["/opt/x/abp/core/bin/uid_entrypoint"]
+        args:
+          - /opt/x/abp/core/bin/startAgent.Sh
+        livenessProbe:
+          exec:
+            command: [ "/opt/x/abp/core/bin/livenessProbe.sh" ]
+          initialDelaySeconds: 300
+          failureThreshold: 1
+          timeoutSeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+        readinessProbe:
+          exec:
+            command: [ "/opt/x/abp/core/bin/readinessProbe.sh" ]
+          periodSeconds: 1
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /opt/x/abp/core/bin/endAgent.Sh
+        volumeMounts:
+        - name: ssh-volume
+          mountPath: /home/x/.ssh
+          readOnly: true
+        - mountPath: /nfs-pv-var6
+          name: var-nfs
+        - name: local-var-dir-volume
+          mountPath: /home/x/local-var/
+        - mountPath: /home/x/GemFire
+          name: gemfire-dir-volume
+        - mountPath: /home/x/pbin/
+          name: pbin-dir-volume
+        - name: tns-volume
+          mountPath:  /etc/tnsnames.ora
+          subPath: tnsnames.ora
+        - name: consul-agent-config-volume
+          mountPath: /home/x/.config/x/centralconfiguration/
+        - name: consul-ccutil-config-volume
+          mountPath: /home/x/.config/ccutils/
+        - name: mmf-tmpfs-dir-volume
+          mountPath: /home/x/mmf-tmpfs-dir/
+      - name: demo1
+        image: "x:5001/centos/app/64og/demo/run_debug:x_PG"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DATABASE_TYPE
+          value: "PG"
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        envFrom:
+        - secretRef:
+              name: env-secrets
+        command: ["/opt/x/abp/core/bin/uid_entrypoint"]
+        args:
+          - /opt/x/abp/core/bin/startFU.Sh
+        livenessProbe:
+          exec:
+            command: [ "/opt/x/abp/core/bin/livenessProbe.sh" ]
+          initialDelaySeconds: 300
+          failureThreshold: 1
+          timeoutSeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+        readinessProbe:
+          exec:
+            command: [ "/opt/x/abp/core/bin/readinessProbe.sh" ]
+          periodSeconds: 1
+        volumeMounts:
+        - name: ssh-volume
+          mountPath: /home/x/.ssh
+          readOnly: true
+        - mountPath: /nfs-pv-var6
+          name: var-nfs
+        - name: mmf-tmpfs-dir-volume
+          mountPath: /home/x/mmf-tmpfs-dir/
+        - name: local-var-dir-volume
+          mountPath: /home/x/local-var/
+      - name: tools
+        image: "x:5001/centos/app/64og/demo/run_debug:x_PG"
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: DATABASE_TYPE
+          value: "PG"
+        command: ["/opt/x/abp/core/bin/uid_entrypoint"]
+        args:
+          - /opt/x/abp/core/bin/startTools.Sh
+        livenessProbe:
+          exec:
+            command: [ "/opt/x/abp/core/bin/livenessProbeTools.sh" ]
+          initialDelaySeconds: 300
+          failureThreshold: 1
+          periodSeconds: 10
+          timeoutSeconds: 10
+          successThreshold: 1
+        volumeMounts:
+        - mountPath: /nfs-pv-var6
+          name: var-nfs
+        - name: local-var-dir-volume
+          mountPath: /home/x/local-var/
+        - name: mmf-tmpfs-dir-volume
+          mountPath: /home/x/mmf-tmpfs-dir/
+        - name: tns-volume
+          mountPath:  /etc/tnsnames.ora
+          subPath: tnsnames.ora
+        - name: consul-agent-config-volume
+          mountPath: /home/x/.config/x/centralconfiguration/
+        - name: consul-ccutil-config-volume
+          mountPath: /home/x/.config/ccutils/
+        - mountPath: /home/x/pbin/
+          name: pbin-dir-volume
+        - name: cleanup-rules
+          mountPath: /etc/cleanUpRules/
+      volumes:
+        - name: ssh-volume
+          secret:
+            secretName: demo1-sshsecret
+        - name: var-nfs
+          persistentVolumeClaim:
+           claimName: nfs-pvc-var6
+        - name: local-var-dir-volume
+          emptyDir: {}
+        - name: mmf-tmpfs-dir-volume
+          emptyDir:
+            medium: Memory
+        - name: gemfire-dir-volume
+          emptyDir: {}
+        - name: pbin-dir-volume
+          emptyDir: {}
+        - name: tns-volume
+          configMap:
+            name: tnsconfigmap
+        - name: consul-agent-config-volume
+          configMap:
+             name: consul-agent-config
+        - name: consul-ccutil-config-volume
+          configMap:
+             name: ccutil-config
+        - name: cleanup-rules
+          configMap:
+             name: cleanuprules
+        - name: custom-volume
+          emptyDir: {}
+      terminationGracePeriodSeconds: 30
+---
+# PM: Added missed resources
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: tcserviceaccount
+  labels:
+    app: demo1
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: env-secrets
+  labels:
+    app: demo1
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: nfs-pvc-var6
+  labels:
+    app: demo1
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: tnsconfigmap
+  labels:
+    app: demo1
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: consul-agent-config
+  labels:
+    app: demo1
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ccutil-config
+  labels:
+    app: demo1
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: cleanuprules
+  labels:
+    app: demo1

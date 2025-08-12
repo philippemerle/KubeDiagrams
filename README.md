@@ -95,6 +95,7 @@ Many other architecture diagrams are available into [examples/](https://github.c
 
 1. [Some Helm charts](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helm-charts/)
 1. [helmfile](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/helmfile/)
+1. [Inside workloads](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/inside-workloads/)
 1. [Miscellaneous examples](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/miscellaneous/)
 
 ## Prerequisites
