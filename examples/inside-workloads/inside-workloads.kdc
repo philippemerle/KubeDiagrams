@@ -67,6 +67,61 @@ nodes: # Mapping from kind/apiVersion to visual nodes
           "xlabel": "controls Pod"
         }
       )
+  StatefulSet/apps/v1:
+    nodes: |
+      # Create the Pod for this StatefulSet
+      pod = {
+        "kind": "Pod",
+        "apiVersion": "v1",
+        "metadata": {
+          **query_path(resource, "spec.template.metadata"),
+          "name": get_name(resource),
+        },
+        "spec": query_path(resource, "spec.template.spec"),
+      }
+      pod_volumes = pod["spec"].get("volumes")
+      pod_volumes = list(pod_volumes) if pod_volumes is not None else []
+      pod["spec"]["volumes"] = pod_volumes
+      nodes.append(pod)
+      # Create PersistentVolumeClaim objects
+      namespace = resource["metadata"].get("namespace")
+      for vct in query_path(resource, "spec.volumeClaimTemplates", []):
+        pvc = {
+          "kind": "PersistentVolumeClaim",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": f"{get_name(vct)}-{get_name(resource)}",
+            "namespace": get_namespace(resource),
+            "labels": {
+              **query_path(resource, "metadata.labels", {}),
+              **query_path(vct, "metadata.labels", {})
+            }
+          },
+          "spec": query_path(vct, "spec")
+        }
+        nodes.append(pvc)
+        pod_volumes.append({
+          "name": get_name(vct),
+          "persistentVolumeClaim": {
+            "claimName": f"{get_name(vct)}-{get_name(resource)}"
+          }
+        })
+    edges: |
+      # Create an edge from this StatefulSet to its Service
+      edges.add_service("spec.serviceName")
+      # Create an edge from this StatefulSet to its Pod
+      edges.add_edge_to(
+        "owner",
+        get_name(resource),
+        get_namespace(resource),
+        "Pod",
+        "v1",
+        { # graphical attributes for this edge
+          "color": "gray",
+          "style": "dotted",
+          "xlabel": "controls Pod"
+        }
+      )
   Pod/v1:
     nodes: |
       # Create init containers for this Pod

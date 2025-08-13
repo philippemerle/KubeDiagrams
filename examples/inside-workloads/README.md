@@ -32,4 +32,8 @@ Following diagram shows the internal structure of the deployment of this demo ex
 
 This previous diagram shows that sometimes the internal structure of workloads can be strongly complex.
 
+Moreover, this could be interesting to see the internal structure of `StatefulSet` workloads like that of the [Cassandra example](../cassandra/)
+
+![Internal structure of the Cassandra example](diagrams/inside-cassandra.png)
+
 The **KubeDiagrams** configuration to show the internal structure of workloads is available in [inside-workloads.kdc](inside-workloads.kdc).
