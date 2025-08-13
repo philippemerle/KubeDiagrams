@@ -36,4 +36,14 @@ Moreover, this could be interesting to see the internal structure of `StatefulSe
 
 ![Internal structure of the Cassandra example](diagrams/inside-cassandra.png)
 
-The **KubeDiagrams** configuration to show the internal structure of workloads is available in [inside-workloads.kdc](inside-workloads.kdc).
+The **KubeDiagrams** configuration to show the internal structure of workloads is available in [inside-workloads.kdc](inside-workloads.kdc) and could be used as following:
+
+```sh
+kube-diagrams -c inside-workloads.kdc <your manifests>
+```
+
+or
+
+```sh
+helm-diagrams -c inside-workloads.kdc <URL of your Helm chart>
+```
