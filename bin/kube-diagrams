@@ -346,15 +346,16 @@ class EdgesContext(list):
         """
         error(self.resource, path, msg)
 
-    def add_edge(self, path, edge):
+    def add_edge(self, path, edge, data=None):
         """
             Add an edge.
         """
         edge_kind = edge[-1]
         if isinstance(edge_kind, str):
             edge_kind = dict(get_edge_config(edge_kind))
-        if "tooltip" not in edge_kind and path is not None:
-            data = query_path(self.resource, path)
+        if "tooltip" not in edge_kind:
+            if data is None and path is not None:
+                data = query_path(self.resource, path)
             if data is None:
                 tooltip = path
             else:
@@ -377,7 +378,7 @@ class EdgesContext(list):
             else:
                 self.warning(path, f"'{rid}' undefined")
 
-    def add_edge_to(self, path, name, namespace, kind, api_version, edge_kind):
+    def add_edge_to(self, path, name, namespace, kind, api_version, edge_kind, data=None):
         """
             Add an edge to a resource.
         """
@@ -393,7 +394,7 @@ class EdgesContext(list):
         else:
             rid = f"{name}/{kind}/{api_version}"
         if rid in resources:
-            self.add_edge(path, [rid, edge_kind])
+            self.add_edge(path, [rid, edge_kind], data)
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"{kind} '{name}' provided by Kubernetes cluster")

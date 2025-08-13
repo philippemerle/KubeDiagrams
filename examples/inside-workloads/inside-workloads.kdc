@@ -30,7 +30,7 @@ nodes: # Mapping from kind/apiVersion to visual nodes
     edges: |
       # Create an edge from this Deployment to its ReplicaSet 
       edges.add_edge_to(
-        "owner",
+        "owns",
         get_name(resource),
         get_namespace(resource),
         "ReplicaSet",
@@ -56,7 +56,7 @@ nodes: # Mapping from kind/apiVersion to visual nodes
     edges: |
       # Create an edge from this ReplicaSet to its Pod
       edges.add_edge_to(
-        "owner",
+        "owns",
         get_name(resource),
         get_namespace(resource),
         "Pod",
@@ -111,7 +111,7 @@ nodes: # Mapping from kind/apiVersion to visual nodes
       edges.add_service("spec.serviceName")
       # Create an edge from this StatefulSet to its Pod
       edges.add_edge_to(
-        "owner",
+        "owns",
         get_name(resource),
         get_namespace(resource),
         "Pod",
@@ -223,7 +223,7 @@ nodes: # Mapping from kind/apiVersion to visual nodes
       # Create edges from this Pod to both ConfigMap and Secret referenced by environment variables
       for eidx, env in enumerate(query_path(resource, "spec.env", [])):
         edges.add_edge_to(
-          f"spec.env[{eidx}].valueFrom.configMapKeyRef",
+          f"spec.env[{eidx}]",
           query_path(env, "valueFrom.configMapKeyRef.name"),
           get_namespace(resource),
           "ConfigMap",
@@ -231,10 +231,11 @@ nodes: # Mapping from kind/apiVersion to visual nodes
           {
             "color": "black",
             # "xlabel": "Uses ConfigMap"
-          }
+          },
+          data=env
         )
         edges.add_edge_to(
-          f"spec.env[{eidx}].valueFrom.secretKeyRef",
+          f"spec.env[{eidx}]",
           query_path(env, "valueFrom.secretKeyRef.name"),
           get_namespace(resource),
           "Secret",
@@ -242,12 +243,13 @@ nodes: # Mapping from kind/apiVersion to visual nodes
           {
             "color": "black",
             # "xlabel": "uses Secret"
-          }
+          },
+          data=env
         )
       # Create edges from this Pod to both ConfigMap and Secret referenced by envFrom
       for eidx, envFrom in enumerate(query_path(resource, "spec.envFrom", [])):
         edges.add_edge_to(
-          f"spec.envFrom[{eidx}].configMapRef",
+          f"spec.envFrom[{eidx}]",
           query_path(envFrom, "configMapRef.name"),
           get_namespace(resource),
           "ConfigMap",
@@ -255,10 +257,11 @@ nodes: # Mapping from kind/apiVersion to visual nodes
           {
             "color": "black",
             # "xlabel": "Uses ConfigMap"
-          }
+          },
+          data=envFrom
         )
         edges.add_edge_to(
-          f"spec.envFrom[{eidx}].secretRef",
+          f"spec.envFrom[{eidx}]",
           query_path(envFrom, "secretRef.name"),
           get_namespace(resource),
           "Secret",
@@ -266,7 +269,8 @@ nodes: # Mapping from kind/apiVersion to visual nodes
           {
             "color": "black",
             # "xlabel": "uses Secret"
-          }
+          },
+          data=envFrom
         )
       # Create edges from this Pod to mounted pod volumes
       for vidx, volumeMount in enumerate(query_path(resource, "spec.volumeMounts", [])):
@@ -279,7 +283,8 @@ nodes: # Mapping from kind/apiVersion to visual nodes
           {
             "color": "red",
             # "xlabel": "mounts Volume"
-          }
+          },
+          data=volumeMount
         )
   PodVolume/v1:
     # Pod volumes are namescaped
