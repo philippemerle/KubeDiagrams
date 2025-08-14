@@ -61,6 +61,7 @@ Many other architecture diagrams are available into [examples/](https://github.c
 
 ### Business Applications
 
+1. [Bank of Anthos](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/bank-of-anthos/)
 1. [DeathStarBench](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/deathstarbench/)
 1. [Official Kubernetes WordPress tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/wordpress/)
 1. [Official Kubernetes ZooKeeper tutorial](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/zookeeper/)

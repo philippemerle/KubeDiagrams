@@ -1,0 +1,13 @@
+clusters:
+  - label: app
+    show: false
+  - label: tier
+    show: false
+  - label: application
+    title: "Application: {}"
+    graph_attr:
+      bgcolor: "#ECE8F6"
+  - label: team
+    title: "Team: {}"
+    graph_attr:
+      bgcolor: "#EBF3E7"

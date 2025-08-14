@@ -1,0 +1,44 @@
+edges:
+  REFERENCE:
+    color: gray
+diagram:
+  edges:
+    - from: loadgenerator/default/Deployment/apps/v1
+      to: frontend/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: userservice/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: contacts/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: ledgerwriter/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: ledgerwriter/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: balancereader/default/Service/v1
+      color: brown
+    - from: frontend/default/Deployment/apps/v1
+      to: transactionhistory/default/Service/v1
+      color: brown
+    - from: userservice/default/Deployment/apps/v1
+      to: accounts-db/default/Service/v1
+      color: brown
+    - from: contacts/default/Deployment/apps/v1
+      to: accounts-db/default/Service/v1
+      color: brown
+    - from: ledgerwriter/default/Deployment/apps/v1
+      to: ledger-db/default/Service/v1
+      color: brown
+    - from: ledgerwriter/default/Deployment/apps/v1
+      to: balancereader/default/Service/v1
+      color: brown
+    - from: balancereader/default/Deployment/apps/v1
+      to: ledger-db/default/Service/v1
+      color: brown
+    - from: transactionhistory/default/Deployment/apps/v1
+      to: ledger-db/default/Service/v1
+      color: brown
