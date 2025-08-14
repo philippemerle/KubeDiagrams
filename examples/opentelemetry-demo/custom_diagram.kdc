@@ -1,0 +1,197 @@
+default_namespace: otel-demo
+clusters:
+  - label: app.kubernetes.io/instance
+    show: false
+  - label: app.kubernetes.io/name
+    graph_attr:
+      bgcolor: "#FDF7E3"
+  - label: app.kubernetes.io/component
+    show: false
+  - label: component
+    show: false
+nodes:
+  Namespace/v1:
+    show: false
+  ServiceAccount/v1:
+    show: false
+diagram:
+  edges: # custom edges
+    - from: accounting/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: accounting/otel-demo/Deployment/apps/v1
+      to: kafka/otel-demo/Service/v1
+      color: brown
+    - from: ad/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: ad/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: cart/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: cart/otel-demo/Deployment/apps/v1
+      to: valkey-cart/otel-demo/Service/v1
+      color: brown
+    - from: cart/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: cart/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: currency/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: email/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: payment/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: product-catalog/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: shipping/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: kafka/otel-demo/Service/v1
+      color: brown
+    - from: checkout/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: email/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: flagd/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: fraud-detection/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: fraud-detection/otel-demo/Deployment/apps/v1
+      to: kafka/otel-demo/Service/v1
+      color: brown
+    - from: fraud-detection/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: ad/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: cart/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: checkout/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: currency/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: product-catalog/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: recommendation/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: shipping/otel-demo/Service/v1
+      color: brown
+    - from: frontend/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: frontend-proxy/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: frontend-proxy/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: frontend-proxy/otel-demo/Deployment/apps/v1
+      to: frontend/otel-demo/Service/v1
+      color: brown
+    - from: frontend-proxy/otel-demo/Deployment/apps/v1
+      to: grafana/otel-demo/Service/v1
+      color: brown
+    - from: frontend-proxy/otel-demo/Deployment/apps/v1
+      to: image-provider/otel-demo/Service/v1
+      color: brown
+    - from: frontend-proxy/otel-demo/Deployment/apps/v1
+      to: jaeger-query/otel-demo/Service/v1
+      color: brown
+    # Commented as communication link not present in
+    # https://opentelemetry.io/docs/demo/architecture/
+    # - from: frontend-proxy/otel-demo/Deployment/apps/v1
+    #  to: load-generator/otel-demo/Service/v1
+    #  color: brown
+    - from: image-provider/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: kafka/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: load-generator/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: load-generator/otel-demo/Deployment/apps/v1
+      to: frontend-proxy/otel-demo/Service/v1
+      color: brown
+    - from: load-generator/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: payment/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: payment/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: product-catalog/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: product-catalog/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: quote/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: recommendation/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: recommendation/otel-demo/Deployment/apps/v1
+      to: product-catalog/otel-demo/Service/v1
+      color: brown
+    - from: recommendation/otel-demo/Deployment/apps/v1
+      to: flagd/otel-demo/Service/v1
+      color: brown
+    - from: shipping/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: shipping/otel-demo/Deployment/apps/v1
+      to: quote/otel-demo/Service/v1
+      color: brown
+    - from: valkey-cart/otel-demo/Deployment/apps/v1
+      to: otel-collector/otel-demo/Service/v1
+      color: brown
+    - from: otel-collector/otel-demo/ConfigMap/v1
+      to: opensearch/otel-demo/Service/v1
+      color: brown
+    - from: otel-collector/otel-demo/ConfigMap/v1
+      to: jaeger-collector/otel-demo/Service/v1
+      color: brown
+    - from: otel-collector/otel-demo/ConfigMap/v1
+      to: prometheus/otel-demo/Service/v1
+      color: brown
+    - from: grafana/otel-demo/ConfigMap/v1
+      to: opensearch/otel-demo/Service/v1
+      color: brown
+    - from: grafana/otel-demo/ConfigMap/v1
+      to: jaeger-collector/otel-demo/Service/v1
+      color: brown
+    - from: grafana/otel-demo/ConfigMap/v1
+      to: prometheus/otel-demo/Service/v1
+      color: brown
