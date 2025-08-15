@@ -29,3 +29,13 @@ diagram: # Customization of generated diagrams
       color: black
       taillabel: update
       style: dotted
+    - description: ConfigName[name='kube-prometheus-stack-grafana-datasource'].data['datasource.yaml']
+        contains kube-prometheus-stack-alertmanager.default:9093
+      from: kube-prometheus-stack-grafana-datasource/default/ConfigMap/v1
+      to: kube-prometheus-stack-alertmanager/default/Service/v1
+      color: brown
+    - description: ConfigName[name='kube-prometheus-stack-grafana-datasource'].data['datasource.yaml']
+        contains kube-prometheus-stack-prometheus.default:9090
+      from: kube-prometheus-stack-grafana-datasource/default/ConfigMap/v1
+      to: kube-prometheus-stack-prometheus/default/Service/v1
+      color: brown
