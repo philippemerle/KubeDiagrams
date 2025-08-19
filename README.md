@@ -10,6 +10,8 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/philippemerle/kubediagrams)](https://hub.docker.com/r/philippemerle/kubediagrams)
 ![contributors](https://img.shields.io/github/contributors/philippemerle/KubeDiagrams)
 
+<a href="https://trendshift.io/repositories/14300" target="_blank"><img src="https://trendshift.io/api/badge/repositories/14300" alt="philippemerle%2FKubeDiagrams | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+
 ![KubeDiagrams Logo](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams.png)
 
 Generate Kubernetes architecture diagrams from Kubernetes manifest files, kustomization files, Helm charts, helmfile descriptors, and actual cluster state.
