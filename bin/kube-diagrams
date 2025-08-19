@@ -224,35 +224,36 @@ def get_namespace(resource):
     """
     return query_path(resource, "metadata.namespace", config.get("default_namespace", "default"))
 
+# Separators in node labels
+NODE_LABEL_SEPARATORS = [" ", ":", "-", "."]
+
+def split_node_label(node_label):
+    """
+        Split node labels into multi-lines.
+    """
+    result = ""
+    last_pos = 0
+    max_pos = len(node_label) - MAX_NODE_LABEL_LENGTH
+    while last_pos < max_pos:
+        part = node_label[last_pos:last_pos+MAX_NODE_LABEL_LENGTH]
+        idx = MAX_NODE_LABEL_LENGTH - 1
+        while idx > 0:
+            if part[idx] in NODE_LABEL_SEPARATORS:
+                part = part[:idx]
+                break
+            idx -= 1
+        result += part
+        result += "\n"
+        last_pos += len(part)
+    result += node_label[last_pos:]
+    return result
+
 def create_diagram_node(resource):
     """
         Create a diagram node from a Kubernetes resource.
     """
     # Format node label
-    node_label = get_name(resource)
-    if len(node_label) > MAX_NODE_LABEL_LENGTH:
-        def split_node_label(node_label, separator):
-            parts = node_label.split(separator)
-            node_label = parts[0]
-            current_length = len(node_label)
-            for part in parts[1:]:
-                if current_length + len(part) >= MAX_NODE_LABEL_LENGTH:
-                    node_label += "\n"
-                    current_length = 0
-                node_label += separator
-                if len(part) >= MAX_NODE_LABEL_LENGTH:
-                    node_label += part[:MAX_NODE_LABEL_LENGTH]
-                    node_label += "\n"
-                    node_label += part[MAX_NODE_LABEL_LENGTH:]
-                    current_length = len(part[MAX_NODE_LABEL_LENGTH:])
-                else:
-                    node_label += part
-                    current_length = current_length + 1 + len(part)
-            return node_label
-        for separator in [":", "-", "."]:
-            if separator in node_label:
-                node_label = split_node_label(node_label, separator)
-                break
+    node_label = split_node_label(get_name(resource))
     # Format node tooltip
     tooltip = f"kind: {resource.get('kind')}\n" \
             + f"apiVersion: {resource.get('apiVersion')}\n" \
@@ -1350,7 +1351,7 @@ def create_custom_node(node_id, node_def):
             module = importlib.import_module(diagram_node_classname[:idx])
             # Get diagram node class
             diagram_node_class = getattr(module, diagram_node_classname[idx+1:])
-    node_label = node_def.get("name","")
+    node_label = split_node_label(node_def.get("name", ""))
     diagram_nodes[node_id] = diagram_node_class(node_label, tooltip=node_label)
 
 def create_custom_cluster(cluster_id, cluster_def):
