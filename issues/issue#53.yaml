@@ -1,0 +1,44 @@
+kind: Secret
+apiVersion: v1
+metadata:
+  name: neuvector-controller-secret
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: neuvector-internal-certs
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: neuvector-manager-secret
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sh.helm.release.v1.neuvector-crd.v1
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sh.helm.release.v1.neuvector-crd.v2
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sh.helm.release.v1.neuvector-crd.v3
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sh.helm.release.v1.neuvector.v1
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sh.helm.release.v1.neuvector.v2
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: sh.helm.release.v1.neuvector.v3
