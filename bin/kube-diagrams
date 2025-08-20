@@ -367,12 +367,12 @@ class EdgesContext(list):
         edge[-1] = edge_kind
         self.append(edge)
 
-    def add_edge_to_rid(self, path, rid, edge_kind):
+    def add_edge_to_rid(self, path, rid, edge_kind, data=None):
         """
             Add an edge to a resource identifier.
         """
         if rid in resources:
-            self.add_edge(path, [rid, edge_kind])
+            self.add_edge(path, [rid, edge_kind], data)
         else:
             if rid in config["cluster-resources"]:
                 self.info(path, f"'{rid}' provided by Kubernetes cluster")
@@ -440,7 +440,8 @@ class EdgesContext(list):
             match_labels=None,
             data=None,
             resource_labels_path="metadata.labels",
-            edge_kind="SELECTOR"
+            edge_kind="SELECTOR",
+            tooltip_data=None
     ):
         """
             Add selector egdes to all resources matching given labels.
@@ -464,7 +465,7 @@ class EdgesContext(list):
                     found = False
                     break
             if found:
-                self.add_edge_to_rid(path, rid, edge_kind)
+                self.add_edge_to_rid(path, rid, edge_kind, tooltip_data)
                 resource_found = True
         return resource_found
 
@@ -493,7 +494,8 @@ class EdgesContext(list):
                         self.namespace,
                         "ConfigMap",
                         "v1",
-                        "REFERENCE"
+                        "REFERENCE",
+                        data=config_map
                     )
                 elif "secret" in volume:
                     secret = volume["secret"]
@@ -517,7 +519,8 @@ class EdgesContext(list):
                         self.namespace,
                         "Secret",
                         "v1",
-                        "REFERENCE"
+                        "REFERENCE",
+                        data=secret
                     )
                 elif "persistentVolumeClaim" in volume:
                     self.add_edge_to(
@@ -526,7 +529,8 @@ class EdgesContext(list):
                         self.namespace,
                         "PersistentVolumeClaim",
                         "v1",
-                        "REFERENCE"
+                        "REFERENCE",
+                        data=volume["persistentVolumeClaim"]
                     )
                 elif "projected" in volume:
                     volumes = query_path(volume, "projected.sources")
@@ -679,12 +683,13 @@ class EdgesContext(list):
         else:
             namespace = None
         self.add_edge_to(
-            f"{path}.apiGroup",
+            path,
             role_ref["name"],
             namespace,
             role_ref["kind"],
             f"{api_group}/v1",
-            "REFERENCE"
+            "REFERENCE",
+            data=role_ref
         )
 
     def add_subjects(self):
@@ -711,23 +716,26 @@ class EdgesContext(list):
                 namespace,
                 subject['kind'],
                 api_version,
-                "REFERENCE-UP"
+                "REFERENCE-UP",
+                data=subject
             )
 
-    def add_service(self, path, data=None):
+    def add_service(self, path, data=None, name=None):
         """
             Add a reference edge to a service resource.
         """
         if data is None:
             data = self.resource
-        name = query_path(data, path)
+        if name is None:
+            name = query_path(data, path)
         self.add_edge_to(
             path,
             name,
             self.namespace,
             "Service",
             "v1",
-            "REFERENCE"
+            "REFERENCE",
+            data=name
         )
 
     def get_owned_resources(self, owner_resource):
@@ -824,7 +832,8 @@ class EdgesContext(list):
                     service['namespace'],
                     "Service",
                     "v1",
-                    "REFERENCE"
+                    "REFERENCE",
+                    data=service
                 )
 
     def add_all_workload_resources(
@@ -928,7 +937,8 @@ class EdgesContext(list):
                         get_namespace(self.resource),
                         "NetworkAttachmentDefinition",
                         "k8s.cni.cncf.io/v1",
-                        "REFERENCE"
+                        "REFERENCE",
+                        data=network
                     )
 
     def add_priority_class(self, path):

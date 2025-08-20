@@ -121,7 +121,12 @@ nodes:
     diagram_node_classname: diagrams.k8s.rbac.CRole
     edges: |
       for idx, clusterRoleSelector in enumerate(query_path(resource, "aggregationRule.clusterRoleSelectors", [])):
-        edges.add_all_resources_matching_labels("ClusterRole", "matchLabels", data=clusterRoleSelector)
+        edges.add_all_resources_matching_labels(
+          "ClusterRole",
+          f"aggregationRule.clusterRoleSelectors[{idx}]",
+          match_labels=clusterRoleSelector.get("matchLabels"),
+          tooltip_data=clusterRoleSelector
+        )
       edges.add_rules_resource_names()
   ClusterRole/rbac.authorization.k8s.io/v1beta1: ClusterRole/rbac.authorization.k8s.io/v1
   ClusterRoleBinding/rbac.authorization.k8s.io/v1:
@@ -178,7 +183,8 @@ nodes:
           None,
           "CSIDriver",
           "storage.k8s.io/v1",
-          "REFERENCE"
+          "REFERENCE",
+          data=driver
         )
   CSIStorageCapacity/storage.k8s.io/v1:
     scope: Namescaped
@@ -254,7 +260,8 @@ nodes:
                 target.get("namespace"),
                 target["kind"],
                 "v1",
-                "REFERENCE"
+                "REFERENCE",
+                data=target
               )
   EndpointSlice/discovery.k8s.io/v1:
     scope: Namespaced
@@ -269,7 +276,8 @@ nodes:
               target["namespace"],
               target["kind"],
               "v1",
-              "REFERENCE"
+              "REFERENCE",
+              data=target
             )
   Group/rbac.authorization.k8s.io/v1:
     scope: Cluster
@@ -294,7 +302,7 @@ nodes:
       edges.add_service("spec.defaultBackend.service.name")
       for ridx, rule in enumerate(query_path(resource, "spec.rules", [])):
         for pidx, path in enumerate(query_path(rule, "http.paths", [])):
-          edges.add_service("backend.service.name", path)
+          edges.add_service(f"spec.rules[{ridx}].http.paths[{pidx}].backend.service.name", name=query_path(path, "backend.service.name"))
       edges.add_edge_to(
         "spec.ingressClassName",
         ".",
