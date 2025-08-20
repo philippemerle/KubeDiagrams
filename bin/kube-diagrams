@@ -394,14 +394,14 @@ class EdgesContext(list):
             rid = f"{name}/{namespace}/{kind}/{api_version}"
         else:
             rid = f"{name}/{kind}/{api_version}"
-        if rid in resources:
-            self.add_edge(path, [rid, edge_kind], data)
+        if not (get_node_config_of_resource_type(f"{kind}/{api_version}") or {}) \
+                    .get("show", True):
+            self.info(path, f"{kind} '{name}' hidden")
         else:
-            if rid in config["cluster-resources"]:
+            if rid in resources:
+                self.add_edge(path, [rid, edge_kind], data)
+            elif rid in config["cluster-resources"]:
                 self.info(path, f"{kind} '{name}' provided by Kubernetes cluster")
-            elif not (get_node_config_of_resource_type(f"{kind}/{api_version}") or {}) \
-                        .get("show", True):
-                self.info(path, f"{kind} '{name}' hidden")
             else:
                 self.warning(path, f"{kind} '{name}' undefined")
 
@@ -1325,6 +1325,7 @@ def process_edges():
                             " by K8s clusters.")
                     continue # skip this edge as the resource is provided by K8s clusters.
                 error(resource, None, f"{ke} resource not found")
+                raise
 
 def create_nodes(cluster):
     """
