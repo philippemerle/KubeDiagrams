@@ -41,36 +41,36 @@
 </a>
 </g>
 </g>
-<!-- fe200e304c074da0bcd57092cb93cae3 -->
+<!-- 4228478c278449aeaf0c23c4e495739d -->
 <g id="node1" class="node">
-<title>fe200e304c074da0bcd57092cb93cae3</title>
+<title>4228478c278449aeaf0c23c4e495739d</title>
 <g id="a_node1"><a xlink:title="kind: StorageClass&#10;apiVersion: storage.k8s.io/v1&#10;metadata:&#10; &#160;name: fast&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/sc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="49.6" y="-118.8"/>
 <text text-anchor="middle" x="100" y="-1.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">fast</text>
 </a>
 </g>
 </g>
-<!-- 9cf4154f3d53459997963ed412b323c4 -->
+<!-- 2e14b9d3993e4fd596427af9979751de -->
 <g id="node2" class="node">
-<title>9cf4154f3d53459997963ed412b323c4</title>
+<title>2e14b9d3993e4fd596427af9979751de</title>
 <g id="a_node2"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cassandra&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="53.6" y="-1292.4"/>
 <text text-anchor="middle" x="104" y="-1174.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cassandra</text>
 </a>
 </g>
 </g>
-<!-- daef7890c8854d899ec11c777c0a72cc -->
+<!-- 47e56018c48d45eea41fc5b49e35aae3 -->
 <g id="node3" class="node">
-<title>daef7890c8854d899ec11c777c0a72cc</title>
+<title>47e56018c48d45eea41fc5b49e35aae3</title>
 <g id="a_node3"><a xlink:title="kind: StatefulSet&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: cassandra&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/sts.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="53.6" y="-1101.6"/>
 <text text-anchor="middle" x="104" y="-983.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cassandra</text>
 </a>
 </g>
 </g>
-<!-- 9cf4154f3d53459997963ed412b323c4&#45;&gt;daef7890c8854d899ec11c777c0a72cc -->
+<!-- 2e14b9d3993e4fd596427af9979751de&#45;&gt;47e56018c48d45eea41fc5b49e35aae3 -->
 <g id="edge1" class="edge">
-<title>9cf4154f3d53459997963ed412b323c4&#45;&gt;daef7890c8854d899ec11c777c0a72cc</title>
+<title>2e14b9d3993e4fd596427af9979751de&#45;&gt;47e56018c48d45eea41fc5b49e35aae3</title>
 <g id="a_edge1"><a xlink:title="spec.selector:&#10; &#160;app: cassandra">
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M120.8,-1173.66C120.8,-1173.66 120.8,-1130.39 120.8,-1130.39"/>
 <polygon fill="black" stroke="black" points="124.3,-1130.39 120.8,-1120.39 117.3,-1130.39 124.3,-1130.39"/>
@@ -78,27 +78,27 @@
 </g>
 <text text-anchor="middle" x="98.68" y="-1153.77" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">9042/TCP</text>
 </g>
-<!-- daef7890c8854d899ec11c777c0a72cc&#45;&gt;9cf4154f3d53459997963ed412b323c4 -->
+<!-- 47e56018c48d45eea41fc5b49e35aae3&#45;&gt;2e14b9d3993e4fd596427af9979751de -->
 <g id="edge2" class="edge">
-<title>daef7890c8854d899ec11c777c0a72cc&#45;&gt;9cf4154f3d53459997963ed412b323c4</title>
+<title>47e56018c48d45eea41fc5b49e35aae3&#45;&gt;2e14b9d3993e4fd596427af9979751de</title>
 <g id="a_edge2"><a xlink:title="spec.serviceName: cassandra">
 <path fill="none" stroke="black" d="M87.2,-1119.54C87.2,-1119.54 87.2,-1162.81 87.2,-1162.81"/>
 <polygon fill="black" stroke="black" points="83.7,-1162.81 87.2,-1172.81 90.7,-1162.81 83.7,-1162.81"/>
 </a>
 </g>
 </g>
-<!-- 67a5a06b98b943bb8a85cfdf0837463b -->
+<!-- dd46a2cbfcdb46378f236a3aa69fa9aa -->
 <g id="node4" class="node">
-<title>67a5a06b98b943bb8a85cfdf0837463b</title>
+<title>dd46a2cbfcdb46378f236a3aa69fa9aa</title>
 <g id="a_node4"><a xlink:title="kind: Pod&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cassandra&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/pod.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="53.6" y="-910.8"/>
 <text text-anchor="middle" x="104" y="-793.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cassandra</text>
 </a>
 </g>
 </g>
-<!-- daef7890c8854d899ec11c777c0a72cc&#45;&gt;67a5a06b98b943bb8a85cfdf0837463b -->
+<!-- 47e56018c48d45eea41fc5b49e35aae3&#45;&gt;dd46a2cbfcdb46378f236a3aa69fa9aa -->
 <g id="edge3" class="edge">
-<title>daef7890c8854d899ec11c777c0a72cc&#45;&gt;67a5a06b98b943bb8a85cfdf0837463b</title>
+<title>47e56018c48d45eea41fc5b49e35aae3&#45;&gt;dd46a2cbfcdb46378f236a3aa69fa9aa</title>
 <g id="a_edge3"><a xlink:title="owns">
 <path fill="none" stroke="gray" stroke-dasharray="1,5" d="M104,-982.86C104,-982.86 104,-939.59 104,-939.59"/>
 <polygon fill="gray" stroke="gray" points="107.5,-939.59 104,-929.59 100.5,-939.59 107.5,-939.59"/>
@@ -106,45 +106,45 @@
 </g>
 <text text-anchor="middle" x="66.5" y="-962.37" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">controls Pod</text>
 </g>
-<!-- 4e467a18307345209d89fd867a735d33 -->
+<!-- 22755be3330c4672acd6c5c63246db27 -->
 <g id="node6" class="node">
-<title>4e467a18307345209d89fd867a735d33</title>
+<title>22755be3330c4672acd6c5c63246db27</title>
 <g id="a_node6"><a xlink:title="kind: Container&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cassandra&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/container.png" width="100.8px" height="98.4375px" preserveAspectRatio="xMinYMin meet" x="31.6" y="-718.819"/>
 <text text-anchor="middle" x="82" y="-602.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cassandra</text>
 </a>
 </g>
 </g>
-<!-- 67a5a06b98b943bb8a85cfdf0837463b&#45;&gt;4e467a18307345209d89fd867a735d33 -->
+<!-- dd46a2cbfcdb46378f236a3aa69fa9aa&#45;&gt;22755be3330c4672acd6c5c63246db27 -->
 <g id="edge4" class="edge">
-<title>67a5a06b98b943bb8a85cfdf0837463b&#45;&gt;4e467a18307345209d89fd867a735d33</title>
+<title>dd46a2cbfcdb46378f236a3aa69fa9aa&#45;&gt;22755be3330c4672acd6c5c63246db27</title>
 <g id="a_edge4"><a xlink:title="spec.containers[0]">
 <path fill="none" stroke="blue" stroke-dasharray="1,5" d="M93,-792.06C93,-792.06 93,-748.79 93,-748.79"/>
 <polygon fill="blue" stroke="blue" points="96.5,-748.79 93,-738.79 89.5,-748.79 96.5,-748.79"/>
 </a>
 </g>
 </g>
-<!-- 65dcc5b14e5b44c0b2b4ef246651135d -->
+<!-- 5a046955dafe4813bc3c4e27e17bc761 -->
 <g id="node7" class="node">
-<title>65dcc5b14e5b44c0b2b4ef246651135d</title>
+<title>5a046955dafe4813bc3c4e27e17bc761</title>
 <g id="a_node7"><a xlink:title="kind: PodVolume&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cassandra&#45;data&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/vol.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="49.6" y="-529.2"/>
 <text text-anchor="middle" x="100" y="-411.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cassandra&#45;data</text>
 </a>
 </g>
 </g>
-<!-- 67a5a06b98b943bb8a85cfdf0837463b&#45;&gt;65dcc5b14e5b44c0b2b4ef246651135d -->
+<!-- dd46a2cbfcdb46378f236a3aa69fa9aa&#45;&gt;5a046955dafe4813bc3c4e27e17bc761 -->
 <g id="edge5" class="edge">
-<title>67a5a06b98b943bb8a85cfdf0837463b&#45;&gt;65dcc5b14e5b44c0b2b4ef246651135d</title>
+<title>dd46a2cbfcdb46378f236a3aa69fa9aa&#45;&gt;5a046955dafe4813bc3c4e27e17bc761</title>
 <g id="a_edge5"><a xlink:title="spec.volumes[0]">
 <path fill="none" stroke="red" stroke-dasharray="1,5" d="M141.4,-792.18C141.4,-792.18 141.4,-558.07 141.4,-558.07"/>
 <polygon fill="red" stroke="red" points="144.9,-558.07 141.4,-548.07 137.9,-558.07 144.9,-558.07"/>
 </a>
 </g>
 </g>
-<!-- b6c5be752bbb4d09a4b839e7523dab2c -->
+<!-- 700e408347b84ad7b5b965463003f6dd -->
 <g id="node5" class="node">
-<title>b6c5be752bbb4d09a4b839e7523dab2c</title>
+<title>700e408347b84ad7b5b965463003f6dd</title>
 <g id="a_node5"><a xlink:title="kind: PersistentVolumeClaim&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cassandra&#45;data&#45;cassandra&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/pvc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="49.6" y="-324"/>
 <text text-anchor="middle" x="100" y="-205.45" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cassandra&#45;data</text>
@@ -152,27 +152,27 @@
 </a>
 </g>
 </g>
-<!-- b6c5be752bbb4d09a4b839e7523dab2c&#45;&gt;fe200e304c074da0bcd57092cb93cae3 -->
+<!-- 700e408347b84ad7b5b965463003f6dd&#45;&gt;4228478c278449aeaf0c23c4e495739d -->
 <g id="edge8" class="edge">
-<title>b6c5be752bbb4d09a4b839e7523dab2c&#45;&gt;fe200e304c074da0bcd57092cb93cae3</title>
+<title>700e408347b84ad7b5b965463003f6dd&#45;&gt;4228478c278449aeaf0c23c4e495739d</title>
 <g id="a_edge8"><a xlink:title="spec.storageClassName: fast">
 <path fill="none" stroke="black" d="M100,-191.02C100,-191.02 100,-147.67 100,-147.67"/>
 <polygon fill="black" stroke="black" points="103.5,-147.67 100,-137.67 96.5,-147.67 103.5,-147.67"/>
 </a>
 </g>
 </g>
-<!-- 4e467a18307345209d89fd867a735d33&#45;&gt;65dcc5b14e5b44c0b2b4ef246651135d -->
+<!-- 22755be3330c4672acd6c5c63246db27&#45;&gt;5a046955dafe4813bc3c4e27e17bc761 -->
 <g id="edge6" class="edge">
-<title>4e467a18307345209d89fd867a735d33&#45;&gt;65dcc5b14e5b44c0b2b4ef246651135d</title>
+<title>22755be3330c4672acd6c5c63246db27&#45;&gt;5a046955dafe4813bc3c4e27e17bc761</title>
 <g id="a_edge6"><a xlink:title="spec.volumeMounts[0]:&#10; &#160;mountPath: /cassandra_data&#10; &#160;name: cassandra&#45;data">
 <path fill="none" stroke="red" d="M91,-601.26C91,-601.26 91,-557.99 91,-557.99"/>
 <polygon fill="red" stroke="red" points="94.5,-557.99 91,-547.99 87.5,-557.99 94.5,-557.99"/>
 </a>
 </g>
 </g>
-<!-- 65dcc5b14e5b44c0b2b4ef246651135d&#45;&gt;b6c5be752bbb4d09a4b839e7523dab2c -->
+<!-- 5a046955dafe4813bc3c4e27e17bc761&#45;&gt;700e408347b84ad7b5b965463003f6dd -->
 <g id="edge7" class="edge">
-<title>65dcc5b14e5b44c0b2b4ef246651135d&#45;&gt;b6c5be752bbb4d09a4b839e7523dab2c</title>
+<title>5a046955dafe4813bc3c4e27e17bc761&#45;&gt;700e408347b84ad7b5b965463003f6dd</title>
 <g id="a_edge7"><a xlink:title="spec.persistentVolumeClaim.claimName: cassandra&#45;data&#45;cassandra">
 <path fill="none" stroke="black" d="M100,-410.47C100,-410.47 100,-367.25 100,-367.25"/>
 <polygon fill="black" stroke="black" points="103.5,-367.25 100,-357.25 96.5,-367.25 103.5,-367.25"/>

@@ -25,18 +25,18 @@
 </a>
 </g>
 </g>
-<!-- d17a5d51418f495789b7939f12578986 -->
+<!-- 6235d17f396c4a6eaab0a11f49f4d75e -->
 <g id="node1" class="node">
-<title>d17a5d51418f495789b7939f12578986</title>
+<title>6235d17f396c4a6eaab0a11f49f4d75e</title>
 <g id="a_node1"><a xlink:title="kind: HorizontalPodAutoscaler&#10;apiVersion: autoscaling/v1&#10;metadata:&#10; &#160;name: demo1&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/clusterconfig/hpa.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="1283.6" y="-157.2"/>
 <text text-anchor="middle" x="1334" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">demo1</text>
 </a>
 </g>
 </g>
-<!-- c67fa1833a9742bbbcb954f79cf9d278 -->
+<!-- 33fa1ac4c4644af5a1d9351fa88d0f30 -->
 <g id="node2" class="node">
-<title>c67fa1833a9742bbbcb954f79cf9d278</title>
+<title>33fa1ac4c4644af5a1d9351fa88d0f30</title>
 <g id="a_node2"><a xlink:title="kind: Secret&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: demo1&#45;demo&#45;cpp&#45;ssl&#45;config&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/secret.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="159.6" y="-582"/>
 <text text-anchor="middle" x="210" y="-463.45" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">demo1&#45;demo&#45;cpp</text>
@@ -44,9 +44,9 @@
 </a>
 </g>
 </g>
-<!-- eff255d4879f4fa8b390f9c97017bbe3 -->
+<!-- fc9b7191dbb34fc69eff16ae08e5edfa -->
 <g id="node3" class="node">
-<title>eff255d4879f4fa8b390f9c97017bbe3</title>
+<title>fc9b7191dbb34fc69eff16ae08e5edfa</title>
 <g id="a_node3"><a xlink:title="kind: Secret&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: demo1&#45;postgres&#45;client&#45;ssl&#45;config&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/secret.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="15.6" y="-582"/>
 <text text-anchor="middle" x="66" y="-462.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">demo1&#45;postgres</text>
@@ -55,36 +55,36 @@
 </a>
 </g>
 </g>
-<!-- 228d5119be1d49b1b03ccf28f38adb41 -->
+<!-- a173fc4ecd4745229afe39de04e1249f -->
 <g id="node4" class="node">
-<title>228d5119be1d49b1b03ccf28f38adb41</title>
+<title>a173fc4ecd4745229afe39de04e1249f</title>
 <g id="a_node4"><a xlink:title="kind: Secret&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: demo1&#45;sshsecret&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/secret.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="1427.6" y="-157.2"/>
 <text text-anchor="middle" x="1478" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">demo1&#45;sshsecret</text>
 </a>
 </g>
 </g>
-<!-- 291d18e0da434d04880cecc349deda31 -->
+<!-- 58fa5efa1b464cd4a779d75408b691a3 -->
 <g id="node5" class="node">
-<title>291d18e0da434d04880cecc349deda31</title>
+<title>58fa5efa1b464cd4a779d75408b691a3</title>
 <g id="a_node5"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: demo1&#45;srv&#45;tcp&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="851.6" y="-582"/>
 <text text-anchor="middle" x="902" y="-464.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">demo1&#45;srv&#45;tcp</text>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300 -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f -->
 <g id="node7" class="node">
-<title>164c16b624084da6bf9eaa3b475c5300</title>
+<title>31b26464b64c40df9d4e1877cd47e57f</title>
 <g id="a_node7"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: demo1&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="779.6" y="-362.4"/>
 <text text-anchor="middle" x="830" y="-244.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">demo1</text>
 </a>
 </g>
 </g>
-<!-- 291d18e0da434d04880cecc349deda31&#45;&gt;164c16b624084da6bf9eaa3b475c5300 -->
+<!-- 58fa5efa1b464cd4a779d75408b691a3&#45;&gt;31b26464b64c40df9d4e1877cd47e57f -->
 <g id="edge2" class="edge">
-<title>291d18e0da434d04880cecc349deda31&#45;&gt;164c16b624084da6bf9eaa3b475c5300</title>
+<title>58fa5efa1b464cd4a779d75408b691a3&#45;&gt;31b26464b64c40df9d4e1877cd47e57f</title>
 <g id="a_edge2"><a xlink:title="spec.selector:&#10; &#160;app: demo1">
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M866,-463.32C866,-463.32 866,-391.24 866,-391.24"/>
 <polygon fill="black" stroke="black" points="869.5,-391.24 866,-381.24 862.5,-391.24 869.5,-391.24"/>
@@ -97,18 +97,18 @@
 <text text-anchor="middle" x="890.75" y="-372.78" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">21112/TCP</text>
 <text text-anchor="middle" x="890.75" y="-361.53" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">21113/TCP</text>
 </g>
-<!-- e461478a39de41c080f435f7bad0abcc -->
+<!-- 6df576f15f674bfe81bf471e85251ba9 -->
 <g id="node6" class="node">
-<title>e461478a39de41c080f435f7bad0abcc</title>
+<title>6df576f15f674bfe81bf471e85251ba9</title>
 <g id="a_node6"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: demo1&#45;srv&#45;udp&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="707.6" y="-582"/>
 <text text-anchor="middle" x="758" y="-464.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">demo1&#45;srv&#45;udp</text>
 </a>
 </g>
 </g>
-<!-- e461478a39de41c080f435f7bad0abcc&#45;&gt;164c16b624084da6bf9eaa3b475c5300 -->
+<!-- 6df576f15f674bfe81bf471e85251ba9&#45;&gt;31b26464b64c40df9d4e1877cd47e57f -->
 <g id="edge3" class="edge">
-<title>e461478a39de41c080f435f7bad0abcc&#45;&gt;164c16b624084da6bf9eaa3b475c5300</title>
+<title>6df576f15f674bfe81bf471e85251ba9&#45;&gt;31b26464b64c40df9d4e1877cd47e57f</title>
 <g id="a_edge3"><a xlink:title="spec.selector:&#10; &#160;app: demo1">
 <path fill="none" stroke="black" stroke-dasharray="5,2" d="M794,-463.32C794,-463.32 794,-391.24 794,-391.24"/>
 <polygon fill="black" stroke="black" points="797.5,-391.24 794,-381.24 790.5,-391.24 797.5,-391.24"/>
@@ -122,108 +122,108 @@
 <text text-anchor="middle" x="768.5" y="-361.53" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">21110/UDP</text>
 <text text-anchor="middle" x="768.5" y="-350.28" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">21111/UDP</text>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;d17a5d51418f495789b7939f12578986 -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;6235d17f396c4a6eaab0a11f49f4d75e -->
 <g id="edge1" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;d17a5d51418f495789b7939f12578986</title>
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;6235d17f396c4a6eaab0a11f49f4d75e</title>
 <g id="a_edge1"><a xlink:title="spec.scaleTargetRef:&#10; &#160;apiVersion: apps/v1&#10; &#160;kind: Deployment&#10; &#160;name: demo1">
 <path fill="none" stroke="black" d="M891.17,-325C891.17,-325 1334,-325 1334,-325 1334,-325 1334,-238.96 1334,-174.94"/>
 <polygon fill="black" stroke="black" points="891.17,-321.5 881.17,-325 891.17,-328.5 891.17,-321.5"/>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;228d5119be1d49b1b03ccf28f38adb41 -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;a173fc4ecd4745229afe39de04e1249f -->
 <g id="edge5" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;228d5119be1d49b1b03ccf28f38adb41</title>
-<g id="a_edge5"><a xlink:title="spec.template.spec.volumes[0].secret">
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;a173fc4ecd4745229afe39de04e1249f</title>
+<g id="a_edge5"><a xlink:title="spec.template.spec.volumes[0].secret:&#10; &#160;secretName: demo1&#45;sshsecret">
 <path fill="none" stroke="black" d="M880.31,-353C1032.56,-353 1478,-353 1478,-353 1478,-353 1478,-186.05 1478,-186.05"/>
 <polygon fill="black" stroke="black" points="1481.5,-186.05 1478,-176.05 1474.5,-186.05 1481.5,-186.05"/>
 </a>
 </g>
 </g>
-<!-- f526a8a55e474582a21b7a092e9a59a8 -->
+<!-- 98186c8360c2419a9880df48d84fc695 -->
 <g id="node8" class="node">
-<title>f526a8a55e474582a21b7a092e9a59a8</title>
+<title>98186c8360c2419a9880df48d84fc695</title>
 <g id="a_node8"><a xlink:title="kind: ServiceAccount&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: tcserviceaccount&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/rbac/sa.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="275.6" y="-157.2"/>
 <text text-anchor="middle" x="326" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">tcserviceaccount</text>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;f526a8a55e474582a21b7a092e9a59a8 -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;98186c8360c2419a9880df48d84fc695 -->
 <g id="edge4" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;f526a8a55e474582a21b7a092e9a59a8</title>
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;98186c8360c2419a9880df48d84fc695</title>
 <g id="a_edge4"><a xlink:title="spec.template.spec.serviceAccountName: tcserviceaccount">
 <path fill="none" stroke="black" d="M779.83,-353C652.35,-353 326,-353 326,-353 326,-353 326,-186.05 326,-186.05"/>
 <polygon fill="black" stroke="black" points="329.5,-186.05 326,-176.05 322.5,-186.05 329.5,-186.05"/>
 </a>
 </g>
 </g>
-<!-- bd711583efd349d88da025c05a07911a -->
+<!-- 95d6bf4e0a714a6ab2859ab373d1e402 -->
 <g id="node9" class="node">
-<title>bd711583efd349d88da025c05a07911a</title>
+<title>95d6bf4e0a714a6ab2859ab373d1e402</title>
 <g id="a_node9"><a xlink:title="kind: Secret&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: env&#45;secrets&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/secret.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="419.6" y="-157.2"/>
 <text text-anchor="middle" x="470" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">env&#45;secrets</text>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;bd711583efd349d88da025c05a07911a -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;95d6bf4e0a714a6ab2859ab373d1e402 -->
 <g id="edge11" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;bd711583efd349d88da025c05a07911a</title>
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;95d6bf4e0a714a6ab2859ab373d1e402</title>
 <g id="a_edge11"><a xlink:title="spec.template.spec.containers:&#10;&#45; args:&#10; &#160;&#45; /opt/x/abp/core/bin/startAgent.Sh&#10; &#160;command:&#10; &#160;&#45; /opt/x/abp/core/bin/uid_entrypoint&#10; &#160;env:&#10; &#160;&#45; name: DATABASE_TYPE&#10; &#160;&#160;&#160;value: PG&#10; &#160;&#45; name: NAMESPACE&#10; &#160;&#160;&#160;valueFrom:&#10; &#160;&#160;&#160;&#160;&#160;fieldRef:&#10; &#160;&#160;&#160;&#160;&#160;&#160;&#160;fieldPath: metadata.namespace&#10; &#160;image: x:5001/centos/app/64og/demo_agent/run_debug:x_PG&#10; &#160;imagePullPolicy: IfNotPresent&#10; &#160;lifecycle:&#10; &#160;&#160;&#160;preStop:&#10; &#160;&#160;&#160;&#160;&#160;exec:&#10; &#160;&#160;&#160;&#160;&#160;&#160;&#160;command:&#10; &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#45; /opt/x/abp/core/bin/endAgent.Sh&#10; &#160;livenessProbe:&#10; &#160;&#160;&#160;exec:&#10; &#160;&#160;&#160;&#160;&#160;command:&#10; &#160;&#160;&#160;&#160;&#160;&#45; /opt/x/abp/core/bin/livenessProbe.sh&#10; &#160;&#160;&#160;failureThreshold: 1&#10; &#160;&#160;&#160;initialDelaySeconds: 300&#10; &#160;&#160;&#160;periodSeconds: 5&#10; &#160;&#160;&#160;successThreshold: 1&#10; &#160;&#160;&#160;timeoutSeconds: 10&#10; &#160;name: demo&#45;agent&#10; &#160;readinessProbe:&#10; &#160;&#160;&#160;exec:&#10; &#160;&#160;&#160;&#160;&#160;command:&#10; &#160;&#160;&#160;&#160;&#160;&#45; /opt/x/abp/core/bin/readinessProbe.sh&#10; &#160;&#160;&#160;periodSeconds: 1&#10; &#160;volumeMounts:&#10; &#160;&#45; mountPath: /home/x/.ssh&#10; &#160;&#160;&#160;name: ssh&#45;volume&#10; &#160;&#160;&#160;readOnly: true&#10; &#160;&#45; mountPath: /nfs&#45;pv&#45;var6&#10; &#160;&#160;&#160;name: var&#45;nfs&#10; &#160;&#45; mountPath: /home/x/local&#45;var/&#10; &#160;&#160;&#160;name: local&#45;var&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /home/x/GemFire&#10; &#160;&#160;&#160;name: gemfire&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /home/x/pbin/&#10; &#160;&#160;&#160;name: pbin&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /etc/tnsnames.ora&#10; &#160;&#160;&#160;name: tns&#45;volume&#10; &#160;&#160;&#160;subPath: tnsnames.ora&#10; &#160;&#45; mountPath: /home/x/.config/x/centralconfiguration/&#10; &#160;&#160;&#160;name: consul&#45;agent&#45;config&#45;volume&#10; &#160;&#45; mountPath: /home/x/.config/ccutils/&#10; &#160;&#160;&#160;name: consul&#45;ccutil&#45;config&#45;volume&#10; &#160;&#45; mountPath: /home/x/mmf&#45;tmpfs&#45;dir/&#10; &#160;&#160;&#160;name: mmf&#45;tmpfs&#45;dir&#45;volume&#10;&#45; args:&#10; &#160;&#45; /opt/x/abp/core/bin/startFU.Sh&#10; &#160;command:&#10; &#160;&#45; /opt/x/abp/core/bin/uid_entrypoint&#10; &#160;env:&#10; &#160;&#45; name: DATABASE_TYPE&#10; &#160;&#160;&#160;value: PG&#10; &#160;&#45; name: NAMESPACE&#10; &#160;&#160;&#160;valueFrom:&#10; &#160;&#160;&#160;&#160;&#160;fieldRef:&#10; &#160;&#160;&#160;&#160;&#160;&#160;&#160;fieldPath: metadata.namespace&#10; &#160;envFrom:&#10; &#160;&#45; secretRef:&#10; &#160;&#160;&#160;&#160;&#160;name: env&#45;secrets&#10; &#160;image: x:5001/centos/app/64og/demo/run_debug:x_PG&#10; &#160;imagePullPolicy: IfNotPresent&#10; &#160;livenessProbe:&#10; &#160;&#160;&#160;exec:&#10; &#160;&#160;&#160;&#160;&#160;command:&#10; &#160;&#160;&#160;&#160;&#160;&#45; /opt/x/abp/core/bin/livenessProbe.sh&#10; &#160;&#160;&#160;failureThreshold: 1&#10; &#160;&#160;&#160;initialDelaySeconds: 300&#10; &#160;&#160;&#160;periodSeconds: 5&#10; &#160;&#160;&#160;successThreshold: 1&#10; &#160;&#160;&#160;timeoutSeconds: 10&#10; &#160;name: demo1&#10; &#160;readinessProbe:&#10; &#160;&#160;&#160;exec:&#10; &#160;&#160;&#160;&#160;&#160;command:&#10; &#160;&#160;&#160;&#160;&#160;&#45; /opt/x/abp/core/bin/readinessProbe.sh&#10; &#160;&#160;&#160;periodSeconds: 1&#10; &#160;volumeMounts:&#10; &#160;&#45; mountPath: /home/x/.ssh&#10; &#160;&#160;&#160;name: ssh&#45;volume&#10; &#160;&#160;&#160;readOnly: true&#10; &#160;&#45; mountPath: /nfs&#45;pv&#45;var6&#10; &#160;&#160;&#160;name: var&#45;nfs&#10; &#160;&#45; mountPath: /home/x/mmf&#45;tmpfs&#45;dir/&#10; &#160;&#160;&#160;name: mmf&#45;tmpfs&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /home/x/local&#45;var/&#10; &#160;&#160;&#160;name: local&#45;var&#45;dir&#45;volume&#10;&#45; args:&#10; &#160;&#45; /opt/x/abp/core/bin/startTools.Sh&#10; &#160;command:&#10; &#160;&#45; /opt/x/abp/core/bin/uid_entrypoint&#10; &#160;env:&#10; &#160;&#45; name: DATABASE_TYPE&#10; &#160;&#160;&#160;value: PG&#10; &#160;image: x:5001/centos/app/64og/demo/run_debug:x_PG&#10; &#160;imagePullPolicy: IfNotPresent&#10; &#160;livenessProbe:&#10; &#160;&#160;&#160;exec:&#10; &#160;&#160;&#160;&#160;&#160;command:&#10; &#160;&#160;&#160;&#160;&#160;&#45; /opt/x/abp/core/bin/livenessProbeTools.sh&#10; &#160;&#160;&#160;failureThreshold: 1&#10; &#160;&#160;&#160;initialDelaySeconds: 300&#10; &#160;&#160;&#160;periodSeconds: 10&#10; &#160;&#160;&#160;successThreshold: 1&#10; &#160;&#160;&#160;timeoutSeconds: 10&#10; &#160;name: tools&#10; &#160;volumeMounts:&#10; &#160;&#45; mountPath: /nfs&#45;pv&#45;var6&#10; &#160;&#160;&#160;name: var&#45;nfs&#10; &#160;&#45; mountPath: /home/x/local&#45;var/&#10; &#160;&#160;&#160;name: local&#45;var&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /home/x/mmf&#45;tmpfs&#45;dir/&#10; &#160;&#160;&#160;name: mmf&#45;tmpfs&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /etc/tnsnames.ora&#10; &#160;&#160;&#160;name: tns&#45;volume&#10; &#160;&#160;&#160;subPath: tnsnames.ora&#10; &#160;&#45; mountPath: /home/x/.config/x/centralconfiguration/&#10; &#160;&#160;&#160;name: consul&#45;agent&#45;config&#45;volume&#10; &#160;&#45; mountPath: /home/x/.config/ccutils/&#10; &#160;&#160;&#160;name: consul&#45;ccutil&#45;config&#45;volume&#10; &#160;&#45; mountPath: /home/x/pbin/&#10; &#160;&#160;&#160;name: pbin&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /etc/cleanUpRules/&#10; &#160;&#160;&#160;name: cleanup&#45;rules">
 <path fill="none" stroke="black" d="M779.96,-325C677.47,-325 453.2,-325 453.2,-325 453.2,-325 453.2,-185.94 453.2,-185.94"/>
 <polygon fill="black" stroke="black" points="456.7,-185.94 453.2,-175.94 449.7,-185.94 456.7,-185.94"/>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;bd711583efd349d88da025c05a07911a -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;95d6bf4e0a714a6ab2859ab373d1e402 -->
 <g id="edge12" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;bd711583efd349d88da025c05a07911a</title>
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;95d6bf4e0a714a6ab2859ab373d1e402</title>
 <g id="a_edge12"><a xlink:title="spec.template.spec.initContainers:&#10;&#45; command:&#10; &#160;&#45; sh&#10; &#160;&#45; &#45;c&#10; &#160;&#45; &#39;[[ &#45;d /opt/x/abp ]] &amp;&amp; cp &#45;r /opt/x/abp/* /opt/x/custom/ || exit 0&#39;&#10; &#160;image: x:5001/centos/app/64og/demo/cust:2200G&#10; &#160;name: demo1&#45;custom&#10; &#160;volumeMounts:&#10; &#160;&#45; mountPath: /opt/x/custom/&#10; &#160;&#160;&#160;name: custom&#45;volume&#10;&#45; args:&#10; &#160;&#45; /opt/x/abp/core/bin/initContainer.Sh&#10; &#160;command:&#10; &#160;&#45; /opt/x/abp/core/bin/uid_entrypoint&#10; &#160;env:&#10; &#160;&#45; name: DATABASE_TYPE&#10; &#160;&#160;&#160;value: PG&#10; &#160;&#45; name: SHARED_PBIN_PATH&#10; &#160;&#160;&#160;value: /nfs&#45;pv&#45;var6/xpi1/SHARED_PBIN&#10; &#160;&#45; name: NAMESPACE&#10; &#160;&#160;&#160;valueFrom:&#10; &#160;&#160;&#160;&#160;&#160;fieldRef:&#10; &#160;&#160;&#160;&#160;&#160;&#160;&#160;fieldPath: metadata.namespace&#10; &#160;envFrom:&#10; &#160;&#45; secretRef:&#10; &#160;&#160;&#160;&#160;&#160;name: env&#45;secrets&#10; &#160;image: x:5001/centos/app/64og/demo/run_debug:x_&#10; &#160;imagePullPolicy: IfNotPresent&#10; &#160;name: demo1&#45;init&#10; &#160;volumeMounts:&#10; &#160;&#45; mountPath: /home/x/.ssh&#10; &#160;&#160;&#160;name: ssh&#45;volume&#10; &#160;&#160;&#160;readOnly: true&#10; &#160;&#45; mountPath: /nfs&#45;pv&#45;var6&#10; &#160;&#160;&#160;name: var&#45;nfs&#10; &#160;&#45; mountPath: /home/x/local&#45;var/&#10; &#160;&#160;&#160;name: local&#45;var&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /home/x/mmf&#45;tmpfs&#45;dir/&#10; &#160;&#160;&#160;name: mmf&#45;tmpfs&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /home/x/GemFire&#10; &#160;&#160;&#160;name: gemfire&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /home/x/pbin/&#10; &#160;&#160;&#160;name: pbin&#45;dir&#45;volume&#10; &#160;&#45; mountPath: /etc/tnsnames.ora&#10; &#160;&#160;&#160;name: tns&#45;volume&#10; &#160;&#160;&#160;subPath: tnsnames.ora&#10; &#160;&#45; mountPath: /home/x/.config/x/centralconfiguration/&#10; &#160;&#160;&#160;name: consul&#45;agent&#45;config&#45;volume&#10; &#160;&#45; mountPath: /home/x/.config/ccutils/&#10; &#160;&#160;&#160;name: consul&#45;ccutil&#45;config&#45;volume&#10; &#160;&#45; mountPath: /opt/x/custom/&#10; &#160;&#160;&#160;name: custom&#45;volume">
 <path fill="none" stroke="black" d="M779.73,-298C684.4,-298 486.8,-298 486.8,-298 486.8,-298 486.8,-186.02 486.8,-186.02"/>
 <polygon fill="black" stroke="black" points="490.3,-186.02 486.8,-176.02 483.3,-186.02 490.3,-186.02"/>
 </a>
 </g>
 </g>
-<!-- 961a14202d9d452a89d9638cafa70880 -->
+<!-- c07a69e32ad54216b9433fa51d6c211c -->
 <g id="node10" class="node">
-<title>961a14202d9d452a89d9638cafa70880</title>
+<title>c07a69e32ad54216b9433fa51d6c211c</title>
 <g id="a_node10"><a xlink:title="kind: PersistentVolumeClaim&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: nfs&#45;pvc&#45;var6&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/pvc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="563.6" y="-157.2"/>
 <text text-anchor="middle" x="614" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">nfs&#45;pvc&#45;var6</text>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;961a14202d9d452a89d9638cafa70880 -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;c07a69e32ad54216b9433fa51d6c211c -->
 <g id="edge6" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;961a14202d9d452a89d9638cafa70880</title>
-<g id="a_edge6"><a xlink:title="spec.template.spec.volumes[1].persistentVolumeClaim">
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;c07a69e32ad54216b9433fa51d6c211c</title>
+<g id="a_edge6"><a xlink:title="spec.template.spec.volumes[1].persistentVolumeClaim:&#10; &#160;claimName: nfs&#45;pvc&#45;var6">
 <path fill="none" stroke="black" d="M779.63,-270C715.8,-270 614,-270 614,-270 614,-270 614,-186.07 614,-186.07"/>
 <polygon fill="black" stroke="black" points="617.5,-186.07 614,-176.07 610.5,-186.07 617.5,-186.07"/>
 </a>
 </g>
 </g>
-<!-- 8af7e3aa013f49849b9dc329812bfa2c -->
+<!-- 1b03fe7424d54badbe4a01cf7d968e15 -->
 <g id="node11" class="node">
-<title>8af7e3aa013f49849b9dc329812bfa2c</title>
+<title>1b03fe7424d54badbe4a01cf7d968e15</title>
 <g id="a_node11"><a xlink:title="kind: ConfigMap&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: tnsconfigmap&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/cm.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="707.6" y="-157.2"/>
 <text text-anchor="middle" x="758" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">tnsconfigmap</text>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;8af7e3aa013f49849b9dc329812bfa2c -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;1b03fe7424d54badbe4a01cf7d968e15 -->
 <g id="edge7" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;8af7e3aa013f49849b9dc329812bfa2c</title>
-<g id="a_edge7"><a xlink:title="spec.template.spec.volumes[6].configMap">
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;1b03fe7424d54badbe4a01cf7d968e15</title>
+<g id="a_edge7"><a xlink:title="spec.template.spec.volumes[6].configMap:&#10; &#160;name: tnsconfigmap">
 <path fill="none" stroke="black" d="M794,-243.67C794,-243.67 794,-186.18 794,-186.18"/>
 <polygon fill="black" stroke="black" points="797.5,-186.18 794,-176.18 790.5,-186.18 797.5,-186.18"/>
 </a>
 </g>
 </g>
-<!-- 98c4a4f9cc744de59430c3c5e192e7f5 -->
+<!-- 1149e461986641328ff4046ecf815de4 -->
 <g id="node12" class="node">
-<title>98c4a4f9cc744de59430c3c5e192e7f5</title>
+<title>1149e461986641328ff4046ecf815de4</title>
 <g id="a_node12"><a xlink:title="kind: ConfigMap&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: consul&#45;agent&#45;config&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/cm.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="851.6" y="-157.2"/>
 <text text-anchor="middle" x="902" y="-38.65" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">consul&#45;agent</text>
@@ -231,46 +231,46 @@
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;98c4a4f9cc744de59430c3c5e192e7f5 -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;1149e461986641328ff4046ecf815de4 -->
 <g id="edge8" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;98c4a4f9cc744de59430c3c5e192e7f5</title>
-<g id="a_edge8"><a xlink:title="spec.template.spec.volumes[7].configMap">
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;1149e461986641328ff4046ecf815de4</title>
+<g id="a_edge8"><a xlink:title="spec.template.spec.volumes[7].configMap:&#10; &#160;name: consul&#45;agent&#45;config">
 <path fill="none" stroke="black" d="M866,-243.67C866,-243.67 866,-200.45 866,-200.45"/>
 <polygon fill="black" stroke="black" points="869.5,-200.45 866,-190.45 862.5,-200.45 869.5,-200.45"/>
 </a>
 </g>
 </g>
-<!-- 89bc6ee66818454e8b9775c4ae8abeaf -->
+<!-- 7ac2162828be452ba9db8890f34230fb -->
 <g id="node13" class="node">
-<title>89bc6ee66818454e8b9775c4ae8abeaf</title>
+<title>7ac2162828be452ba9db8890f34230fb</title>
 <g id="a_node13"><a xlink:title="kind: ConfigMap&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: ccutil&#45;config&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/cm.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="995.6" y="-157.2"/>
 <text text-anchor="middle" x="1046" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">ccutil&#45;config</text>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;89bc6ee66818454e8b9775c4ae8abeaf -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;7ac2162828be452ba9db8890f34230fb -->
 <g id="edge9" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;89bc6ee66818454e8b9775c4ae8abeaf</title>
-<g id="a_edge9"><a xlink:title="spec.template.spec.volumes[8].configMap">
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;7ac2162828be452ba9db8890f34230fb</title>
+<g id="a_edge9"><a xlink:title="spec.template.spec.volumes[8].configMap:&#10; &#160;name: ccutil&#45;config">
 <path fill="none" stroke="black" d="M880.37,-270C944.2,-270 1046,-270 1046,-270 1046,-270 1046,-186.07 1046,-186.07"/>
 <polygon fill="black" stroke="black" points="1049.5,-186.07 1046,-176.07 1042.5,-186.07 1049.5,-186.07"/>
 </a>
 </g>
 </g>
-<!-- 56ed5562ef0a45c19d0e695e738365c4 -->
+<!-- 4b553e3402e242b4bf2f98a0cd13af8a -->
 <g id="node14" class="node">
-<title>56ed5562ef0a45c19d0e695e738365c4</title>
+<title>4b553e3402e242b4bf2f98a0cd13af8a</title>
 <g id="a_node14"><a xlink:title="kind: ConfigMap&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cleanuprules&#10;...">
 <image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/cm.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="1139.6" y="-157.2"/>
 <text text-anchor="middle" x="1190" y="-39.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cleanuprules</text>
 </a>
 </g>
 </g>
-<!-- 164c16b624084da6bf9eaa3b475c5300&#45;&gt;56ed5562ef0a45c19d0e695e738365c4 -->
+<!-- 31b26464b64c40df9d4e1877cd47e57f&#45;&gt;4b553e3402e242b4bf2f98a0cd13af8a -->
 <g id="edge10" class="edge">
-<title>164c16b624084da6bf9eaa3b475c5300&#45;&gt;56ed5562ef0a45c19d0e695e738365c4</title>
-<g id="a_edge10"><a xlink:title="spec.template.spec.volumes[9].configMap">
+<title>31b26464b64c40df9d4e1877cd47e57f&#45;&gt;4b553e3402e242b4bf2f98a0cd13af8a</title>
+<g id="a_edge10"><a xlink:title="spec.template.spec.volumes[9].configMap:&#10; &#160;name: cleanuprules">
 <path fill="none" stroke="black" d="M880.06,-298C978.97,-298 1190,-298 1190,-298 1190,-298 1190,-186.02 1190,-186.02"/>
 <polygon fill="black" stroke="black" points="1193.5,-186.02 1190,-176.02 1186.5,-186.02 1193.5,-186.02"/>
 </a>
