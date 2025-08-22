@@ -16,8 +16,22 @@
 
 Generate Kubernetes architecture diagrams from Kubernetes manifest files, kustomization files, Helm charts, helmfile descriptors, and actual cluster state.
 
-There are several tools to generate Kubernetes architecture diagrams (see **[here](https://github.com/philippemerle/Awesome-Kubernetes-Architecture-Diagrams)**).
-The main originality of **KubeDiagrams** is its **[configurability](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml)** allowing for instance to deal with custom Kubernetes resources.
+There are several tools to generate Kubernetes architecture diagrams, see **[here](https://github.com/philippemerle/Awesome-Kubernetes-Architecture-Diagrams)** for a detailed list.
+Compared to these existing tools, the main originalities of **KubeDiagrams** are the support of:
+
+* **[most of all Kubernetes built-in resources](https://github.com/philippemerle/KubeDiagrams#kubernetes-built-in-resources)**,
+* **[any Kubernetes custom resources](https://github.com/philippemerle/KubeDiagrams#kubernetes-custom-resources)**,
+* **[customizable resource clustering](https://github.com/philippemerle/KubeDiagrams#kubernetes-resources-clustering)**,
+* **[any Kubernetes resource relationships](https://github.com/philippemerle/KubeDiagrams#kubernetes-resource-relationships)**,
+* **[declarative custom diagrams](https://github.com/philippemerle/KubeDiagrams#declarative-custom-diagrams)**,
+* **[an interactive diagram viewer](https://github.com/philippemerle/KubeDiagrams#kubediagrams-interactive-viewer)**,
+* **main input formats** such as Kubernetes manifest files, customization files, Helm charts, helmfile descriptors, and actual cluster state,
+* **main output formats** such as DOT, GIF, JPEG, PDF, PNG, SVG, and TIFF,
+* **[a very large set of examples](https://github.com/philippemerle/KubeDiagrams#examples)**.
+
+**KubeDiagrams** is available as a [Python package in PyPI](https://pypi.org/project/KubeDiagrams), a [container image in DockerHub](https://hub.docker.com/r/philippemerle/kubediagrams), a `kubectl` plugin, a Nix flake, and a GitHub Action, see [here](https://github.com/philippemerle/KubeDiagrams#getting-started) for more details.
+
+Read **[Real-World Use Cases](https://github.com/philippemerle/KubeDiagrams#real-world-use-cases)** and **[What do they say about it](https://github.com/philippemerle/KubeDiagrams#what-do-they-say-about-it)** to discover how **KubeDiagrams** is really used and appreciated.
 
 ## Examples
 
@@ -343,7 +357,7 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 
 ## Features
 
-### Kubernetes resources
+### Kubernetes built-in resources
 
 **KubeDiagrams** supported the following 47 Kubernetes resource types:
 
@@ -419,6 +433,8 @@ Currently, there are 16 unsupported Kubernetes resource types:
 | `PriorityLevelConfiguration` | `flowcontrol.apiserver.k8s.io` |
 |        `NodeMetrics`         |        `metrics.k8s.io`        |
 |         `PodMetrics`         |        `metrics.k8s.io`        |
+
+### Kubernetes custom resources
 
 The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/monitoring.coreos.com.kdc](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/monitoring.coreos.com.kdc#L4), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L17), and
 [examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L14).
@@ -497,7 +513,7 @@ Following diagram illustrates all the visual nodes, edges, and clusters supporte
 
 Generated SVG diagrams contain tooltips for each cluster/node/edge as illustrated in [images/semiotics.svg](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/semiotics.svg)
 
-### Custom diagrams
+### Declarative custom diagrams
 
 By default, **KubeDiagrams** generates diagrams from data contained into Kubernetes manifest files, actual cluster state, kustomization files, or Helm charts automatically. But sometimes, users would like to customize generated diagrams by adding their own clusters, nodes and edges as illustrated in the following diagram:
 
