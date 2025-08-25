@@ -1,0 +1,28 @@
+nodes:
+  OnePasswordItem/onepassword.com/v1:
+    scope: Namespaced
+    # Instead of custom icon, treat it as if it _was_ a Secret
+    diagram_node_classname: diagrams.k8s.podconfig.Secret
+    #
+    # Following creates the Secret resource and an edge to it.
+    #
+    nodes: | # Sub nodes to create from this node
+      # Create a Secret resource
+      nodes.append({
+        "kind": "Secret",
+        "apiVersion": "v1",
+        "metadata": {
+          "name": get_name(resource), # With the same name than the OnePasswordItem resource
+          "namespace": get_namespace(resource) # and within the same namespace
+        }
+      })
+    edges: |
+      # Following edge is not strictly required but it shows that the OnePasswordItem resource owns the Secret one.
+      edges.add_edge_to(
+        "owns",
+        get_name(resource),
+        get_namespace(resource),
+        "Secret",
+        "v1",
+        "OWNER"
+      )

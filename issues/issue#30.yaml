@@ -1,0 +1,17 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: cron-job
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          volumes:
+            - secret:
+                secretName: app-api-key
+---
+kind: OnePasswordItem
+apiVersion: onepassword.com/v1
+metadata:
+  name: app-api-key
