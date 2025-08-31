@@ -33,6 +33,8 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 
 Read **[Real-World Use Cases](https://github.com/philippemerle/KubeDiagrams#real-world-use-cases)** and **[What do they say about it](https://github.com/philippemerle/KubeDiagrams#what-do-they-say-about-it)** to discover how **KubeDiagrams** is really used and appreciated.
 
+Try it on your own Kubernetes manifests, Helm charts, helmfiles, and actual cluster state!
+
 ## Examples
 
 Architecture diagram for **[official Kubernetes WordPress tutorial](https://kubernetes.io/docs/tutorials/stateful-application/mysql-wordpress-persistent-volume/)** manifests:
@@ -233,7 +235,7 @@ kubectl diagrams all -o diagram.png
 To enable this, simply symlink or copy the [`kubectl-diagrams`](./bin/kubectl-diagrams) script onto your `$PATH`:
 
 ```sh
-ln -s $(which kube-diagrams) /usr/local/bin/kubectl-diagrams
+ln -s $(which kubectl-diagrams) /usr/local/bin/kubectl-diagrams
 ```
 
 > [!NOTE]
@@ -411,7 +413,7 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 |     `VerticalPodAutoscaler`      |      `autoscaling.k8s.io`      |             `v1`              |                ![VerticalPodAutoscaler](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vpa.png)                |
 |        `VolumeAttachment`        |        `storage.k8s.io`        |             `v1`              |         ![VolumeAttachment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/master/icons/png/resources/labeled/vol-128.png)          |
 
-**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L83).
+**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L103).
 
 Currently, there are 16 unsupported Kubernetes resource types:
 
@@ -436,8 +438,8 @@ Currently, there are 16 unsupported Kubernetes resource types:
 
 ### Kubernetes custom resources
 
-The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/monitoring.coreos.com.kdc](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/monitoring.coreos.com.kdc#L4), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L17), and
-[examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L14).
+The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/monitoring.coreos.com.kdc](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/monitoring.coreos.com.kdc#L4), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L19), and
+[examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L22).
 Following lists some custom resources already supported in [examples](https://github.com/philippemerle/KubeDiagrams/blob/main/examples).
 
 |               Kind               |            ApiGroup            |           Versions            |                                                                          Icon                                                                          |
@@ -484,13 +486,13 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 | `rbac.authorization.k8s.io/aggregate-to-edit` |  Edit ClusterRole Aggregation  | transparent | Yes |
 | `rbac.authorization.k8s.io/aggregate-to-view` |  View ClusterRole Aggregation  | transparent | Yes |
 
-Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L77) file.
+Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L97) file.
 
 | Annotation Key |   Cluster Title    |  Background Color  |   Recommended   |
 | :------------: | :----------------: | :----------------: | :----------------: |
 | `helm.sh/hook` | `annotation value` | ![Static Badge](https://img.shields.io/badge/%20%20%20%20%20%20%20%20%20%20-EBF3E7) | Yes |
 
-New label/annotation-based mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2), [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L1), and [examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L1))
+New label/annotation-based mappings can be easily defined in custom configuration files (see [examples/minikube/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/minikube/KubeDiagrams.yml#L2), [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L5), [examples/free5gc-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/free5gc-k8s/KubeDiagrams.yml#L2), [examples/open5gs-k8s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/open5gs-k8s/KubeDiagrams.yml#L2), [examples/towards5gs-helm/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/towards5gs-helm/KubeDiagrams.yml#L2), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L1), and [examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L9))
 and provided to **KubeDiagrams** via the `--config` command-line option.
 
 ### Kubernetes resource relationships
