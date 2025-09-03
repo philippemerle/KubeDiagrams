@@ -1,0 +1,120 @@
+nodes:
+  VaultConnection/secrets.hashicorp.com/v1beta1:
+    scope: Namespaced
+    # custom_icon: path-to-a-png-icon
+  VaultAuth/secrets.hashicorp.com/v1beta1:
+    scope: Namespaced
+    # custom_icon: path-to-a-png-icon
+    edges: |
+      edges.add_edge_to(
+        "spec.vaultConnectionRef",
+        ".",
+        get_namespace(resource),
+        "VaultConnection",
+        "secrets.hashicorp.com/v1beta1",
+        "REFERENCE"
+      )
+      edges.add_edge_to(
+        "spec.vaultAuthGlobalRef.name",
+        ".",
+        get_namespace(resource),
+        "VaultAuthGlobal",
+        "secrets.hashicorp.com/v1beta1",
+        "REFERENCE"
+      )
+  VaultAuthGlobal/secrets.hashicorp.com/v1beta1:
+    scope: Namespaced
+    # custom_icon: path-to-a-png-icon
+  VaultStaticSecret/secrets.hashicorp.com/v1beta1:
+    scope: Namespaced
+    # custom_icon: path-to-a-png-icon
+    edges: |
+      edges.add_edge_to(
+        "spec.vaultAuthRef",
+        ".",
+        get_namespace(resource),
+        "VaultAuth",
+        "secrets.hashicorp.com/v1beta1",
+        "REFERENCE"
+      )
+      edges.add_edge_to(
+        "spec.destination.name",
+        ".",
+        get_namespace(resource),
+        "Secret",
+        "v1",
+        "OWNER"
+      )
+    nodes: |
+      secret_name = query_path(resource, "spec.destination.name")
+      if secret_name is not None:
+        nodes.append({
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secret_name,
+            "namespace": get_namespace(resource)
+          }
+        })
+  VaultPKISecret/secrets.hashicorp.com/v1beta1:
+    scope: Namespaced
+    # custom_icon: path-to-a-png-icon
+    edges: |
+      edges.add_edge_to(
+        "spec.vaultAuthRef",
+        ".",
+        get_namespace(resource),
+        "VaultAuth",
+        "secrets.hashicorp.com/v1beta1",
+        "REFERENCE"
+      )
+      edges.add_edge_to(
+        "spec.destination.name",
+        ".",
+        get_namespace(resource),
+        "Secret",
+        "v1",
+        "OWNER"
+      )
+    nodes: |
+      secret_name = query_path(resource, "spec.destination.name")
+      if secret_name is not None:
+        nodes.append({
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secret_name,
+            "namespace": get_namespace(resource)
+          }
+        })
+  VaultDynamicSecret/secrets.hashicorp.com/v1beta1:
+    scope: Namespaced
+    # custom_icon: path-to-a-png-icon
+    edges: |
+      edges.add_edge_to(
+        "spec.vaultAuthRef",
+        ".",
+        get_namespace(resource),
+        "VaultAuth",
+        "secrets.hashicorp.com/v1beta1",
+        "REFERENCE"
+      )
+      edges.add_edge_to(
+        "spec.destination.name",
+        ".",
+        get_namespace(resource),
+        "Secret",
+        "v1",
+        "OWNER"
+      )
+    nodes: |
+      secret_name = query_path(resource, "spec.destination.name")
+      if secret_name is not None:
+        nodes.append({
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": secret_name,
+            "namespace": get_namespace(resource)
+          }
+        })
