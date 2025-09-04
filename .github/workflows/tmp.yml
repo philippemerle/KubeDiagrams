@@ -1,4 +1,4 @@
-name: Release Image 0.5.0
+name: Release Image 0.6.0
 
 on:
   workflow_dispatch:
@@ -27,4 +27,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: philippemerle/kubediagrams:0.5.0
+          tags: philippemerle/kubediagrams:0.6.0
