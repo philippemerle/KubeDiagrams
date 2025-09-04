@@ -607,6 +607,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [KubeDiagrams 0.6.0 is out!](https://www.reddit.com/r/kubernetes/comments/1n86imp/kubediagrams_060_is_out/), Reddit, September 4, 2025.
+
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1956434726450860497) on X, August 15, 2025.
 
 1. [Kubernetes Insights Report - July 2025](https://kube.today/kubernetes-insights-july-2025), Kube Today, August 12, 2025.
