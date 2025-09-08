@@ -609,6 +609,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 1. [KubeDiagrams 0.6.0 is out!](https://www.reddit.com/r/kubernetes/comments/1n86imp/kubediagrams_060_is_out/), Reddit, September 4, 2025.
 
+1. [Evgeny Anikiev's post](https://www.linkedin.com/posts/anikievev_github-philippemerlekubediagrams-generate-activity-7368221605052694528-pB7Y/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAAAemi4BApQnQWOvw041B_9Tbc_ljWmw1-E) on LinkedIn, September 2, 2025.
+
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1956434726450860497) on X, August 15, 2025.
 
 1. [Kubernetes Insights Report - July 2025](https://kube.today/kubernetes-insights-july-2025), Kube Today, August 12, 2025.
