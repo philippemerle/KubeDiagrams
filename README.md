@@ -589,6 +589,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Talks
 
+1. [Visualizing Cloud-native Applications with KubeDiagrams](https://github.com/philippemerle/KubeDiagrams/tree/main/docs/2025-VISSOFT-slides.pdf), Philippe Merle, Fabio Petrillo. [13th IEEE Working Conference on Software Visualization (VISSOFT 2025)](https://vissoft.io/2025/), Auckland, New Zealand, September 7-8, 2025.
+
 1. [Visualizing cloud-native applications with KubeDiagrams](https://mybox.inria.fr/f/61de0e6e5be94b7a941f/?dl=1), Philippe Merle, [PEPR Cloud Taranis Project](https://pepr-cloud.fr/en/project-taranis/), February 17, 2025.
 
 ### Blogs
