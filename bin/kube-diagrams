@@ -1352,28 +1352,46 @@ def create_custom_node(node_id, node_def):
     """
         Create a custom node.
     """
-    diagram_node_class = ManagedServices # default diagram node class
-    # Get diagram node class name
-    diagram_node_classname = node_def.get("type")
-    if diagram_node_classname is not None: # classname defined
-        # Import Diagrams node class module
-        idx = diagram_node_classname.rfind('.')
-        if idx != -1:
-            module = importlib.import_module(diagram_node_classname[:idx])
-            # Get diagram node class
-            diagram_node_class = getattr(module, diagram_node_classname[idx+1:])
+    node_icon = node_def.get("icon")
     node_label = split_node_label(node_def.get("name", ""))
-    diagram_nodes[node_id] = diagram_node_class(node_label, tooltip=node_label)
+    if node_icon is not None: # icon defined
+        diagram_nodes[node_id] = Custom(
+            node_label,
+            os.path.abspath(node_icon.replace("$KD", DIRNAME)),
+            tooltip=node_label
+        )
+    else:
+        diagram_node_class = ManagedServices # default diagram node class
+        # Get diagram node class name
+        diagram_node_classname = node_def.get("type")
+        if diagram_node_classname is not None: # classname defined
+            # Import Diagrams node class module
+            idx = diagram_node_classname.rfind('.')
+            if idx != -1:
+                module = importlib.import_module(diagram_node_classname[:idx])
+                # Get diagram node class
+                diagram_node_class = getattr(module, diagram_node_classname[idx+1:])
+        diagram_nodes[node_id] = diagram_node_class(node_label, tooltip=node_label)
 
 def create_custom_cluster(cluster_id, cluster_def):
     """
         Create a custom cluster.
     """
     cluster_name = query_path(cluster_def, "name")
-    with Cluster(cluster_name, graph_attr={
-            "tooltip": cluster_name,
-            **cluster_def.get("graph_attr", {})
-         }):
+    cluster_type = query_path(cluster_def, "type")
+    # Build base graph_attr
+    graph_attr = {
+        "tooltip": cluster_name,
+        **cluster_def.get("graph_attr", {}),
+    }
+    if cluster_type:
+        # Dynamically import diagrams node class
+        idx = cluster_type.rfind(".")
+        if idx != -1:
+            module = importlib.import_module(cluster_type[:idx])
+            diagram_class = getattr(module, cluster_type[idx+1:])
+            graph_attr["label"] = icon(diagram_class, cluster_name)
+    with Cluster(cluster_name, graph_attr=graph_attr):
         create_custom_clusters_nodes(cluster_id, cluster_def)
 
 def create_custom_clusters_nodes(container_id, container_def):
