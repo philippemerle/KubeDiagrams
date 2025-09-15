@@ -1,0 +1,485 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/component: mgmt
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp-mgmt
+  namespace: myapp
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - pods/log
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - get
+  - list
+- apiGroups:
+  - apps
+  resourceNames:
+  - myapp
+  resources:
+  - deployments
+  verbs:
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/component: mgmt
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp-mgmt
+  namespace: myapp
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: myapp-mgmt
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: myapp
+---
+apiVersion: v1
+data:
+  BUCKET: myapp
+  ENDPOINT: https://minio-tls:9000
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: db
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: minio
+  namespace: myapp
+---
+apiVersion: v1
+data:
+  database: myapp
+  hostname: myapp-db
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: db
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp-db
+  namespace: myapp
+---
+apiVersion: v1
+data:
+  ACCESS_KEY:
+  SECRET_KEY:
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/component: db
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: minio
+  namespace: myapp
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    io.cilium/lb-ipam-ips: 1.2.3.4
+  labels:
+    app.kubernetes.io/component: mgmt
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp-mgmt
+  namespace: myapp
+spec:
+  externalTrafficPolicy: Local
+  ports:
+  - name: ssh
+    port: 22
+    targetPort: 2222
+  selector:
+    app.kubernetes.io/component: mgmt
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp
+  namespace: myapp
+spec:
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+  selector:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  type: ClusterIP
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: logs
+  namespace: myapp
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp
+  namespace: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: app
+      app.kubernetes.io/instance: dev
+      app.kubernetes.io/name: myapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: app
+        app.kubernetes.io/instance: dev
+        app.kubernetes.io/name: myapp
+    spec:
+      containers:
+      - env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              key: hostname
+              name: myapp-db
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: database
+              name: myapp-db
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              key: username
+              name: myapp.myapp-db.credentials.postgresql.acid.zalan.do
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: myapp.myapp-db.credentials.postgresql.acid.zalan.do
+        image: myapp
+        livenessProbe:
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          successThreshold: 1
+          tcpSocket:
+            port: 8000
+          timeoutSeconds: 5
+        name: myapp
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health-check
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+          requests:
+            cpu: 1000m
+            memory: 4Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          runAsGroup: 1001
+          runAsNonRoot: true
+          runAsUser: 1001
+        volumeMounts:
+        - mountPath: /app/log
+          name: logs
+        - mountPath: /mnt/tmp
+          name: tmp
+      hostname: myapp
+      securityContext:
+        fsGroup: 1001
+      volumes:
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs
+      - emptyDir:
+          sizeLimit: 1Gi
+        name: tmp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: mgmt
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp-mgmt
+  namespace: myapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: mgmt
+      app.kubernetes.io/instance: dev
+      app.kubernetes.io/name: myapp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: mgmt
+        app.kubernetes.io/instance: dev
+        app.kubernetes.io/name: myapp
+    spec:
+      containers:
+      - image: myapp-mgmt
+        name: myapp-mgmt
+        ports:
+        - containerPort: 2222
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        volumeMounts:
+        - mountPath: /usr/bin/kubectl
+          name: host-usr-bin
+          subPath: kubectl
+        - mountPath: /logs
+          name: logs
+      hostname: myapp-mgmt
+      securityContext:
+        fsGroup: 1001
+      volumes:
+      - hostPath:
+          path: /usr/bin
+        name: host-usr-bin
+      - name: logs
+        persistentVolumeClaim:
+          claimName: logs
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  labels:
+    app.kubernetes.io/component: db
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp-db
+  namespace: myapp
+spec:
+  databases:
+    myapp: myapp
+  env:
+  - name: AWS_ENDPOINT
+    valueFrom:
+      configMapKeyRef:
+        key: ENDPOINT
+        name: minio
+  - name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        key: ACCESS_KEY
+        name: minio
+  - name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        key: SECRET_KEY
+        name: minio
+  - name: AWS_S3_FORCE_PATH_STYLE
+    value: "true"
+  - name: USE_WALG_RESTORE
+    value: "true"
+  - name: USE_WALG_BACKUP
+    value: "true"
+  - name: WAL_S3_BUCKET
+    valueFrom:
+      configMapKeyRef:
+        key: BUCKET
+        name: minio
+  - name: WALG_S3_CA_CERT_FILE
+    value: /certs/minio/ca.crt
+  - name: WAL_BUCKET_SCOPE_PREFIX
+    value: ""
+  - name: WAL_BUCKET_SCOPE_SUFFIX
+    value: ""
+  - name: BACKUP_NUM_TO_RETAIN
+    value: "30"
+  numberOfInstances: 2
+  postgresql:
+    version: "17"
+  resources:
+    limits:
+      cpu: 2000m
+      memory: 4096Mi
+    requests:
+      cpu: 1000m
+      memory: 4096Mi
+  teamId: myapp
+  users:
+    myapp:
+    - superuser
+    - createdb
+  volume:
+    size: 10Gi
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: minio
+  namespace: myapp
+spec:
+  description: allow pods to connect to MinIO
+  egress:
+  - toEndpoints:
+    - matchLabels:
+        k8s:app.kubernetes.io/name: minio-tls
+        k8s:io.kubernetes.pod.namespace: minio-tls
+    toPorts:
+    - ports:
+      - port: "9000"
+        protocol: TCP
+  endpointSelector: {}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: namespace-internal
+  namespace: myapp
+spec:
+  description: allow namespace internal communication
+  egress:
+  - toEndpoints:
+    - matchLabels: {}
+  endpointSelector:
+    matchLabels: {}
+  ingress:
+  - fromEndpoints:
+    - matchLabels: {}
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: app
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp
+  namespace: myapp
+spec:
+  description: allow myapp ingress and egress connections
+  egress:
+  - ...
+  ingress:
+  - ...
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  labels:
+    app.kubernetes.io/component: mgmt
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp-mgmt
+  namespace: myapp
+spec:
+  description: allow ingress mgmt connections
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/component: mgmt
+  ingress:
+  - toPorts:
+    - ports:
+      - port: "2222"
+        protocol: TCP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app.kubernetes.io/component: web
+    app.kubernetes.io/instance: dev
+    app.kubernetes.io/name: myapp
+  name: myapp
+  namespace: myapp
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: myapp.example.net
+    http:
+      paths:
+      - backend:
+          service:
+            name: myapp
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - myapp.example.net
+    secretName: myapp-tls
