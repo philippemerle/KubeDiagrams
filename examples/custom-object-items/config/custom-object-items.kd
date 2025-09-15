@@ -1,0 +1,132 @@
+diagram:
+  clusters:
+    EMEA:
+      name: "K8s Cluster: EMEA"
+      graph_attr:
+        bgcolor: transparent
+        pencolor: black
+        style: dashed,rounded
+      clusters:
+        cert-manager:
+          name: "cert-manager"
+          type: diagrams.k8s.group.Namespace
+          graph_attr:
+            bgcolor: transparent
+            pencolor: black
+            style: dashed,rounded
+          clusters:
+            appcm:
+              name: ""
+              nodes:
+                cert-manager:
+                  name: "Certificate Management"
+                  type: diagrams.onprem.certificates.CertManager
+        minio-tls:
+          name: "minio-tls"
+          type: diagrams.k8s.group.Namespace
+          graph_attr:
+            bgcolor: transparent
+            pencolor: black
+            style: dashed,rounded
+          clusters:
+            appminio:
+              name: ""
+              nodes:
+                minio-tls:
+                  name: "S3 Storage"
+                  icon: icons/minio.png
+  nodes:
+    Admin:
+      name: Admin / DevOps
+      type: diagrams.azure.general.Supportrequests
+    Users:
+      name: Users
+      type: diagrams.azure.identity.Groups
+    PKI:
+      name: PKI
+      type: diagrams.aws.security.CertificateAuthority
+  edges:
+    - from: Admin
+      to: myapp-mgmt/myapp/Service/v1
+      xlabel: SSH
+      color: orange
+    - from: Users
+      to: myapp/myapp/Ingress/networking.k8s.io/v1
+      xlabel: HTTPS
+      color: "#00AB00"
+    - from: myapp/myapp/Ingress/networking.k8s.io/v1
+      to: EMEA.cert-manager.appcm.cert-manager
+    - from: EMEA.cert-manager.appcm.cert-manager
+      to: PKI
+      xlabel: HTTPS
+      color: "#00AB00"
+    - from: myapp-db/myapp/postgresql/acid.zalan.do/v1
+      to: EMEA.minio-tls.appminio.minio-tls
+      xlabel: HTTPS
+      color: "#00AB00"
+    - from: myapp/myapp/Deployment/apps/v1
+      to: myapp-db/myapp/postgresql/acid.zalan.do/v1
+  generate_diagram_in_cluster: EMEA
+nodes:
+  CiliumNetworkPolicy/cilium.io/v2:
+    scope: Namespaced
+    custom_icon: icons/cilium.png
+  postgresql/acid.zalan.do/v1:
+    scope: Namespaced
+    diagram_node_classname: diagrams.onprem.database.Postgresql
+    edges: |
+      edges.add_edge_to(
+        "spec",
+        get_name(resource),
+        get_namespace(resource),
+        "ConfigMap",
+        "v1",
+        "REFERENCE"
+      )
+      # add edge from postgresql to MinIO ConfigMap
+      edges.add_edge_to(
+        "spec",
+        "minio",
+        get_namespace(resource),
+        "ConfigMap",
+        "v1",
+        "REFERENCE"
+      )
+      # add edge from postgresql to MinIO Secret
+      edges.add_edge_to(
+        "spec",
+        "minio",
+        get_namespace(resource),
+        "Secret",
+        "v1",
+        "REFERENCE"
+      )
+  Ingress/networking.k8s.io/v1:
+    scope: Namespaced
+    nodes: |
+      for idx, tls in enumerate(query_path(resource, "spec.tls", [])):
+        nodes.append({
+          "kind": "Secret",
+          "apiVersion": "v1",
+          "metadata": {
+            "name": tls.get("secretName"),
+            "namespace": get_namespace(resource),
+            "labels": {
+              **query_path(resource, "metadata.labels", {})
+            }
+          }
+        })
+    edges: |
+      edges.add_service("spec.defaultBackend.service.name")
+      for ridx, rule in enumerate(query_path(resource, "spec.rules", [])):
+        for pidx, path in enumerate(query_path(rule, "http.paths", [])):
+          edges.add_service(f"spec.rules[{ridx}].http.paths[{pidx}].backend.service.name", name=query_path(path, "backend.service.name"))
+      for idx, tls in enumerate(query_path(resource, "spec.tls", [])):
+        edges.add_edge_to(
+          f"spec.tls[{idx}]",
+          tls.get("secretName"),
+          get_namespace(resource),
+          "Secret",
+          "v1",
+          "REFERENCE"
+        )
