@@ -587,7 +587,7 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Papers
 
-1. [Visualizing Cloud-native Applications with KubeDiagrams](https://hal.science/hal-05263068). Philippe Merle and Fabio Petrillo. [VISSOFT 2025 - 13th IEEE Working Conference on Software Visualization](https://vissoft.io/2025), pp.1-11, Auckland, New Zealand, September 2025.
+1. [Visualizing Cloud-native Applications with KubeDiagrams](https://hal.science/hal-05263068). Philippe Merle and Fabio Petrillo. Proceedings of the [13th IEEE Working Conference on Software Visualization - VISSOFT 2025](https://vissoft.io/2025), pp.106-116, Auckland, New Zealand, September 2025.
 
 1. [Visualizing Cloud-native Applications with KubeDiagrams](http://arxiv.org/abs/2505.22879). Philippe Merle and Fabio Petrillo. arXiv. May 28, 2025.
 
