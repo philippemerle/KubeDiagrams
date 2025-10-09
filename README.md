@@ -613,6 +613,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Kube Architect's post](https://x.com/K8sArchitect/status/1975578370457964926) on X, October 7, 2025.
+
 1. [Kube Architect's post](https://www.linkedin.com/posts/kubernetes-architect_kubediagrams-reads-kubernetes-manifests-activity-7381344073300979712-pKZa/) on LinkedIn, October 7, 2025.
 
 1. [Kubernetes What's New's post](https://www.linkedin.com/posts/k8snews_heres-your-quick-roundup-of-the-top-kubernetes-activity-7375559648743043072-1e89/) on LinkedIn, September 22, 2025.
