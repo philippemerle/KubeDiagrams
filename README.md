@@ -613,6 +613,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Online KubeDiagrams Service](https://www.reddit.com/r/kubernetes/comments/1o4lk73/online_kubediagrams_service/), Reddit, October 12, 2025.
+
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1975578370457964926) on X, October 7, 2025.
 
 1. [Kube Architect's post](https://www.linkedin.com/posts/kubernetes-architect_kubediagrams-reads-kubernetes-manifests-activity-7381344073300979712-pKZa/) on LinkedIn, October 7, 2025.
