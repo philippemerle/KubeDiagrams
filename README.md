@@ -599,6 +599,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Blogs
 
+1. [Visualising the architecture of cloud-native applications with KubeDiagrams](https://www.inria.fr/en/visualising-architecture-cloud-native-applications-kubediagrams), Inria, October 15, 2025.
+
 1. [KubeDiagrams: Automating your Kubernetes Architecture](https://medium.com/@iamdanielemmanuelmark5/kubediagrams-automating-your-kubernetes-architecture-9f9b305a7bb4), Daniel Makhoba Emmanuel, Medium, June 19, 2025.
 
 1. [[Literature Review] Visualizing Cloud-native Applications with KubeDiagrams](https://www.themoonlight.io/en/review/visualizing-cloud-native-applications-with-kubediagrams), Moonlight, May 27, 2025.
