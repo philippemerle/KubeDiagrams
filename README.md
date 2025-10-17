@@ -31,6 +31,8 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 
 **KubeDiagrams** is available as a [Python package in PyPI](https://pypi.org/project/KubeDiagrams), a [container image in DockerHub](https://hub.docker.com/r/philippemerle/kubediagrams), a `kubectl` plugin, a Nix flake, and a GitHub Action, see [here](https://github.com/philippemerle/KubeDiagrams#getting-started) for more details.
 
+An **Online KubeDiagrams Service** is freely available at **[http://kubediagrams.lille.inria.fr/](http://kubediagrams.lille.inria.fr/)**.
+
 Read **[Real-World Use Cases](https://github.com/philippemerle/KubeDiagrams#real-world-use-cases)** and **[What do they say about it](https://github.com/philippemerle/KubeDiagrams#what-do-they-say-about-it)** to discover how **KubeDiagrams** is really used and appreciated.
 
 Try it on your own Kubernetes manifests, Helm charts, helmfiles, and actual cluster state!
