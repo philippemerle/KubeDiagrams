@@ -601,6 +601,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Blogs
 
+1. [KubeDiagrams - Como gerar diagramas das suas arquiteturas Kubernetes](https://www.linkedin.com/pulse/kubediagrams-como-gerar-diagramas-das-suas-arquiteturas-kubernetes-9xbdf/), Paulo Cerqueira, October 22, 2025.
+
 1. [Visualising the architecture of cloud-native applications with KubeDiagrams](https://www.inria.fr/en/visualising-architecture-cloud-native-applications-kubediagrams), Inria, October 15, 2025.
 
 1. [KubeDiagrams: Automating your Kubernetes Architecture](https://medium.com/@iamdanielemmanuelmark5/kubediagrams-automating-your-kubernetes-architecture-9f9b305a7bb4), Daniel Makhoba Emmanuel, Medium, June 19, 2025.
