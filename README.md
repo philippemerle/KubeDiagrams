@@ -104,6 +104,7 @@ Many other architecture diagrams are available into [examples/](https://github.c
 
 1. [Argo](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/)
 1. [cert-manager](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cert-manager/)
+1. [External Secrets Operator](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/external-secrets/)
 1. [Istio](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/istio/)
 1. [Kube Prometheus Stack](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/)
 1. [LeaderWorkerSet API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/)
@@ -441,8 +442,8 @@ Currently, there are 16 unsupported Kubernetes resource types:
 
 ### Kubernetes custom resources
 
-The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/monitoring.coreos.com.kdc](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/monitoring.coreos.com.kdc#L4), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L19), and
-[examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L22).
+The mapping for any Kubernetes custom resources can be also defined into **KubeDiagrams** configuration files as illustrated in [examples/k0s/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/k0s/KubeDiagrams.yml#L10), [examples/kube-prometheus-stack/monitoring.coreos.com.kdc](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/monitoring.coreos.com.kdc#L4), [examples/lws/KubeDiagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/KubeDiagrams.yml#L19),
+[examples/argo/KubeDiagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/KubeDiagrams.yaml#L22), and [examples/external-secrets/external-secrets.io.kdc](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/external-secrets/external-secrets.io.kdc#L1).
 Following lists some custom resources already supported in [examples](https://github.com/philippemerle/KubeDiagrams/blob/main/examples).
 
 |               Kind               |            ApiGroup            |           Versions            |                                                                          Icon                                                                          |
@@ -468,6 +469,8 @@ Following lists some custom resources already supported in [examples](https://gi
 |           `Certificate`           |    `cert-manager.io`    |    `v1alpha1` `v1alpha2` `v1`    |                  ![Certificate](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/azure/web/app-service-certificates.png)                  |
 |           `ClusterIssuer`           |    `cert-manager.io`    |    `v1alpha1` `v1alpha2` `v1`    |                  ![ClusterIssuer](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/aws/security/certificate-authority.png)                  |
 |           `Issuer`           |    `cert-manager.io`    |    `v1alpha1` `v1alpha2` `v1`    |                  ![Issuer](https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/aws/security/certificate-authority.png)                  |
+|           `ExternalSecret`           |    `external-secrets.io`    |    `v1alpha1` `v1beta1` `v1`    |                  ![ExternalSecret](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/external-secrets/icons/ExternalSecret.png)                  |
+|           `SecretStore`           |    `external-secrets.io`    |    `v1alpha1` `v1beta1` `v1`    |                  ![SecretStore](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/external-secrets/icons/SecretStore.png)                  |
 
 ### Kubernetes resources clustering
 
