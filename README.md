@@ -622,6 +622,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [OSO's post](https://x.com/osodevops/status/1985564412720091564) on X, November 4, 2025.
+
 1. [Philippe Merle's post](https://www.linkedin.com/analytics/post-summary/urn:li:activity:7387345855089070080/) on LinkedIn, October 24, 2025.
 
 1. [Online KubeDiagrams Service](https://www.reddit.com/r/kubernetes/comments/1o4lk73/online_kubediagrams_service/), Reddit, October 12, 2025.
