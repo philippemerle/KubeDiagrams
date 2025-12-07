@@ -622,6 +622,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [James Whyley's post](https://www.linkedin.com/posts/james-whyley-0941aa31_online-kubediagrams-web-server-activity-7402319330182479872-uK61/) on LinkedIn, December 5, 2025.
+
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1995932488393171427) on X, December 2, 2025.
 
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/1986813654801485978) on X, November 7, 2025.
