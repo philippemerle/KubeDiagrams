@@ -605,6 +605,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Blogs
 
+1. [KubeDiagrams: Automatically Generate Stunning Kubernetes Architecture Diagrams from Code and Clusters](https://engineering.01cloud.com/2025/12/24/kubediagrams-automatically-generate-stunning-kubernetes-architecture-diagrams-from-code-and-clusters/), 01 Cloud Engineering, December 24, 2025.
+
 1. [KubeDiagrams - Como gerar diagramas das suas arquiteturas Kubernetes](https://www.linkedin.com/pulse/kubediagrams-como-gerar-diagramas-das-suas-arquiteturas-kubernetes-9xbdf/), Paulo Cerqueira, October 22, 2025.
 
 1. [Visualising the architecture of cloud-native applications with KubeDiagrams](https://www.inria.fr/en/visualising-architecture-cloud-native-applications-kubediagrams), Inria, October 15, 2025.
@@ -622,6 +624,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 1. [Visualising SQL Server in Kubernetes](https://dbafromthecold.com/2025/02/06/visualising-sql-server-in-kubernetes/), Andrew Pruski, February 6, 2025.
 
 ### Social Networks
+
+1. [01Cloud's post](https://www.linkedin.com/posts/zero-one-cloud_kubediagrams-automatically-generate-stunning-activity-7409579703847710720-ht68/), LinkedIn, December 24, 2025.
 
 1. [KubeDiagrams](https://www.reddit.com/r/kubernetes/comments/1pqkffu/kubediagrams/), Reddit, December 19, 2025.
 
