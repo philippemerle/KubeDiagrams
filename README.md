@@ -625,6 +625,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Kube Architect's post](https://x.com/K8sArchitect/status/2007167771566608550) on X, January 2, 2026.
+
 1. [01Cloud's post](https://www.linkedin.com/posts/zero-one-cloud_kubediagrams-automatically-generate-stunning-activity-7409579703847710720-ht68/), LinkedIn, December 24, 2025.
 
 1. [KubeDiagrams](https://www.reddit.com/r/kubernetes/comments/1pqkffu/kubediagrams/), Reddit, December 19, 2025.
