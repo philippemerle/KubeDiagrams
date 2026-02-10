@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>KubeDiagrams Interactive Viewer</title>
+      <!-- cytoscape -->
+      <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.32.0/dist/cytoscape.min.js"></script>
+
+      <!-- layout dagre -->
+      <script src=https://cdn.jsdelivr.net/npm/dagre@0.8.5/dist/dagre.min.js></script>
+      <script src="https://cdn.jsdelivr.net/npm/cytoscape-dagre@2.5.0/cytoscape-dagre.min.js"></script>
+
+      <!-- layout klay -->
+      <script src="https://cdn.jsdelivr.net/npm/klayjs@0.4.1/klay.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/cytoscape-klay@3.1.4/cytoscape-klay.min.js"></script>
+
+      <!-- cytoscape-context-menus -->
+      <script src="https://cdn.jsdelivr.net/npm/cytoscape-context-menus@4.2.1/cytoscape-context-menus.min.js"></script>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cytoscape-context-menus@4.2.1/cytoscape-context-menus.min.css">
+
+      <!-- KubeDiagrams Interactive Viewer -->
+      <script src="./script/defaultStyle.js"></script>
+      <script src="./script/layout.js"></script>
+      <script src="./script/itemAndFunctionMenus.js"></script>
+      <script>
+        (function () {
+          // 1) Autoload via ?dataUrl=...
+          const params = new URLSearchParams(location.search);
+          const dataUrl = params.get('dataUrl');
+          if (dataUrl) {
+            fetch(dataUrl)
+              .then(r => r.json())
+              .then(json => {
+                if (typeof window.renderFromDotJson === 'function') {
+                  window.renderFromDotJson(json);
+                } else {
+                  console.warn('renderFromDotJson(json) is not defined.');
+                }
+              })
+              .catch(err => console.error('Failed to load DOT_JSON via dataUrl:', err));
+          }
+
+          // 2) Autoload via postMessage
+          window.addEventListener('message', (e) => {
+            const data = e && e.data;
+            if (!data || data.type !== 'KD_LOAD_DOT_JSON' || !data.payload) return;
+
+            try {
+              const json = data.payload;
+              if (typeof window.renderFromDotJson === 'function') {
+                window.renderFromDotJson(json);
+              } else {
+                console.warn('renderFromDotJson(json) is not defined.');
+              }
+            } catch (err) {
+              console.error('Failed to handle KD_LOAD_DOT_JSON:', err);
+            }
+          }, false);
+        })();
+      </script>
+      <script  src="./script/main.js"></script>
+      <link rel="stylesheet" href="./style.css">
+
+    </head>
+    <body>
+      <h1><img style="vertical-align: middle;" src="KubeDiagrams.png" alt="Logo de KubeDiagrams" height="80"/> <text style="color: #326CE5;">Interactive Viewer</text></h1>
+      <div class="buttons">
+        Select a .dot_json file:
+        <input type="file" id="fileInput"/>
+        Choose a layout
+        <div id="layoutButtons"></div>
+        Save as
+        <div id="saveButtons">
+            <button id="savePNG">PNG</button>
+            <button id="saveJPG">JPG</button>
+        </div>
+      </div>
+      <div id="paper"></div>
+      <pre id="tooltip"></pre>
+    </body>
+</html>

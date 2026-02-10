@@ -1,0 +1,13 @@
+# Dépendances
+node_modules/
+dist/
+build/
+
+# Fichiers de configuration
+.env
+.env.local
+
+# Fichiers générés
+*.log
+.DS_Store
+

@@ -1,0 +1,61 @@
+# =============================================================================
+# KubeDiagrams Web UI - Docker Compose
+# =============================================================================
+# Services:
+# - frontend: Apache2 serving React static files + reverse proxy to backend
+# - backend: Python/Flask/Gunicorn with KubeDiagrams
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # Frontend Service (Apache2 + React Static Files)
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: kubediagrams-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      - BACKEND_URL=http://backend:5000
+    networks:
+      - kubediagrams-network
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Backend Service (Python/Flask/Gunicorn + KubeDiagrams)
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: kubediagrams-backend
+    expose:
+      - "5000"
+    environment:
+      - FLASK_ENV=production
+      - BEHIND_PROXY=true
+      - PROXY_X_FOR=1
+    volumes:
+      # Persist logs outside container
+      - ./backend/logs:/app/logs
+    networks:
+      - kubediagrams-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:5000/api/health"]
+      interval: 5m
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+# -----------------------------------------------------------------------------
+# Networks
+# -----------------------------------------------------------------------------
+networks:
+  kubediagrams-network:
+    driver: bridge
