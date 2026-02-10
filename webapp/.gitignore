@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+*.venv
+env/
+venv/
+ENV/
+.env
+.venv/
+*.sqlite3
+*.log
+logs/
+feedback.txt
+*.db
+.DS_Store
+
+# Flask uploads and temp
+instance/
+*.pem
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Vite / React build
+dist/
+build/
+
+# VSCode
+.vscode/
+
+# macOS/Linux junk
+Thumbs.db
+.DS_Store
+.idea
