@@ -1,8 +1,0 @@
-[MANIFEST]
-Note: 0
-Commentaire: test
-
-[HELMFILE]
-Note: 5
-Commentaire: ttt
-
