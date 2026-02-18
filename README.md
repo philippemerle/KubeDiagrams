@@ -26,6 +26,7 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 * **[any Kubernetes resource relationships](https://github.com/philippemerle/KubeDiagrams#kubernetes-resource-relationships)**,
 * **[declarative custom diagrams](https://github.com/philippemerle/KubeDiagrams#declarative-custom-diagrams)**,
 * **[an interactive diagram viewer](https://github.com/philippemerle/KubeDiagrams#kubediagrams-interactive-viewer)**,
+* **[a modern web application](https://github.com/philippemerle/KubeDiagrams#kubediagrams-webapp)**,
 * **main input formats** such as Kubernetes manifest files, customization files, Helm charts, helmfile descriptors, and actual cluster state,
 * **main output formats** such as DOT, GIF, JPEG, PDF, PNG, SVG, and TIFF,
 * **[a very large set of examples](https://github.com/philippemerle/KubeDiagrams#examples)**.
@@ -131,6 +132,10 @@ Following software must be installed:
 - `dot` command ([Graphviz](https://www.graphviz.org/))
 
 ## Getting Started
+
+### Online with nothing to install on your machine
+
+You could test **KubeDiagrams** directly from your favorite Web browser **[here](https://kubediagrams.lille.inria.fr/)**.
 
 ### From PyPI
 
@@ -551,6 +556,12 @@ Then open the `wordpress.dot_json` file:
 ![KubeDiagrams Interactive Viewer](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-Interactive-Viewer.png)
 
 **KubeDiagrams Interactive Viewer** allows users to zoom in/out diagrams, to see cluster/node/edge tooltips, open/close clusters, move clusters/nodes interactively, and save as PNG/JPG images.
+
+## KubeDiagrams WebApp
+
+A modern web app for **KubeDiagrams** is available in **[webapp](https://github.com/philippemerle/KubeDiagrams/tree/main/webapp)**. See a demo in the following video.
+
+[![Watch the video](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/docs/KubeDiagrams_WebApp.mp4)](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/docs/KubeDiagrams_WebApp.mp4).
 
 ## Architecture
 
