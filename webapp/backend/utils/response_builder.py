@@ -169,4 +169,3 @@ class ResponseBuilder:
         """
         status_code = 200 if result.success else 400
         return jsonify(result.to_dict()), status_code
-

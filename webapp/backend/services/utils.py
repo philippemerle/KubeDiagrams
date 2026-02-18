@@ -4,7 +4,6 @@ import shlex
 
 from constants import TEXT_FORMATS
 
-
 def has_fatal_error(stdout_txt: str, stderr_txt: str) -> bool:
     """
     Vérifie si la sortie contient une erreur fatale.
@@ -54,4 +53,3 @@ def encode_content(content: bytes, output_format: str) -> str:
     if output_format in TEXT_FORMATS:
         return content.decode("utf-8")
     return base64.b64encode(content).decode("utf-8")
-

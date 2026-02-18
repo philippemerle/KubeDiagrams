@@ -8,7 +8,6 @@ from .models import DiagramResult
 from .file_manager import FileManager
 from .utils import parse_extra_args, has_fatal_error, encode_content
 
-
 def generate_from_helm(
     chart_url: str,
     output_format: str = "png",
@@ -134,4 +133,3 @@ def generate_from_helm(
             error=f"Internal error: {e}",
             command=" ".join(cmd) if 'cmd' in locals() else None
         )
-

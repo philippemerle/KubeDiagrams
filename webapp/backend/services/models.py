@@ -1,5 +1,6 @@
 """Service Data Model"""
 from typing import Optional
+
 class DiagramResult:
     """Data model for the diagram result."""
     def __init__(

@@ -3,6 +3,7 @@ import os
 import tempfile
 from typing import Optional
 from contextlib import contextmanager
+
 class FileManager:
     """Temporary file manager."""
     @staticmethod
@@ -32,6 +33,7 @@ class FileManager:
                     os.remove(temp_file)
                 except OSError:
                     pass
+
     @staticmethod
     def cleanup_files(*file_paths: str) -> None:
         """
@@ -45,6 +47,7 @@ class FileManager:
                     os.remove(file_path)
                 except OSError:
                     pass
+
     @staticmethod
     def get_output_paths(base_path: str, output_format: str) -> tuple[str, str]:
         """
@@ -59,6 +62,7 @@ class FileManager:
         requested_output = f"{base_without_ext}.{output_format}"
         png_output = f"{base_without_ext}.png"
         return requested_output, png_output
+
     @staticmethod
     def find_output_file(requested_path: str, fallback_path: str) -> Optional[tuple[str, str]]:
         """
@@ -75,6 +79,7 @@ class FileManager:
         elif os.path.exists(fallback_path):
             return fallback_path, "png"
         return None
+
     @staticmethod
     def read_file_content(file_path: str, binary: bool = True) -> bytes | str:
         """
@@ -88,6 +93,7 @@ class FileManager:
         mode = "rb" if binary else "r"
         with open(file_path, mode) as f:
             return f.read()
+
     @staticmethod
     def get_base_name_from_path(file_path: str) -> str:
         """

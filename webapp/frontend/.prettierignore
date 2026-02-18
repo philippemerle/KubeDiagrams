@@ -1,13 +1,12 @@
-# Dépendances
+# Dependencies
 node_modules/
 dist/
 build/
 
-# Fichiers de configuration
+# Configuration files
 .env
 .env.local
 
-# Fichiers générés
+# Generated files
 *.log
 .DS_Store
-

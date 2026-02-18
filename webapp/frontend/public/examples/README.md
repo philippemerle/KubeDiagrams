@@ -9,7 +9,8 @@ examples/
 ├── manifests/       # Kubernetes manifest examples
 │   ├── cassandra.yaml
 │   ├── microservices.yaml
-│   └── redis-statefulset.yaml
+│   ├── redis-statefulset.yaml
+│   └── wordpress.yaml
 └── helmfiles/       # Helmfile examples
     └── monitoring-stack.yaml
 ```

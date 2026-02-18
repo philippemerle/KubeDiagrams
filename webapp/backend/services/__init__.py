@@ -12,4 +12,3 @@ __all__ = [
     'generate_from_helm',
     'generate_from_helmfile'
 ]
-

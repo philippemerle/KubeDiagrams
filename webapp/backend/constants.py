@@ -1,6 +1,7 @@
-"""Constantes of the backend"""
+"""Constants of the backend"""
 import re
-# Different format of mime_types
+
+# Different formats of mime_types
 MIME_TYPES = {
     "png": "image/png",
     "jpg": "image/jpeg",

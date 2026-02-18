@@ -54,4 +54,3 @@ def generate_helmfile_diagram():
 
     # Returning the response
     return ResponseBuilder.from_diagram_result(result)
-

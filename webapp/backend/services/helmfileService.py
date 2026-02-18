@@ -7,7 +7,6 @@ from .models import DiagramResult
 from .file_manager import FileManager
 from .utils import parse_extra_args, has_fatal_error, encode_content
 
-
 def generate_from_helmfile(
     helmfile_content: str,
     output_format: str = "png",

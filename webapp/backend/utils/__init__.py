@@ -14,4 +14,3 @@ __all__ = [
     'log_request',
     'log_request_compact'
 ]
-

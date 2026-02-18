@@ -1,4 +1,4 @@
-"""Flask Application for KubeDiagrams Web UI."""
+"""Flask Application for KubeDiagrams Web App."""
 from flask import Flask, g, request, jsonify
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix

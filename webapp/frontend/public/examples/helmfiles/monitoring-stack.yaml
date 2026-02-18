@@ -24,4 +24,3 @@ releases:
         persistence:
           enabled: true
           size: 5Gi
-

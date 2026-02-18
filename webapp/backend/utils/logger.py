@@ -105,4 +105,3 @@ def get_app_logger(name: str = None) -> logging.Logger:
         name = frame.f_globals.get('__name__', 'app')
 
     return AppLogger.get_logger(name)
-

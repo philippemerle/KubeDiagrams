@@ -1,7 +1,6 @@
 """Functions utils for routes."""
 from constants import MAX_LOG_LENGTH
 
-
 def compact_for_log(value: str, maxlen: int = MAX_LOG_LENGTH) -> str:
     """
     Compress a string for the logs (escape n/ r).
@@ -19,7 +18,6 @@ def compact_for_log(value: str, maxlen: int = MAX_LOG_LENGTH) -> str:
     if len(s) <= maxlen:
         return s
     return s[:maxlen] + f"...<+{len(s)-maxlen} chars>"
-
 
 def log_to_csv(client_ip: str, route: str, params: str):
     """

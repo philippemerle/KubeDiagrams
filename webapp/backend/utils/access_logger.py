@@ -5,7 +5,6 @@ from flask import request, g
 from typing import Optional
 from config import Config
 
-
 def is_valid_ip(ip: str) -> bool:
     """
     Check if the IP address is valid and not a placeholder.

@@ -180,4 +180,3 @@ class InputValidator:
         if len(safe_filename) > 255:
             safe_filename = safe_filename[:255]
         return safe_filename
-
