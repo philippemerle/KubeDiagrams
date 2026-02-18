@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci # npm ci is more fast than npm install
+RUN npm install
 
 # Copy source code, we copy all the frontend dire
 COPY . .
