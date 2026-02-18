@@ -1,0 +1,36 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Logs (will be mounted as volume)
+logs/*.log
+logs/*.csv
+
+# Development files
+.git
+.gitignore
+*.md
+
+# IDE
+.vscode/
+.idea/
+
+# Test files
+test-*.png
+test-*.svg
+*.test.py
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak

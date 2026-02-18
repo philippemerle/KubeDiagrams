@@ -1,0 +1,27 @@
+repositories:
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
+
+releases:
+  - name: prometheus
+    namespace: monitoring
+    chart: prometheus-community/prometheus
+    version: 15.0.0
+    values:
+      - server:
+          persistentVolume:
+            enabled: true
+            size: 8Gi
+
+  - name: grafana
+    namespace: monitoring
+    chart: grafana/grafana
+    version: 6.50.0
+    values:
+      - adminPassword: changeme
+        persistence:
+          enabled: true
+          size: 5Gi
+

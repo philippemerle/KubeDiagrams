@@ -1,0 +1,24 @@
+#paper {
+    width: 100%;
+    height: 80vh;
+    display: block;
+    margin: auto;
+    border: solid;
+}
+.buttons {
+    display: flex;
+    gap: 10px;
+}
+#layoutButtons {
+    display: flex;
+    gap: 4px;
+}
+#tooltip {
+    position: absolute;
+    display: none;
+    background: white;
+    border: solid;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 15px;
+}

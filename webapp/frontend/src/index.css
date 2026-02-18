@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-background: #0f172a; /* sombre pour background */
+  --color-panel: #1e293b; /* panneau input/output */
+  --color-text: #f1f5f9; /* texte général */
+  --color-accent: #3b82f6; /* bleu pour hover ou boutons */
+}
+
+/* Application */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Titres */
+h1 {
+  font-size: 2.5rem; /* un peu plus grand */
+  font-weight: 700;
+  margin-bottom: 1rem; /* espacement en dessous */
+}
+
+/* Boutons */
+button {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  color: var(--color-text);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
+}
+
+button:hover {
+  background-color: var(--color-accent);
+  transform: scale(1.05);
+}
+
+.diagram-viewer svg {
+  image-rendering: optimizeQuality;
+  text-rendering: geometricPrecision;
+  shape-rendering: geometricPrecision;
+}
+
+input[type='file']::file-selector-button {
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  transition:
+    background-color 0.2s,
+    transform 0.1s;
+  cursor: pointer;
+}
+input[type='file']::file-selector-button:hover {
+  background: #3b82f6;
+  transform: scale(1.02);
+}
+.kd-panzoom img {
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}
