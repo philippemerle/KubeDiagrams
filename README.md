@@ -3,7 +3,7 @@
 [![CNCF Landscape](https://img.shields.io/badge/CNCF%20Landscape-5699C6)](https://landscape.cncf.io/?item=app-definition-and-development--application-definition-image-build--kubediagrams)
 [![license](https://img.shields.io/github/license/philippemerle/KubeDiagrams)](https://github.com/philippemerle/KubeDiagrams/blob/main/LICENSE)
 ![python version](https://img.shields.io/badge/python-%3E%3D%203.9-blue?logo=python)
-[![Socket Badge](https://socket.dev/api/badge/pypi/package/KubeDiagrams/0.4.0?artifact_id=tar-gz)](https://socket.dev/pypi/package/KubeDiagrams/overview/0.4.0/tar-gz)
+[![Socket Badge](https://socket.dev/api/badge/pypi/package/KubeDiagrams/0.6.0?artifact_id=tar-gz)](https://socket.dev/pypi/package/KubeDiagrams/overview/0.6.0/tar-gz)
 [![pypi version](https://badge.fury.io/py/KubeDiagrams.svg)](https://badge.fury.io/py/KubeDiagrams)
 [![PyPI Downloads](https://static.pepy.tech/badge/kubediagrams)](https://pepy.tech/projects/kubediagrams)
 [![Docker Stars](https://img.shields.io/docker/stars/philippemerle/kubediagrams)](https://hub.docker.com/r/philippemerle/kubediagrams)
