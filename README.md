@@ -559,9 +559,7 @@ Then open the `wordpress.dot_json` file:
 
 ## KubeDiagrams WebApp
 
-A modern web app for **KubeDiagrams** is available in **[webapp](https://github.com/philippemerle/KubeDiagrams/tree/main/webapp)**. See a demo in the following video.
-
-[![Watch the video](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/docs/KubeDiagrams_WebApp.mp4)](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/docs/KubeDiagrams_WebApp.mp4).
+A modern web app for **KubeDiagrams** is available in **[webapp](https://github.com/philippemerle/KubeDiagrams/tree/main/webapp)**. See a demo in [this video](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/docs/KubeDiagrams_WebApp.mp4).
 
 ## Architecture
 
