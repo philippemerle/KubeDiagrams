@@ -1,5 +1,5 @@
 # =============================================================================
-# KubeDiagrams Web UI - Docker Compose
+# KubeDiagrams Web App - Docker Compose
 # =============================================================================
 # Services:
 # - frontend: Apache2 serving React static files + reverse proxy to backend
