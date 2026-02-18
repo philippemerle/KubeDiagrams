@@ -28,4 +28,5 @@ jobs:
         pip install pylint setuptools PyYAML diagrams
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py') bin/kube-diagrams
+        pylint bin/kube-diagrams setup.py
+        # $(git ls-files '*.py') commented to not pylint webapp/backend
