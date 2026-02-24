@@ -576,7 +576,8 @@ Following provides links to real-world use cases.
 **KubeDiagrams** could be used to generate architectural diagrams documenting your Kubernetes applications (manifests, Helm charts, helmfiles, or cluster state). See following links:
 
 - [duoan/tinyurl](https://github.com/duoan/tinyurl?tab=readme-ov-file#deployment-kubernetes)
-- [Daniel-Makhoba-Emmanuel/Full-stack-k8s-lab](https://github.com/Daniel-Makhoba-Emmanuel/Full-stack-k8s-lab)
+- [Daniel-Makhoba-Emmanuel/Full-stack-k8s-lab](https://daniel-makhoba-emmanuel.github.io/Full-stack-k8s-lab/lab-setup/architecture/)
+- [david-shepard/flux-infra](https://github.com/david-shepard/flux-infra?tab=readme-ov-file#%EF%B8%8F-architecture-overview)
 
 ### Architectural defects identification
 
