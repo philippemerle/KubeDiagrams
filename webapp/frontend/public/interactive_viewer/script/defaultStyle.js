@@ -65,6 +65,7 @@ const defaultGroupNodeStyle = {
                     'height': 100,
                     'text-valign' : 'bottom',       
                     'text-wrap': 'wrap',
+                    'shape': 'rectangle',
                 }
 
 const defaultGlobalNodeStyle = {
