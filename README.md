@@ -29,7 +29,7 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 * **[a modern web application](https://github.com/philippemerle/KubeDiagrams#kubediagrams-webapp)**,
 * **main input formats** such as Kubernetes manifest files, customization files, Helm charts, helmfile descriptors, and actual cluster state,
 * **main output formats** such as DOT, draw.io, GIF, JPEG, PDF, PNG, SVG, and TIFF,
-* **[editable draw.io export](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#editable-drawio-export)**
+* **[editable draw.io export](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#editable-drawio-export)**,
 * **[a very large set of examples](https://github.com/philippemerle/KubeDiagrams#examples)**.
 
 **KubeDiagrams** is available as a [Python package in PyPI](https://pypi.org/project/KubeDiagrams), a [container image in DockerHub](https://hub.docker.com/r/philippemerle/kubediagrams), a `kubectl` plugin, a Nix flake, and a GitHub Action, see [here](https://github.com/philippemerle/KubeDiagrams#getting-started) for more details.
