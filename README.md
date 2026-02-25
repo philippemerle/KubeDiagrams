@@ -28,7 +28,8 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 * **[an interactive diagram viewer](https://github.com/philippemerle/KubeDiagrams#kubediagrams-interactive-viewer)**,
 * **[a modern web application](https://github.com/philippemerle/KubeDiagrams#kubediagrams-webapp)**,
 * **main input formats** such as Kubernetes manifest files, customization files, Helm charts, helmfile descriptors, and actual cluster state,
-* **main output formats** such as DOT, GIF, JPEG, PDF, PNG, SVG, and TIFF,
+* **main output formats** such as DOT, draw.io, GIF, JPEG, PDF, PNG, SVG, and TIFF,
+* [editable draw.io export](https://github.com/philippemerle/KubeDiagrams#editable_drawio_export)
 * **[a very large set of examples](https://github.com/philippemerle/KubeDiagrams#examples)**.
 
 **KubeDiagrams** is available as a [Python package in PyPI](https://pypi.org/project/KubeDiagrams), a [container image in DockerHub](https://hub.docker.com/r/philippemerle/kubediagrams), a `kubectl` plugin, a Nix flake, and a GitHub Action, see [here](https://github.com/philippemerle/KubeDiagrams#getting-started) for more details.
@@ -139,7 +140,7 @@ You could test **KubeDiagrams** directly from your favorite Web browser **[here]
 
 ### From PyPI
 
-Following command installs **KubeDiagrams** and all its Python dependencies, i.e., [PyYAML](https://pyyaml.org) and [Diagrams](https://diagrams.mingrammer.com/).
+Following command installs **KubeDiagrams** and all its Python dependencies, i.e., [PyYAML](https://pyyaml.org), [Diagrams](https://diagrams.mingrammer.com/), and [graphviz2drawio](https://pypi.org/project/graphviz2drawio).
 
 ```ssh
 # using pip (pip3)
@@ -206,7 +207,7 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -o, --output OUTPUT   output diagram filename
-  -f, --format FORMAT   output format, allowed formats are dot, dot_json, gif, jp2, jpe, jpeg, jpg, pdf, png, svg, tif, tiff, set to png by default
+  -f, --format FORMAT   output format, allowed formats are dot, dot_json, drawio, gif, jp2, jpe, jpeg, jpg, pdf, png, svg, tif, tiff, set to png by default
   --embed-all-icons     embed all icons into svg or dot_json output diagrams
   -c, --config CONFIG   custom kube-diagrams configuration file
   -n, --namespace NAMESPACE
@@ -560,6 +561,18 @@ Then open the `wordpress.dot_json` file:
 ## KubeDiagrams WebApp
 
 A modern web app for **KubeDiagrams** is available in **[webapp](https://github.com/philippemerle/KubeDiagrams/tree/main/webapp)**. See a demo in [this video](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/docs/KubeDiagrams_WebApp.mp4).
+
+## Editable draw.io Export
+
+**KubeDiagrams** could output diagrams in the `drawio` format. For instance, type:
+
+```sh
+kube-diagrams examples/wordpress/*.yaml -o wordpress.drawio
+```
+
+✨ Generated `drawio` files can be opened with [draw.io](https://www.drawio.com/) or your favorite diagram editor.
+
+![KubeDiagrams in draw.io](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-drawio.png)
 
 ## Architecture
 

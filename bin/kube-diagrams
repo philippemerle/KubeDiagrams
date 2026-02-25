@@ -10,6 +10,7 @@ import json
 import os
 import traceback
 from pprint import pprint
+import subprocess
 import sys
 import yaml
 import diagrams
@@ -32,7 +33,7 @@ yaml.SafeLoader.yaml_implicit_resolvers.pop("=")
 # All dot output formats are listed in https://graphviz.org/docs/outputs/
 # If you need a format not listed below, just add it below.
 SUPPORTED_OUTPUT_FORMATS = (
-    "dot", "dot_json", "gif", "jp2", "jpe", "jpeg", "jpg", "pdf", "png",
+    "dot", "dot_json", "drawio", "gif", "jp2", "jpe", "jpeg", "jpg", "pdf", "png",
     "svg", "tif", "tiff"
 )
 class Diagram(diagrams.Diagram):
@@ -1107,6 +1108,12 @@ if args.format not in SUPPORTED_OUTPUT_FORMATS:
             f" use '{SOF}' instead!", file=sys.stderr)
     sys.exit(1)
 
+is_drawio_format = args.format == "drawio"
+if is_drawio_format:
+    drawio_filename = args.output
+    args.output = "/tmp/drawio"
+    args.format = "dot"
+
 if args.embed_all_icons and args.format not in ('svg', 'dot_json'):
     print("Warning: --embed-all-icons only works with svg or dot_json output format!")
 
@@ -1186,7 +1193,8 @@ def process_resource(resource):
                 "style": "rounded,dashed",
                 "bgcolor": "white",
                 "pencolor": "black",
-                "label": icon(Namespace, get_namespace(resource))
+                "label": icon(Namespace, get_namespace(resource)) \
+                    if not is_drawio_format else f"Namespace: {get_namespace(resource)}"
             })
 
     if rid not in resources:
@@ -1433,6 +1441,13 @@ with Diagram("", filename=args.output, show=False, direction="TB", outformat=arg
             _ = from_node >> Edge(**custom_edge, tooltip=edge_tooltip) >> to_node
 
 print(f"{args.output}.{args.format} generated.")
+
+if is_drawio_format:
+    command = ["graphviz2drawio", f"{args.output}.{args.format}", "-o", f"{drawio_filename}.drawio"]
+    print(f"Executing {' '.join(command)}...")
+    subprocess.run(command, check=False)
+    os.remove(f"{args.output}.{args.format}")
+    print(f"{drawio_filename}.drawio generated.")
 
 if args.format in ("svg", "dot_json"):
     filename = f"{args.output}.{args.format}"

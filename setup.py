@@ -7,7 +7,7 @@ from setuptools import setup
 with open("README.md", encoding="utf-8") as readme:
     setup(
         name="KubeDiagrams",
-        version="0.7.0",
+        version="0.8.0",
         author="Philippe Merle",
         author_email="philippe.merle@inria.fr",
         maintainer="Philippe Merle",
@@ -39,6 +39,7 @@ with open("README.md", encoding="utf-8") as readme:
         install_requires=[
             "PyYAML",
             "diagrams",
+            "graphviz2drawio",
         ],
         packages=[],
         package_dir={},
