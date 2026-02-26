@@ -12,6 +12,7 @@ on:
     paths:
       - 'bin/**'
       - Dockerfile
+  workflow_dispatch:
 
 permissions:
   contents: read
