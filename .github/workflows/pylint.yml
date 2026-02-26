@@ -6,6 +6,7 @@ on:
       - .pylintrc
       - bin/kube-diagrams
       - '**.py'
+  workflow_dispatch:
 
 permissions:
   contents: read
