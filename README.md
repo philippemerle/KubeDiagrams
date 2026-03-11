@@ -648,6 +648,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Binayak Chatterjee's post](https://www.linkedin.com/posts/binayak-chatterjee_kubernetes-devops-platformengineering-activity-7435645106331971585--3pt/) on LinkedIn, March 7, 2026.
+
 1. [KubeDiagrams 0.7.0 is out!](https://www.reddit.com/r/kubernetes/comments/1r823fo/kubediagrams_070_is_out/), Reddit, February 18, 2026.
 
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/2007167771566608550) on X, January 2, 2026.
