@@ -648,6 +648,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Kube Architect's post](https://www.linkedin.com/posts/kubernetes-architect_kubediagrams-is-a-tool-that-automatically-activity-7440788253752078336-wSLL) on LinkedIn, March 20, 2026.
+
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/2035021302327582744) on X, March 20, 2026.
 
 1. [Binayak Chatterjee's post](https://www.linkedin.com/posts/binayak-chatterjee_kubernetes-devops-platformengineering-activity-7435645106331971585--3pt/) on LinkedIn, March 7, 2026.
