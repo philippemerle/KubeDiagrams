@@ -648,6 +648,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Tom Dörr's post](https://x.com/tom_doerr/status/20397263158975120064) on X, April 2, 2026.
+
 1. [Kube Architect's post](https://www.linkedin.com/posts/kubernetes-architect_kubediagrams-is-a-tool-that-automatically-activity-7440788253752078336-wSLL) on LinkedIn, March 20, 2026.
 
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/2035021302327582744) on X, March 20, 2026.
