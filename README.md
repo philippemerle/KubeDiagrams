@@ -650,6 +650,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Ayaan's post](https://x.com/twtayaan/status/2051550460142878742) on X, May 5, 2026.
+
 1. [kienletech's post](https://www.threads.com/@kienletech/post/DXiSzuCE4Ee) on Threads, April 25, 2026.
 
 1. [Frederyk Leonam's post](https://www.linkedin.com/posts/frederyk-leonam_kubernetes-devops-cloudnative-activity-7447668260675735552-1X9o/) on LinkedIn, April 9, 2026.
