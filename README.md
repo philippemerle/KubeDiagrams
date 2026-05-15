@@ -650,6 +650,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Bart Farrell's post](https://www.linkedin.com/posts/bart-farrell_most-kubernetes-architecture-diagrams-are-ugcPost-7460742208980242432-9ufJ/) on LinkedIn, May 14, 2026.
+
 1. [Vaishnavi's post](https://x.com/_vmlops/status/2052054847961407828) on X, May 6, 2026.
 
 1. [Nidouille's post](https://x.com/_Nidouille_/status/2051965165415825911) on X, May 6, 2026.
