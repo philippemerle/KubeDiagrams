@@ -1,0 +1,30 @@
+#$ Used in:
+#$ - geps/gep-1748.md
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: store-1
+spec:
+  parentRefs:
+  - group: multicluster.x-k8s.io
+    kind: ServiceImport
+    name: store
+  rules:
+  - matches:
+    - path:
+        value: "/cart"
+    backendRefs:
+    - group: multicluster.x-k8s.io
+      kind: ServiceImport
+      name: cart
+---
+# Following are resources not explicitely declared
+apiVersion: multicluster.x-k8s.io/v1
+kind: ServiceImport
+metadata:
+  name: store
+---
+apiVersion: multicluster.x-k8s.io/v1
+kind: ServiceImport
+metadata:
+  name: cart

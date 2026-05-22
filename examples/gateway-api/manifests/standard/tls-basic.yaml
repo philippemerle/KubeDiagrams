@@ -1,0 +1,45 @@
+#$ Used in:
+#$ - site-src/guides/tls.md
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: tls-basic
+spec:
+  gatewayClassName: example
+  listeners:
+  - name: foo-https
+    protocol: HTTPS
+    port: 443
+    hostname: foo.example.com
+    tls:
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: foo-example-com-cert
+  - name: bar-https
+    protocol: HTTPS
+    port: 443
+    hostname: bar.example.com
+    tls:
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: bar-example-com-cert
+---
+# Following are resources not explicitely declared
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: example
+spec:
+  controllerName: "example.net/gateway-controller"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: foo-example-com-cert
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bar-example-com-cert

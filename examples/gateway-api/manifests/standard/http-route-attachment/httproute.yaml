@@ -1,0 +1,23 @@
+#$ Used in:
+#$ - site-src/concepts/api-overview.md
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: my-route
+  namespace: gateway-api-example-ns2
+spec:
+  parentRefs:
+  - kind: Gateway
+    name: foo-gateway
+    namespace: gateway-api-example-ns1
+  rules:
+  - backendRefs:
+    - name: foo-svc
+      port: 8080
+---
+# Following are resources not explicitely declared in
+apiVersion: v1
+kind: Service
+metadata:
+  name: foo-svc
+  namespace: gateway-api-example-ns2

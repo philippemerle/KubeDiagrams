@@ -1,0 +1,22 @@
+#$ Used in:
+#$ - site-src/guides/traffic-splitting.md
+#$ - site-src/guides/simple-gateway.md
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: prod-web
+spec:
+  gatewayClassName: example
+  listeners:
+  - protocol: HTTP
+    port: 80
+    name: prod-web-gw
+    allowedRoutes:
+      namespaces:
+        from: Same
+---
+# Following are resources not explicitely declared
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: example

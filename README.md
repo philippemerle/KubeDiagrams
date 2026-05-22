@@ -108,6 +108,7 @@ Many other architecture diagrams are available into [examples/](https://github.c
 1. [Argo](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/argo/)
 1. [cert-manager](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/cert-manager/)
 1. [External Secrets Operator](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/external-secrets/)
+1. [Gateway API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/gateway-api/)
 1. [Istio](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/istio/)
 1. [Kube Prometheus Stack](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/kube-prometheus-stack/)
 1. [LeaderWorkerSet API](https://github.com/philippemerle/KubeDiagrams/blob/main/examples/lws/)

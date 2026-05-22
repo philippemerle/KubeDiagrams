@@ -658,6 +658,339 @@ nodes:
         "v1",
         "REFERENCE"
       )
+
+  #
+  # KubeDiagrams configuration for Kubernetes Gateway API
+  #
+
+  BackendTLSPolicy/gateway.networking.k8s.io/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/BackendTLSPolicy.png
+    edges: |
+      # spec.targetRefs.*
+      for idx, targetRef in enumerate(query_path(resource, "spec.targetRefs", [])):
+        group = targetRef["group"]
+        edges.add_edge_to(
+          f"spec.targetRefs[{idx}]",
+          targetRef.get("name"),
+          get_namespace(resource),
+          targetRef["kind"],
+          f"{group}/v1" if group != "" else "v1",
+          "REFERENCE"
+        )
+      # spec.validation.caCertificateRefs.*
+      for idx, caCertificateRef in enumerate(query_path(resource, "spec.validation.caCertificateRefs", [])):
+          group = caCertificateRef["group"]
+          edges.add_edge_to(
+            f"spec.validation.caCertificateRefs[{idx}]",
+            caCertificateRef.get("name"),
+            get_namespace(resource),
+            caCertificateRef["kind"],
+            f"{group}/v1" if group != "" else "v1",
+            "REFERENCE"
+          )
+
+  Gateway/gateway.networking.k8s.io/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/Gateway.png
+    edges: |
+      # spec.gatewayClassName
+      edges.add_edge_to(
+        "spec.gatewayClassName",
+        ".",
+        None,
+        "GatewayClass",
+        "gateway.networking.k8s.io/v1",
+        "REFERENCE-UP"
+      )
+      # spec.tls.backend.clientCertificateRef
+      clientCertificateRef = query_path(resource, "spec.tls.backend.clientCertificateRef")
+      if clientCertificateRef is not None:
+        group = clientCertificateRef["group"]
+        edges.add_edge_to(
+          "spec.tls.backend.clientCertificateRef",
+          clientCertificateRef.get("name"),
+          get_namespace(resource),
+          clientCertificateRef["kind"],
+          f"{group}/v1" if group != "" else "v1",
+          "REFERENCE"
+        )
+      # spec.tls.frontend.default.validation.caCertificateRefs.*
+      for idx, caCertificateRef in enumerate(query_path(resource, "spec.tls.frontend.default.validation.caCertificateRefs", [])):
+        group = caCertificateRef["group"]
+        edges.add_edge_to(
+          f"spec.tls.frontend.default.validation.caCertificateRefs[{idx}]",
+          caCertificateRef.get("name"),
+          get_namespace(resource),
+          caCertificateRef["kind"],
+          f"{group}/v1" if group != "" else "v1",
+          "REFERENCE"
+        )
+      # spec.tls.frontend.perPort.*.tls.validation.caCertificateRefs.*
+      for idxp, perPort in enumerate(query_path(resource, "spec.tls.frontend.perPort", [])):
+        for idxc, caCertificateRef in enumerate(query_path(perPort, "tls.validation.caCertificateRefs", [])):
+          group = caCertificateRef["group"]
+          edges.add_edge_to(
+            f"spec.tls.perPort[{idxp}].tls.validation.caCertificateRefs[{idxc}]",
+            caCertificateRef.get('name'),
+            get_namespace(resource),
+            caCertificateRef["kind"],
+            f"{group}/v1" if group != "" else "v1",
+            "REFERENCE"
+          )
+      # spec.listeners.*.tls.certificateRefs.*
+      for idxl, listener in enumerate(query_path(resource, "spec.listeners", [])):
+        for idxc, certificateRef in enumerate(query_path(listener, "tls.certificateRefs", [])):
+          kind = certificateRef.get("kind", "Secret")
+          namespace = certificateRef.get("namespace") or get_namespace(resource)
+          group = certificateRef.get("group", "")
+          edges.add_edge_to(
+            f"spec.listeners[{idxl}].tls.certificateRefs[{idxc}]",
+            certificateRef.get("name"),
+            namespace,
+            kind,
+            f"{group}/v1" if group != "" else "v1",
+            "REFERENCE"
+          )
+
+  GatewayClass/gateway.networking.k8s.io/v1:
+    scope: Cluster
+    custom_icon: $KD/icons/GatewayClass.png
+    edges: |
+      # spec.parametersRef
+      parametersRef = query_path(resource, "spec.parametersRef")
+      if parametersRef is not None:
+        group = parametersRef.get("group")
+        edges.add_edge_to(
+          "spec.parametersRef",
+          parametersRef.get("name"),
+          parametersRef.get("namespace"),
+          parametersRef.get("kind"),
+          f"{group}/v1",
+          "REFERENCE"
+        )
+
+  GRPCRoute/gateway.networking.k8s.io/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/GRPCRoute.png
+    edges: |
+      # spec.parentRefs.*
+      for idx, parentRef in enumerate(query_path(resource, "spec.parentRefs", [])):
+        namespace = parentRef.get("namespace") or get_namespace(resource)
+        edges.add_edge_to(
+          f"spec.parentRefs[{idx}]",
+          parentRef.get('name'),
+          namespace,
+          "Gateway",
+          "gateway.networking.k8s.io/v1",
+          "REFERENCE-UP",
+          data=parentRef
+        )
+      # spec.rules.*
+      for idxr, rule in enumerate(query_path(resource, "spec.rules", [])):
+        # spec.rules.*.backendRefs.*
+        for idxbr, backendRef in enumerate(query_path(rule, "backendRefs", [])):
+          edges.add_edge_to(
+            f"spec.rules[{idxr}].backendRefs[{idxbr}]",
+            backendRef.get('name'),
+            get_namespace(resource),
+            "Service",
+            "v1",
+            "REFERENCE",
+            data=backendRef
+          )
+        # spec.rules.*.filters.*
+        for idxf, filter in enumerate(query_path(rule, "filters", [])):
+          # spec.rules.*.filters.*.requestMirror.backendRef
+          backendRef = query_path(filter, "requestMirror.backendRef")
+          if backendRef is not None:
+            edges.add_edge_to(
+              f"spec.rules[{idxr}].filters[{idxf}].requestMirror.backendRef",
+              backendRef.get('name'),
+              get_namespace(resource),
+              "Service",
+              "v1",
+              "REFERENCE",
+              data=backendRef
+            )
+          # spec.rules.*.filters.*.extensionRef
+          extensionRef = query_path(filter, "extensionRef")
+          if extensionRef is not None:
+            namespace = extensionRef.get("namespace") or get_namespace(resource)
+            group = extensionRef.get("group", "")
+            kind = extensionRef.get('kind', "Service")
+            edges.add_edge_to(
+              f"spec.rules[{idxr}].filters[{idxf}].extensionRef",
+              extensionRef.get('name'),
+              namespace,
+              kind,
+              f"{group}/v1" if group != "" else "v1",
+              "REFERENCE",
+              data=extensionRef
+            )
+
+  HTTPRoute/gateway.networking.k8s.io/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/HTTPRoute.png
+    edges: |
+      # spec.parentRefs.*
+      for idx, parentRef in enumerate(query_path(resource, "spec.parentRefs", [])):
+        namespace = parentRef.get("namespace") or get_namespace(resource)
+        group = parentRef.get("group", "gateway.networking.k8s.io")
+        kind = parentRef.get('kind', "Gateway")
+        edges.add_edge_to(
+          f"spec.parentRefs[{idx}]",
+          parentRef.get('name'),
+          namespace,
+          kind,
+          f"{group}/v1",
+          "REFERENCE-UP",
+          data=parentRef
+        )
+      # spec.rules.*.backendRefs.*
+      for idxr, rule in enumerate(query_path(resource, "spec.rules", [])):
+        for idxbr, backendRef in enumerate(query_path(rule, "backendRefs", [])):
+          namespace = backendRef.get("namespace") or get_namespace(resource)
+          group = backendRef.get("group", "")
+          kind = backendRef.get('kind', "Service")
+          edges.add_edge_to(
+            f"spec.rules[{idxr}].backendRefs[{idxbr}]",
+            backendRef.get('name'),
+            namespace,
+            kind,
+            f"{group}/v1" if group != "" else "v1",
+            "REFERENCE",
+            data=backendRef
+          )
+        # spec.filters.*
+        for idxf, filter in enumerate(query_path(rule, "filters", [])):
+          # spec.filters.*.backendRef
+          backendRef = query_path(filter, "requestMirror.backendRef")
+          if backendRef is not None:
+            namespace = backendRef.get("namespace") or get_namespace(resource)
+            group = backendRef.get("group", "")
+            kind = backendRef.get('kind', "Service")
+            edges.add_edge_to(
+              f"spec.rules[{idxr}].filters[{idxf}].requestMirror.backendRef",
+              backendRef.get('name'),
+              namespace,
+              kind,
+              f"{group}/v1" if group != "" else "v1",
+              "REFERENCE",
+              data=backendRef
+            )
+          # spec.filters.*.extensionRef
+          extensionRef = query_path(filter, "extensionRef")
+          if extensionRef is not None:
+            namespace = extensionRef.get("namespace") or get_namespace(resource)
+            group = extensionRef.get("group", "")
+            kind = extensionRef.get('kind', "Service")
+            edges.add_edge_to(
+              f"spec.rules[{idxr}].filters[{idxf}].extensionRef",
+              extensionRef.get('name'),
+              namespace,
+              kind,
+              f"{group}/v1" if group != "" else "v1",
+              "REFERENCE",
+              data=extensionRef
+            )
+
+  ListenerSet/gateway.networking.k8s.io/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/ListenerSet.png
+    edges: |
+      # spec.parentRef
+      parentRef = query_path(resource, "spec.parentRef")
+      if parentRef is not None:
+        group = parentRef.get("group", "")
+        edges.add_edge_to(
+          "spec.parentRef",
+          parentRef.get('name'),
+          parentRef.get('namespace'),
+          parentRef.get('kind'),
+          f"{group}/v1" if group != "" else "v1",
+          "REFERENCE-UP",
+          data=parentRef
+        )
+      # spec.listeners.*.tls.certificateRefs.*
+      for idxl, listener in enumerate(query_path(resource, "spec.listeners", [])):
+        for idxc, certificateRef in enumerate(query_path(listener, "tls.certificateRefs", [])):
+          kind = certificateRef.get("kind", "Secret")
+          namespace = certificateRef.get("namespace") or get_namespace(resource)
+          group = certificateRef.get("group", "")
+          edges.add_edge_to(
+            f"spec.listeners[{idxl}].tls.certificateRefs[{idxc}]",
+            certificateRef.get("name"),
+            namespace,
+            kind,
+            f"{group}/v1" if group != "" else "v1",
+            "REFERENCE"
+          )
+
+  ReferenceGrant/gateway.networking.k8s.io/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/ReferenceGrant.png
+    edges: |
+      # spec.from.*
+      for idx, spec_from in enumerate(query_path(resource, "spec.from", [])):
+        group = spec_from.get("group", "")
+        apiVersion = f"{group}/v1" if group != "" else "v1"
+        kind = spec_from.get("kind")
+        namespace = spec_from.get("namespace")
+        for rid, res in resources.items():
+          if res.get("kind") == kind \
+             and res.get("apiVersion") == apiVersion \
+             and get_namespace(res) == namespace:
+            edges.add_edge_to_rid(
+              f"spec.from[{idx}]",
+              rid,
+              "REFERENCE-UP"
+            )
+      # spec.to.*
+      for idx, spec_to in enumerate(query_path(resource, "spec.to", [])):
+        group = spec_to.get("group", "")
+        apiVersion = f"{group}/v1" if group != "" else "v1"
+        kind = spec_to.get("kind")
+        namespace = spec_to.get("namespace") or get_namespace(resource)
+        for rid, res in resources.items():
+          if res.get("kind") == kind \
+              and res.get("apiVersion") == apiVersion \
+              and get_namespace(res) == namespace:
+            edges.add_edge_to_rid(
+              f"spec.to[{idx}]",
+              rid,
+              "REFERENCE"
+            )
+
+  TLSRoute/gateway.networking.k8s.io/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/TLSRoute.png
+    edges: |
+      # spec.parentRefs.*
+      for idx, parentRef in enumerate(query_path(resource, "spec.parentRefs", [])):
+        namespace = parentRef.get("namespace") or get_namespace(resource)
+        edges.add_edge_to(
+          f"spec.parentRefs[{idx}]",
+          parentRef.get('name'),
+          namespace,
+          "Gateway",
+          "gateway.networking.k8s.io/v1",
+          "REFERENCE-UP",
+          data=parentRef
+        )
+      # spec.rules.*.backendRefs.*
+      for idxr, rule in enumerate(query_path(resource, "spec.rules", [])):
+        for idxbr, backendRef in enumerate(query_path(rule, "backendRefs", [])):
+          edges.add_edge_to(
+            f"spec.rules[{idxr}].backendRefs[{idxbr}]",
+            backendRef.get('name'),
+            get_namespace(resource),
+            "Service",
+            "v1",
+            "REFERENCE",
+            data=backendRef
+          )
+
 cluster-resources:
   # default namespace
   - default/default/ServiceAccount/v1

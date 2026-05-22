@@ -1,0 +1,28 @@
+clusters:
+  - label: gateway
+    title: "Gateway"
+    recommended: false
+    graph_attr:
+      bgcolor: white
+  - label: shared-gateway-access
+    title: "Gateway"
+    recommended: false
+    graph_attr:
+      bgcolor: white
+  - label: belongs-to
+    title: "Gateway"
+    recommended: false
+    graph_attr:
+      bgcolor: white
+nodes:
+  CustomBackend/acme.io/v1:
+    scope: Namespaced
+    custom_icon: icons/gateway-api-logo.png
+  CustomFilter/acme.io/v1:
+    scope: Namespaced
+    custom_icon: icons/gateway-api-logo.png
+  Parameters/acme.io/v1:
+    scope: Cluster
+    custom_icon: icons/gateway-api-logo.png
+  ServiceImport/multicluster.x-k8s.io/v1:
+    scope: Namespaced

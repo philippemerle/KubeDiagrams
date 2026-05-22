@@ -1,0 +1,73 @@
+#$ Used in:
+#$ - site-src/api-types/httproute.md
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: example
+spec:
+  controllerName: acme.io/gateway-controller
+  parametersRef:
+    name: example
+    group: acme.io
+    kind: Parameters
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: my-gateway
+spec:
+  gatewayClassName: example
+  listeners:  # Use GatewayClass defaults for listener definition.
+  - name: http
+    protocol: HTTP
+    port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-app-1
+spec:
+  parentRefs:
+  - name: my-gateway
+  hostnames:
+  - "foo.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /bar
+    backendRefs:
+    - name: my-service1
+      port: 8080
+  - matches:
+    - headers:
+      - type: Exact
+        name: magic
+        value: foo
+      queryParams:
+      - type: Exact
+        name: great
+        value: example
+      path:
+        type: PathPrefix
+        value: /some/thing
+      method: GET
+    backendRefs:
+    - name: my-service2
+      port: 8080
+---
+# Following are resources not explicitely declared in
+apiVersion: acme.io/v1
+kind: Parameters
+metadata:
+  name: example
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service2

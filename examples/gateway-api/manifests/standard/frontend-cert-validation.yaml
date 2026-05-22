@@ -1,0 +1,67 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: client-validation-basic
+spec:
+  gatewayClassName: acme-lb
+  tls:
+    frontend:
+      default:
+        validation:
+          caCertificateRefs:
+          - kind: ConfigMap
+            group: ""
+            name: foo-example-com-ca-cert
+      perPort:
+      - port: 8443
+        tls:
+          validation:
+            caCertificateRefs:
+            - kind: ConfigMap
+              group: ""
+              name: bar-example-com-ca-cert
+  listeners:
+  - name: foo-https
+    protocol: HTTPS
+    port: 443
+    hostname: foo.example.com
+    tls:
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: foo-example-com-cert
+  - name: bar-https
+    protocol: HTTPS
+    port: 8443
+    hostname: bar.example.com
+    tls:
+      certificateRefs:
+      - kind: Secret
+        group: ""
+        name: bar-example-com-cert
+---
+# Following are resources not explicitely declared
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: acme-lb
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: foo-example-com-cert
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bar-example-com-cert
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: foo-example-com-ca-cert
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bar-example-com-ca-cert

@@ -1,0 +1,24 @@
+#$ Used in:
+#$ - site-src/api-types/httproute.md
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-filter-rewrite-3
+spec:
+  hostnames:
+    - rewrite.example
+  rules:
+    - filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: elsewhere.example
+      backendRefs:
+        - name: example-svc
+          weight: 1
+          port: 80
+---
+# Following are resources not explicitely declared
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-svc

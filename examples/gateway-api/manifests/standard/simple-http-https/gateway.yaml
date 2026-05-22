@@ -1,0 +1,44 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: example-gateway
+spec:
+  gatewayClassName: prod
+  listeners:
+  - name: http
+    port: 80
+    protocol: HTTP
+    hostname: "*.example.com"
+  - name: https
+    port: 443
+    protocol: HTTPS
+    hostname: "*.example.com"
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: example-com
+  - name: https-default-tls-mode
+    port: 8443
+    protocol: HTTPS
+    hostname: "*.foo.com"
+    tls:
+      certificateRefs:
+      - kind: Secret
+        name: foo-com
+---
+# Following are resources not explicitely declared
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: prod
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: example-com
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: foo-com

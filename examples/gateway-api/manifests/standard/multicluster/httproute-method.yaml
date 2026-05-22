@@ -1,0 +1,40 @@
+#$ Used in:
+#$ - geps/gep-1748.md
+kind: HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+metadata:
+  name: api
+spec:
+  parentRefs:
+  - name: api-gw
+  rules:
+  - matches:
+    - method: POST
+    - method: PUT
+    - method: DELETE
+    backendRefs:
+    - group: multicluster.x-k8s.io
+      kind: ServiceImport
+      name: api-primary
+      port: 8080
+  - backendRefs:
+    - group: multicluster.x-k8s.io
+      kind: ServiceImport
+      name: api-replicas
+      port: 8080
+---
+# Following are resources not explicitely declared
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: api-gw
+---
+apiVersion: multicluster.x-k8s.io/v1
+kind: ServiceImport
+metadata:
+  name: api-primary
+---
+apiVersion: multicluster.x-k8s.io/v1
+kind: ServiceImport
+metadata:
+  name: api-replicas

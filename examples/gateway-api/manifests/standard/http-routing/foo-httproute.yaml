@@ -1,0 +1,25 @@
+#$ Used in:
+#$ - site-src/guides/http-routing.md
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: foo-route
+spec:
+  parentRefs:
+  - name: example-gateway
+  hostnames:
+  - "foo.example.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /login
+    backendRefs:
+    - name: foo-svc
+      port: 8080
+---
+# Following are resources not explicitely declared
+apiVersion: v1
+kind: Service
+metadata:
+  name: foo-svc

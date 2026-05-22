@@ -1,0 +1,32 @@
+#$ Used in:
+#$ - site-src/concepts/security-model.md
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: allow-prod-traffic
+spec:
+  from:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: prod
+  to:
+  - group: ""
+    kind: Service
+---
+# Following are resources not explicitely declared
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-route
+  namespace: prod
+spec:
+  rules:
+  - backendRefs:
+    - name: service
+      namespace: default
+      port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service
