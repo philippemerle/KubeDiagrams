@@ -1,6 +1,8 @@
 """Service for generating diagrams from Kubernetes manifests."""
 import subprocess
 
+from graphviz2drawio.graphviz2drawio import convert as drawio_convert
+
 from constants import MIME_TYPES
 from .models import DiagramResult
 from .file_manager import FileManager
@@ -26,6 +28,49 @@ def generate_from_manifest(
     """
     with FileManager.create_temp_file(manifest_content, suffix='.yaml') as tmp_manifest:
         base_name = FileManager.get_base_name_from_path(tmp_manifest)
+
+        # draw.io: generate .dot first, then convert via graphviz2drawio
+        if output_format == "drawio":
+            dot_output, _ = FileManager.get_output_paths(tmp_manifest, "dot")
+            drawio_output, _ = FileManager.get_output_paths(tmp_manifest, "drawio")
+            try:
+                cmd = ["kube-diagrams", tmp_manifest, "-o", dot_output]
+                if without_namespace:
+                    cmd.append("--without-namespace")
+                if extra_args.strip():
+                    cmd.extend(parse_extra_args(extra_args))
+                proc = subprocess.run(cmd, check=False, capture_output=True, text=True)
+                stdout_output = proc.stdout or ""
+                stderr_output = proc.stderr or ""
+                if proc.returncode != 0 or has_fatal_error(stdout_output, stderr_output):
+                    FileManager.cleanup_files(dot_output)
+                    return DiagramResult(
+                        success=False,
+                        error="KubeDiagrams failed. See command output below.",
+                        command=" ".join(cmd),
+                        stdout=stdout_output,
+                        stderr=stderr_output
+                    )
+                drawio_xml = drawio_convert(dot_output)
+                FileManager.cleanup_files(dot_output)
+                return DiagramResult(
+                    success=True,
+                    diagram=drawio_xml,
+                    mime_type=MIME_TYPES.get("drawio", "application/xml"),
+                    filename=f"{base_name}.drawio",
+                    message="Diagram successfully generated.",
+                    command=" ".join(cmd),
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+            except Exception as e:
+                FileManager.cleanup_files(dot_output)
+                return DiagramResult(
+                    success=False,
+                    error=f"draw.io conversion failed: {e}",
+                    command=" ".join(cmd) if 'cmd' in locals() else None
+                )
+
         requested_output, png_output = FileManager.get_output_paths(tmp_manifest, output_format)
         
         try:

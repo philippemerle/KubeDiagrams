@@ -7,6 +7,7 @@ export const OUTPUT_FORMATS = Object.freeze({
   PDF: 'pdf',
   DOT: 'dot',
   DOT_JSON: 'dot_json',
+  DRAWIO: 'drawio',
 });
 
 export const OUTPUT_FORMAT_LIST = Object.freeze([
@@ -17,6 +18,7 @@ export const OUTPUT_FORMAT_LIST = Object.freeze([
   OUTPUT_FORMATS.PDF,
   OUTPUT_FORMATS.DOT,
   OUTPUT_FORMATS.DOT_JSON,
+  OUTPUT_FORMATS.DRAWIO,
 ]);
 
 // API Endpoints
@@ -51,6 +53,7 @@ export const MIME_TYPES = Object.freeze({
   [OUTPUT_FORMATS.PDF]: 'application/pdf',
   [OUTPUT_FORMATS.DOT]: 'text/vnd.graphviz',
   [OUTPUT_FORMATS.DOT_JSON]: 'application/json',
+  [OUTPUT_FORMATS.DRAWIO]: 'application/xml',
 });
 
 // Viewer message types for postMessage communication
@@ -72,4 +75,5 @@ export const TEXT_FORMATS = Object.freeze([
   OUTPUT_FORMATS.SVG,
   OUTPUT_FORMATS.DOT,
   OUTPUT_FORMATS.DOT_JSON,
+  OUTPUT_FORMATS.DRAWIO,
 ]);

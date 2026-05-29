@@ -2,6 +2,8 @@
 import subprocess
 import os
 
+from graphviz2drawio.graphviz2drawio import convert as drawio_convert
+
 from constants import MIME_TYPES
 from .models import DiagramResult
 from .file_manager import FileManager
@@ -26,8 +28,10 @@ def generate_from_helmfile(
         DiagramResult: Result of the generation
     """
     with FileManager.create_temp_file(helmfile_content, suffix=".yaml", mode='wb') as temp_helmfile_path:
-        output_path = temp_helmfile_path + f".{output_format}"
-        
+        is_drawio = output_format == "drawio"
+        actual_format = "dot" if is_drawio else output_format
+        output_path = temp_helmfile_path + f".{actual_format}"
+
         try:
             # Command helmfile template
             template_cmd = ["helmfile", "template", "-f", temp_helmfile_path]
@@ -82,6 +86,20 @@ def generate_from_helmfile(
                 return DiagramResult(
                     success=False,
                     error=f"Output file not found: {output_path}",
+                    command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+
+            if is_drawio:
+                drawio_xml = drawio_convert(output_path)
+                FileManager.cleanup_files(output_path)
+                return DiagramResult(
+                    success=True,
+                    diagram=drawio_xml,
+                    mime_type=MIME_TYPES.get("drawio", "application/xml"),
+                    filename="helmfile-diagram.drawio",
+                    message="Helmfile diagram successfully generated.",
                     command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
                     stdout=stdout_output,
                     stderr=stderr_output

@@ -3,6 +3,8 @@ import subprocess
 import os
 from urllib.parse import urlparse
 
+from graphviz2drawio.graphviz2drawio import convert as drawio_convert
+
 from constants import MIME_TYPES
 from .models import DiagramResult
 from .file_manager import FileManager
@@ -31,6 +33,44 @@ def generate_from_helm(
     # Pour les URLs OCI
     if chart_url.startswith('oci://'):
         base_name = chart_url.rstrip('/').split('/')[-1]
+
+    # draw.io: generate .dot first, then convert via graphviz2drawio
+    if output_format == "drawio":
+        dot_output = os.path.abspath(f"{base_name}.dot")
+        try:
+            cmd = ["helm-diagrams", chart_url, "-o", f"{base_name}.dot"]
+            if extra_args.strip():
+                cmd.extend(parse_extra_args(extra_args))
+            proc = subprocess.run(cmd, check=False, capture_output=True, text=True)
+            stdout_output = proc.stdout or ""
+            stderr_output = proc.stderr or ""
+            has_error = proc.returncode != 0 or has_fatal_error(stdout_output, stderr_output)
+            if "Error:" in stderr_output or "execution error" in stderr_output.lower():
+                has_error = True
+            if has_error:
+                FileManager.cleanup_files(dot_output)
+                return DiagramResult(
+                    success=False, error="helm-diagrams failed to generate the diagram.",
+                    command=" ".join(cmd), stdout=stdout_output, stderr=stderr_output
+                )
+            drawio_xml = drawio_convert(dot_output)
+            FileManager.cleanup_files(dot_output)
+            return DiagramResult(
+                success=True,
+                diagram=drawio_xml,
+                mime_type=MIME_TYPES.get("drawio", "application/xml"),
+                filename=f"{base_name}.drawio",
+                message="Helm diagram successfully generated.",
+                command=" ".join(cmd),
+                stdout=stdout_output,
+                stderr=stderr_output
+            )
+        except Exception as e:
+            FileManager.cleanup_files(dot_output)
+            return DiagramResult(
+                success=False, error=f"draw.io conversion failed: {e}",
+                command=" ".join(cmd) if 'cmd' in locals() else None
+            )
 
     requested_output = os.path.abspath(f"{base_name}.{output_format}")
     png_output = os.path.abspath(f"{base_name}.png")

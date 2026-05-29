@@ -10,10 +10,11 @@ MIME_TYPES = {
     "svg": "image/svg+xml",
     "pdf": "application/pdf",
     "dot": "text/vnd.graphviz",
-    "dot_json": "application/json"
+    "dot_json": "application/json",
+    "drawio": "application/xml"
 }
 # no binary format
-TEXT_FORMATS = {"svg", "dot", "dot_json"}
+TEXT_FORMATS = {"svg", "dot", "dot_json", "drawio"}
 # Manifest_detector
 MANIFEST_RE = re.compile(r'^\s*apiVersion\s*:\s*.+$', re.MULTILINE)
 KIND_RE = re.compile(r'^\s*kind\s*:\s*.+$', re.MULTILINE)

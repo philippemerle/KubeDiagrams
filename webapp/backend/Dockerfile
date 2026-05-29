@@ -14,9 +14,13 @@ FROM docker.io/python:3.13-alpine AS base
 # Install system dependencies
 RUN apk update && apk add --no-cache \
     graphviz \
+    graphviz-dev \
     bash \
     ttf-freefont \
     curl \
+    git \
+    gcc \
+    musl-dev \
     && rm -rf /var/cache/apk/*
 
 # Copy Helm from first stage

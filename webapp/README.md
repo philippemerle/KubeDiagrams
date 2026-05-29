@@ -1,3 +1,5 @@
+## Project Structure
+Web Interface for generating Kubernetes diagrams from manifests, Helm charts, or Helmfile files using Kubediagrams.
 # KubeDiagrams Web App
 
 A modern web application for generating Kubernetes architecture diagrams from manifests, Helm charts, or Helmfile configurations using [KubeDiagrams](https://github.com/philippemerle/KubeDiagrams).
@@ -70,9 +72,9 @@ The following command-line tools must be installed and available in your PATH:
 webapp/
 ├── backend/                        # Python/Flask backend
 │   ├── routes/                     # Flask route handlers
-│   │   ├── manifest.py             # Manifest diagram generation endpoint
-│   │   ├── helm.py                 # Helm chart diagram endpoint
-│   │   ├── helmfile.py             # Helmfile diagram endpoint
+│   │   ├── manifest.py             # Manifest diagram generation endpoints
+│   │   ├── helm.py                 # Helm chart diagram endpoints
+│   │   ├── helmfile.py             # Helmfile diagram endpoints
 │   │   └── submit.py               # Feedback submission endpoint
 │   ├── services/                   # Business logic layer
 │   │   ├── manifestService.py      # Manifest processing service

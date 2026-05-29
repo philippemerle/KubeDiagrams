@@ -13,8 +13,9 @@ function DownloadButton({ diagram, mimeType, outputFormat, filename, filenameFal
     return null;
   }
 
-  const finalFilename =
-    filename || filenameFallback || `diagram.${(outputFormat || 'png').toLowerCase()}`;
+  // Default to 'png' if outputFormat is not provided
+  const format = outputFormat || 'png';
+  const finalFilename = filename || filenameFallback || `diagram.${format.toLowerCase()}`;
 
   return (
     <div className="flex justify-center">
@@ -23,14 +24,14 @@ function DownloadButton({ diagram, mimeType, outputFormat, filename, filenameFal
           handleDownload({
             diagram,
             mimeType,
-            outputFormat,
+            outputFormat: format,
             filenameFallback: finalFilename,
           })
         }
         className="mt-2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition flex items-center gap-2"
       >
         <Download className="w-4 h-4" />
-        Download {outputFormat.toUpperCase()}
+        Download {format.toUpperCase()}
       </button>
     </div>
   );
