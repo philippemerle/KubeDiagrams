@@ -432,18 +432,18 @@ python3 app.py       # Start Flask server in debug mode
 ### Technologies Used
 
 **Backend**:
-- Flask 3.1.2 - Web framework
-- Gunicorn 23.0.0 - WSGI server
-- KubeDiagrams 0.6.0 - Diagram generation
-- PyYAML 6.0.2 - YAML parsing
+- Flask 3.1.3 - Web framework
+- Gunicorn 26.0.0 - WSGI server
+- KubeDiagrams (main) - Diagram generation
+- PyYAML 6.0.3 - YAML parsing
+- Werkzeug 3.1.6 - WSGI utilities
 
 **Frontend**:
 - React 19.1.0 - UI framework
 - Vite 6.3.5 - Build tool
 - TailwindCSS 4.1.6 - Styling
-- Lucide React - Icons
-- Motion - Animations
-
+- Lucide React 0.552.0 - Icons
+- Motion 12.11.4 - Animations
 ---
 
 ## Contributing
