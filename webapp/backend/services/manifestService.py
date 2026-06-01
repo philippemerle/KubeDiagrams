@@ -6,6 +6,7 @@ from .models import DiagramResult
 from .file_manager import FileManager
 from .utils import parse_extra_args, has_fatal_error, encode_content
 
+
 def generate_from_manifest(
     manifest_content: str,
     output_format: str = "png",
@@ -26,8 +27,9 @@ def generate_from_manifest(
     """
     with FileManager.create_temp_file(manifest_content, suffix='.yaml') as tmp_manifest:
         base_name = FileManager.get_base_name_from_path(tmp_manifest)
+
         requested_output, png_output = FileManager.get_output_paths(tmp_manifest, output_format)
-        
+
         try:
             # Command
             cmd = ["kube-diagrams", tmp_manifest, "-o", requested_output]
@@ -95,3 +97,4 @@ def generate_from_manifest(
                 error=f"Internal error: {e}",
                 command=" ".join(cmd) if 'cmd' in locals() else None
             )
+

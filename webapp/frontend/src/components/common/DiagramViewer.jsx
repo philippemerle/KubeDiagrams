@@ -1,13 +1,71 @@
 /**
  * DiagramViewer Component
  * Universal component for rendering diagrams in all supported formats
- * Supports: DOT_JSON (interactive), PDF, DOT (code), SVG, PNG, JPG
+ * Supports: DOT_JSON (interactive), PDF, DOT (code), SVG, PNG, JPG, DRAWIO
  */
 
+import { useRef, useEffect } from 'react';
 import { Code2, Copy } from 'lucide-react';
 import PanZoomContainer from './PanZoomContainer.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { OUTPUT_FORMATS } from '../../utils/constants.js';
+
+/**
+ * Embedded draw.io viewer using embed.diagrams.net with postMessage protocol.
+ * When the iframe signals {event: "init"}, we send {action: "load", xml: content}.
+ */
+function DrawioViewer({ content }) {
+  const iframeRef = useRef(null);
+  const contentRef = useRef(content);
+
+  // Keep ref in sync so the message handler always reads the latest content
+  useEffect(() => {
+    contentRef.current = content;
+  }, [content]);
+
+  // Listen for draw.io init event and send the XML content
+  useEffect(() => {
+    const handleMessage = (event) => {
+      if (!event.origin.includes('diagrams.net')) return;
+      try {
+        const data = JSON.parse(event.data);
+        if (data.event === 'init') {
+          iframeRef.current?.contentWindow?.postMessage(
+            JSON.stringify({ action: 'load', xml: contentRef.current, fit: 1 }),
+            'https://embed.diagrams.net'
+          );
+        }
+      } catch {
+        // ignore JSON parse errors from unrelated messages
+      }
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  // When content changes on an already-loaded iframe, push the new diagram
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (iframe?.contentWindow) {
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ action: 'load', xml: content, fit: 1 }),
+        'https://embed.diagrams.net'
+      );
+    }
+  }, [content]);
+
+  return (
+    <div className="w-full h-[82vh] border rounded overflow-hidden bg-white">
+      <iframe
+        ref={iframeRef}
+        src="https://embed.diagrams.net/?embed=1&spin=1&proto=json&noSaveBtn=1&noExitBtn=1&libraries=1"
+        title="KubeDiagrams Draw.io Viewer"
+        className="w-full h-full"
+        allowFullScreen
+      />
+    </div>
+  );
+}
 
 function DiagramViewer({
   diagram,
@@ -51,6 +109,11 @@ function DiagramViewer({
         />
       </div>
     );
+  }
+
+  // DRAWIO - Draw.io embedded viewer
+  if (ext === OUTPUT_FORMATS.DRAWIO) {
+    return <DrawioViewer key={viewerKey} content={diagram} />;
   }
 
   // PDF - Embedded viewer

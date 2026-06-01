@@ -149,8 +149,9 @@ export function useDiagramGeneration({ apiFunction, validateInput, diagramType =
         setStdout(data.stdout || '');
         setStderr(data.stderr || '');
 
-        // Increment viewer key for DOT_JSON to force iframe reload
-        if (!hasFatal && (params.outputFormat || '').toLowerCase() === OUTPUT_FORMATS.DOT_JSON) {
+        // Increment viewer key for DOT_JSON and DRAWIO to force iframe reload
+        const fmt = (params.outputFormat || '').toLowerCase();
+        if (!hasFatal && (fmt === OUTPUT_FORMATS.DOT_JSON || fmt === OUTPUT_FORMATS.DRAWIO)) {
           setViewerKey((k) => k + 1);
         }
 

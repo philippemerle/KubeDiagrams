@@ -13,6 +13,7 @@ export const TOOLTIP_CONTENT = {
       svg: 'SVG Vector - Perfect quality at any scale',
       dot: 'DOT File - Graphviz text format for manual editing',
       dotjson: 'Interactive Viewer - Explore with zoom/pan/click',
+      drawio: 'Draw.io - Open in draw.io editor or diagrams.net',
     },
   },
 

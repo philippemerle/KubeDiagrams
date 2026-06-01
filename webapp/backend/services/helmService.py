@@ -8,6 +8,7 @@ from .models import DiagramResult
 from .file_manager import FileManager
 from .utils import parse_extra_args, has_fatal_error, encode_content
 
+
 def generate_from_helm(
     chart_url: str,
     output_format: str = "png",
@@ -27,7 +28,7 @@ def generate_from_helm(
     # Extraction du nom de base
     parsed = urlparse(chart_url)
     base_name = os.path.basename(parsed.path).replace(".tgz", "").replace(".tar.gz", "")
-    
+
     # Pour les URLs OCI
     if chart_url.startswith('oci://'):
         base_name = chart_url.rstrip('/').split('/')[-1]
@@ -133,3 +134,4 @@ def generate_from_helm(
             error=f"Internal error: {e}",
             command=" ".join(cmd) if 'cmd' in locals() else None
         )
+

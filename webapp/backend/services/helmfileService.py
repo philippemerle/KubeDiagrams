@@ -7,6 +7,7 @@ from .models import DiagramResult
 from .file_manager import FileManager
 from .utils import parse_extra_args, has_fatal_error, encode_content
 
+
 def generate_from_helmfile(
     helmfile_content: str,
     output_format: str = "png",
@@ -27,7 +28,7 @@ def generate_from_helmfile(
     """
     with FileManager.create_temp_file(helmfile_content, suffix=".yaml", mode='wb') as temp_helmfile_path:
         output_path = temp_helmfile_path + f".{output_format}"
-        
+
         try:
             # Command helmfile template
             template_cmd = ["helmfile", "template", "-f", temp_helmfile_path]
