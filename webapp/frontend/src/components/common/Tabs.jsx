@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ManifestTab from '../tabs/ManifestTab/index.jsx';
 import HelmTab from '../tabs/HelmTab/index.jsx';
 import HelmFileTab from '../tabs/HelmFileTab/index.jsx';
+import ClusterTab from '../tabs/ClusterTab/index.jsx';
 import InteractiveViewerTab from '../tabs/InteractiveViewerTab/index.jsx';
 
 function Tabs({ historyContext }) {
@@ -16,6 +17,7 @@ function Tabs({ historyContext }) {
       if (type === 'manifest') setActiveTab('manifest');
       else if (type === 'helm') setActiveTab('helm');
       else if (type === 'helmfile') setActiveTab('helmfile');
+      else if (type === 'cluster') setActiveTab('cluster');
     }
   }, [historyContext?.restoredItem]);
 
@@ -23,6 +25,7 @@ function Tabs({ historyContext }) {
     { id: 'manifest', label: 'Manifest' },
     { id: 'helm', label: 'Helm Chart' },
     { id: 'helmfile', label: 'HelmFile' },
+    { id: 'cluster', label: 'Cluster' },
     { id: 'interactviewer', label: 'InteractiveViewer' },
   ];
 
@@ -53,6 +56,7 @@ function Tabs({ historyContext }) {
         {activeTab === 'manifest' && <ManifestTab historyContext={historyContext} />}
         {activeTab === 'helm' && <HelmTab historyContext={historyContext} />}
         {activeTab === 'helmfile' && <HelmFileTab historyContext={historyContext} />}
+        {activeTab === 'cluster' && <ClusterTab historyContext={historyContext} />}
         {activeTab === 'interactviewer' && <InteractiveViewerTab />}
       </div>
     </div>

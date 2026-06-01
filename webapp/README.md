@@ -4,9 +4,9 @@ Web Interface for generating Kubernetes diagrams from manifests, Helm charts, or
 
 A modern web application for generating Kubernetes architecture diagrams from manifests, Helm charts, or Helmfile configurations using [KubeDiagrams](https://github.com/philippemerle/KubeDiagrams).
 
-## ✨ Features
+## Features
 
-- **Multiple Input Types**: Support for Kubernetes manifests, Helm charts, and Helmfile configurations
+- **Multiple Input Types**: Support for Kubernetes manifests, Helm charts, Helmfile configurations, and live cluster diagrams
 - **Flexible Output Formats**: Generate diagrams in PNG, SVG, PDF, DOT, and interactive HTML
 - **Interactive Viewer**: Explore diagrams with an interactive web viewer
 - **Built-in Examples**: Pre-loaded examples for quick testing
@@ -75,11 +75,13 @@ webapp/
 │   │   ├── manifest.py             # Manifest diagram generation endpoints
 │   │   ├── helm.py                 # Helm chart diagram endpoints
 │   │   ├── helmfile.py             # Helmfile diagram endpoints
+│   │   ├── cluster.py              # Cluster diagram endpoints
 │   │   └── submit.py               # Feedback submission endpoint
 │   ├── services/                   # Business logic layer
 │   │   ├── manifestService.py      # Manifest processing service
 │   │   ├── helmService.py          # Helm processing service
 │   │   ├── helmfileService.py      # Helmfile processing service
+│   │   ├── clusterService.py       # Cluster processing service
 │   │   ├── file_manager.py         # File operations manager
 │   │   └── models.py               # Data models
 │   ├── utils/                      # Utility modules
@@ -103,6 +105,7 @@ webapp/
 │   │   │       ├── ManifestTab/    # Kubernetes manifest tab
 │   │   │       ├── HelmTab/        # Helm chart tab
 │   │   │       ├── HelmFileTab/    # Helmfile tab
+│   │   │       ├── ClusterTab/     # Live cluster tab
 │   │   │       └── InteractiveViewerTab/  # Interactive viewer
 │   │   ├── examples/               # Example registry
 │   │   ├── hooks/                  # Custom React hooks
@@ -311,9 +314,22 @@ Generate diagrams from Helmfile configurations.
 4. Click "Generate Diagram"
 
 **Requirement**: `helmfile` must be installed on the server.
-
-### 4. Interactive Viewer
-
+5. 
+### 4. Cluster Tab
+Generate diagrams from a live Kubernetes cluster.
+**Steps**:
+1. Select the "Cluster" tab
+2. Optionally specify a Kubernetes context (leave empty to use current context)
+3. Optionally specify a namespace (leave empty to diagram all namespaces)
+4. Configure diagram options
+5. Click "Generate Cluster Diagram"
+**Requirements**: 
+- `kubectl-diagrams` must be installed on the server
+- Server must have access to a Kubernetes cluster via kubeconfig
+- Proper RBAC permissions to read cluster resources
+**Note**: This uses the server's kubectl configuration, not the client's.
+6. 
+### 5. Interactive Viewer
 View diagrams in an interactive HTML viewer with zoom, pan, and search capabilities.
 
 **Features**:
@@ -371,6 +387,7 @@ See `frontend/public/examples/README.md` for instructions on adding new examples
 - `POST /api/manifest/generate` - Generate diagram from manifest
 - `POST /api/helm/generate` - Generate diagram from Helm chart
 - `POST /api/helmfile/generate` - Generate diagram from Helmfile
+- `POST /api/cluster/generate` - Generate diagram from live cluster
 - `POST /api/submit` - Submit feedback
 
 ---
@@ -458,5 +475,5 @@ For issues and questions, please [open an issue on the GitHub repository](https:
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 - [Graphviz](https://graphviz.org/) - Graph visualization software

@@ -4,11 +4,19 @@ from .file_manager import FileManager
 from .manifestService import generate_from_manifest
 from .helmService import generate_from_helm
 from .helmfileService import generate_from_helmfile
+from .clusterService import (
+    generate_from_cluster,
+    get_namespaces,
+    get_resource_types,
+)
 
 __all__ = [
     'DiagramResult',
     'FileManager',
     'generate_from_manifest',
     'generate_from_helm',
-    'generate_from_helmfile'
+    'generate_from_helmfile',
+    'generate_from_cluster',
+    'get_namespaces',
+    'get_resource_types',
 ]

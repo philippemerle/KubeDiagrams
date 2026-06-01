@@ -150,6 +150,169 @@ export async function generateHelmfileDiagram({
 }
 
 /**
+ * Generate diagram from live Kubernetes cluster
+ * @param {Object} params - Request parameters
+ * @param {string} [params.namespace] - Namespace to diagram (optional)
+ * @param {Array<string>} [params.resourceTypes] - Resource types to include
+ * @param {boolean} [params.allNamespaces] - Include all namespaces
+ * @param {string} params.outputFormat - Output format (png, jpg, svg, pdf, dot, dot_json)
+ * @param {string} [params.extraArgs] - Additional CLI arguments
+ * @param {boolean} [params.withoutNamespace] - Generate without namespace
+ * @returns {Promise<Object>} Response with diagram data
+ */
+export async function generateClusterDiagram({
+  namespace = '',
+  resourceTypes = [],
+  allNamespaces = false,
+  outputFormat,
+  extraArgs = '',
+  withoutNamespace = false,
+}) {
+  logger.debug('Requesting Cluster diagram generation', {
+    namespace,
+    allNamespaces,
+    outputFormat,
+    withoutNamespace,
+  });
+
+  const response = await apiFetch(API_ENDPOINTS.GENERATE_CLUSTER, {
+    body: JSON.stringify({
+      namespace,
+      resourceTypes,
+      allNamespaces,
+      outputFormat,
+      extraArgs,
+      withoutNamespace,
+    }),
+  });
+
+  if (response.ok && response.data.diagram) {
+    logger.info('Cluster diagram generated successfully', {
+      namespace,
+      allNamespaces,
+      outputFormat,
+      withoutNamespace,
+      filename: response.data.filename,
+    });
+  }
+
+  return response;
+}
+
+/**
+ * Get list of namespaces from Kubernetes cluster
+ * @returns {Promise<Object>} Response with namespaces list
+ */
+export async function getClusterNamespaces() {
+  logger.debug('Fetching cluster namespaces');
+
+  try {
+    const response = await fetch(API_ENDPOINTS.CLUSTER_NAMESPACES, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      logger.error('Failed to fetch namespaces', {
+        statusCode: response.status,
+        error: data?.error,
+      });
+    } else {
+      logger.info('Namespaces fetched successfully', {
+        count: data?.namespaces?.length || 0,
+      });
+    }
+
+    return {
+      ok: response.ok,
+      status: response.status,
+      data,
+    };
+  } catch (error) {
+    logger.error('Network error fetching namespaces', { error });
+    throw error;
+  }
+}
+
+/**
+ * Get list of resource types from Kubernetes cluster
+ * @param {string} [namespace] - Optional namespace filter
+ * @returns {Promise<Object>} Response with resource types list
+ */
+export async function getClusterResourceTypes(namespace = '') {
+  logger.debug('Fetching cluster resource types', { namespace });
+
+  try {
+    const url = namespace
+      ? `${API_ENDPOINTS.CLUSTER_RESOURCE_TYPES}?namespace=${encodeURIComponent(namespace)}`
+      : API_ENDPOINTS.CLUSTER_RESOURCE_TYPES;
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      logger.error('Failed to fetch resource types', {
+        statusCode: response.status,
+        error: data?.error,
+      });
+    } else {
+      logger.info('Resource types fetched successfully', {
+        count: data?.resourceTypes?.length || 0,
+      });
+    }
+
+    return {
+      ok: response.ok,
+      status: response.status,
+      data,
+    };
+  } catch (error) {
+    logger.error('Network error fetching resource types', { error });
+    throw error;
+  }
+}
+
+/**
+ * Retrieve resources from Kubernetes cluster
+ * @param {Object} params - Request parameters
+ * @param {string} [params.namespace] - Namespace filter
+ * @param {Array<string>} [params.resourceTypes] - Resource types to retrieve
+ * @param {boolean} [params.allNamespaces] - Retrieve from all namespaces
+ * @returns {Promise<Object>} Response with manifest data
+ */
+export async function getClusterResources({
+  namespace = '',
+  resourceTypes = [],
+  allNamespaces = false,
+}) {
+  logger.debug('Retrieving cluster resources', { namespace, resourceTypes, allNamespaces });
+
+  const response = await apiFetch(API_ENDPOINTS.CLUSTER_RESOURCES, {
+    body: JSON.stringify({
+      namespace,
+      resourceTypes,
+      allNamespaces,
+    }),
+  });
+
+  if (response.ok && response.data.manifest) {
+    logger.info('Cluster resources retrieved successfully');
+  }
+
+  return response;
+}
+
+/**
  * Submit user feedback
  * @param {Object} params - Feedback parameters
  * @param {number} params.note - Rating (1-5)
@@ -198,6 +361,10 @@ export default {
   generateManifestDiagram,
   generateHelmDiagram,
   generateHelmfileDiagram,
+  generateClusterDiagram,
+  getClusterNamespaces,
+  getClusterResourceTypes,
+  getClusterResources,
   submitFeedback,
   hasFatalErrors,
 };

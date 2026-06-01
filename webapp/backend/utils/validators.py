@@ -131,6 +131,24 @@ class InputValidator:
         return True, None
 
     @staticmethod
+    def validate_k8s_name(name: str) -> bool:
+        """
+        Validate a Kubernetes resource name.
+
+        Args:
+            name: Resource name to validate
+
+        Returns:
+            bool: True if valid
+        """
+        if not name or not isinstance(name, str):
+            return False
+        # Kubernetes names must be lowercase alphanumeric, with hyphens allowed
+        # Must start and end with alphanumeric
+        pattern = re.compile(r'^[a-z0-9]([-a-z0-9]*[a-z0-9])?$')
+        return bool(pattern.match(name)) and len(name) <= 253
+
+    @staticmethod
     def looks_like_manifest(text: str) -> bool:
         """
         Heuristic to detect a Kubernetes manifest.
