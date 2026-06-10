@@ -25,11 +25,11 @@ def generate_from_helm(
     Returns:
         DiagramResult: Result of the generation
     """
-    # Extraction du nom de base
+    # Extract base name for output file
     parsed = urlparse(chart_url)
     base_name = os.path.basename(parsed.path).replace(".tgz", "").replace(".tar.gz", "")
 
-    # Pour les URLs OCI
+    # OCI URLs use the last path segment as chart name
     if chart_url.startswith('oci://'):
         base_name = chart_url.rstrip('/').split('/')[-1]
 
@@ -42,12 +42,11 @@ def generate_from_helm(
         if extra_args.strip():
             cmd.extend(parse_extra_args(extra_args))
 
-        # Execution
+        # Run the command and capture output
         proc = subprocess.run(cmd, check=False, capture_output=True, text=True)
         stdout_output = proc.stdout or ""
         stderr_output = proc.stderr or ""
 
-        # First we verify if there was an error before file exist
         has_error = proc.returncode != 0 or has_fatal_error(stdout_output, stderr_output)
         
         # Second we verify if there was an error in the stderr output

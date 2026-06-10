@@ -120,9 +120,9 @@ const HistoryPanel = ({ history, onRestore, onRemove, onClear, isOpen, onToggle 
                 {history.length === 0 ? (
                   <div className="flex flex-col items-center justify-center h-full text-slate-500">
                     <FileText className="w-16 h-16 mb-4 opacity-50" />
-                    <p className="text-center">Aucun diagramme dans l&apos;historique</p>
+                    <p className="text-center">No diagrams in history</p>
                     <p className="text-xs text-center mt-2">
-                      Les diagrammes générés apparaîtront ici
+                      Generated diagrams will appear here
                     </p>
                   </div>
                 ) : (

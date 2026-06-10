@@ -31,7 +31,7 @@ function Tabs({ historyContext }) {
 
   return (
     <div className="flex flex-col flex-1 w-full">
-      {/* Onglets */}
+      {/* Tabs */}
       <div className="flex mb-4 space-x-4">
         {tabs.map((tab) => (
           <motion.button
@@ -51,7 +51,7 @@ function Tabs({ historyContext }) {
         ))}
       </div>
 
-      {/* Contenu des tabs */}
+      {/* Tab content */}
       <div className="flex-1">
         {activeTab === 'manifest' && <ManifestTab historyContext={historyContext} />}
         {activeTab === 'helm' && <HelmTab historyContext={historyContext} />}

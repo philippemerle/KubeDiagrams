@@ -21,7 +21,7 @@ function App() {
     setRestoredItem(null);
   };
 
-  // Mémoriser historyContext pour éviter de le recréer à chaque render
+  // Memoize historyContext to avoid recreating it on every render
   const historyContext = useMemo(
     () => ({ addToHistory, getHistoryItem, restoredItem, clearRestoredItem }),
     [addToHistory, getHistoryItem, restoredItem]

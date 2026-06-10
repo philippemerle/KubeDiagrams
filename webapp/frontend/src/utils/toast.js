@@ -77,9 +77,9 @@ export const dismissToast = (toastId) => {
  */
 export const showPromise = (promise, messages) => {
   return toast.promise(promise, {
-    loading: messages.loading || 'Chargement...',
-    success: messages.success || 'Terminé !',
-    error: messages.error || 'Une erreur est survenue',
+    loading: messages.loading || 'Loading...',
+    success: messages.success || 'Done!',
+    error: messages.error || 'An error occurred',
   });
 };
 

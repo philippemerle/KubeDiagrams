@@ -9,8 +9,8 @@ const ProgressBar = ({ currentStep = 'idle', isVisible = false }) => {
   const steps = [
     { id: 'parsing', label: 'Parsing' },
     { id: 'validation', label: 'Validation' },
-    { id: 'generation', label: 'Génération' },
-    { id: 'rendering', label: 'Rendu' },
+    { id: 'generation', label: 'Generation' },
+    { id: 'rendering', label: 'Rendering' },
   ];
 
   const getStepStatus = (stepId) => {
@@ -65,7 +65,7 @@ const ProgressBar = ({ currentStep = 'idle', isVisible = false }) => {
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-semibold text-slate-300">
-          {currentStep === 'completed' ? '✓ Génération terminée' : 'Génération en cours...'}
+          {currentStep === 'completed' ? '✓ Generation complete' : 'Generation in progress...'}
         </h3>
         {currentStep !== 'completed' && currentStep !== 'error' && (
           <Loader2 className="w-4 h-4 animate-spin text-blue-400" />

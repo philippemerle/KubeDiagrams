@@ -14,7 +14,7 @@ export default function PanZoomContainer({
   scrollPanSpeed = 3.0,
   buttonZoomFactor = 1.25,
   buttonZoomFactorFast = 1.5,
-  // Souris
+  // Mouse
   mouseZoomDampen = 0.018,
   clampDeltaY = 50,
 }) {
@@ -22,17 +22,17 @@ export default function PanZoomContainer({
   const measureRef = useRef(null);
   const isInControls = (el) => !!(el && el.closest && el.closest('.kd-controls'));
 
-  // États affichés
+  // Displayed state (reactive)
   const [scale, _setScale] = useState(1);
   const [tx, _setTx] = useState(0);
   const [ty, _setTy] = useState(0);
 
-  // Réfs calculs + animation
+  // Refs for calculation and animation (non-reactive)
   const scaleRef = useRef(1);
   const txRef = useRef(0);
   const tyRef = useRef(0);
 
-  // Cibles animées
+  // Animated targets
   const targetScaleRef = useRef(1);
   const targetTxRef = useRef(0);
   const targetTyRef = useRef(0);
@@ -55,7 +55,7 @@ export default function PanZoomContainer({
   const [naturalSize, setNaturalSize] = useState({ w: 0, h: 0 });
   const [vpSize, setVpSize] = useState({ w: 0, h: 0 });
 
-  // Mesures
+  // Measure natural content size and viewport size
   useLayoutEffect(() => {
     const el = measureRef.current;
     if (!el) return;
@@ -83,7 +83,7 @@ export default function PanZoomContainer({
     };
   }, []);
 
-  // Fit initial
+  // Fit content into viewport on first render
   useEffect(() => {
     if (!naturalSize.w || !naturalSize.h || !vpSize.w || !vpSize.h) return;
     fit(true);
@@ -91,7 +91,7 @@ export default function PanZoomContainer({
 
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
-  // Anime position/zoom vers la cible
+  // Animate position/zoom toward targets with smoothing
   const animate = useCallback(() => {
     const s = scaleRef.current;
     const tx = txRef.current;
@@ -167,7 +167,7 @@ export default function PanZoomContainer({
         dY *= vp.clientHeight;
       }
 
-      // --- ZOOM (pinch/ctrl) : adoucir la souris, garder le trackpad tel quel
+      // --- ZOOM (pinch/ctrl): dampen mouse wheel, keep trackpad as-is
       if (e.ctrlKey) {
         const isTrackpad = isTrackpadWheel(e);
         const sens = isTrackpad ? pinchSensitivity : pinchSensitivity * mouseZoomDampen;
@@ -178,7 +178,7 @@ export default function PanZoomContainer({
         return;
       }
 
-      // --- Mode "zoom" à la molette : même adoucissement pour souris
+      // --- Wheel zoom mode: same dampening as pinch/ctrl
       if (wheelMode === 'zoom') {
         const isTrackpad = isTrackpadWheel(e);
         const sens = isTrackpad ? wheelSensitivity : wheelSensitivity * mouseZoomDampen;
@@ -189,7 +189,7 @@ export default function PanZoomContainer({
         return;
       }
 
-      // --- Par défaut : PAN au wheel/trackpad (deux doigts)
+      // --- Default: pan with wheel/trackpad (two-finger scroll)
       const k = scrollPanSpeed;
       targetTxRef.current = txRef.current - dX * k;
       targetTyRef.current = tyRef.current - dY * k;

@@ -93,7 +93,7 @@ function HelmTab({ historyContext }) {
       historyContext.addToHistory(historyItem);
       lastHistoryIdRef.current = historyId;
     }
-  }, [diagram, progressStep]); // Dépendances minimales pour éviter la boucle
+  }, [diagram, progressStep]); // minimal deps — avoids a save loop
 
   // Restore from history
   useEffect(() => {
@@ -133,7 +133,7 @@ function HelmTab({ historyContext }) {
     setChartUrl(v);
     setBackendError('');
 
-    // Valider seulement si l'URL n'est pas vide
+    // Validate only if URL is not empty
     if (v && v.trim()) {
       setInputError(
         isValidChartUrl(v)

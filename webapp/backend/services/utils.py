@@ -1,4 +1,4 @@
-"""Utilitaires pour les services de génération de diagrammes."""
+"""Utilities for diagram generation services."""
 import base64
 import shlex
 
@@ -6,30 +6,30 @@ from constants import TEXT_FORMATS
 
 def has_fatal_error(stdout_txt: str, stderr_txt: str) -> bool:
     """
-    Vérifie si la sortie contient une erreur fatale.
-    
+    Check whether subprocess output contains a fatal error marker.
+
     Args:
-        stdout_txt: Sortie standard
-        stderr_txt: Sortie d'erreur
-        
+        stdout_txt: Standard output text
+        stderr_txt: Standard error text
+
     Returns:
-        bool: True si erreur fatale détectée
+        bool: True if a fatal error was detected
     """
     return ("error:" in (stdout_txt or "").lower()) or ("error:" in (stderr_txt or "").lower())
 
 
 def parse_extra_args(extra_args: str) -> list[str]:
     """
-    Parse les arguments supplémentaires.
-    
+    Parse a string of extra CLI arguments using shell-like tokenization.
+
     Args:
-        extra_args: Arguments supplémentaires en string
-        
+        extra_args: Space-separated argument string (may include quoted tokens)
+
     Returns:
-        list[str]: Liste des arguments parsés
-        
+        list[str]: Parsed argument tokens
+
     Raises:
-        ValueError: Si les arguments sont invalides
+        ValueError: If the argument string has invalid shell syntax
     """
     if not extra_args or not extra_args.strip():
         return []
@@ -41,14 +41,17 @@ def parse_extra_args(extra_args: str) -> list[str]:
 
 def encode_content(content: bytes, output_format: str) -> str:
     """
-    Encode le contenu en base64 ou UTF-8 selon le format.
-    
+    Encode diagram content for JSON transport.
+
+    Text-based formats (SVG, DOT, DOT_JSON, DRAWIO) are decoded as UTF-8.
+    Binary formats (PNG, JPG, PDF) are base64-encoded.
+
     Args:
-        content: Contenu à encoder
-        output_format: Format de sortie
-        
+        content: Raw file content
+        output_format: Output format string (e.g. 'png', 'svg')
+
     Returns:
-        str: Contenu encodé
+        str: Encoded content ready for the API response
     """
     if output_format in TEXT_FORMATS:
         return content.decode("utf-8")

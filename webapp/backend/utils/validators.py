@@ -75,7 +75,7 @@ class InputValidator:
             url: URL of the Helm chart
 
         Returns:
-            Tuple[bool, Optional[str]]: (est_valide, message_erreur)
+            Tuple[bool, Optional[str]]: (is_valid, error_message)
         """
         if not url or not url.strip():
             return False, "Chart URL cannot be empty."
@@ -121,7 +121,7 @@ class InputValidator:
             Tuple[bool, Optional[str]]: (is_valid, error_message)
         """
         if not args or not args.strip():
-            return True, None  # Les args vides sont valides
+            return True, None
 
         dangerous_chars = [';', '&', '|', '`', '$', '(', ')']
         for char in dangerous_chars:
