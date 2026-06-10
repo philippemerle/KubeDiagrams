@@ -200,6 +200,32 @@ export async function generateClusterDiagram({
 }
 
 /**
+ * Get the currently active kubectl context name.
+ * @returns {Promise<Object>} Response with context name
+ */
+export async function getClusterContext() {
+  logger.debug('Fetching current kubectl context');
+
+  try {
+    const response = await fetch(API_ENDPOINTS.CLUSTER_CONTEXT, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      logger.info('kubectl context fetched', { context: data?.context });
+    }
+
+    return { ok: response.ok, status: response.status, data };
+  } catch (error) {
+    logger.error('Network error fetching kubectl context', { error });
+    throw error;
+  }
+}
+
+/**
  * Get list of namespaces from Kubernetes cluster
  * @returns {Promise<Object>} Response with namespaces list
  */
@@ -239,19 +265,17 @@ export async function getClusterNamespaces() {
 }
 
 /**
- * Get list of resource types from Kubernetes cluster
- * @param {string} [namespace] - Optional namespace filter
+ * Get all resource types known by the Kubernetes cluster.
+ * Each entry includes name, shortNames, namespaced scope, and isCommon flag.
+ * The list is fetched once on tab open and cached in the component — use the
+ * refresh button to re-query the cluster.
  * @returns {Promise<Object>} Response with resource types list
  */
-export async function getClusterResourceTypes(namespace = '') {
-  logger.debug('Fetching cluster resource types', { namespace });
+export async function getClusterResourceTypes() {
+  logger.debug('Fetching cluster resource types');
 
   try {
-    const url = namespace
-      ? `${API_ENDPOINTS.CLUSTER_RESOURCE_TYPES}?namespace=${encodeURIComponent(namespace)}`
-      : API_ENDPOINTS.CLUSTER_RESOURCE_TYPES;
-
-    const response = await fetch(url, {
+    const response = await fetch(API_ENDPOINTS.CLUSTER_RESOURCE_TYPES, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -282,35 +306,6 @@ export async function getClusterResourceTypes(namespace = '') {
   }
 }
 
-/**
- * Retrieve resources from Kubernetes cluster
- * @param {Object} params - Request parameters
- * @param {string} [params.namespace] - Namespace filter
- * @param {Array<string>} [params.resourceTypes] - Resource types to retrieve
- * @param {boolean} [params.allNamespaces] - Retrieve from all namespaces
- * @returns {Promise<Object>} Response with manifest data
- */
-export async function getClusterResources({
-  namespace = '',
-  resourceTypes = [],
-  allNamespaces = false,
-}) {
-  logger.debug('Retrieving cluster resources', { namespace, resourceTypes, allNamespaces });
-
-  const response = await apiFetch(API_ENDPOINTS.CLUSTER_RESOURCES, {
-    body: JSON.stringify({
-      namespace,
-      resourceTypes,
-      allNamespaces,
-    }),
-  });
-
-  if (response.ok && response.data.manifest) {
-    logger.info('Cluster resources retrieved successfully');
-  }
-
-  return response;
-}
 
 /**
  * Submit user feedback
@@ -362,9 +357,9 @@ export default {
   generateHelmDiagram,
   generateHelmfileDiagram,
   generateClusterDiagram,
+  getClusterContext,
   getClusterNamespaces,
   getClusterResourceTypes,
-  getClusterResources,
   submitFeedback,
   hasFatalErrors,
 };

@@ -8,6 +8,7 @@ import { DEFAULTS } from '../../../utils/constants.js';
 import { generateClusterDiagram } from '../../../services/diagramApi.js';
 import { useViewerSync } from '../../../hooks/useViewerSync.js';
 import { useDiagramGeneration } from '../../../hooks/useDiagramGeneration.js';
+import { useClusterData } from '../../../hooks/useClusterData.js';
 import ClusterInput from './ClusterInput.jsx';
 import ClusterOutput from './ClusterOutput.jsx';
 import CommandDetails from '../../common/CommandDetails.jsx';
@@ -34,7 +35,6 @@ function ClusterTab({ historyContext }) {
     setErrorMessage,
     isSubmitting,
     viewerKey,
-    progressStep,
     handleSubmit: generateDiagram,
     resetOutput,
   } = useDiagramGeneration({
@@ -61,9 +61,37 @@ function ClusterTab({ historyContext }) {
   }, [outputFormat, diagram, resetOutput]);
 
   // Viewer synchronization hook for DOT_JSON format
-  const { viewerRef, handleViewerLoad } = useViewerSync({
-    diagram,
-    outputFormat,
+  const { viewerRef, handleViewerLoad } = useViewerSync({ diagram, outputFormat });
+
+  // Cluster connectivity: namespaces, resource types, context, and all related handlers
+  const {
+    currentContext,
+    namespaces,
+    availableResourceTypes,
+    loadingNamespaces,
+    loadingResourceTypes,
+    resourceTypeSearch,
+    setResourceTypeSearch,
+    filteredResourceTypes,
+    commonVisible,
+    otherVisible,
+    fetchContext,
+    fetchNamespaces,
+    handleRefreshResourceTypes,
+    handleResourceTypeToggle,
+    handleSelectCommon,
+    handleSelectAll,
+    handleClearSelection,
+    handleAllNamespacesToggle,
+    handleNamespaceChange,
+  } = useClusterData({
+    resourceTypes,
+    setResourceTypes,
+    namespace,
+    setNamespace,
+    allNamespaces,
+    setAllNamespaces,
+    setErrorMessage,
   });
 
   // Auto-scroll to output when diagram is ready
@@ -136,11 +164,8 @@ function ClusterTab({ historyContext }) {
         <div className="lg:w-1/4">
           <ClusterInput
             namespace={namespace}
-            setNamespace={setNamespace}
             resourceTypes={resourceTypes}
-            setResourceTypes={setResourceTypes}
             allNamespaces={allNamespaces}
-            setAllNamespaces={setAllNamespaces}
             outputFormat={outputFormat}
             setOutputFormat={setOutputFormat}
             extraArgs={extraArgs}
@@ -148,9 +173,27 @@ function ClusterTab({ historyContext }) {
             withoutNamespace={withoutNamespace}
             setWithoutNamespace={setWithoutNamespace}
             errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
             isSubmitting={isSubmitting}
             onSubmit={handleGenerate}
+            currentContext={currentContext}
+            namespaces={namespaces}
+            availableResourceTypes={availableResourceTypes}
+            loadingNamespaces={loadingNamespaces}
+            loadingResourceTypes={loadingResourceTypes}
+            resourceTypeSearch={resourceTypeSearch}
+            setResourceTypeSearch={setResourceTypeSearch}
+            filteredResourceTypes={filteredResourceTypes}
+            commonVisible={commonVisible}
+            otherVisible={otherVisible}
+            fetchContext={fetchContext}
+            fetchNamespaces={fetchNamespaces}
+            handleRefreshResourceTypes={handleRefreshResourceTypes}
+            handleResourceTypeToggle={handleResourceTypeToggle}
+            handleSelectCommon={handleSelectCommon}
+            handleSelectAll={handleSelectAll}
+            handleClearSelection={handleClearSelection}
+            handleAllNamespacesToggle={handleAllNamespacesToggle}
+            handleNamespaceChange={handleNamespaceChange}
           />
         </div>
 

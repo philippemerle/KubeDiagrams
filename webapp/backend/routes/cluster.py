@@ -6,14 +6,28 @@ from services import (
     generate_from_cluster,
     get_namespaces,
     get_resource_types,
+    get_current_context,
 )
 from utils import InputValidator, ResponseBuilder
 
 cluster_bp = Blueprint('cluster', __name__)
 
 
+@cluster_bp.route('/api/cluster/context', methods=['GET'])
+def get_context():
+    """Return the name of the currently active kubectl context."""
+    try:
+        context = get_current_context()
+        return ResponseBuilder.success({"context": context})
+    except RuntimeError as e:
+        return ResponseBuilder.error(str(e))
+    except Exception as e:
+        return ResponseBuilder.error(f"Unexpected error: {str(e)}")
+
+
 @cluster_bp.route('/api/cluster/namespaces', methods=['GET'])
 def list_namespaces():
+    """Return the list of namespaces available in the connected Kubernetes cluster."""
     try:
         namespaces = get_namespaces()
         return ResponseBuilder.success({
@@ -28,9 +42,9 @@ def list_namespaces():
 
 @cluster_bp.route('/api/cluster/resource-types', methods=['GET'])
 def list_resource_types():
-    namespace = request.args.get('namespace')
+    """Return all resource types known by the cluster, tagged with namespace scope and common status."""
     try:
-        resource_types = get_resource_types(namespace=namespace)
+        resource_types = get_resource_types()
         return ResponseBuilder.success({
             "resourceTypes": resource_types,
             "count": len(resource_types)
@@ -58,13 +72,17 @@ def generate_cluster_diagram():
     route = request.path
     params = (
         f"namespace={namespace};"
-        f"resourceTypes={','.join(resource_types) if resource_types else 'default'};"
+        f"resourceTypes={','.join(resource_types)};"
         f"allNamespaces={all_namespaces};"
         f"format={output_format};"
         f"extraArgs={compact_for_log(extra_args)};"
         f"withoutNamespace={without_namespace}"
     )
     log_to_csv(client_ip, route, params)
+
+    # Validate resource types
+    if not resource_types:
+        return ResponseBuilder.validation_error("resourceTypes", "At least one resource type must be selected")
 
     # Validate namespace if provided
     if namespace and not InputValidator.validate_k8s_name(namespace):
@@ -83,7 +101,7 @@ def generate_cluster_diagram():
     # Generate diagram using kubectl-diagrams
     result = generate_from_cluster(
         namespace=namespace,
-        resource_types=resource_types if resource_types else None,
+        resource_types=resource_types,
         all_namespaces=all_namespaces,
         output_format=output_format,
         extra_args=extra_args,

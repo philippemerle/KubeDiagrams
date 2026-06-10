@@ -8,6 +8,7 @@ from .clusterService import (
     generate_from_cluster,
     get_namespaces,
     get_resource_types,
+    get_current_context,
 )
 
 __all__ = [
@@ -19,4 +20,6 @@ __all__ = [
     'generate_from_cluster',
     'get_namespaces',
     'get_resource_types',
+    'get_current_context',
 ]
+

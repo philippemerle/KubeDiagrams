@@ -61,7 +61,7 @@ def create_app():
     # Logging Configuration
     setup_logging()
 
-    # Middleware pour logger les requêtes
+    # Middleware to log requests
     @app.before_request
     def before_request():
         """Save request start time for performance logging."""
