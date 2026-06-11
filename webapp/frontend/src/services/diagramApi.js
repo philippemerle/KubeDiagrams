@@ -306,7 +306,6 @@ export async function getClusterResourceTypes() {
   }
 }
 
-
 /**
  * Submit user feedback
  * @param {Object} params - Feedback parameters

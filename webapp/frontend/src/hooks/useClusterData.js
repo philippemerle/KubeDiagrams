@@ -136,8 +136,7 @@ export function useClusterData({
     const commons = availableResourceTypes.filter((rt) => rt.isCommon);
     // With a specific namespace, default to namespaced commons only — cluster-scoped
     // resources (nodes, storageclasses…) can still be added manually.
-    const selected =
-      namespace && !allNamespaces ? commons.filter((rt) => rt.namespaced) : commons;
+    const selected = namespace && !allNamespaces ? commons.filter((rt) => rt.namespaced) : commons;
     setResourceTypes(selected.map((rt) => rt.name));
   };
 

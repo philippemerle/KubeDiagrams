@@ -80,7 +80,10 @@ function ClusterInput({
               <label className="block text-sm font-medium text-white">Namespace</label>
               <button
                 type="button"
-                onClick={() => { fetchNamespaces(); fetchContext(); }}
+                onClick={() => {
+                  fetchNamespaces();
+                  fetchContext();
+                }}
                 disabled={loadingNamespaces}
                 className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
               >
@@ -175,9 +178,12 @@ function ClusterInput({
                 : `${availableResourceTypes.length} types known by the cluster`}
               {namespace && !allNamespaces && !resourceTypeSearch && (
                 <span>
-                  {' '}— resources tagged{' '}
-                  <span className="text-purple-400 font-medium">cluster</span> are not bound to a
-                  namespace but can still be included (e.g. nodes for pod placement).
+                  {' '}
+                  — resources tagged <span className="text-purple-400 font-medium">
+                    cluster
+                  </span>{' '}
+                  are not bound to a namespace but can still be included (e.g. nodes for pod
+                  placement).
                 </span>
               )}
             </p>
@@ -262,7 +268,9 @@ function ClusterInput({
               </>
             )}
           </div>
-          <p className={`text-xs mt-1 ${resourceTypes.length === 0 ? 'text-yellow-400' : 'text-gray-400'}`}>
+          <p
+            className={`text-xs mt-1 ${resourceTypes.length === 0 ? 'text-yellow-400' : 'text-gray-400'}`}
+          >
             {resourceTypes.length > 0
               ? `${resourceTypes.length} type${resourceTypes.length > 1 ? 's' : ''} selected`
               : 'No types selected — please select at least one resource type.'}
@@ -307,12 +315,10 @@ function ClusterInput({
                 <>
                   <strong>No cluster detected.</strong> Start your cluster, then click{' '}
                   <strong>Refresh</strong>:
-                  <br />• minikube:{' '}
-                  <code className="bg-gray-800 px-1 rounded">minikube start</code>
+                  <br />• minikube: <code className="bg-gray-800 px-1 rounded">minikube start</code>
                   <br />• kind:{' '}
                   <code className="bg-gray-800 px-1 rounded">kind create cluster</code>
-                  <br />• k3d:{' '}
-                  <code className="bg-gray-800 px-1 rounded">k3d cluster create</code>
+                  <br />• k3d: <code className="bg-gray-800 px-1 rounded">k3d cluster create</code>
                   <br />
                   Make sure <code className="bg-gray-800 px-1 rounded">kubectl</code> is installed
                   and your kubeconfig points to the right context.

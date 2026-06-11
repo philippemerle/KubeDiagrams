@@ -23,6 +23,13 @@ RUN apk update && apk add --no-cache \
     musl-dev \
     && rm -rf /var/cache/apk/*
 
+# Install kubectl (statically compiled Go binary — works on Alpine/musl)
+RUN ARCH=$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/') && \
+    KUBECTL_VERSION=$(curl -fsSL https://dl.k8s.io/release/stable.txt) && \
+    curl -fsSL -o /usr/local/bin/kubectl \
+        "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${ARCH}/kubectl" && \
+    chmod +x /usr/local/bin/kubectl
+
 # Copy Helm from first stage
 COPY --from=helm /usr/bin/helm /usr/local/bin/helm
 

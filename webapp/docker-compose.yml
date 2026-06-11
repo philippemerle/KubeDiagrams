@@ -43,8 +43,13 @@ services:
     volumes:
       # Persist logs outside container
       - ./backend/logs:/app/logs
+      # Mount host kubeconfig so kubectl can reach the cluster started on the host
+      - ${HOME}/.kube:/root/.kube:ro
+      # Mount minikube certs at the same absolute path as on the host (kubeconfig references them by absolute path)
+      - ${HOME}/.minikube:${HOME}/.minikube:ro
     networks:
       - kubediagrams-network
+      - minikube
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "--fail", "--silent", "http://localhost:5000/api/health"]
@@ -59,3 +64,5 @@ services:
 networks:
   kubediagrams-network:
     driver: bridge
+  minikube:
+    external: true

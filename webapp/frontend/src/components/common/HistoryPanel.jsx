@@ -121,9 +121,7 @@ const HistoryPanel = ({ history, onRestore, onRemove, onClear, isOpen, onToggle 
                   <div className="flex flex-col items-center justify-center h-full text-slate-500">
                     <FileText className="w-16 h-16 mb-4 opacity-50" />
                     <p className="text-center">No diagrams in history</p>
-                    <p className="text-xs text-center mt-2">
-                      Generated diagrams will appear here
-                    </p>
+                    <p className="text-xs text-center mt-2">Generated diagrams will appear here</p>
                   </div>
                 ) : (
                   history.map((item) => (
