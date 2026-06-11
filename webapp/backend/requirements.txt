@@ -16,7 +16,6 @@ MarkupSafe==3.0.3
 nodeenv==1.10.0
 platformdirs==4.9.4
 pre_commit==4.5.1
-puremagic==2.0.2
 pygraphviz==1.14
 python-discovery==1.1.3
 PyYAML==6.0.3

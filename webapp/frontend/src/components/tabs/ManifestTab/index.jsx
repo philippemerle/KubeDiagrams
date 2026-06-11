@@ -101,7 +101,7 @@ function ManifestTab({ historyContext }) {
       historyContext.addToHistory(historyItem);
       lastHistoryIdRef.current = historyId;
     }
-  }, [diagram, progressStep]); // Dépendances minimales pour éviter la boucle
+  }, [diagram, progressStep]); // minimal deps — avoids a save loop
 
   // Restore from history
   useEffect(() => {

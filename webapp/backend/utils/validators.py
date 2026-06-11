@@ -75,7 +75,7 @@ class InputValidator:
             url: URL of the Helm chart
 
         Returns:
-            Tuple[bool, Optional[str]]: (est_valide, message_erreur)
+            Tuple[bool, Optional[str]]: (is_valid, error_message)
         """
         if not url or not url.strip():
             return False, "Chart URL cannot be empty."
@@ -121,7 +121,7 @@ class InputValidator:
             Tuple[bool, Optional[str]]: (is_valid, error_message)
         """
         if not args or not args.strip():
-            return True, None  # Les args vides sont valides
+            return True, None
 
         dangerous_chars = [';', '&', '|', '`', '$', '(', ')']
         for char in dangerous_chars:
@@ -129,6 +129,24 @@ class InputValidator:
                 return False, f"Extra args contain dangerous character '{char}'"
 
         return True, None
+
+    @staticmethod
+    def validate_k8s_name(name: str) -> bool:
+        """
+        Validate a Kubernetes resource name.
+
+        Args:
+            name: Resource name to validate
+
+        Returns:
+            bool: True if valid
+        """
+        if not name or not isinstance(name, str):
+            return False
+        # Kubernetes names must be lowercase alphanumeric, with hyphens allowed
+        # Must start and end with alphanumeric
+        pattern = re.compile(r'^[a-z0-9]([-a-z0-9]*[a-z0-9])?$')
+        return bool(pattern.match(name)) and len(name) <= 253
 
     @staticmethod
     def looks_like_manifest(text: str) -> bool:

@@ -27,6 +27,10 @@ export const API_ENDPOINTS = Object.freeze({
   GENERATE_MANIFEST: '/api/generate-diagram',
   GENERATE_HELM: '/api/generate-helm-diagram',
   GENERATE_HELMFILE: '/api/generate-helmfile-diagram',
+  GENERATE_CLUSTER: '/api/cluster/generate',
+  CLUSTER_CONTEXT: '/api/cluster/context',
+  CLUSTER_NAMESPACES: '/api/cluster/namespaces',
+  CLUSTER_RESOURCE_TYPES: '/api/cluster/resource-types',
   SUBMIT_FEEDBACK: '/api/submit-feedback',
   EXAMPLES: '/api/examples',
 });

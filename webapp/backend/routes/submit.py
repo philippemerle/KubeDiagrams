@@ -23,13 +23,13 @@ def submit_feedback():
     if note or comment:
         try:
             with open(Config.FEEDBACK_FILE, "a", encoding="utf-8") as f:
-                f.write(f"[{diagram_type.upper()}]\nNote: {note}\nCommentaire: {comment}\n\n")
+                f.write(f"[{diagram_type.upper()}]\nNote: {note}\nComment: {comment}\n\n")
 
             return ResponseBuilder.success(
                 message="Feedback submitted successfully. Thank you!"
             )
         except Exception as e:
-            # Log l'erreur dans le CSV
+            # Log error to CSV
             csv_logger = logging.getLogger(Config.LOGGER_NAME)
             csv_logger.error(f"Error writing feedback: {e}")
             return ResponseBuilder.error(
