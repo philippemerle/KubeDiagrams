@@ -72,7 +72,7 @@ def icon(node: object, label: str, size=64):
             + label + '</td></tr></table>>'
 
 # Maximum length for diagram node labels
-MAX_NODE_LABEL_LENGTH = 16
+MAX_NODE_LABEL_LENGTH = 14
 
 def query_path(data, path, default=None):
     """
