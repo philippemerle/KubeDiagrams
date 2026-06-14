@@ -136,9 +136,17 @@ nodes:
       edges.add_role("roleRef")
       edges.add_subjects()
   ClusterRoleBinding/rbac.authorization.k8s.io/v1beta1: ClusterRoleBinding/rbac.authorization.k8s.io/v1
+  ComponentStatus/v1:
+    scope: Cluster
+    custom_icon: $KD/icons/componentstatus.png
+    # no edges
   ConfigMap/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.podconfig.CM
+    # no edges
+  ControllerRevision/apps/v1:
+    scope: Namespaced
+    custom_icon: $KD/icons/controllerrevision.png
     # no edges
   CronJob/batch/v1:
     scope: Namespaced
@@ -279,6 +287,19 @@ nodes:
               "REFERENCE",
               data=target
             )
+  FlowSchema/flowcontrol.apiserver.k8s.io/v1:
+    scope: Cluster
+    custom_icon: $KD/icons/flowschema.png
+    edges: |
+      edges.add_edge_to(
+        "spec.priorityLevelConfiguration.name",
+        ".",
+        None,
+        "PriorityLevelConfiguration",
+        resource.get("apiVersion"),
+        "REFERENCE"
+      )
+  FlowSchema/flowcontrol.apiserver.k8s.io/v1beta3: FlowSchema/flowcontrol.apiserver.k8s.io/v1
   Group/rbac.authorization.k8s.io/v1:
     scope: Cluster
     diagram_node_classname: diagrams.k8s.rbac.Group
@@ -428,6 +449,10 @@ nodes:
     custom_icon: $KD/icons/pc.png
     # no edges
   PriorityClass/scheduling.k8s.io/v1beta1: PriorityClass/scheduling.k8s.io/v1
+  PriorityLevelConfiguration/flowcontrol.apiserver.k8s.io/v1:
+    scope: Cluster
+    custom_icon: $KD/icons/prioritylevelconfiguration.png
+  PriorityLevelConfiguration/flowcontrol.apiserver.k8s.io/v1beta3: PriorityLevelConfiguration/flowcontrol.apiserver.k8s.io/v1
   Pod/v1:
     scope: Namespaced
     diagram_node_classname: diagrams.k8s.compute.Pod

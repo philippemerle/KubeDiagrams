@@ -373,14 +373,16 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 
 ### Kubernetes built-in resources
 
-**KubeDiagrams** supported the following 47 Kubernetes resource types:
+**KubeDiagrams** supported the following 51 Kubernetes resource types:
 
 |               Kind               |            ApiGroup            |           Versions            |                                                                          Icon                                                                          |
 | :------------------------------: | :----------------------------: | :---------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------: |
 |           `APIService`           |    `apiregistration.k8s.io`    |        `v1beta1` `v1`         |                  ![APIService](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/apiservice.png)                  |
 |          `ClusterRole`           |  `rbac.authorization.k8s.io`   |        `v1beta1` `v1`         |          ![ClusterRole](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/c-role-128.png)           |
 |       `ClusterRoleBinding`       |  `rbac.authorization.k8s.io`   |        `v1beta1` `v1`         |        ![ClusterRoleBinding](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/crb-128.png)         |
+|           `ComponentStatus`            |                                |             `v1`              |             ![ComponentStatus](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/componentstatus.png)              |
 |           `ConfigMap`            |                                |             `v1`              |             ![ConfigMap](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/cm-128.png)              |
+|           `ControllerRevision`            |             `apps`                   |             `v1`              |             ![ControllerRevision](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/controllerrevision.png)              |
 |            `CronJob`             |            `batch`             |        `v1beta1` `v1`         |            ![CronJob](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/cronjob-128.png)            |
 |           `CSIDriver`            |        `storage.k8s.io`        |        `v1beta1` `v1`         |                   ![CSIDriver](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csidriver.png)                   |
 |            `CSINode`             |        `storage.k8s.io`        |             `v1`              |                     ![CSINode](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/csinode.png)                     |
@@ -390,6 +392,7 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 |           `Deployment`           |         `apps` `extensions`    |   `v1beta1` `v1beta2` `v1`    |           ![Deployment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/deploy-128.png)           |
 |           `Endpoints`            |                                |             `v1`              |             ![Endpoints](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/ep-128.png)              |
 |         `EndpointSlice`          |       `discovery.k8s.io`       |             `v1`              |                    ![EndpointSlice](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/eps.png)                    |
+|             `FlowSchema`              |  `flowcontrol.apiserver.k8s.io`   |             `v1beta3` `v1`              |              ![FlowSchema](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/flowschema.png)              |
 |             `Group`              |  `rbac.authorization.k8s.io`   |             `v1`              |              ![Group](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/group-128.png)              |
 |    `HorizontalPodAutoscaler`     |         `autoscaling`          | `v1` `v2beta1` `v2beta2` `v2` |      ![HorizontalPodAutoscaler](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/hpa-128.png)      |
 |            `Ingress`             | `networking.k8s.io` `extensions` |        `v1beta1` `v1`         |              ![Ingress](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/ing-128.png)              |
@@ -409,6 +412,7 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 |       `PodSecurityPolicy`        |     `policy` `extensions`      |        `v1beta1` `v1`         |         ![PodSecurityPolicy](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/psp-128.png)         |
 |          `PodTemplate`           |                                |             `v1`              |                 ![PodTemplate](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/podtemplate.png)                 |
 |         `PriorityClass`          |      `scheduling.k8s.io`       |        `v1beta1` `v1`         |                    ![PriorityClass](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/pc.png)                     |
+|         `PriorityLevelConfiguration`          |      `flowcontrol.apiserver.k8s.io`       |        `v1beta3` `v1`         |                    ![PriorityLevelConfiguration](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/prioritylevelconfiguration.png)                     |
 |           `ReplicaSet`           |             `apps`             |             `v1`              |             ![ReplicaSet](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/rs-128.png)             |
 |     `ReplicationController`      |                                |             `v1`              |                ![ReplicationController](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/rc.png)                 |
 |         `ResourceQuota`          |                                |             `v1`              |          ![ResourceQuota](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/quota-128.png)          |
@@ -427,14 +431,12 @@ Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubu
 
 **Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L103).
 
-Currently, there are 16 unsupported Kubernetes resource types:
+Currently, there are 12 unsupported Kubernetes resource types:
 
 |             Kind             |            ApiGroup            |
 | :--------------------------: | :----------------------------: |
 |          `Binding`           |                                |
-|      `ComponentStatus`       |                                |
 |           `Event`            |                                |
-|     `ControllerRevision`     |             `apps`             |
 |        `TokenReview`         |    `authentication.k8s.io`     |
 |  `LocalSubjectAccessReview`  |     `authorization.k8s.io`     |
 |  `SelfSubjectAccessReview`   |     `authorization.k8s.io`     |
@@ -443,8 +445,6 @@ Currently, there are 16 unsupported Kubernetes resource types:
 |    `SubjectAccessReview`     |     `authorization.k8s.io`     |
 | `CertificateSigningRequest`  |     `certificates.k8s.io`      |
 |           `Event`            |        `events.k8s.io`         |
-|         `FlowSchema`         | `flowcontrol.apiserver.k8s.io` |
-| `PriorityLevelConfiguration` | `flowcontrol.apiserver.k8s.io` |
 |        `NodeMetrics`         |        `metrics.k8s.io`        |
 |         `PodMetrics`         |        `metrics.k8s.io`        |
 
