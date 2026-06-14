@@ -267,7 +267,7 @@ nodes:
     scope: Namespaced
     custom_icon: $KD/icons/eps.png
     edges: |
-        for idx, endpoint in enumerate(resource.get("endpoints", [])):
+        for idx, endpoint in enumerate(query_path(resource, "endpoints", [])):
           if "targetRef" in endpoint:
             target = endpoint["targetRef"]
             edges.add_edge_to(
