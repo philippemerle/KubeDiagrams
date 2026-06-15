@@ -629,6 +629,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Blogs
 
+1. [KubeDiagrams Launches Automated Kubernetes Architecture Visualization](https://thenextgentechinsider.com/pulse/kubediagrams-launches-automated-kubernetes-architecture-visualization), TheNextGenTechInsider.com, May 22, 2026.
+
 1. [KubeDiagrams in action: turning kubectl get all into a visual architecture diagram, the strongest weapon for newbies onboarding](https://www.itnotetk.com/2026/04/19/kubediagrams-%e5%af%a6%e6%88%b0%ef%bc%9a%e6%8a%8a-kubectl-get-all-%e8%ae%8a%e6%88%90%e8%a6%96%e8%a6%ba%e5%8c%96%e6%9e%b6%e6%a7%8b%e5%9c%96%ef%bc%8c%e6%96%b0%e4%ba%ba-onboarding-%e7%9a%84%e6%9c%80/), Tony.Wu's Blog, April 19, 2026.
 
 1. [KubeDiagrams: Automatically Generate Stunning Kubernetes Architecture Diagrams from Code and Clusters](https://engineering.01cloud.com/2025/12/24/kubediagrams-automatically-generate-stunning-kubernetes-architecture-diagrams-from-code-and-clusters/), 01 Cloud Engineering, December 24, 2025.
