@@ -27,6 +27,7 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 * **[declarative custom diagrams](https://github.com/philippemerle/KubeDiagrams#declarative-custom-diagrams)**,
 * **[an interactive diagram viewer](https://github.com/philippemerle/KubeDiagrams#kubediagrams-interactive-viewer)**,
 * **[a modern web application](https://github.com/philippemerle/KubeDiagrams#kubediagrams-webapp)**,
+* **[a plugin for JetBrains IDEs](https://github.com/philippemerle/KubeDiagrams#kubediagrams-plugin-for-JetBrains-IDEs)**,
 * **main input formats** such as Kubernetes manifest files, customization files, Helm charts, helmfile descriptors, and actual cluster state,
 * **main output formats** such as DOT, draw.io, GIF, JPEG, PDF, PNG, SVG, and TIFF,
 * **[editable draw.io export](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#editable-drawio-export)**,
@@ -368,6 +369,12 @@ jobs:
 ```
 
 Action `philippemerle/KubeDiagrams@main` is available [here](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/action.yml).
+
+### KubeDiagrams Plugin for JetBrains IDEs
+
+![KubeDiagrams Plugin for JetBrains IDEs](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-Plugin-for-JetBrains-IDEs.png)
+
+The **KubeDiagrams Plugin for JetBrains IDEs** is available [here](https://plugins.jetbrains.com/plugin/32395-kubediagrams).
 
 ## Features
 
