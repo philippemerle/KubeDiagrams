@@ -811,6 +811,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Referencing sites
 
+1. [Kubernetes Tools Directory | KubeThings](https://kubethings.com/tools)
+
 1. [Cloud Native Landscape](https://landscape.cncf.io/)
 
 1. [Awesome Cloud Native](https://github.com/rootsongjc/awesome-cloud-native)
