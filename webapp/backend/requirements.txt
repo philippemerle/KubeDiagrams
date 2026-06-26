@@ -1,6 +1,6 @@
 blinker==1.9.0
 cfgv==3.5.0
-click==8.2.1
+click==8.3.3
 diagrams==0.25.1
 distlib==0.4.0
 filelock==3.25.2
