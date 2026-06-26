@@ -611,7 +611,8 @@ nodes:
         pvc = {
           "kind": "PersistentVolumeClaim",
           "apiVersion": "v1",
-          **vct
+          "metadata": dict(vct.get("metadata", {})),
+          "spec": vct.get("spec", {}),
         }
         pvc["metadata"]["name"] = f'{pvc["metadata"]["name"]}-{resource["metadata"]["name"]}'
         if namespace is not None:
