@@ -618,7 +618,7 @@ class EdgesContext(list):
         for idx, vct in enumerate(query_path(self.resource, path, [])):
             self.add_edge_to(
                 f"{path}[{idx}]",
-                vct['metadata']['name'],
+                f"{vct['metadata']['name']}-{self.resource['metadata']['name']}",
                 self.namespace,
                 "PersistentVolumeClaim",
                 "v1",
