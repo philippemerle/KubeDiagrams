@@ -660,6 +660,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [Kube Architect's post](https://x.com/K8sArchitect/status/2065812949055213921) on X, June 13, 2026.
+
 1. [Bart Farrell's post](https://www.linkedin.com/posts/bart-farrell_most-kubernetes-architecture-diagrams-are-ugcPost-7460742208980242432-9ufJ/) on LinkedIn, May 14, 2026.
 
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/2054586480761176326) on X, May 13, 2026.
