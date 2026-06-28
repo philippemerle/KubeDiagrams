@@ -9,11 +9,11 @@ import importlib
 import json
 import os
 from pathlib import Path
-import pygraphviz
 import traceback
 from pprint import pprint
 import subprocess
 import sys
+import pygraphviz
 import yaml
 import diagrams
 from diagrams import Edge, Cluster
@@ -36,7 +36,17 @@ KUBEDIAGRAMS_URL = \
 # Conversion of dot files to Mermaid files
 #
 
-def convert_dot_attributes_to_mermaid(command: str, name: str, attributes: dict, attr: str, ident: int, stream):
+def convert_dot_attributes_to_mermaid(
+    keyword: str,
+    name: str,
+    attributes: dict,
+    attr: str,
+    ident: int,
+    stream
+):
+    """
+        Convert dot attributes to Mermaid attributes.
+    """
     mappings = []
     if attr is not None:
         mappings.append(attr)
@@ -57,15 +67,28 @@ def convert_dot_attributes_to_mermaid(command: str, name: str, attributes: dict,
             if "dashed" in av:
                 mappings.append("stroke-dasharray:7 7")
     if len(mappings) > 0:
-        print("  "*ident, command, " ", name, " ", ",".join(mappings), sep="", file=stream)
+        print("  "*ident, keyword, " ", name, " ", ",".join(mappings), sep="", file=stream)
 
-def convert_dot_subgraph_to_mermaid(graph: pygraphviz.AGraph, already_created_nodes: set, ident: int, stream):
+def convert_dot_subgraph_to_mermaid(
+    graph: pygraphviz.AGraph,
+    already_created_nodes: set,
+    ident: int,
+    stream
+):
+    """
+        Convert a dot subgraph to a Mermaid subgraph.
+    """
     for subgraph in graph.subgraphs():
         name = subgraph.name.replace(":", "").replace(" ", "_")
-        print("  "*ident, "subgraph ", name, " [", subgraph.graph_attr["label"], "]", sep="", file=stream)
+        print("  "*ident, "subgraph ", name, " [", subgraph.graph_attr["label"],
+                "]", sep="", file=stream)
         print("  "*(ident+1), "direction TB", sep="", file=stream)
-        convert_dot_attributes_to_mermaid("style", name, subgraph.graph_attr, None, ident+1, stream)
-        convert_dot_subgraph_to_mermaid(subgraph, already_created_nodes, ident+1, stream)
+        convert_dot_attributes_to_mermaid(
+            "style", name, subgraph.graph_attr, None, ident+1, stream
+        )
+        convert_dot_subgraph_to_mermaid(
+            subgraph, already_created_nodes, ident+1, stream
+        )
         print("  "*ident, "end", sep="", file=stream)
     for nid in graph.nodes():
         if nid not in already_created_nodes:
@@ -74,20 +97,26 @@ def convert_dot_subgraph_to_mermaid(graph: pygraphviz.AGraph, already_created_no
             url = node.attr["image"].replace(DIAGRAMS_PATH, DIAGRAMS_URL)
             url = url.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
             label = node.attr["label"].replace("\n", "")
-            print("  "*ident, node.name, "@{ img: \"", url, "\", label: \"", label, "\", h: 120, constraint: \"on\" }", sep="", file=stream)
-            convert_dot_attributes_to_mermaid("style", node.name, node.attr, "fill:none,stroke:none", ident, stream)
+            print("  "*ident, node.name, "@{ img: \"", url, "\", label: \"",
+                label, "\", h: 120, constraint: \"on\" }", sep="", file=stream)
+            convert_dot_attributes_to_mermaid(
+                "style", node.name, node.attr, "fill:none,stroke:none", ident, stream
+            )
 
-def convert_dot_to_mermaid(dot_filename, mermaid_filename):
+def convert_dot_to_mermaid(a_dot_filename, a_mermaid_filename):
+    """
+        Convert a dot file to a Mermaid file.
+    """
     graph = pygraphviz.AGraph()
-    graph.read(dot_filename)
-    with open(mermaid_filename, "wt") as stream:
+    graph.read(a_dot_filename)
+    with open(a_mermaid_filename, "wt", encoding="utf-8") as stream:
         print("flowchart TB", file=stream)
         convert_dot_subgraph_to_mermaid(graph, set(), 1, stream)
         for eid, edge in enumerate(graph.edges()):
             if edge.attr.get("xlabel") != "":
                 edge_dir = {
                     "forward": "-- \"{}\" -->",
-#TODO               "back": "-- \"{}\" --",
+#TO DO               "back": "-- \"{}\" --",
                     "both": "<-- \"{}\" -->",
                 }[edge.attr["dir"]].format(edge.attr["xlabel"])
             else:
@@ -98,7 +127,9 @@ def convert_dot_to_mermaid(dot_filename, mermaid_filename):
                 }[edge.attr["dir"]]
             print(" ", edge[0], edge_dir, edge[1], file=stream)
             edge_color = edge.attr.get("color") or graph.edge_attr["color"]
-            convert_dot_attributes_to_mermaid("linkStyle", eid, edge.attr, f"stroke:{edge_color}", 1, stream)
+            convert_dot_attributes_to_mermaid(
+                "linkStyle", eid, edge.attr, f"stroke:{edge_color}", 1, stream
+            )
 
 # According to https://github.com/yaml/pyyaml/issues/89, PyYAML raises
 # yaml.constructor.ConstructorError: could not determine a constructor for
