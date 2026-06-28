@@ -29,8 +29,9 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 * **[a modern web application](https://github.com/philippemerle/KubeDiagrams#kubediagrams-webapp)**,
 * **[a plugin for JetBrains IDEs](https://github.com/philippemerle/KubeDiagrams#kubediagrams-plugin-for-JetBrains-IDEs)**,
 * **main input formats** such as Kubernetes manifest files, customization files, Helm charts, helmfile descriptors, and actual cluster state,
-* **main output formats** such as DOT, draw.io, GIF, JPEG, PDF, PNG, SVG, and TIFF,
+* **main output formats** such as DOT, draw.io, GIF, JPEG, Mermaid, PDF, PNG, SVG, and TIFF,
 * **[editable draw.io export](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#editable-drawio-export)**,
+* **[Mermaid Diagram Generation](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#mermaid-diagram-generation)**,
 * **[a very large set of examples](https://github.com/philippemerle/KubeDiagrams#examples)**.
 
 **KubeDiagrams** is available as a [Python package in PyPI](https://pypi.org/project/KubeDiagrams), a [container image in DockerHub](https://hub.docker.com/r/philippemerle/kubediagrams), a `kubectl` plugin, a Nix flake, and a GitHub Action, see [here](https://github.com/philippemerle/KubeDiagrams#getting-started) for more details.
@@ -209,7 +210,7 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -o, --output OUTPUT   output diagram filename
-  -f, --format FORMAT   output format, allowed formats are dot, dot_json, drawio, gif, jp2, jpe, jpeg, jpg, pdf, png, svg, tif, tiff, set to png by default
+  -f, --format FORMAT   output format, allowed formats are dot, dot_json, drawio, gif, jp2, jpe, jpeg, jpg, mermaid, pdf, png, svg, tif, tiff, set to png by default
   --embed-all-icons     embed all icons into svg or dot_json output diagrams
   -c, --config CONFIG   custom kube-diagrams configuration file
   -n, --namespace NAMESPACE
@@ -581,6 +582,54 @@ kube-diagrams examples/wordpress/*.yaml -o wordpress.drawio
 ✨ Generated `drawio` files can be opened with [draw.io](https://www.drawio.com/) or your favorite diagram editor.
 
 ![KubeDiagrams in draw.io](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-drawio.png)
+
+## Mermaid Diagram Generation
+
+**KubeDiagrams** could output diagrams in the [Mermaid](https://mermaid.js.org/) format. For instance, type:
+
+```sh
+kube-diagrams examples/wordpress/*.yaml -o wordpress.mermaid
+```
+
+The generated diagram is rendered as follows:
+
+```mermaid
+flowchart TB
+  subgraph Namespace_default [Namespace: default]
+    direction TB
+    style Namespace_default fill:white,color:#2D3436,font:sans-serif,font-size:12pt,stroke:black,stroke-dasharray:4
+    subgraph Application_wordpress [Application: wordpress]
+      direction TB
+      style Application_wordpress fill:#ECE8F6,color:#2D3436,font:sans-serif,font-size:12pt,stroke:#AEB6BE
+      309b7a6a980d471ab77463b5b100daf4@{ img: "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png", label: "wordpress-mysql", h: 120, constraint: "on" }
+      style 309b7a6a980d471ab77463b5b100daf4 fill:none,stroke:none
+      418cdbdf8b6e4c15808f6790ca468518@{ img: "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/pvc.png", label: "mysql-pv-claim", h: 120, constraint: "on" }
+      style 418cdbdf8b6e4c15808f6790ca468518 fill:none,stroke:none
+      86aea62b4d7e4855b53c90a845137ac1@{ img: "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png", label: "wordpress-mysql", h: 120, constraint: "on" }
+      style 86aea62b4d7e4855b53c90a845137ac1 fill:none,stroke:none
+      a86b1243aba448808bb39f896fa92ed6@{ img: "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/secret.png", label: "mysql-pass", h: 120, constraint: "on" }
+      style a86b1243aba448808bb39f896fa92ed6 fill:none,stroke:none
+      ace15327f7724ee89433abe9c08c81b2@{ img: "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png", label: "wordpress", h: 120, constraint: "on" }
+      style ace15327f7724ee89433abe9c08c81b2 fill:none,stroke:none
+      31f2b483d2c646f890233c302438cb84@{ img: "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/pvc.png", label: "wp-pv-claim", h: 120, constraint: "on" }
+      style 31f2b483d2c646f890233c302438cb84 fill:none,stroke:none
+      efa901d5916f4a6b8f0b56c88ac08b73@{ img: "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png", label: "wordpress", h: 120, constraint: "on" }
+      style efa901d5916f4a6b8f0b56c88ac08b73 fill:none,stroke:none
+    end
+  end
+  309b7a6a980d471ab77463b5b100daf4 -- "3306/TCP" --> 86aea62b4d7e4855b53c90a845137ac1
+  linkStyle 0 stroke:black,color:#2D3436,font:sans-serif,font-size:10pt,stroke-dasharray:4
+  86aea62b4d7e4855b53c90a845137ac1 --> 418cdbdf8b6e4c15808f6790ca468518
+  linkStyle 1 stroke:black,color:#2D3436,font:sans-serif,font-size:13pt
+  86aea62b4d7e4855b53c90a845137ac1 --> a86b1243aba448808bb39f896fa92ed6
+  linkStyle 2 stroke:black,color:#2D3436,font:sans-serif,font-size:13pt
+  ace15327f7724ee89433abe9c08c81b2 -- "80/TCP" --> efa901d5916f4a6b8f0b56c88ac08b73
+  linkStyle 3 stroke:black,color:#2D3436,font:sans-serif,font-size:10pt,stroke-dasharray:4
+  efa901d5916f4a6b8f0b56c88ac08b73 --> a86b1243aba448808bb39f896fa92ed6
+  linkStyle 4 stroke:black,color:#2D3436,font:sans-serif,font-size:13pt
+  efa901d5916f4a6b8f0b56c88ac08b73 --> 31f2b483d2c646f890233c302438cb84
+  linkStyle 5 stroke:black,color:#2D3436,font:sans-serif,font-size:13pt
+```
 
 ## Architecture
 

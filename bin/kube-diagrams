@@ -8,6 +8,8 @@ import copy
 import importlib
 import json
 import os
+from pathlib import Path
+import pygraphviz
 import traceback
 from pprint import pprint
 import subprocess
@@ -18,6 +20,85 @@ from diagrams import Edge, Cluster
 from diagrams.aws.enablement import ManagedServices
 from diagrams.custom import Custom
 from diagrams.k8s.group import Namespace
+
+#
+# Absolute paths to be replaced by urls
+#
+
+DIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(diagrams.__file__))).parent)
+DIAGRAMS_URL = \
+    "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master"
+KUBEDIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(__file__))).parent)
+KUBEDIAGRAMS_URL = \
+    "https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main"
+
+#
+# Conversion of dot files to Mermaid files
+#
+
+def convert_dot_attributes_to_mermaid(command: str, name: str, attributes: dict, attr: str, ident: int, stream):
+    mappings = []
+    if attr is not None:
+        mappings.append(attr)
+    for ak, av in attributes.items():
+        if ak == "bgcolor":
+            mappings.append(f"fill:{av}")
+#        elif ak == "color":
+#            mappings.append(f"color:{av}")
+        elif ak == "fontcolor":
+            mappings.append(f"color:{av}")
+        elif ak == "fontname":
+            mappings.append(f"font:{av.lower()}")
+        elif ak == "fontsize":
+            mappings.append(f"font-size:{av}pt")
+        elif ak == "pencolor":
+            mappings.append(f"stroke:{av}")
+        elif ak == "style":
+            if "dashed" in av:
+                mappings.append("stroke-dasharray:7 7")
+    if len(mappings) > 0:
+        print("  "*ident, command, " ", name, " ", ",".join(mappings), sep="", file=stream)
+
+def convert_dot_subgraph_to_mermaid(graph: pygraphviz.AGraph, already_created_nodes: set, ident: int, stream):
+    for subgraph in graph.subgraphs():
+        name = subgraph.name.replace(":", "").replace(" ", "_")
+        print("  "*ident, "subgraph ", name, " [", subgraph.graph_attr["label"], "]", sep="", file=stream)
+        print("  "*(ident+1), "direction TB", sep="", file=stream)
+        convert_dot_attributes_to_mermaid("style", name, subgraph.graph_attr, None, ident+1, stream)
+        convert_dot_subgraph_to_mermaid(subgraph, already_created_nodes, ident+1, stream)
+        print("  "*ident, "end", sep="", file=stream)
+    for nid in graph.nodes():
+        if nid not in already_created_nodes:
+            already_created_nodes.add(nid)
+            node = graph.get_node(nid)
+            url = node.attr["image"].replace(DIAGRAMS_PATH, DIAGRAMS_URL)
+            url = url.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
+            label = node.attr["label"].replace("\n", "")
+            print("  "*ident, node.name, "@{ img: \"", url, "\", label: \"", label, "\", h: 120, constraint: \"on\" }", sep="", file=stream)
+            convert_dot_attributes_to_mermaid("style", node.name, node.attr, "fill:none,stroke:none", ident, stream)
+
+def convert_dot_to_mermaid(dot_filename, mermaid_filename):
+    graph = pygraphviz.AGraph()
+    graph.read(dot_filename)
+    with open(mermaid_filename, "wt") as stream:
+        print("flowchart TB", file=stream)
+        convert_dot_subgraph_to_mermaid(graph, set(), 1, stream)
+        for eid, edge in enumerate(graph.edges()):
+            if edge.attr.get("xlabel") != "":
+                edge_dir = {
+                    "forward": "-- \"{}\" -->",
+#TODO               "back": "-- \"{}\" --",
+                    "both": "<-- \"{}\" -->",
+                }[edge.attr["dir"]].format(edge.attr["xlabel"])
+            else:
+                edge_dir = {
+                    "forward": "-->",
+                    "back": "---",
+                    "both": "<-->",
+                }[edge.attr["dir"]]
+            print(" ", edge[0], edge_dir, edge[1], file=stream)
+            edge_color = edge.attr.get("color") or graph.edge_attr["color"]
+            convert_dot_attributes_to_mermaid("linkStyle", eid, edge.attr, f"stroke:{edge_color}", 1, stream)
 
 # According to https://github.com/yaml/pyyaml/issues/89, PyYAML raises
 # yaml.constructor.ConstructorError: could not determine a constructor for
@@ -33,8 +114,8 @@ yaml.SafeLoader.yaml_implicit_resolvers.pop("=")
 # All dot output formats are listed in https://graphviz.org/docs/outputs/
 # If you need a format not listed below, just add it below.
 SUPPORTED_OUTPUT_FORMATS = (
-    "dot", "dot_json", "drawio", "gif", "jp2", "jpe", "jpeg", "jpg", "pdf", "png",
-    "svg", "tif", "tiff"
+    "dot", "dot_json", "drawio", "gif", "jp2", "jpe", "jpeg", "jpg", "mermaid",
+    "pdf", "png", "svg", "tif", "tiff"
 )
 class Diagram(diagrams.Diagram):
     """
@@ -1114,6 +1195,12 @@ if is_drawio_format:
     args.output = "/tmp/drawio"
     args.format = "dot"
 
+is_mermaid_format = args.format == "mermaid"
+if is_mermaid_format:
+    mermaid_filename = args.output
+    args.output = "/tmp/mermaid"
+    args.format = "dot"
+
 if args.embed_all_icons and args.format not in ('svg', 'dot_json'):
     print("Warning: --embed-all-icons only works with svg or dot_json output format!")
 
@@ -1194,7 +1281,8 @@ def process_resource(resource):
                 "bgcolor": "white",
                 "pencolor": "black",
                 "label": icon(Namespace, get_namespace(resource)) \
-                    if not is_drawio_format else f"Namespace: {get_namespace(resource)}"
+                    if not is_drawio_format and not is_mermaid_format \
+                        else f"Namespace: {get_namespace(resource)}"
             })
 
     if rid not in resources:
@@ -1440,7 +1528,8 @@ with Diagram("", filename=args.output, show=False, direction="TB", outformat=arg
             edge_tooltip = f"from: {custom_edge_from}\nto: {custom_edge_to}"
             _ = from_node >> Edge(**custom_edge, tooltip=edge_tooltip) >> to_node
 
-print(f"{args.output}.{args.format} generated.")
+generated_filename = f"{args.output}.{args.format}"
+print(f"{generated_filename} generated.")
 
 if is_drawio_format:
     command = ["graphviz2drawio", f"{args.output}.{args.format}", "-o", f"{drawio_filename}.drawio"]
@@ -1449,20 +1538,17 @@ if is_drawio_format:
     os.remove(f"{args.output}.{args.format}")
     print(f"{drawio_filename}.drawio generated.")
 
+if is_mermaid_format:
+    convert_dot_to_mermaid(generated_filename, f"{mermaid_filename}.mermaid")
+    os.remove(generated_filename)
+    print(f"{mermaid_filename}.mermaid generated.")
+
 if args.format in ("svg", "dot_json"):
     filename = f"{args.output}.{args.format}"
     print("Post-process paths of icons...")
     # read all the lines of the generated file
     with open(filename, "rt", encoding="utf-8") as fs:
         lines = fs.readlines()
-    # compute absolute paths to be replaced by urls
-    from pathlib import Path
-    DIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(diagrams.__file__))).parent)
-    DIAGRAMS_URL = \
-        "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master"
-    KUBEDIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(__file__))).parent)
-    KUBEDIAGRAMS_URL = \
-        "https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main"
     if args.format == "svg":
         what_to_search = [
             r'image xlink:href="([^"]+)"',

@@ -5,6 +5,9 @@ BIN=../../bin
 # Generate the Kubernetes architecture diagram for WordPress manifests.
 $BIN/kube-diagrams -o wordpress *.yaml
 
+# Generate Mermaid diagram
+$BIN/kube-diagrams -o wordpress.mermaid *.yaml
+
 # Deploy the WordPress application.
 kubectl apply -f mysql-pass.yaml
 kubectl apply -f mysql-deployment.yaml
