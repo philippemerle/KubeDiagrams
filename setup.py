@@ -39,7 +39,7 @@ with open("README.md", encoding="utf-8") as readme:
         install_requires=[
             "PyYAML",
             "diagrams",
-            "pygraphviz==1.14",
+            "pygraphviz==2.0",
             "graphviz2drawio",
         ],
         packages=[],
