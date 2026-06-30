@@ -29,9 +29,10 @@ Compared to these existing tools, the main originalities of **KubeDiagrams** are
 * **[a modern web application](https://github.com/philippemerle/KubeDiagrams#kubediagrams-webapp)**,
 * **[a plugin for JetBrains IDEs](https://github.com/philippemerle/KubeDiagrams#kubediagrams-plugin-for-JetBrains-IDEs)**,
 * **main input formats** such as Kubernetes manifest files, customization files, Helm charts, helmfile descriptors, and actual cluster state,
-* **main output formats** such as DOT, draw.io, GIF, JPEG, Mermaid, PDF, PNG, SVG, and TIFF,
-* **[editable draw.io export](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#editable-drawio-export)**,
+* **main output formats** such as D2, DOT, draw.io, GIF, JPEG, Mermaid, PDF, PNG, SVG, and TIFF,
+* **[D2 Diagram Generation](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#d2-diagram-generation)**
 * **[Mermaid Diagram Generation](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#mermaid-diagram-generation)**,
+* **[editable draw.io export](https://github.com/philippemerle/KubeDiagrams?tab=readme-ov-file#editable-drawio-export)**,
 * **[a very large set of examples](https://github.com/philippemerle/KubeDiagrams#examples)**.
 
 **KubeDiagrams** is available as a [Python package in PyPI](https://pypi.org/project/KubeDiagrams), a [container image in DockerHub](https://hub.docker.com/r/philippemerle/kubediagrams), a `kubectl` plugin, a Nix flake, and a GitHub Action, see [here](https://github.com/philippemerle/KubeDiagrams#getting-started) for more details.
@@ -210,7 +211,7 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -o, --output OUTPUT   output diagram filename
-  -f, --format FORMAT   output format, allowed formats are dot, dot_json, drawio, gif, jp2, jpe, jpeg, jpg, mermaid, pdf, png, svg, tif, tiff, set to png by default
+  -f, --format FORMAT   output format, allowed formats are d2, dot, dot_json, drawio, gif, jp2, jpe, jpeg, jpg, mermaid, pdf, png, svg, tif, tiff, set to png by default
   --embed-all-icons     embed all icons into svg or dot_json output diagrams
   -c, --config CONFIG   custom kube-diagrams configuration file
   -n, --namespace NAMESPACE
@@ -582,6 +583,18 @@ kube-diagrams examples/wordpress/*.yaml -o wordpress.drawio
 ✨ Generated `drawio` files can be opened with [draw.io](https://www.drawio.com/) or your favorite diagram editor.
 
 ![KubeDiagrams in draw.io](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/KubeDiagrams-drawio.png)
+
+## D2 Diagram Generation
+
+**KubeDiagrams** could output diagrams in the [D2](https://d2lang.com/) format. For instance, type:
+
+```sh
+kube-diagrams examples/wordpress/*.yaml -o wordpress.d2
+```
+
+After compiling with D2 CLI, the generated diagram is rendered as follows:
+
+![WordPress D2 Diagram](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/examples/wordpress/wordpress.d2.svg)
 
 ## Mermaid Diagram Generation
 

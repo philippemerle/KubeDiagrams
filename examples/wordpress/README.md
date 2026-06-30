@@ -54,6 +54,9 @@ $ kube-diagrams -c custom_diagram.kd -o wordpress_deployed_in_aws_eks namespace_
 Architecture diagram for WordPress manifests:
 ![wordpress.png](wordpress.png)
 
+D2 diagram for WordPress manifests:
+![wordpress.d2.svg](wordpress.d2.svg)
+
 Mermaid diagram for WordPress manifests:
 ```mermaid
 flowchart TB

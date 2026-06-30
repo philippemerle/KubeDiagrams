@@ -33,6 +33,123 @@ KUBEDIAGRAMS_URL = \
     "https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main"
 
 #
+# Conversion of dot files to D2 files
+#
+
+def convert_dot_attributes_to_d2(
+    attributes: dict,
+    attr: str,
+    ident: int,
+    stream
+):
+    """
+        Convert DOT attributes to D2 attributes.
+    """
+    mappings = []
+    if attr is not None:
+        mappings.append(attr)
+    for ak, av in attributes.items():
+        if ak == "bgcolor":
+            mappings.append(f"fill: \"{av}\"")
+#        elif ak == "color":
+#            mappings.append(f"color:{av}")
+        elif ak == "fontcolor":
+            mappings.append(f"font-color: \"{av}\"")
+# Commented as currently d2 supports only one font.
+#        elif ak == "fontname":
+#            mappings.append(f"font: \"{av.lower()}\"")
+        elif ak == "fontsize":
+            mappings.append(f"font-size: {av}")
+        elif ak == "pencolor":
+            mappings.append(f"stroke: \"{av}\"")
+        elif ak == "style":
+            if "dashed" in av:
+                mappings.append("stroke-dash: 7")
+            if "rounded" in av:
+                mappings.append("border-radius: 20")
+    if len(mappings) > 0:
+        print("  "*ident, "style : {", sep="", file=stream)
+        for mapping in mappings:
+            print("  "*(ident+1), mapping, sep="", file=stream)
+        print("  "*ident, "}", sep="", file=stream)
+
+def convert_dot_subgraph_to_d2(
+    graph: pygraphviz.AGraph,
+    already_created_nodes: dict,
+    node_id_prefix: str,
+    ident: int,
+    stream
+):
+    """
+        Convert DOT subgraphs to D2 containers.
+    """
+    for subgraph in graph.subgraphs():
+        name = subgraph.name.replace(":", "").replace(".", "_").replace(" ", "_")
+        print("  "*ident, name, ": ",
+            subgraph.graph_attr["label"],
+            " {", sep="", file=stream
+        )
+        print("  "*(ident+1), "label.near: \"top-left\"", sep="", file=stream)
+        convert_dot_attributes_to_d2(
+            subgraph.graph_attr, None, ident+1, stream
+        )
+        print("  "*(ident+1), "tooltip: |`yaml", sep="", file=stream)
+        print(subgraph.graph_attr["tooltip"], file=stream)
+        print("`|", file=stream)
+        convert_dot_subgraph_to_d2(
+            subgraph, already_created_nodes, f"{node_id_prefix}{name}.",
+            ident+1, stream
+        )
+        print("  "*ident, "}", sep="", file=stream)
+    for nid in graph.nodes():
+        if nid not in already_created_nodes:
+            already_created_nodes[nid] = f"{node_id_prefix}{nid}"
+            node = graph.get_node(nid)
+            print("  "*ident, node.name, ": {", sep="", file=stream)
+            label = node.attr["label"].replace("\n", "\\n")
+            print("  "*(ident+1), f"label: \"{label}\"", sep="", file=stream)
+            print("  "*(ident+1), "shape: image", sep="", file=stream)
+            url = node.attr["image"].replace(DIAGRAMS_PATH, DIAGRAMS_URL)
+            url = url.replace(KUBEDIAGRAMS_PATH, KUBEDIAGRAMS_URL)
+            print("  "*(ident+1), "icon: ", url, sep="", file=stream)
+            print("  "*(ident+1), "tooltip: |`yaml", sep="", file=stream)
+            print(node.attr["tooltip"], file=stream)
+            print("`|", file=stream)
+            convert_dot_attributes_to_d2(node.attr, None, ident+1, stream)
+            print("  "*ident, "}", sep="", file=stream)
+
+def convert_dot_to_d2(a_dot_filename, a_d2_filename):
+    """
+        Convert DOT files to D2 files.
+    """
+    graph = pygraphviz.AGraph()
+    graph.read(a_dot_filename)
+    with open(a_d2_filename, "wt", encoding="utf-8") as stream:
+        node_ids = {}
+        convert_dot_subgraph_to_d2(graph, node_ids, "", 0, stream)
+        for _, edge in enumerate(graph.edges()):
+            edge_dir = {
+                "forward": "->",
+                "back": "<-",
+                "both": "<->",
+            }[edge.attr["dir"]]
+            print(
+                f"{node_ids[edge[0]]} {edge_dir} {node_ids[edge[1]]}:", "{",
+                file=stream
+            )
+            if edge.attr["xlabel"] != "":
+                print("  ", "label:", edge.attr["xlabel"].replace("\n", "\\n"),
+                        sep="", file=stream)
+            edge_color = edge.attr.get("color") or graph.edge_attr["color"]
+            convert_dot_attributes_to_d2(
+                edge.attr, f"stroke: \"{edge_color}\"", 1, stream
+            )
+            print("  ", "tooltip: |`yaml", sep="", file=stream)
+            print(edge.attr["tooltip"], file=stream)
+            print("`|", file=stream)
+            print("}", file=stream)
+
+#
 # Conversion of dot files to Mermaid files
 #
 
@@ -145,8 +262,21 @@ yaml.SafeLoader.yaml_implicit_resolvers.pop("=")
 # All dot output formats are listed in https://graphviz.org/docs/outputs/
 # If you need a format not listed below, just add it below.
 SUPPORTED_OUTPUT_FORMATS = (
-    "dot", "dot_json", "drawio", "gif", "jp2", "jpe", "jpeg", "jpg", "mermaid",
-    "pdf", "png", "svg", "tif", "tiff"
+    "d2",
+    "dot",
+    "dot_json",
+    "drawio",
+    "gif",
+    "jp2",
+    "jpe",
+    "jpeg",
+    "jpg",
+    "mermaid",
+    "pdf",
+    "png",
+    "svg",
+    "tif",
+    "tiff"
 )
 class Diagram(diagrams.Diagram):
     """
@@ -1220,6 +1350,12 @@ if args.format not in SUPPORTED_OUTPUT_FORMATS:
             f" use '{SOF}' instead!", file=sys.stderr)
     sys.exit(1)
 
+is_d2_format = args.format == "d2"
+if is_d2_format:
+    d2_filename = args.output
+    args.output = "/tmp/d2"
+    args.format = "dot"
+
 is_drawio_format = args.format == "drawio"
 if is_drawio_format:
     drawio_filename = args.output
@@ -1312,8 +1448,9 @@ def process_resource(resource):
                 "bgcolor": "white",
                 "pencolor": "black",
                 "label": icon(Namespace, get_namespace(resource)) \
-                    if not is_drawio_format and not is_mermaid_format \
-                        else f"Namespace: {get_namespace(resource)}"
+                    if not is_d2_format and not is_drawio_format \
+                        and not is_mermaid_format \
+                            else f"Namespace: {get_namespace(resource)}"
             })
 
     if rid not in resources:
@@ -1561,6 +1698,11 @@ with Diagram("", filename=args.output, show=False, direction="TB", outformat=arg
 
 generated_filename = f"{args.output}.{args.format}"
 print(f"{generated_filename} generated.")
+
+if is_d2_format:
+    convert_dot_to_d2(generated_filename, f"{d2_filename}.d2")
+    os.remove(generated_filename)
+    print(f"{d2_filename}.d2 generated.")
 
 if is_drawio_format:
     command = ["graphviz2drawio", f"{args.output}.{args.format}", "-o", f"{drawio_filename}.drawio"]

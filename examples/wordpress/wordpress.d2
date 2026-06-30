@@ -1,0 +1,222 @@
+cluster_Namespace_default: Namespace: default {
+  label.near: "top-left"
+  style : {
+    fill: "white"
+    font-color: "#2D3436"
+    font-size: 12
+    stroke: "black"
+    stroke-dash: 7
+    border-radius: 20
+  }
+  tooltip: |`yaml
+Namespace: default
+`|
+  cluster_Application_wordpress: Application: wordpress {
+    label.near: "top-left"
+    style : {
+      fill: "#ECE8F6"
+      font-color: "#2D3436"
+      font-size: 12
+      stroke: "#AEB6BE"
+      border-radius: 20
+    }
+    tooltip: |`yaml
+Application: wordpress
+`|
+    409ca87daa5048ca88acb285541c5ed4: {
+      label: "wordpress\n-mysql"
+      shape: image
+      icon: https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png
+      tooltip: |`yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: wordpress-mysql
+...
+`|
+    }
+    2e73b26fd42f47088398e8a8b40ee2b3: {
+      label: "wordpress\n-mysql"
+      shape: image
+      icon: https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png
+      tooltip: |`yaml
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wordpress-mysql
+...
+`|
+    }
+    050c141af8e1488ba3966c4c53c62f0b: {
+      label: "mysql-pv-claim"
+      shape: image
+      icon: https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/pvc.png
+      tooltip: |`yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: mysql-pv-claim
+...
+`|
+    }
+    d0dcc56f1fb241d8b3b78cc59e573592: {
+      label: "mysql-pass"
+      shape: image
+      icon: https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/podconfig/secret.png
+      tooltip: |`yaml
+kind: Secret
+apiVersion: v1
+metadata:
+  name: mysql-pass
+...
+`|
+    }
+    69dbe6da8d1f43ac95b8f1e35c24e7e8: {
+      label: "wordpress"
+      shape: image
+      icon: https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png
+      tooltip: |`yaml
+kind: Service
+apiVersion: v1
+metadata:
+  name: wordpress
+...
+`|
+    }
+    9e6835256f684df79009297ae4390eeb: {
+      label: "wordpress"
+      shape: image
+      icon: https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png
+      tooltip: |`yaml
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wordpress
+...
+`|
+    }
+    c6240fb70d7a4b02967405efda70ec7c: {
+      label: "wp-pv-claim"
+      shape: image
+      icon: https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/storage/pvc.png
+      tooltip: |`yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: wp-pv-claim
+...
+`|
+    }
+  }
+}
+cluster_Namespace_default.cluster_Application_wordpress.409ca87daa5048ca88acb285541c5ed4 -> cluster_Namespace_default.cluster_Application_wordpress.2e73b26fd42f47088398e8a8b40ee2b3: {
+  label:3306/TCP
+  style : {
+    stroke: "black"
+    font-color: "#2D3436"
+    font-size: 10
+    stroke-dash: 7
+  }
+  tooltip: |`yaml
+spec.selector:
+  app: wordpress
+  tier: mysql
+`|
+}
+cluster_Namespace_default.cluster_Application_wordpress.2e73b26fd42f47088398e8a8b40ee2b3 -> cluster_Namespace_default.cluster_Application_wordpress.050c141af8e1488ba3966c4c53c62f0b: {
+  style : {
+    stroke: "black"
+    font-color: "#2D3436"
+    font-size: 13
+  }
+  tooltip: |`yaml
+spec.template.spec.volumes[0].persistentVolumeClaim:
+  claimName: mysql-pv-claim
+`|
+}
+cluster_Namespace_default.cluster_Application_wordpress.2e73b26fd42f47088398e8a8b40ee2b3 -> cluster_Namespace_default.cluster_Application_wordpress.d0dcc56f1fb241d8b3b78cc59e573592: {
+  style : {
+    stroke: "black"
+    font-color: "#2D3436"
+    font-size: 13
+  }
+  tooltip: |`yaml
+spec.template.spec.containers:
+- env:
+  - name: MYSQL_ROOT_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: mysql-pass
+  - name: MYSQL_DATABASE
+    value: wordpress
+  - name: MYSQL_USER
+    value: wordpress
+  - name: MYSQL_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: mysql-pass
+  image: mysql:8.0
+  name: mysql
+  ports:
+  - containerPort: 3306
+    name: mysql
+  volumeMounts:
+  - mountPath: /var/lib/mysql
+    name: mysql-persistent-storage
+`|
+}
+cluster_Namespace_default.cluster_Application_wordpress.69dbe6da8d1f43ac95b8f1e35c24e7e8 -> cluster_Namespace_default.cluster_Application_wordpress.9e6835256f684df79009297ae4390eeb: {
+  label:80/TCP
+  style : {
+    stroke: "black"
+    font-color: "#2D3436"
+    font-size: 10
+    stroke-dash: 7
+  }
+  tooltip: |`yaml
+spec.selector:
+  app: wordpress
+  tier: frontend
+`|
+}
+cluster_Namespace_default.cluster_Application_wordpress.9e6835256f684df79009297ae4390eeb -> cluster_Namespace_default.cluster_Application_wordpress.d0dcc56f1fb241d8b3b78cc59e573592: {
+  style : {
+    stroke: "black"
+    font-color: "#2D3436"
+    font-size: 13
+  }
+  tooltip: |`yaml
+spec.template.spec.containers:
+- env:
+  - name: WORDPRESS_DB_HOST
+    value: wordpress-mysql
+  - name: WORDPRESS_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: mysql-pass
+  - name: WORDPRESS_DB_USER
+    value: wordpress
+  image: wordpress:6.2.1-apache
+  name: wordpress
+  ports:
+  - containerPort: 80
+    name: wordpress
+  volumeMounts:
+  - mountPath: /var/www/html
+    name: wordpress-persistent-storage
+`|
+}
+cluster_Namespace_default.cluster_Application_wordpress.9e6835256f684df79009297ae4390eeb -> cluster_Namespace_default.cluster_Application_wordpress.c6240fb70d7a4b02967405efda70ec7c: {
+  style : {
+    stroke: "black"
+    font-color: "#2D3436"
+    font-size: 13
+  }
+  tooltip: |`yaml
+spec.template.spec.volumes[0].persistentVolumeClaim:
+  claimName: wp-pv-claim
+`|
+}

@@ -5,6 +5,11 @@ BIN=../../bin
 # Generate the Kubernetes architecture diagram for WordPress manifests.
 $BIN/kube-diagrams -o wordpress *.yaml
 
+# Generate D2 diagram
+$BIN/kube-diagrams -o wordpress.d2 *.yaml
+# Compile D2 diagram
+# d2 wordpress.d2 wordpress.d2.svg
+
 # Generate Mermaid diagram
 $BIN/kube-diagrams -o wordpress.mermaid *.yaml
 
