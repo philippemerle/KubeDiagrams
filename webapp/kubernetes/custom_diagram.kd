@@ -1,0 +1,16 @@
+diagram:
+  nodes:
+    users:
+      name: Users
+      type: diagrams.onprem.client.Users
+  edges:
+    - from: users
+      to: frontend/kube-diagrams/Service/v1
+      color: brown
+      fontcolor: brown
+      xlabel: use
+    - from: frontend/kube-diagrams/Deployment/apps/v1
+      to: backend/kube-diagrams/Service/v1
+      color: brown
+      fontcolor: brown
+      xlabel: ProxyPass /api
