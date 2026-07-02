@@ -10,6 +10,7 @@ A modern web application for generating Kubernetes architecture diagrams from ma
 - **Built-in Examples**: Pre-loaded examples for quick testing
 - **History Management**: Keep track of your diagram generations
 - **Docker Support**: Easy deployment with Docker and Docker Compose
+- **Kubernetes Support**: Easy deployment on Kubernetes clusters
 - **Access Logging**: Apache Combined Log format compatible with GoAccess
 
 ---
@@ -41,6 +42,37 @@ That's it! The application is now running with both frontend and backend service
 
 ```bash
 docker compose down
+```
+
+### Using Minikube
+
+#### 1. **Clone the repository**
+
+```bash
+git clone https://github.com/philippemerle/KubeDiagrams.git
+cd KubeDiagrams/webapp
+```
+
+#### 2. **Start the application**
+
+```bash
+kubectl apply -f kubernetes/kube-diagrams-webapp.yaml
+```
+
+#### 3. **Access the application**
+
+It is needed to expose the frontend service.
+
+```bash
+minikube service -n kube-diagrams frontend
+```
+
+That's it! A new tab is opened in your default browser to access the KubeDiagrams WebApp frontend.
+
+#### Stopping the application
+
+```bash
+kubectl delete -f kubernetes/kube-diagrams-webapp.yaml
 ```
 
 ---
@@ -121,6 +153,10 @@ webapp/
 │   ├── apache.conf                 # Apache reverse proxy config
 │   └── Dockerfile                  # Frontend Docker image
 │
+├── kubernetes/                     # Kubernetes orchestration
+    └── kube-diagrams-webapp.yaml   # Manifests for deploying KubeDiagrams WebApp
+│
+├── build-and-push-images.sh        # Script to build and push both frontend and backend container images
 └── docker-compose.yml              # Docker Compose orchestration
 ```
 
