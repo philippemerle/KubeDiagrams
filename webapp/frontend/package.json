@@ -12,8 +12,10 @@
     "format:check": "prettier --check \"src/**/*.{js,jsx,json,css}\""
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tailwindcss/vite": "^4.1.18",
     "lucide-react": "^0.574.0",
+    "monaco-yaml": "^5.5.1",
     "motion": "^12.34.1",
     "prop-types": "^15.8.1",
     "react": "^19.2.4",

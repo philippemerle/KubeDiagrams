@@ -6,10 +6,10 @@
 
 import AnsiText from './AnsiText.jsx';
 
-function CommandDetails({ command, stdout, stderr, message }) {
+function CommandDetails({ command, stdout, stderr, message, titleClassName = 'text-gray-800' }) {
   return (
     <div className="mt-6" id="command-details">
-      <h3 className="text-xl font-bold text-gray-800 mb-2">Command Execution Details</h3>
+      <h3 className={`text-xl font-bold ${titleClassName} mb-2`}>Command Execution Details</h3>
       <div className="bg-black text-white p-4 rounded-md text-sm space-y-4 overflow-x-auto">
         {command && (
           <div>

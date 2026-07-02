@@ -195,9 +195,9 @@ export function useClusterData({
   const commonVisible = filteredResourceTypes.filter(
     (rt) => rt.isCommon && (!isNamespaceContext || rt.namespaced)
   );
-  const otherVisible = filteredResourceTypes.filter(
-    (rt) => !rt.isCommon || (isNamespaceContext && !rt.namespaced)
-  );
+  const otherVisible = filteredResourceTypes
+    .filter((rt) => !rt.isCommon || (isNamespaceContext && !rt.namespaced))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return {
     // Data
