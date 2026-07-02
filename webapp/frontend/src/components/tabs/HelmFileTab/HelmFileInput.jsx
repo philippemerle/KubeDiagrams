@@ -7,6 +7,7 @@ import { Info, Upload } from 'lucide-react';
 import SubmitButton from '../../common/SubmitButton.jsx';
 import ManifestOptions from '../../options/ManifestOptions';
 import ExampleSelector from '../../common/ExampleSelector.jsx';
+import YamlEditor from '../../common/YamlEditor.jsx';
 import { EXAMPLE_TYPES } from '../../../utils/constants.js';
 
 function HelmFileInput({
@@ -30,12 +31,11 @@ function HelmFileInput({
 
       <ExampleSelector type={EXAMPLE_TYPES.HELMFILE} onSelectExample={setHelmfileContent} />
 
-      <textarea
-        className="w-full h-64 p-4 rounded-lg resize-none bg-gray-700 text-white"
-        placeholder="Paste your helmfile.yaml content here..."
+      <YamlEditor
+        path="helmfile.yaml"
         value={helmfileContent}
-        onChange={(e) => {
-          setHelmfileContent(e.target.value);
+        onChange={(val) => {
+          setHelmfileContent(val);
           if (errorMessage) setErrorMessage('');
         }}
       />

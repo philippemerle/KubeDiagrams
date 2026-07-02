@@ -215,7 +215,7 @@ function ClusterTab({ historyContext }) {
 
       {/* Command Details Section - Full width below */}
       {(command || stdout || stderr || message) && (
-        <CommandDetails command={command} stdout={stdout} stderr={stderr} message={message} />
+        <CommandDetails command={command} stdout={stdout} stderr={stderr} message={message} titleClassName="text-white" />
       )}
     </div>
   );

@@ -7,6 +7,7 @@ import { Info, Upload } from 'lucide-react';
 import SubmitButton from '../../common/SubmitButton.jsx';
 import ManifestOptions from '../../options/ManifestOptions';
 import ExampleSelector from '../../common/ExampleSelector.jsx';
+import YamlEditor from '../../common/YamlEditor.jsx';
 import { EXAMPLE_TYPES } from '../../../utils/constants.js';
 
 function ManifestInput({
@@ -30,12 +31,11 @@ function ManifestInput({
 
       <ExampleSelector type={EXAMPLE_TYPES.MANIFEST} onSelectExample={setManifestContent} />
 
-      <textarea
-        className="w-full h-64 p-4 rounded-lg resize-none bg-gray-700 text-white"
-        placeholder="Paste your Kubernetes manifest YAML here..."
+      <YamlEditor
+        path="manifest.yaml"
         value={manifestContent}
-        onChange={(e) => {
-          setManifestContent(e.target.value);
+        onChange={(val) => {
+          setManifestContent(val);
           if (errorMessage) setErrorMessage('');
         }}
       />
