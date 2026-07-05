@@ -14,67 +14,94 @@ const RESOURCE_CATEGORIES = {
     'Extensions': ['CustomResourceDefinition', 'APIService', 'MutatingWebhookConfiguration', 'ValidatingWebhookConfiguration']
 };
 
+function closeAllFilterPanels(except) {
+    document.querySelectorAll('.filter-dropdown.open').forEach(dropdown => {
+        if (dropdown !== except) dropdown.classList.remove('open');
+    });
+}
+
 function renderFilters() {
     const container = document.getElementById('categoryFilters');
     if (!container) return;
     container.innerHTML = '';
-    
+
     for (const [category, kinds] of Object.entries(RESOURCE_CATEGORIES)) {
-        const catDiv = document.createElement('div');
-        catDiv.style.display = 'flex';
-        catDiv.style.flexDirection = 'column';
-        catDiv.style.minWidth = '140px';
-        
+        const dropdown = document.createElement('div');
+        dropdown.className = 'filter-dropdown';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'filter-dropdown-toggle';
+        toggleBtn.textContent = category + ' ▾';
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const wasOpen = dropdown.classList.contains('open');
+            closeAllFilterPanels();
+            dropdown.classList.toggle('open', !wasOpen);
+        });
+
+        const panel = document.createElement('div');
+        panel.className = 'filter-dropdown-panel';
+        panel.addEventListener('click', (e) => e.stopPropagation());
+
         const catLabel = document.createElement('label');
-        catLabel.style.fontWeight = 'bold';
-        catLabel.style.marginBottom = '6px';
-        catLabel.style.borderBottom = '1px solid #ddd';
-        catLabel.style.cursor = 'pointer';
-        
+        catLabel.className = 'filter-category-label';
+
         const catCheck = document.createElement('input');
         catCheck.type = 'checkbox';
         catCheck.checked = true;
         catCheck.className = 'category-checkbox';
         catCheck.value = category;
-        
+
         catLabel.appendChild(catCheck);
         catLabel.appendChild(document.createTextNode(' ' + category));
-        catDiv.appendChild(catLabel);
-        
+        panel.appendChild(catLabel);
+
         kinds.forEach(kind => {
             const label = document.createElement('label');
-            label.style.marginLeft = '12px';
-            label.style.cursor = 'pointer';
-            label.style.marginBottom = '2px';
+            label.className = 'filter-kind-label';
             const cb = document.createElement('input');
             cb.type = 'checkbox';
             cb.checked = true;
             cb.value = kind.toLowerCase();
             cb.className = `kind-checkbox kind-${kind.toLowerCase()}`;
             cb.dataset.category = category;
-            
+
             label.appendChild(cb);
             label.appendChild(document.createTextNode(' ' + kind));
-            catDiv.appendChild(label);
-            
+            panel.appendChild(label);
+
             cb.addEventListener('change', () => {
                 // If any child is unchecked, uncheck the parent. If all are checked, check it.
-                const allChecked = Array.from(catDiv.querySelectorAll('.kind-checkbox')).every(c => c.checked);
+                const allChecked = Array.from(panel.querySelectorAll('.kind-checkbox')).every(c => c.checked);
                 catCheck.checked = allChecked;
                 updateCategoryFilters();
+                updateDropdownToggleState(dropdown, toggleBtn, category, panel);
             });
         });
-        
+
         catCheck.addEventListener('change', (e) => {
             const isChecked = e.target.checked;
-            catDiv.querySelectorAll('.kind-checkbox').forEach(cb => {
+            panel.querySelectorAll('.kind-checkbox').forEach(cb => {
                 cb.checked = isChecked;
             });
             updateCategoryFilters();
+            updateDropdownToggleState(dropdown, toggleBtn, category, panel);
         });
-        
-        container.appendChild(catDiv);
+
+        dropdown.appendChild(toggleBtn);
+        dropdown.appendChild(panel);
+        container.appendChild(dropdown);
     }
+
+    document.addEventListener('click', () => closeAllFilterPanels());
+}
+
+function updateDropdownToggleState(dropdown, toggleBtn, category, panel) {
+    const checkboxes = panel.querySelectorAll('.kind-checkbox');
+    const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+    dropdown.classList.toggle('filter-dropdown-partial', checkedCount > 0 && checkedCount < checkboxes.length);
+    dropdown.classList.toggle('filter-dropdown-empty', checkedCount === 0);
 }
 
 function updateCategoryFilters() {
