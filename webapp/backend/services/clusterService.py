@@ -9,7 +9,7 @@ from typing import List, Optional, Dict, Any
 from constants import MIME_TYPES
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
 
 COMMON_RESOURCE_TYPES = frozenset({
     'pods', 'services', 'deployments', 'replicasets', 'statefulsets',
@@ -191,9 +191,9 @@ def generate_from_cluster(
         elif namespace:
             cmd.extend(["-n", namespace])
 
-        cmd.extend(["-o", requested_output])
+        cmd.extend(["-o", dot_output or requested_output])
 
-        if output_format != "png":
+        if output_format != "png" and not dot_output:
             cmd.extend(["-f", output_format])
 
         if without_namespace:
@@ -209,20 +209,40 @@ def generate_from_cluster(
         if proc.returncode != 0 or has_fatal_error(stdout_output, stderr_output):
             return _make_diagrams_error(stdout_output, stderr_output, cmd)
 
-        output_info = FileManager.find_output_file(requested_output, png_output)
-        if output_info is None:
-            return DiagramResult(
-                success=False,
-                error=f"Output file not found: {requested_output}",
-                command=" ".join(cmd),
-                stdout=stdout_output,
-                stderr=stderr_output
-            )
-        output_file, produced_format = output_info
+        if output_format == "dot_json":
+            if not os.path.exists(dot_output):
+                return DiagramResult(
+                    success=False,
+                    error=f"Output file not found: {dot_output}",
+                    command=" ".join(cmd),
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+            if not dot_to_dot_json(dot_output, requested_output):
+                FileManager.cleanup_files(dot_output)
+                return DiagramResult(
+                    success=False,
+                    error="dot -Tjson conversion failed (is graphviz installed?).",
+                    command=" ".join(cmd),
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+            output_file, produced_format = requested_output, "dot_json"
+        else:
+            output_info = FileManager.find_output_file(requested_output, png_output)
+            if output_info is None:
+                return DiagramResult(
+                    success=False,
+                    error=f"Output file not found: {requested_output}",
+                    command=" ".join(cmd),
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+            output_file, produced_format = output_info
 
         content = FileManager.read_file_content(output_file, binary=True)
         encoded = encode_content(content, produced_format)
-        FileManager.cleanup_files(output_file)
+        FileManager.cleanup_files(output_file, dot_output)
 
         return DiagramResult(
             success=True,

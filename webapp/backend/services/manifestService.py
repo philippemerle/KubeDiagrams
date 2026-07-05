@@ -1,10 +1,11 @@
 """Service for generating diagrams from Kubernetes manifests."""
+import os
 import subprocess
 
 from constants import MIME_TYPES
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
 
 
 def generate_from_manifest(
@@ -30,9 +31,11 @@ def generate_from_manifest(
 
         requested_output, png_output = FileManager.get_output_paths(tmp_manifest, output_format)
 
+        dot_output = requested_output.replace(".dot_json", ".dot") if output_format == "dot_json" else None
+
         try:
             # Command
-            cmd = ["kube-diagrams", tmp_manifest, "-o", requested_output]
+            cmd = ["kube-diagrams", tmp_manifest, "-o", dot_output or requested_output]
             if without_namespace:
                 cmd.append("--without-namespace")
             if extra_args.strip():
@@ -45,7 +48,7 @@ def generate_from_manifest(
 
             # Error verification
             if proc.returncode != 0 or has_fatal_error(stdout_output, stderr_output):
-                FileManager.cleanup_files(requested_output, png_output)
+                FileManager.cleanup_files(requested_output, png_output, dot_output)
                 return DiagramResult(
                     success=False,
                     error="KubeDiagrams failed. See command output below.",
@@ -54,23 +57,43 @@ def generate_from_manifest(
                     stderr=stderr_output
                 )
 
-            # Output file verification
-            output_info = FileManager.find_output_file(requested_output, png_output)
-            if not output_info:
-                return DiagramResult(
-                    success=False,
-                    error=f"Output file not found (looked for {requested_output} and {png_output}).",
-                    command=" ".join(cmd),
-                    stdout=stdout_output,
-                    stderr=stderr_output
-                )
+            if output_format == "dot_json":
+                if not os.path.exists(dot_output):
+                    return DiagramResult(
+                        success=False,
+                        error=f"Output file not found: {dot_output}",
+                        command=" ".join(cmd),
+                        stdout=stdout_output,
+                        stderr=stderr_output
+                    )
+                if not dot_to_dot_json(dot_output, requested_output):
+                    FileManager.cleanup_files(dot_output)
+                    return DiagramResult(
+                        success=False,
+                        error="dot -Tjson conversion failed (is graphviz installed?).",
+                        command=" ".join(cmd),
+                        stdout=stdout_output,
+                        stderr=stderr_output
+                    )
+                output_file, produced_format = requested_output, "dot_json"
+            else:
+                # Output file verification
+                output_info = FileManager.find_output_file(requested_output, png_output)
+                if not output_info:
+                    return DiagramResult(
+                        success=False,
+                        error=f"Output file not found (looked for {requested_output} and {png_output}).",
+                        command=" ".join(cmd),
+                        stdout=stdout_output,
+                        stderr=stderr_output
+                    )
+                output_file, produced_format = output_info
 
-            output_file, produced_format = output_info
             content = FileManager.read_file_content(output_file, binary=True)
             encoded = encode_content(content, produced_format)
 
             # Cleaning
-            FileManager.cleanup_files(requested_output, png_output)
+            FileManager.cleanup_files(requested_output, png_output, dot_output)
 
             return DiagramResult(
                 success=True,
@@ -84,14 +107,14 @@ def generate_from_manifest(
             )
 
         except ValueError as e:
-            FileManager.cleanup_files(requested_output, png_output)
+            FileManager.cleanup_files(requested_output, png_output, dot_output)
             return DiagramResult(
                 success=False,
                 error=str(e),
                 command=" ".join(cmd) if 'cmd' in locals() else None
             )
         except Exception as e:
-            FileManager.cleanup_files(requested_output, png_output)
+            FileManager.cleanup_files(requested_output, png_output, dot_output)
             return DiagramResult(
                 success=False,
                 error=f"Internal error: {e}",

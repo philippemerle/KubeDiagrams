@@ -22,3 +22,7 @@
     border-radius: 4px;
     font-size: 15px;
 }
+input[type="checkbox"] {
+    accent-color: #3b82f6;
+}
+

@@ -14,14 +14,32 @@ function getDefaultGlobalNodeStyleFromNodeValues(node) {
 }
 
 function getDefaultClusterStyleFromClusterValues(cluster) {
+    let style = {
+        'border-style': cluster.data.bs,
+        'border-color': cluster.data.bc,
+        'background-color': cluster.data.bgcolor,
+    };
+
+    if (cluster.data.image && cluster.data.image.trim() !== '') {
+        style['background-image'] = cluster.data.image;
+        style['background-fit'] = 'none';
+        style['background-width'] = '40px';
+        style['background-height'] = '40px';
+        style['background-position-x'] = '50%';
+        style['background-position-y'] = '20px';
+        style['background-opacity'] = 1;
+        style['background-clip'] = 'node';
+        style['text-valign'] = 'top';
+        style['text-halign'] = 'center';
+        style['text-margin-y'] = 18;
+        style['padding'] = '45px';
+        style['padding-top'] = '65px';
+    }
+
     return {
-            selector : ".clusterStyle" + clusterStyleList.length, 
-            style : {
-                'border-style': cluster.data.bs,
-                'border-color': cluster.data.bc,
-                'background-color': cluster.data.bgcolor,
-            }
-        };
+        selector : ".clusterStyle" + clusterStyleList.length, 
+        style : style
+    };
 } 
 
 function getDefaultEdgeStyleFromEdgeValues(edge) {
@@ -51,6 +69,7 @@ const clusterClosedStyle = {
 
 const clusterOpenStyle = {
                     'text-valign': 'top',
+                    'text-halign': 'center',
                     'text-wrap': 'none',
                     'text-margin-y': 15, 
                     'padding': '15px',
