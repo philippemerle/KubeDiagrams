@@ -11,6 +11,7 @@ import { generateHelmfileDiagram } from '../../../services/diagramApi.js';
 import { useViewerSync } from '../../../hooks/useViewerSync.js';
 import { useFileUpload } from '../../../hooks/useFileUpload.js';
 import { useDiagramGeneration } from '../../../hooks/useDiagramGeneration.js';
+import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import HelmFileInput from './HelmFileInput.jsx';
 import HelmFileOutput from './HelmFileOutput.jsx';
 import ProgressBar from '../../common/ProgressBar.jsx';
@@ -52,6 +53,9 @@ function HelmFileTab({ historyContext }) {
 
   // dot_json viewer sync
   const { viewerRef, handleViewerLoad } = useViewerSync({ diagram, outputFormat });
+
+  // Auto-scroll to output when diagram is ready
+  const outputRef = useScrollToOutput(progressStep);
 
   // File upload handler
   const { createFileInputHandler } = useFileUpload();
@@ -152,21 +156,23 @@ function HelmFileTab({ historyContext }) {
         isVisible={progressStep !== 'idle'}
       /> */}
 
-      <HelmFileOutput
-        errorMessage={errorMessage}
-        diagram={diagram}
-        outputFormat={outputFormat}
-        mimeType={mimeType}
-        filename={filename}
-        command={command}
-        stdout={stdout}
-        stderr={stderr}
-        message={message}
-        viewerKey={viewerKey}
-        viewerRef={viewerRef}
-        onViewerLoad={handleViewerLoad}
-        isSubmitting={isSubmitting}
-      />
+      <div ref={outputRef}>
+        <HelmFileOutput
+          errorMessage={errorMessage}
+          diagram={diagram}
+          outputFormat={outputFormat}
+          mimeType={mimeType}
+          filename={filename}
+          command={command}
+          stdout={stdout}
+          stderr={stderr}
+          message={message}
+          viewerKey={viewerKey}
+          viewerRef={viewerRef}
+          onViewerLoad={handleViewerLoad}
+          isSubmitting={isSubmitting}
+        />
+      </div>
     </div>
   );
 }

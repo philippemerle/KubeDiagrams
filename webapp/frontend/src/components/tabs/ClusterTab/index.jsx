@@ -9,6 +9,7 @@ import { generateClusterDiagram } from '../../../services/diagramApi.js';
 import { useViewerSync } from '../../../hooks/useViewerSync.js';
 import { useDiagramGeneration } from '../../../hooks/useDiagramGeneration.js';
 import { useClusterData } from '../../../hooks/useClusterData.js';
+import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import ClusterInput from './ClusterInput.jsx';
 import ClusterOutput from './ClusterOutput.jsx';
 import CommandDetails from '../../common/CommandDetails.jsx';
@@ -35,6 +36,7 @@ function ClusterTab({ historyContext }) {
     setErrorMessage,
     isSubmitting,
     viewerKey,
+    progressStep,
     handleSubmit: generateDiagram,
     resetOutput,
   } = useDiagramGeneration({
@@ -95,6 +97,7 @@ function ClusterTab({ historyContext }) {
   });
 
   // Auto-scroll to output when diagram is ready
+  const outputRef = useScrollToOutput(progressStep);
 
   // History restoration
   const hasRestoredRef = useRef(false);
@@ -198,7 +201,7 @@ function ClusterTab({ historyContext }) {
         </div>
 
         {/* Output Section  */}
-        <div className="lg:w-3/4">
+        <div className="lg:w-3/4" ref={outputRef}>
           <ClusterOutput
             diagram={diagram}
             mimeType={mimeType}

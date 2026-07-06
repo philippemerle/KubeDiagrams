@@ -5,7 +5,7 @@ import os
 from constants import MIME_TYPES
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
 
 
 def generate_from_helmfile(
@@ -28,6 +28,7 @@ def generate_from_helmfile(
     """
     with FileManager.create_temp_file(helmfile_content, suffix=".yaml", mode='wb') as temp_helmfile_path:
         output_path = temp_helmfile_path + f".{output_format}"
+        dot_output_path = temp_helmfile_path + ".dot" if output_format == "dot_json" else None
 
         try:
             # Command helmfile template
@@ -42,7 +43,7 @@ def generate_from_helmfile(
             helm_output, helm_err = template_proc.communicate()
 
             if template_proc.returncode != 0 or has_fatal_error("", helm_err):
-                FileManager.cleanup_files(output_path)
+                FileManager.cleanup_files(output_path, dot_output_path)
                 return DiagramResult(
                     success=False,
                     error="Helmfile template failed. See command output below.",
@@ -52,7 +53,7 @@ def generate_from_helmfile(
                 )
 
             # Command kube-diagrams
-            cmd = ["kube-diagrams", "-", "-o", output_path]
+            cmd = ["kube-diagrams", "-", "-o", dot_output_path or output_path]
             if without_namespace:
                 cmd.append("--without-namespace")
             if extra_args.strip():
@@ -70,7 +71,7 @@ def generate_from_helmfile(
             stderr_output = kube_proc.stderr or ""
 
             if kube_proc.returncode != 0 or has_fatal_error(stdout_output, stderr_output):
-                FileManager.cleanup_files(output_path)
+                FileManager.cleanup_files(output_path, dot_output_path)
                 return DiagramResult(
                     success=False,
                     error="kube-diagrams failed",
@@ -79,7 +80,25 @@ def generate_from_helmfile(
                     stderr=stderr_output
                 )
 
-            if not os.path.exists(output_path):
+            if output_format == "dot_json":
+                if not os.path.exists(dot_output_path):
+                    return DiagramResult(
+                        success=False,
+                        error=f"Output file not found: {dot_output_path}",
+                        command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                        stdout=stdout_output,
+                        stderr=stderr_output
+                    )
+                if not dot_to_dot_json(dot_output_path, output_path):
+                    FileManager.cleanup_files(dot_output_path)
+                    return DiagramResult(
+                        success=False,
+                        error="dot -Tjson conversion failed (is graphviz installed?).",
+                        command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                        stdout=stdout_output,
+                        stderr=stderr_output
+                    )
+            elif not os.path.exists(output_path):
                 return DiagramResult(
                     success=False,
                     error=f"Output file not found: {output_path}",
@@ -92,7 +111,7 @@ def generate_from_helmfile(
             encoded = encode_content(content, output_format)
 
             # Cleaning
-            FileManager.cleanup_files(output_path)
+            FileManager.cleanup_files(output_path, dot_output_path)
 
             return DiagramResult(
                 success=True,
@@ -106,14 +125,14 @@ def generate_from_helmfile(
             )
 
         except ValueError as e:
-            FileManager.cleanup_files(output_path)
+            FileManager.cleanup_files(output_path, dot_output_path)
             return DiagramResult(
                 success=False,
                 error=str(e),
                 command=" ".join(cmd) if 'cmd' in locals() else None
             )
         except Exception as e:
-            FileManager.cleanup_files(output_path)
+            FileManager.cleanup_files(output_path, dot_output_path)
             return DiagramResult(
                 success=False,
                 error=str(e),

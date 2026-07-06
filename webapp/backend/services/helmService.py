@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from constants import MIME_TYPES
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
 
 
 def generate_from_helm(
@@ -33,12 +33,13 @@ def generate_from_helm(
     if chart_url.startswith('oci://'):
         base_name = chart_url.rstrip('/').split('/')[-1]
 
+    dot_output = os.path.abspath(f"{base_name}.dot") if output_format == "dot_json" else None
     requested_output = os.path.abspath(f"{base_name}.{output_format}")
     png_output = os.path.abspath(f"{base_name}.png")
 
     try:
         # Command uses helm-diagrams instead of helm
-        cmd = ["helm-diagrams", chart_url, "-o", f"{base_name}.{output_format}"]
+        cmd = ["helm-diagrams", chart_url, "-o", dot_output or requested_output]
         if extra_args.strip():
             cmd.extend(parse_extra_args(extra_args))
 
@@ -54,8 +55,8 @@ def generate_from_helm(
             has_error = True
 
         if has_error:
-            FileManager.cleanup_files(requested_output, png_output)
-            
+            FileManager.cleanup_files(requested_output, png_output, dot_output)
+
             # logs for all errors
             error_details = []
             if "not found" in stderr_output.lower() or "404" in stderr_output:
@@ -83,28 +84,46 @@ def generate_from_helm(
                 stderr=stderr_output
             )
 
-        # Search for the output file
-        output_info = FileManager.find_output_file(requested_output, png_output)
-        if not output_info:
-            return DiagramResult(
-                success=False,
-                error=f"Output file not found (looked for {os.path.basename(requested_output)} and {os.path.basename(png_output)}).",
-                command=" ".join(cmd),
-                stdout=stdout_output,
-                stderr=stderr_output
-            )
-
-        output_file, produced_format = output_info
-
         note = ""
-        if produced_format == "png" and output_format != "png":
-            note = f"Requested format '{output_format}' is not available from helm-diagrams. Returned PNG instead."
+        if output_format == "dot_json":
+            if not os.path.exists(dot_output):
+                return DiagramResult(
+                    success=False,
+                    error=f"Output file not found: {dot_output}",
+                    command=" ".join(cmd),
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+            if not dot_to_dot_json(dot_output, requested_output):
+                FileManager.cleanup_files(dot_output)
+                return DiagramResult(
+                    success=False,
+                    error="dot -Tjson conversion failed (is graphviz installed?).",
+                    command=" ".join(cmd),
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+            output_file, produced_format = requested_output, "dot_json"
+        else:
+            # Search for the output file
+            output_info = FileManager.find_output_file(requested_output, png_output)
+            if not output_info:
+                return DiagramResult(
+                    success=False,
+                    error=f"Output file not found (looked for {os.path.basename(requested_output)} and {os.path.basename(png_output)}).",
+                    command=" ".join(cmd),
+                    stdout=stdout_output,
+                    stderr=stderr_output
+                )
+            output_file, produced_format = output_info
+            if produced_format == "png" and output_format != "png":
+                note = f"Requested format '{output_format}' is not available from helm-diagrams. Returned PNG instead."
 
         content = FileManager.read_file_content(output_file, binary=True)
         encoded = encode_content(content, produced_format)
 
         # Cleaning
-        FileManager.cleanup_files(requested_output, png_output)
+        FileManager.cleanup_files(requested_output, png_output, dot_output)
 
         message = (note + " " if note else "") + "Helm diagram successfully generated."
 
@@ -120,14 +139,14 @@ def generate_from_helm(
         )
 
     except ValueError as e:
-        FileManager.cleanup_files(requested_output, png_output)
+        FileManager.cleanup_files(requested_output, png_output, dot_output)
         return DiagramResult(
             success=False,
             error=str(e),
             command=" ".join(cmd) if 'cmd' in locals() else None
         )
     except Exception as e:
-        FileManager.cleanup_files(requested_output, png_output)
+        FileManager.cleanup_files(requested_output, png_output, dot_output)
         return DiagramResult(
             success=False,
             error=f"Internal error: {e}",
