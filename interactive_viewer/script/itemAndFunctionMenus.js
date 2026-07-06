@@ -21,7 +21,8 @@ const itemOpenClose = {
 function openCluster(cluster) {
     cluster.children().style('display', 'element');
     cluster.data('isClose', false);
-    cluster.style(clusterOpenStyle);
+    const image = cluster.data('image');
+    cluster.style({ ...clusterOpenStyle, 'background-image': image || 'none' });
 }
 
 /**
@@ -31,5 +32,6 @@ function openCluster(cluster) {
 function closeCluster(cluster) {
     cluster.children().style('display', 'none');
     cluster.data('isClose', true);
-    cluster.style(clusterClosedStyle);
+    const image = cluster.data('image');
+    cluster.style({ ...clusterClosedStyle, 'background-image': image || 'none' });
 }
