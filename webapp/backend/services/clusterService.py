@@ -183,6 +183,7 @@ def generate_from_cluster(
         base_name = f"cluster-diagram-{uuid.uuid4().hex[:8]}"
         base_path = os.path.join(tempfile.gettempdir(), base_name)
         requested_output, png_output = FileManager.get_output_paths(base_path, output_format)
+        dot_output = requested_output.replace(".dot_json", ".dot") if output_format == "dot_json" else None
 
         cmd = ["kubectl-diagrams", resources_arg]
 
