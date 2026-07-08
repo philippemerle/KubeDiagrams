@@ -722,6 +722,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 
 ### Social Networks
 
+1. [KubeDiagrams 0.8.0 is out!](https://www.reddit.com/r/kubernetes/comments/1uqlx1n/kubediagrams_080_is_out/), Reddit, July 8, 2026.
+
 1. [Pablo Cesar La Madrid Rojas's post](https://www.linkedin.com/posts/pablolamadridrojas_k8s-kubernetes-kubediagramas-activity-7478772031023476736-3K9m) on LinkedIn, July 3, 2026.
 
 1. [Kube Architect's post](https://x.com/K8sArchitect/status/2065812949055213921) on X, June 13, 2026.
