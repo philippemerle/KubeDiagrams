@@ -37,7 +37,7 @@
 
         kube-diagrams = pkgs.stdenv.mkDerivation {
           pname = "kube-diagrams";
-          version = "0.7.0";
+          version = "0.8.0";
           src = self;
           postPatch = ''
             substituteInPlace bin/kube-diagrams \
