@@ -10,6 +10,7 @@ from .clusterService import (
     get_resource_types,
     get_current_context,
 )
+from .utils import dot_to_svg
 
 __all__ = [
     'DiagramResult',
@@ -21,5 +22,6 @@ __all__ = [
     'get_namespaces',
     'get_resource_types',
     'get_current_context',
+    'dot_to_svg',
 ]
 

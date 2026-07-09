@@ -8,6 +8,7 @@ from routes.helm import helm_bp
 from routes.helmfile import helmfile_bp
 from routes.submit import submit_bp
 from routes.cluster import cluster_bp
+from routes.render import render_bp
 from utils.access_logger import log_request, get_real_ip, get_all_ip_headers
 from time import time
 
@@ -91,6 +92,7 @@ def create_app():
     app.register_blueprint(helmfile_bp)
     app.register_blueprint(submit_bp)
     app.register_blueprint(cluster_bp)
+    app.register_blueprint(render_bp)
 
     return app
 

@@ -126,6 +126,39 @@ def dot_to_dot_json(dot_path: str, dot_json_path: str) -> bool:
         return False
 
 
+def dot_to_svg(dot_text: str) -> str | None:
+    """
+    Render DOT source to SVG via `dot -Tsvg`, then fix local icon paths into
+    GitHub CDN URLs. dot embeds icons in the SVG as xlink:href pointing to
+    the absolute local filesystem path used at generation time, which the
+    browser can't resolve.
+
+    Args:
+        dot_text: DOT source text.
+
+    Returns:
+        str | None: The rendered SVG text, or None if the conversion failed.
+    """
+    try:
+        result = subprocess.run(
+            ["dot", "-Tsvg"],
+            input=dot_text,
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        if result.returncode != 0 or not result.stdout:
+            return None
+
+        return re.sub(
+            r'xlink:href="([^"]*resources/[^"]+)"',
+            lambda m: f'xlink:href="{_local_path_to_github_url(m.group(1))}"',
+            result.stdout,
+        )
+    except Exception:
+        return None
+
+
 def enrich_dot_json_with_positions(dot_json_path: str) -> None:
     """
     Enrich a .dot_json file with layout coordinates computed by `dot -Tjson`.

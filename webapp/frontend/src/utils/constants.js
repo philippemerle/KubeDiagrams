@@ -37,6 +37,7 @@ export const API_ENDPOINTS = Object.freeze({
   CLUSTER_RESOURCE_TYPES: '/api/cluster/resource-types',
   SUBMIT_FEEDBACK: '/api/submit-feedback',
   EXAMPLES: '/api/examples',
+  RENDER_DOT_SVG: '/api/render-dot-svg',
 });
 
 // Example types

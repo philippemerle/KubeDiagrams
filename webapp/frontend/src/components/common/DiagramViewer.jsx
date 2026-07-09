@@ -1,15 +1,15 @@
 /**
  * DiagramViewer Component
  * Universal component for rendering diagrams in all supported formats
- * Supports: DOT_JSON (interactive), PDF, DOT (code), SVG, PNG, JPG, DRAWIO
+ * Supports: DOT_JSON (interactive), PDF, DOT, SVG, PNG, JPG, DRAWIO
  */
 
 import { useRef, useState, useEffect } from 'react';
 import mermaid from 'mermaid';
-import { Code2, Copy } from 'lucide-react';
 import PanZoomContainer from './PanZoomContainer.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { OUTPUT_FORMATS } from '../../utils/constants.js';
+import { renderDotToSvg } from '../../services/diagramApi.js';
 
 // Mermaid configuration for consistent styling across the app
 mermaid.initialize({
@@ -214,6 +214,64 @@ function D2Viewer({ content }) {
   );
 }
 
+/**
+DotViewer Component
+*/
+function DotViewer({ content }) {
+  const containerRef = useRef(null);
+  const [error, setError] = useState(null);
+  const [isRendering, setIsRendering] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    renderDotToSvg(content)
+      .then((response) => {
+        if (cancelled) return;
+        if (!response.ok || !response.data?.svg) {
+          setError(response.data?.error || 'Failed to render DOT diagram.');
+          return;
+        }
+        if (!containerRef.current) return;
+        containerRef.current.innerHTML = response.data.svg;
+        fixSvgIntrinsicSize(containerRef.current.querySelector('svg'));
+        setError(null);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setError(err?.message || 'Failed to render DOT diagram.');
+      })
+      .finally(() => {
+        if (!cancelled) setIsRendering(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [content]);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
+        DOT rendering error: {error}
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-[70vh]">
+      <PanZoomContainer className="w-full h-full bg-white rounded-md border">
+        <div ref={containerRef} className="diagram-viewer" />
+      </PanZoomContainer>
+      {isRendering && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md pointer-events-none">
+          <LoadingSpinner size="lg" color="blue" text="Rendering DOT diagram..." />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function DiagramViewer({
   diagram,
   outputFormat,
@@ -288,50 +346,11 @@ function DiagramViewer({
     );
   }
 
-  // DOT - Source code viewer
+  // DOT - Server-rendered viewer (graphviz is already a mandatory backend
+  // dependency, so rendering there avoids adding a client-side WASM lib for
+  // yet another format)
   if (ext === OUTPUT_FORMATS.DOT) {
-    return (
-      <div className="w-full h-[70vh] bg-gray-900 rounded-md border overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between bg-gray-800 px-4 py-2 border-b border-gray-700">
-          <div className="flex items-center gap-2">
-            <Code2 className="w-5 h-5 text-green-400" />
-            <span className="text-sm font-semibold text-gray-300">DOT Source Code (Graphviz)</span>
-          </div>
-          <button
-            onClick={(e) => {
-              navigator.clipboard.writeText(diagram);
-              const btn = e.currentTarget;
-              const originalText = btn.innerHTML;
-              btn.innerHTML = '<span class="text-green-400">✓ Copied!</span>';
-              setTimeout(() => {
-                btn.innerHTML = originalText;
-              }, 2000);
-            }}
-            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition flex items-center gap-1"
-          >
-            <Copy className="w-4 h-4" />
-            Copy
-          </button>
-        </div>
-        <div className="flex-1 overflow-auto p-4">
-          <pre className="text-sm text-gray-100 font-mono whitespace-pre">
-            <code>{diagram}</code>
-          </pre>
-        </div>
-        <div className="bg-gray-800 px-4 py-2 border-t border-gray-700 text-xs text-gray-400">
-          Tip: Use this DOT code with Graphviz tools (dot, neato, fdp, circo, twopi) or online
-          visualizers like{' '}
-          <a
-            href="https://dreampuf.github.io/GraphvizOnline/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:underline"
-          >
-            GraphvizOnline
-          </a>
-        </div>
-      </div>
-    );
+    return <DotViewer key={viewerKey} content={diagram} />;
   }
 
   // SVG/PNG/JPG/JPEG - Image viewer with pan & zoom

@@ -339,6 +339,28 @@ export async function submitFeedback({ note, comment, diagramType }) {
 }
 
 /**
+ * Render DOT source (already returned by a previous generate call) to SVG
+ * @param {string} dot - DOT source text
+ * @returns {Promise<Object>} Response with { svg } data
+ */
+export async function renderDotToSvg(dot) {
+  logger.debug('Requesting DOT-to-SVG render');
+
+  const response = await apiFetch(API_ENDPOINTS.RENDER_DOT_SVG, {
+    body: JSON.stringify({ dot }),
+  });
+
+  if (!response.ok) {
+    logger.warn('Failed to render DOT to SVG', {
+      statusCode: response.status,
+      error: response.data?.error,
+    });
+  }
+
+  return response;
+}
+
+/**
  * Check if output contains fatal errors
  * @param {string} stdout - Standard output
  * @param {string} stderr - Standard error
@@ -361,4 +383,5 @@ export default {
   getClusterResourceTypes,
   submitFeedback,
   hasFatalErrors,
+  renderDotToSvg,
 };
