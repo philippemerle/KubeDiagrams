@@ -56,17 +56,14 @@ function HelmTab({ historyContext }) {
   // Auto-scroll to output when diagram is ready
   const outputRef = useScrollToOutput(progressStep);
 
-  // Track previous outputFormat to detect changes
-  const prevOutputFormatRef = useRef(outputFormat);
   const lastHistoryIdRef = useRef(null);
 
-  // Reset output when output format changes (not on initial render)
-  useEffect(() => {
-    if (prevOutputFormatRef.current !== outputFormat && diagram) {
+  const handleOutputFormatChange = (newFormat) => {
+    if (newFormat !== outputFormat && diagram) {
       resetOutput();
     }
-    prevOutputFormatRef.current = outputFormat;
-  }, [outputFormat, diagram, resetOutput]);
+    setOutputFormat(newFormat);
+  };
 
   // Save to history when diagram is successfully generated
   useEffect(() => {
@@ -164,7 +161,7 @@ function HelmTab({ historyContext }) {
         chartUrl={chartUrl}
         setChartUrl={setChartUrl}
         outputFormat={outputFormat}
-        setOutputFormat={setOutputFormat}
+        setOutputFormat={handleOutputFormatChange}
         extraArgs={extraArgs}
         setExtraArgs={setExtraArgs}
         inputError={inputError}

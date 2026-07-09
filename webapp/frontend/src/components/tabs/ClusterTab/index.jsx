@@ -51,16 +51,12 @@ function ClusterTab({ historyContext }) {
     diagramType: 'cluster',
   });
 
-  // Track previous outputFormat to detect changes
-  const prevOutputFormatRef = useRef(outputFormat);
-
-  // Reset output when output format changes (not on initial render)
-  useEffect(() => {
-    if (prevOutputFormatRef.current !== outputFormat && diagram) {
+  const handleOutputFormatChange = (newFormat) => {
+    if (newFormat !== outputFormat && diagram) {
       resetOutput();
     }
-    prevOutputFormatRef.current = outputFormat;
-  }, [outputFormat, diagram, resetOutput]);
+    setOutputFormat(newFormat);
+  };
 
   // Viewer synchronization hook for DOT_JSON format
   const { viewerRef, handleViewerLoad } = useViewerSync({ diagram, outputFormat });
@@ -170,7 +166,7 @@ function ClusterTab({ historyContext }) {
             resourceTypes={resourceTypes}
             allNamespaces={allNamespaces}
             outputFormat={outputFormat}
-            setOutputFormat={setOutputFormat}
+            setOutputFormat={handleOutputFormatChange}
             extraArgs={extraArgs}
             setExtraArgs={setExtraArgs}
             withoutNamespace={withoutNamespace}
@@ -218,7 +214,13 @@ function ClusterTab({ historyContext }) {
 
       {/* Command Details Section - Full width below */}
       {(command || stdout || stderr || message) && (
-        <CommandDetails command={command} stdout={stdout} stderr={stderr} message={message} titleClassName="text-white" />
+        <CommandDetails
+          command={command}
+          stdout={stdout}
+          stderr={stderr}
+          message={message}
+          titleClassName="text-white"
+        />
       )}
     </div>
   );

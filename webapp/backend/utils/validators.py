@@ -12,7 +12,7 @@ class ValidationError(Exception):
 class InputValidator:
     """Validator for user inputs."""
 
-    SUPPORTED_FORMATS = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'pdf', 'dot', 'dot_json', 'drawio', 'mermaid']
+    SUPPORTED_FORMATS = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'pdf', 'dot', 'dot_json', 'drawio', 'mermaid', 'd2']
 
     # Valid Pattern for url
     HELM_URL_PATTERN = re.compile(

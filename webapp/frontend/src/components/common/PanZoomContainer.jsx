@@ -299,16 +299,32 @@ export default function PanZoomContainer({
       }}
     >
       <div className="kd-controls absolute z-10 top-2 right-2 flex gap-2 pointer-events-auto">
-        <button type="button" onClick={zoomOut} className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100">
+        <button
+          type="button"
+          onClick={zoomOut}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           −
         </button>
-        <button type="button" onClick={zoomIn} className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100">
+        <button
+          type="button"
+          onClick={zoomIn}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           +
         </button>
-        <button type="button" onClick={reset} className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100">
+        <button
+          type="button"
+          onClick={reset}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           Reset
         </button>
-        <button type="button" onClick={() => fit(false)} className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100">
+        <button
+          type="button"
+          onClick={() => fit(false)}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           Fit
         </button>
       </div>

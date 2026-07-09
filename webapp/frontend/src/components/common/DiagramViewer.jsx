@@ -20,6 +20,27 @@ mermaid.initialize({
 
 let mermaidRenderId = 0;
 
+let mermaidQueue = Promise.resolve();
+
+function renderMermaid(content) {
+  const id = `mermaid-diagram-${++mermaidRenderId}`;
+  const task = mermaidQueue.then(() => mermaid.render(id, content));
+  mermaidQueue = task.then(
+    () => {},
+    () => {}
+  );
+  return task;
+}
+
+function fixSvgIntrinsicSize(svgEl) {
+  const viewBox = svgEl?.getAttribute('viewBox');
+  if (!svgEl || !viewBox) return;
+  const [, , vbWidth, vbHeight] = viewBox.split(' ').map(Number);
+  svgEl.setAttribute('width', vbWidth);
+  svgEl.setAttribute('height', vbHeight);
+  svgEl.style.maxWidth = '';
+}
+
 /**
  * Embedded draw.io viewer using embed.diagrams.net with postMessage protocol.
  * When the iframe signals {event: "init"}, we send {action: "load", xml: content}.
@@ -88,28 +109,13 @@ function MermaidViewer({ content }) {
 
   useEffect(() => {
     let cancelled = false;
-    const id = `mermaid-diagram-${++mermaidRenderId}`;
 
-    mermaid
-      .render(id, content)
+    renderMermaid(content)
       .then(({ svg, bindFunctions }) => {
         if (cancelled || !containerRef.current) return;
         containerRef.current.innerHTML = svg;
         bindFunctions?.(containerRef.current);
-
-        // mermaid emits width="100%" with no height (just a max-width style),
-        // which leaves the SVG's intrinsic size ambiguous in a plain container.
-        // Pin width/height to the viewBox so PanZoomContainer measures the real
-        // diagram size and its fit-on-load logic frames it like mermaid.live does.
-        const svgEl = containerRef.current.querySelector('svg');
-        const viewBox = svgEl?.getAttribute('viewBox');
-        if (svgEl && viewBox) {
-          const [, , vbWidth, vbHeight] = viewBox.split(' ').map(Number);
-          svgEl.setAttribute('width', vbWidth);
-          svgEl.setAttribute('height', vbHeight);
-          svgEl.style.maxWidth = '';
-        }
-
+        fixSvgIntrinsicSize(containerRef.current.querySelector('svg'));
         setError(null);
       })
       .catch((err) => {
@@ -134,6 +140,77 @@ function MermaidViewer({ content }) {
     <PanZoomContainer className="w-full h-[70vh] bg-white rounded-md border">
       <div ref={containerRef} className="diagram-viewer" />
     </PanZoomContainer>
+  );
+}
+
+let d2InstancePromise = null;
+
+let d2Queue = Promise.resolve();
+
+function renderD2(content) {
+  const task = d2Queue.then(async () => {
+    if (!d2InstancePromise) {
+      d2InstancePromise = import('@terrastruct/d2').then(({ D2 }) => new D2());
+    }
+    const d2 = await d2InstancePromise;
+    const result = await d2.compile(content);
+    return d2.render(result.diagram, result.renderOptions);
+  });
+  // Keep the queue alive even if this task fails, so later renders aren't stuck
+  d2Queue = task.then(
+    () => {},
+    () => {}
+  );
+  return task;
+}
+
+function D2Viewer({ content }) {
+  const containerRef = useRef(null);
+  const [error, setError] = useState(null);
+  const [isRendering, setIsRendering] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    renderD2(content)
+      .then((svg) => {
+        if (cancelled || !containerRef.current) return;
+        containerRef.current.innerHTML = svg;
+        fixSvgIntrinsicSize(containerRef.current.querySelector('svg'));
+        setError(null);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setError(err?.message || 'Failed to render D2 diagram.');
+      })
+      .finally(() => {
+        if (!cancelled) setIsRendering(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [content]);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
+        D2 rendering error: {error}
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative w-full h-[70vh]">
+      <PanZoomContainer className="w-full h-full bg-white rounded-md border">
+        <div ref={containerRef} className="diagram-viewer" />
+      </PanZoomContainer>
+      {isRendering && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md pointer-events-none">
+          <LoadingSpinner size="lg" color="blue" text="Rendering D2 diagram..." />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -189,6 +266,11 @@ function DiagramViewer({
   // MERMAID - Client-side rendered viewer
   if (ext === OUTPUT_FORMATS.MERMAID) {
     return <MermaidViewer key={viewerKey} content={diagram} />;
+  }
+
+  // D2 - Client-side rendered viewer
+  if (ext === OUTPUT_FORMATS.D2) {
+    return <D2Viewer key={viewerKey} content={diagram} />;
   }
 
   // PDF - Embedded viewer
