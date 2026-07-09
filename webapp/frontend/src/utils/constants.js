@@ -8,6 +8,7 @@ export const OUTPUT_FORMATS = Object.freeze({
   DOT: 'dot',
   DOT_JSON: 'dot_json',
   DRAWIO: 'drawio',
+  MERMAID: 'mermaid',
 });
 
 export const OUTPUT_FORMAT_LIST = Object.freeze([
@@ -19,6 +20,7 @@ export const OUTPUT_FORMAT_LIST = Object.freeze([
   OUTPUT_FORMATS.DOT,
   OUTPUT_FORMATS.DOT_JSON,
   OUTPUT_FORMATS.DRAWIO,
+  OUTPUT_FORMATS.MERMAID,
 ]);
 
 // API Endpoints
@@ -58,6 +60,7 @@ export const MIME_TYPES = Object.freeze({
   [OUTPUT_FORMATS.DOT]: 'text/vnd.graphviz',
   [OUTPUT_FORMATS.DOT_JSON]: 'application/json',
   [OUTPUT_FORMATS.DRAWIO]: 'application/xml',
+  [OUTPUT_FORMATS.MERMAID]: 'text/vnd.mermaid',
 });
 
 // Viewer message types for postMessage communication
@@ -80,4 +83,5 @@ export const TEXT_FORMATS = Object.freeze([
   OUTPUT_FORMATS.DOT,
   OUTPUT_FORMATS.DOT_JSON,
   OUTPUT_FORMATS.DRAWIO,
+  OUTPUT_FORMATS.MERMAID,
 ]);

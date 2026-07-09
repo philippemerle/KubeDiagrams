@@ -42,6 +42,16 @@ button:hover {
   transform: scale(1.05);
 }
 
+/* Pan/zoom overlay controls button colors. */
+.kd-controls button {
+  color: #1f2937;
+}
+
+.kd-controls button:hover {
+  background-color: #f3f4f6;
+  transform: none;
+}
+
 .diagram-viewer svg {
   image-rendering: optimizeQuality;
   text-rendering: geometricPrecision;

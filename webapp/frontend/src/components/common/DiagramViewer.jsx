@@ -4,11 +4,21 @@
  * Supports: DOT_JSON (interactive), PDF, DOT (code), SVG, PNG, JPG, DRAWIO
  */
 
-import { useRef, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import mermaid from 'mermaid';
 import { Code2, Copy } from 'lucide-react';
 import PanZoomContainer from './PanZoomContainer.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { OUTPUT_FORMATS } from '../../utils/constants.js';
+
+// Mermaid configuration for consistent styling across the app
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'default',
+  themeVariables: { edgeLabelBackground: '#4b5563', nodeTextColor: '#f9fafb' },
+});
+
+let mermaidRenderId = 0;
 
 /**
  * Embedded draw.io viewer using embed.diagrams.net with postMessage protocol.
@@ -67,6 +77,66 @@ function DrawioViewer({ content }) {
   );
 }
 
+/**
+MermaidViewer Component
+Renders Mermaid diagrams using the mermaid library.
+Handles errors and displays them in the UI. 
+*/
+function MermaidViewer({ content }) {
+  const containerRef = useRef(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const id = `mermaid-diagram-${++mermaidRenderId}`;
+
+    mermaid
+      .render(id, content)
+      .then(({ svg, bindFunctions }) => {
+        if (cancelled || !containerRef.current) return;
+        containerRef.current.innerHTML = svg;
+        bindFunctions?.(containerRef.current);
+
+        // mermaid emits width="100%" with no height (just a max-width style),
+        // which leaves the SVG's intrinsic size ambiguous in a plain container.
+        // Pin width/height to the viewBox so PanZoomContainer measures the real
+        // diagram size and its fit-on-load logic frames it like mermaid.live does.
+        const svgEl = containerRef.current.querySelector('svg');
+        const viewBox = svgEl?.getAttribute('viewBox');
+        if (svgEl && viewBox) {
+          const [, , vbWidth, vbHeight] = viewBox.split(' ').map(Number);
+          svgEl.setAttribute('width', vbWidth);
+          svgEl.setAttribute('height', vbHeight);
+          svgEl.style.maxWidth = '';
+        }
+
+        setError(null);
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setError(err?.message || 'Failed to render Mermaid diagram.');
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [content]);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
+        Mermaid rendering error: {error}
+      </div>
+    );
+  }
+
+  return (
+    <PanZoomContainer className="w-full h-[70vh] bg-white rounded-md border">
+      <div ref={containerRef} className="diagram-viewer" />
+    </PanZoomContainer>
+  );
+}
+
 function DiagramViewer({
   diagram,
   outputFormat,
@@ -114,6 +184,11 @@ function DiagramViewer({
   // DRAWIO - Draw.io embedded viewer
   if (ext === OUTPUT_FORMATS.DRAWIO) {
     return <DrawioViewer key={viewerKey} content={diagram} />;
+  }
+
+  // MERMAID - Client-side rendered viewer
+  if (ext === OUTPUT_FORMATS.MERMAID) {
+    return <MermaidViewer key={viewerKey} content={diagram} />;
   }
 
   // PDF - Embedded viewer
