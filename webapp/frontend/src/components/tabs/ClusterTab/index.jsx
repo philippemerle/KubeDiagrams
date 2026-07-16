@@ -2,12 +2,12 @@
  * Cluster Tab Container
  * Main component that orchestrates live cluster diagram generation
  */
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { DEFAULTS } from '../../../utils/constants.js';
 import { generateClusterDiagram } from '../../../services/diagramApi.js';
 import { useViewerSync } from '../../../hooks/useViewerSync.js';
 import { useDiagramGeneration } from '../../../hooks/useDiagramGeneration.js';
+import { useHistorySync } from '../../../hooks/useHistorySync.js';
 import { useClusterData } from '../../../hooks/useClusterData.js';
 import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import ClusterInput from './ClusterInput.jsx';
@@ -19,12 +19,13 @@ function ClusterTab({ historyContext }) {
   const [namespace, setNamespace] = useState('');
   const [resourceTypes, setResourceTypes] = useState([]);
   const [allNamespaces, setAllNamespaces] = useState(false);
-  const [outputFormat, setOutputFormat] = useState(DEFAULTS.OUTPUT_FORMAT);
   const [extraArgs, setExtraArgs] = useState('');
   const [withoutNamespace, setWithoutNamespace] = useState(false);
 
   // Diagram generation hook
   const {
+    outputFormat,
+    handleOutputFormatChange,
     diagram,
     command,
     message,
@@ -38,7 +39,7 @@ function ClusterTab({ historyContext }) {
     viewerKey,
     progressStep,
     handleSubmit: generateDiagram,
-    resetOutput,
+    restoreDiagram,
   } = useDiagramGeneration({
     apiFunction: generateClusterDiagram,
     validateInput: (params) => {
@@ -50,13 +51,6 @@ function ClusterTab({ historyContext }) {
     },
     diagramType: 'cluster',
   });
-
-  const handleOutputFormatChange = (newFormat) => {
-    if (newFormat !== outputFormat && diagram) {
-      resetOutput();
-    }
-    setOutputFormat(newFormat);
-  };
 
   // Viewer synchronization hook for DOT_JSON format
   const { viewerRef, handleViewerLoad } = useViewerSync({ diagram, outputFormat });
@@ -95,45 +89,25 @@ function ClusterTab({ historyContext }) {
   // Auto-scroll to output when diagram is ready
   const outputRef = useScrollToOutput(progressStep);
 
-  // History restoration
-  const hasRestoredRef = useRef(false);
-  useEffect(() => {
-    if (historyContext?.restoredItem && !hasRestoredRef.current) {
-      const item = historyContext.restoredItem;
-      if (item.type === 'cluster') {
-        setNamespace(item.input?.namespace || '');
-        setResourceTypes(item.input?.resourceTypes || []);
-        setAllNamespaces(item.input?.allNamespaces || false);
-        setOutputFormat(item.outputFormat || DEFAULTS.OUTPUT_FORMAT);
-        setExtraArgs(item.extraArgs || '');
-        setWithoutNamespace(item.withoutNamespace || false);
-        hasRestoredRef.current = true;
-      }
-    }
-  }, [historyContext?.restoredItem]);
-
-  // History tracking
-  useEffect(() => {
-    if (diagram && historyContext?.addToHistory) {
-      historyContext.addToHistory({
-        type: 'cluster',
-        input: { namespace, resourceTypes, allNamespaces },
-        outputFormat,
-        extraArgs,
-        withoutNamespace,
-        result: {
-          diagram,
-          mimeType,
-          filename,
-          message,
-          command,
-          stdout,
-          stderr,
-        },
-        timestamp: Date.now(),
-      });
-    }
-  }, [diagram]);
+  useHistorySync({
+    diagramType: 'cluster',
+    historyContext,
+    outputFormat,
+    diagram,
+    mimeType,
+    filename,
+    progressStep,
+    restoreDiagram,
+    buildInput: () => ({ namespace, resourceTypes, allNamespaces, extraArgs, withoutNamespace }),
+    buildPreview: () => (allNamespaces ? 'All namespaces' : namespace || 'No namespace selected'),
+    restoreInput: (input) => {
+      setNamespace(input.namespace || '');
+      setResourceTypes(input.resourceTypes || []);
+      setAllNamespaces(input.allNamespaces || false);
+      setExtraArgs(input.extraArgs || '');
+      setWithoutNamespace(input.withoutNamespace || false);
+    },
+  });
 
   // Handle diagram generation with proper parameters
   const handleGenerate = useCallback(() => {
@@ -228,8 +202,9 @@ function ClusterTab({ historyContext }) {
 
 ClusterTab.propTypes = {
   historyContext: PropTypes.shape({
+    addToHistory: PropTypes.func.isRequired,
     restoredItem: PropTypes.object,
-    addToHistory: PropTypes.func,
+    clearRestoredItem: PropTypes.func.isRequired,
   }),
 };
 

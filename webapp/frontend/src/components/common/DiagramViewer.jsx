@@ -4,18 +4,22 @@
  * Supports: DOT_JSON (interactive), PDF, DOT, SVG, PNG, JPG, DRAWIO
  */
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import mermaid from 'mermaid';
 import PanZoomContainer from './PanZoomContainer.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { OUTPUT_FORMATS } from '../../utils/constants.js';
 import { renderDotToSvg } from '../../services/diagramApi.js';
+import { useSvgDiagramRenderer } from '../../hooks/useSvgDiagramRenderer.js';
 
 // Mermaid configuration for consistent styling across the app
 mermaid.initialize({
   startOnLoad: false,
   theme: 'default',
   themeVariables: { edgeLabelBackground: '#4b5563', nodeTextColor: '#f9fafb' },
+  // Default maxTextSize (50000) is too low for real cluster/namespace diagrams
+  maxTextSize: 1000000,
+  maxEdges: 2000,
 });
 
 let mermaidRenderId = 0;
@@ -30,15 +34,6 @@ function renderMermaid(content) {
     () => {}
   );
   return task;
-}
-
-function fixSvgIntrinsicSize(svgEl) {
-  const viewBox = svgEl?.getAttribute('viewBox');
-  if (!svgEl || !viewBox) return;
-  const [, , vbWidth, vbHeight] = viewBox.split(' ').map(Number);
-  svgEl.setAttribute('width', vbWidth);
-  svgEl.setAttribute('height', vbHeight);
-  svgEl.style.maxWidth = '';
 }
 
 /**
@@ -98,42 +93,37 @@ function DrawioViewer({ content }) {
   );
 }
 
-/**
-MermaidViewer Component
-Renders Mermaid diagrams using the mermaid library.
-Handles errors and displays them in the UI. 
-*/
+
+function DiagramRenderError({ formatLabel, message }) {
+  return (
+    <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
+      {formatLabel} rendering error: {message}
+    </div>
+  );
+}
+
+function SvgDiagramFrame({ containerRef, isRendering, loadingText }) {
+  return (
+    <div className="relative w-full h-[70vh]">
+      <PanZoomContainer className="w-full h-full bg-white rounded-md border">
+        <div ref={containerRef} className="diagram-viewer" />
+      </PanZoomContainer>
+      {isRendering && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md pointer-events-none">
+          <LoadingSpinner size="lg" color="blue" text={loadingText} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function MermaidViewer({ content }) {
-  const containerRef = useRef(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    renderMermaid(content)
-      .then(({ svg, bindFunctions }) => {
-        if (cancelled || !containerRef.current) return;
-        containerRef.current.innerHTML = svg;
-        bindFunctions?.(containerRef.current);
-        fixSvgIntrinsicSize(containerRef.current.querySelector('svg'));
-        setError(null);
-      })
-      .catch((err) => {
-        if (cancelled) return;
-        setError(err?.message || 'Failed to render Mermaid diagram.');
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [content]);
+  const { containerRef, error } = useSvgDiagramRenderer(renderMermaid, content, {
+    formatLabel: 'Mermaid',
+  });
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
-        Mermaid rendering error: {error}
-      </div>
-    );
+    return <DiagramRenderError formatLabel="Mermaid" message={error} />;
   }
 
   return (
@@ -154,7 +144,8 @@ function renderD2(content) {
     }
     const d2 = await d2InstancePromise;
     const result = await d2.compile(content);
-    return d2.render(result.diagram, result.renderOptions);
+    const svg = await d2.render(result.diagram, result.renderOptions);
+    return { svg };
   });
   // Keep the queue alive even if this task fails, so later renders aren't stuck
   d2Queue = task.then(
@@ -165,110 +156,51 @@ function renderD2(content) {
 }
 
 function D2Viewer({ content }) {
-  const containerRef = useRef(null);
-  const [error, setError] = useState(null);
-  const [isRendering, setIsRendering] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    renderD2(content)
-      .then((svg) => {
-        if (cancelled || !containerRef.current) return;
-        containerRef.current.innerHTML = svg;
-        fixSvgIntrinsicSize(containerRef.current.querySelector('svg'));
-        setError(null);
-      })
-      .catch((err) => {
-        if (cancelled) return;
-        setError(err?.message || 'Failed to render D2 diagram.');
-      })
-      .finally(() => {
-        if (!cancelled) setIsRendering(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [content]);
+  const { containerRef, error, isRendering } = useSvgDiagramRenderer(renderD2, content, {
+    formatLabel: 'D2',
+    showSpinner: true,
+  });
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
-        D2 rendering error: {error}
-      </div>
-    );
+    return <DiagramRenderError formatLabel="D2" message={error} />;
   }
 
   return (
-    <div className="relative w-full h-[70vh]">
-      <PanZoomContainer className="w-full h-full bg-white rounded-md border">
-        <div ref={containerRef} className="diagram-viewer" />
-      </PanZoomContainer>
-      {isRendering && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md pointer-events-none">
-          <LoadingSpinner size="lg" color="blue" text="Rendering D2 diagram..." />
-        </div>
-      )}
-    </div>
+    <SvgDiagramFrame
+      containerRef={containerRef}
+      isRendering={isRendering}
+      loadingText="Rendering D2 diagram..."
+    />
   );
 }
 
 /**
-DotViewer Component
-*/
+ * DotViewer Component
+ */
+async function renderDot(content) {
+  const response = await renderDotToSvg(content);
+  if (!response.ok || !response.data?.svg) {
+    throw new Error(response.data?.error || 'Failed to render DOT diagram.');
+  }
+  return { svg: response.data.svg };
+}
+
 function DotViewer({ content }) {
-  const containerRef = useRef(null);
-  const [error, setError] = useState(null);
-  const [isRendering, setIsRendering] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    renderDotToSvg(content)
-      .then((response) => {
-        if (cancelled) return;
-        if (!response.ok || !response.data?.svg) {
-          setError(response.data?.error || 'Failed to render DOT diagram.');
-          return;
-        }
-        if (!containerRef.current) return;
-        containerRef.current.innerHTML = response.data.svg;
-        fixSvgIntrinsicSize(containerRef.current.querySelector('svg'));
-        setError(null);
-      })
-      .catch((err) => {
-        if (cancelled) return;
-        setError(err?.message || 'Failed to render DOT diagram.');
-      })
-      .finally(() => {
-        if (!cancelled) setIsRendering(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [content]);
+  const { containerRef, error, isRendering } = useSvgDiagramRenderer(renderDot, content, {
+    formatLabel: 'DOT',
+    showSpinner: true,
+  });
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
-        DOT rendering error: {error}
-      </div>
-    );
+    return <DiagramRenderError formatLabel="DOT" message={error} />;
   }
 
   return (
-    <div className="relative w-full h-[70vh]">
-      <PanZoomContainer className="w-full h-full bg-white rounded-md border">
-        <div ref={containerRef} className="diagram-viewer" />
-      </PanZoomContainer>
-      {isRendering && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md pointer-events-none">
-          <LoadingSpinner size="lg" color="blue" text="Rendering DOT diagram..." />
-        </div>
-      )}
-    </div>
+    <SvgDiagramFrame
+      containerRef={containerRef}
+      isRendering={isRendering}
+      loadingText="Rendering DOT diagram..."
+    />
   );
 }
 

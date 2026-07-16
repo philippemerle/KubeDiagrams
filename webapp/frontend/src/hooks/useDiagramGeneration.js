@@ -4,7 +4,7 @@
  */
 
 import { useState, useCallback } from 'react';
-import { OUTPUT_FORMATS } from '../utils/constants.js';
+import { OUTPUT_FORMATS, DEFAULTS } from '../utils/constants.js';
 import logger from '../utils/logger.js';
 import { hasFatalErrors } from '../services/diagramApi.js';
 import toastUtil from '../utils/toast.js';
@@ -18,6 +18,8 @@ import toastUtil from '../utils/toast.js';
  * @returns {Object} - State and handlers for diagram generation
  */
 export function useDiagramGeneration({ apiFunction, validateInput, diagramType = 'diagram' }) {
+  const [outputFormat, setOutputFormat] = useState(DEFAULTS.OUTPUT_FORMAT);
+
   // Output states
   const [diagram, setDiagram] = useState('');
   const [command, setCommand] = useState('');
@@ -51,6 +53,15 @@ export function useDiagramGeneration({ apiFunction, validateInput, diagramType =
     setErrorMessage('');
     setProgressStep('idle');
   }, []);
+  const handleOutputFormatChange = useCallback(
+    (newFormat) => {
+      if (newFormat !== outputFormat && diagram) {
+        resetOutput();
+      }
+      setOutputFormat(newFormat);
+    },
+    [outputFormat, diagram, resetOutput]
+  );
 
   /**
    * Handle diagram generation submission
@@ -196,6 +207,7 @@ export function useDiagramGeneration({ apiFunction, validateInput, diagramType =
    * @param {Object} historyItem - History item with diagram and metadata
    */
   const restoreDiagram = useCallback((historyItem) => {
+    setOutputFormat(historyItem.outputFormat || DEFAULTS.OUTPUT_FORMAT);
     setDiagram(historyItem.diagram || '');
     setCommand('');
     setMessage(historyItem.message || '');
@@ -209,6 +221,11 @@ export function useDiagramGeneration({ apiFunction, validateInput, diagramType =
   }, []);
 
   return {
+    // Output format
+    outputFormat,
+    setOutputFormat,
+    handleOutputFormatChange,
+
     // Output states
     diagram,
     command,

@@ -8,7 +8,7 @@ import { useHistory } from './hooks/useHistory.js';
 function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [restoredItem, setRestoredItem] = useState(null);
-  const { history, addToHistory, removeFromHistory, clearHistory, getHistoryItem } = useHistory();
+  const { history, addToHistory, removeFromHistory, clearHistory } = useHistory();
 
   const handleRestoreFromHistory = (item) => {
     // Set the restored item to trigger restoration in the corresponding tab
@@ -23,8 +23,8 @@ function App() {
 
   // Memoize historyContext to avoid recreating it on every render
   const historyContext = useMemo(
-    () => ({ addToHistory, getHistoryItem, restoredItem, clearRestoredItem }),
-    [addToHistory, getHistoryItem, restoredItem]
+    () => ({ addToHistory, restoredItem, clearRestoredItem }),
+    [addToHistory, restoredItem]
   );
 
   return (

@@ -7,6 +7,7 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   optimizeDeps: {
     exclude: ['@terrastruct/d2'],
+    include: ['path-browserify'],
   },
   server: {
     proxy: {

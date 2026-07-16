@@ -33,6 +33,7 @@ const HistoryPanel = ({ history, onRestore, onRemove, onClear, isOpen, onToggle 
       manifest: 'Manifest',
       helm: 'Helm',
       helmfile: 'Helmfile',
+      cluster: 'Cluster',
     };
     return labels[type] || type;
   };
@@ -42,6 +43,7 @@ const HistoryPanel = ({ history, onRestore, onRemove, onClear, isOpen, onToggle 
       manifest: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
       helm: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
       helmfile: 'bg-green-500/20 text-green-400 border-green-500/30',
+      cluster: 'bg-orange-500/20 text-orange-400 border-orange-500/30',
     };
     return colors[type] || 'bg-slate-500/20 text-slate-400 border-slate-500/30';
   };
