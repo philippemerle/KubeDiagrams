@@ -52,7 +52,7 @@ function DrawioViewer({ content }) {
   // Listen for draw.io init event and send the XML content
   useEffect(() => {
     const handleMessage = (event) => {
-      if (!event.origin.includes('diagrams.net')) return;
+      if (event.origin !== 'https://embed.diagrams.net') return;
       try {
         const data = JSON.parse(event.data);
         if (data.event === 'init') {
@@ -92,7 +92,6 @@ function DrawioViewer({ content }) {
     </div>
   );
 }
-
 
 function DiagramRenderError({ formatLabel, message }) {
   return (

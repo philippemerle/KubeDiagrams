@@ -17,7 +17,11 @@ function fixSvgIntrinsicSize(svgEl) {
  * @param {boolean} [options.showSpinner] - Whether to expose a loading state while rendering
  * @returns {{ containerRef: React.RefObject, error: string|null, isRendering: boolean }}
  */
-export function useSvgDiagramRenderer(renderFn, content, { formatLabel = '', showSpinner = false } = {}) {
+export function useSvgDiagramRenderer(
+  renderFn,
+  content,
+  { formatLabel = '', showSpinner = false } = {}
+) {
   const containerRef = useRef(null);
   const [error, setError] = useState(null);
   const [isRendering, setIsRendering] = useState(showSpinner);

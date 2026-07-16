@@ -16,43 +16,34 @@ cluster_bp = Blueprint('cluster', __name__)
 @cluster_bp.route('/api/cluster/context', methods=['GET'])
 def get_context():
     """Return the name of the currently active kubectl context."""
-    try:
-        context = get_current_context()
-        return ResponseBuilder.success({"context": context})
-    except RuntimeError as e:
-        return ResponseBuilder.error(str(e))
-    except Exception as e:
-        return ResponseBuilder.error(f"Unexpected error: {str(e)}")
+    context, error = get_current_context()
+    if error:
+        return ResponseBuilder.error(error)
+    return ResponseBuilder.success({"context": context})
 
 
 @cluster_bp.route('/api/cluster/namespaces', methods=['GET'])
 def list_namespaces():
     """Return the list of namespaces available in the connected Kubernetes cluster."""
-    try:
-        namespaces = get_namespaces()
-        return ResponseBuilder.success({
-            "namespaces": namespaces,
-            "count": len(namespaces)
-        })
-    except RuntimeError as e:
-        return ResponseBuilder.error(str(e))
-    except Exception as e:
-        return ResponseBuilder.error(f"Unexpected error: {str(e)}")
+    namespaces, error = get_namespaces()
+    if error:
+        return ResponseBuilder.error(error)
+    return ResponseBuilder.success({
+        "namespaces": namespaces,
+        "count": len(namespaces)
+    })
 
 
 @cluster_bp.route('/api/cluster/resource-types', methods=['GET'])
 def list_resource_types():
     """Return all resource types known by the cluster, tagged with namespace scope and common status."""
-    try:
-        resource_types = get_resource_types()
-        return ResponseBuilder.success({
-            "resourceTypes": resource_types,
-            "count": len(resource_types)
-        })
-    except RuntimeError as e:
-        return ResponseBuilder.error(str(e))
-    except Exception as e:
-        return ResponseBuilder.error(f"Unexpected error: {str(e)}")
+    resource_types, error = get_resource_types()
+    if error:
+        return ResponseBuilder.error(error)
+    return ResponseBuilder.success({
+        "resourceTypes": resource_types,
+        "count": len(resource_types)
+    })
 
 
 @cluster_bp.route('/api/cluster/generate', methods=['POST'])
@@ -94,7 +85,7 @@ def generate_cluster_diagram():
         return ResponseBuilder.validation_error("outputFormat", error_msg)
 
     # Extra arguments validation
-    is_valid, error_msg = InputValidator.validate_extra_args(extra_args)
+    is_valid, error_msg = InputValidator.validate_extra_args(extra_args, "kubectl-diagrams")
     if not is_valid:
         return ResponseBuilder.validation_error("extraArgs", error_msg)
 

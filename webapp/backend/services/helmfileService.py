@@ -3,9 +3,12 @@ import subprocess
 import os
 
 from constants import MIME_TYPES
+from utils import get_app_logger, log_unexpected_error
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json, get_safe_format_extension, redact_temp_paths
+
+logger = get_app_logger(__name__)
 
 
 def generate_from_helmfile(
@@ -26,8 +29,10 @@ def generate_from_helmfile(
     Returns:
         DiagramResult: Result of the generation
     """
+    safe_ext = get_safe_format_extension(output_format)
+
     with FileManager.create_temp_file(helmfile_content, suffix=".yaml", mode='wb') as temp_helmfile_path:
-        output_path = temp_helmfile_path + f".{output_format}"
+        output_path = temp_helmfile_path + f".{safe_ext}"
         dot_output_path = temp_helmfile_path + ".dot" if output_format == "dot_json" else None
 
         try:
@@ -47,7 +52,7 @@ def generate_from_helmfile(
                 return DiagramResult(
                     success=False,
                     error="Helmfile template failed. See command output below.",
-                    command=" ".join(template_cmd),
+                    command=redact_temp_paths(" ".join(template_cmd), temp_helmfile_path),
                     stdout="",
                     stderr=helm_err or ""
                 )
@@ -57,7 +62,7 @@ def generate_from_helmfile(
             if without_namespace:
                 cmd.append("--without-namespace")
             if extra_args.strip():
-                cmd.extend(parse_extra_args(extra_args))
+                cmd.extend(parse_extra_args(extra_args, "kube-diagrams"))
 
             kube_proc = subprocess.run(
                 cmd,
@@ -75,7 +80,7 @@ def generate_from_helmfile(
                 return DiagramResult(
                     success=False,
                     error="kube-diagrams failed",
-                    command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                    command=redact_temp_paths(f"{' '.join(template_cmd)} | {' '.join(cmd)}", temp_helmfile_path, output_path, dot_output_path),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -84,8 +89,8 @@ def generate_from_helmfile(
                 if not os.path.exists(dot_output_path):
                     return DiagramResult(
                         success=False,
-                        error=f"Output file not found: {dot_output_path}",
-                        command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                        error=f"Output file not found: {os.path.basename(dot_output_path)}",
+                        command=redact_temp_paths(f"{' '.join(template_cmd)} | {' '.join(cmd)}", temp_helmfile_path, output_path, dot_output_path),
                         stdout=stdout_output,
                         stderr=stderr_output
                     )
@@ -94,15 +99,15 @@ def generate_from_helmfile(
                     return DiagramResult(
                         success=False,
                         error="dot -Tjson conversion failed (is graphviz installed?).",
-                        command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                        command=redact_temp_paths(f"{' '.join(template_cmd)} | {' '.join(cmd)}", temp_helmfile_path, output_path, dot_output_path),
                         stdout=stdout_output,
                         stderr=stderr_output
                     )
             elif not os.path.exists(output_path):
                 return DiagramResult(
                     success=False,
-                    error=f"Output file not found: {output_path}",
-                    command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                    error=f"Output file not found: {os.path.basename(output_path)}",
+                    command=redact_temp_paths(f"{' '.join(template_cmd)} | {' '.join(cmd)}", temp_helmfile_path, output_path, dot_output_path),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -119,22 +124,15 @@ def generate_from_helmfile(
                 mime_type=MIME_TYPES.get(output_format, "application/octet-stream"),
                 filename=f"helmfile-diagram.{output_format}",
                 message="Helmfile diagram successfully generated.",
-                command=f"{' '.join(template_cmd)} | {' '.join(cmd)}",
+                command=redact_temp_paths(f"{' '.join(template_cmd)} | {' '.join(cmd)}", temp_helmfile_path, output_path, dot_output_path),
                 stdout=stdout_output,
                 stderr=stderr_output
             )
 
-        except ValueError as e:
+        except Exception:
             FileManager.cleanup_files(output_path, dot_output_path)
             return DiagramResult(
                 success=False,
-                error=str(e),
-                command=" ".join(cmd) if 'cmd' in locals() else None
-            )
-        except Exception as e:
-            FileManager.cleanup_files(output_path, dot_output_path)
-            return DiagramResult(
-                success=False,
-                error=str(e),
-                command=" ".join(cmd) if 'cmd' in locals() else None
+                error=log_unexpected_error(logger, "generating diagram from Helmfile"),
+                command=redact_temp_paths(" ".join(cmd), temp_helmfile_path, output_path, dot_output_path) if 'cmd' in locals() else None
             )
