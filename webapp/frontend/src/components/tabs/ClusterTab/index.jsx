@@ -55,9 +55,11 @@ function ClusterTab({ historyContext }) {
   // Viewer synchronization hook for DOT_JSON format
   const { viewerRef, handleViewerLoad } = useViewerSync({ diagram, outputFormat });
 
-  // Cluster connectivity: namespaces, resource types, context, and all related handlers
+  // Cluster connectivity: contexts, namespaces, resource types, and all related handlers
   const {
-    currentContext,
+    contexts,
+    selectedContext,
+    loadingContexts,
     namespaces,
     availableResourceTypes,
     loadingNamespaces,
@@ -67,9 +69,10 @@ function ClusterTab({ historyContext }) {
     filteredResourceTypes,
     commonVisible,
     otherVisible,
-    fetchContext,
+    fetchContexts,
     fetchNamespaces,
     handleRefreshResourceTypes,
+    handleContextChange,
     handleResourceTypeToggle,
     handleSelectCommon,
     handleSelectAll,
@@ -98,7 +101,14 @@ function ClusterTab({ historyContext }) {
     filename,
     progressStep,
     restoreDiagram,
-    buildInput: () => ({ namespace, resourceTypes, allNamespaces, extraArgs, withoutNamespace }),
+    buildInput: () => ({
+      namespace,
+      resourceTypes,
+      allNamespaces,
+      extraArgs,
+      withoutNamespace,
+      context: selectedContext,
+    }),
     buildPreview: () => (allNamespaces ? 'All namespaces' : namespace || 'No namespace selected'),
     restoreInput: (input) => {
       setNamespace(input.namespace || '');
@@ -106,6 +116,7 @@ function ClusterTab({ historyContext }) {
       setAllNamespaces(input.allNamespaces || false);
       setExtraArgs(input.extraArgs || '');
       setWithoutNamespace(input.withoutNamespace || false);
+      if (input.context) handleContextChange(input.context);
     },
   });
 
@@ -118,6 +129,7 @@ function ClusterTab({ historyContext }) {
       outputFormat,
       extraArgs,
       withoutNamespace,
+      context: selectedContext,
     });
   }, [
     generateDiagram,
@@ -126,6 +138,7 @@ function ClusterTab({ historyContext }) {
     allNamespaces,
     outputFormat,
     extraArgs,
+    selectedContext,
     withoutNamespace,
   ]);
 
@@ -148,7 +161,9 @@ function ClusterTab({ historyContext }) {
             errorMessage={errorMessage}
             isSubmitting={isSubmitting}
             onSubmit={handleGenerate}
-            currentContext={currentContext}
+            contexts={contexts}
+            selectedContext={selectedContext}
+            loadingContexts={loadingContexts}
             namespaces={namespaces}
             availableResourceTypes={availableResourceTypes}
             loadingNamespaces={loadingNamespaces}
@@ -158,9 +173,10 @@ function ClusterTab({ historyContext }) {
             filteredResourceTypes={filteredResourceTypes}
             commonVisible={commonVisible}
             otherVisible={otherVisible}
-            fetchContext={fetchContext}
+            fetchContexts={fetchContexts}
             fetchNamespaces={fetchNamespaces}
             handleRefreshResourceTypes={handleRefreshResourceTypes}
+            handleContextChange={handleContextChange}
             handleResourceTypeToggle={handleResourceTypeToggle}
             handleSelectCommon={handleSelectCommon}
             handleSelectAll={handleSelectAll}

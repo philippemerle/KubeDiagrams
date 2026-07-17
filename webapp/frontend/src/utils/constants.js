@@ -33,6 +33,7 @@ export const API_ENDPOINTS = Object.freeze({
   GENERATE_HELMFILE: '/api/generate-helmfile-diagram',
   GENERATE_CLUSTER: '/api/cluster/generate',
   CLUSTER_CONTEXT: '/api/cluster/context',
+  CLUSTER_CONTEXTS: '/api/cluster/contexts',
   CLUSTER_NAMESPACES: '/api/cluster/namespaces',
   CLUSTER_RESOURCE_TYPES: '/api/cluster/resource-types',
   SUBMIT_FEEDBACK: '/api/submit-feedback',

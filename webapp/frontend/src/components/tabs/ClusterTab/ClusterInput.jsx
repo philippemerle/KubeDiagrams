@@ -24,7 +24,9 @@ function ClusterInput({
   isSubmitting,
   onSubmit,
   // Cluster data (from useClusterData via index.jsx)
-  currentContext,
+  contexts,
+  selectedContext,
+  loadingContexts,
   namespaces,
   availableResourceTypes,
   loadingNamespaces,
@@ -34,9 +36,10 @@ function ClusterInput({
   filteredResourceTypes,
   commonVisible,
   otherVisible,
-  fetchContext,
+  fetchContexts,
   fetchNamespaces,
   handleRefreshResourceTypes,
+  handleContextChange,
   handleResourceTypeToggle,
   handleSelectCommon,
   handleSelectAll,
@@ -51,12 +54,37 @@ function ClusterInput({
         <h2 className="text-2xl font-bold">Cluster Resources</h2>
       </div>
 
-      {currentContext && (
-        <p className="text-xs text-gray-400 -mt-2">
-          Context:{' '}
-          <code className="text-green-400 bg-gray-800 px-1.5 py-0.5 rounded">{currentContext}</code>
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-medium text-white">Cluster Context</label>
+          <button
+            type="button"
+            onClick={fetchContexts}
+            disabled={loadingContexts}
+            className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
+          >
+            <RefreshCw className={`w-3 h-3 ${loadingContexts ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
+        <select
+          className="w-full p-3 rounded-lg bg-gray-700 text-white"
+          value={selectedContext}
+          onChange={(e) => handleContextChange(e.target.value)}
+          disabled={loadingContexts || contexts.length === 0}
+        >
+          {contexts.length === 0 && <option value="">No context available</option>}
+          {contexts.map((ctx) => (
+            <option key={ctx.name} value={ctx.name}>
+              {ctx.name}
+              {ctx.current ? ' (current)' : ''}
+            </option>
+          ))}
+        </select>
+        <p className="text-xs text-gray-400 mt-1">
+          Select which kubectl context/cluster to generate the diagram from.
         </p>
-      )}
+      </div>
 
       <div className="space-y-4">
         {/* All Namespaces Checkbox */}
@@ -80,10 +108,7 @@ function ClusterInput({
               <label className="block text-sm font-medium text-white">Namespace</label>
               <button
                 type="button"
-                onClick={() => {
-                  fetchNamespaces();
-                  fetchContext();
-                }}
+                onClick={() => fetchNamespaces()}
                 disabled={loadingNamespaces}
                 className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
               >
@@ -391,7 +416,14 @@ ClusterInput.propTypes = {
   errorMessage: PropTypes.string,
   isSubmitting: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  currentContext: PropTypes.string.isRequired,
+  contexts: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      current: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  selectedContext: PropTypes.string.isRequired,
+  loadingContexts: PropTypes.bool.isRequired,
   namespaces: PropTypes.arrayOf(PropTypes.string).isRequired,
   availableResourceTypes: PropTypes.array.isRequired,
   loadingNamespaces: PropTypes.bool.isRequired,
@@ -401,9 +433,10 @@ ClusterInput.propTypes = {
   filteredResourceTypes: PropTypes.array.isRequired,
   commonVisible: PropTypes.array.isRequired,
   otherVisible: PropTypes.array.isRequired,
-  fetchContext: PropTypes.func.isRequired,
+  fetchContexts: PropTypes.func.isRequired,
   fetchNamespaces: PropTypes.func.isRequired,
   handleRefreshResourceTypes: PropTypes.func.isRequired,
+  handleContextChange: PropTypes.func.isRequired,
   handleResourceTypeToggle: PropTypes.func.isRequired,
   handleSelectCommon: PropTypes.func.isRequired,
   handleSelectAll: PropTypes.func.isRequired,

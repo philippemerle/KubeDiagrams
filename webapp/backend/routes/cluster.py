@@ -7,6 +7,7 @@ from services import (
     get_namespaces,
     get_resource_types,
     get_current_context,
+    get_contexts,
 )
 from utils import InputValidator, ResponseBuilder
 
@@ -22,10 +23,23 @@ def get_context():
     return ResponseBuilder.success({"context": context})
 
 
+@cluster_bp.route('/api/cluster/contexts', methods=['GET'])
+def list_contexts():
+    """Return the list of kubectl contexts configured locally, marking which one is current."""
+    contexts, error = get_contexts()
+    if error:
+        return ResponseBuilder.error(error)
+    return ResponseBuilder.success({
+        "contexts": contexts,
+        "count": len(contexts)
+    })
+
+
 @cluster_bp.route('/api/cluster/namespaces', methods=['GET'])
 def list_namespaces():
     """Return the list of namespaces available in the connected Kubernetes cluster."""
-    namespaces, error = get_namespaces()
+    context = request.args.get('context') or None
+    namespaces, error = get_namespaces(context=context)
     if error:
         return ResponseBuilder.error(error)
     return ResponseBuilder.success({
@@ -37,7 +51,8 @@ def list_namespaces():
 @cluster_bp.route('/api/cluster/resource-types', methods=['GET'])
 def list_resource_types():
     """Return all resource types known by the cluster, tagged with namespace scope and common status."""
-    resource_types, error = get_resource_types()
+    context = request.args.get('context') or None
+    resource_types, error = get_resource_types(context=context)
     if error:
         return ResponseBuilder.error(error)
     return ResponseBuilder.success({
@@ -57,6 +72,7 @@ def generate_cluster_diagram():
     output_format = (data.get('outputFormat') or 'png').lower()
     extra_args = data.get('extraArgs', '')
     without_namespace = data.get('withoutNamespace', False)
+    context = data.get('context') or None
 
     # Log to CSV
     client_ip = request.remote_addr
@@ -67,7 +83,8 @@ def generate_cluster_diagram():
         f"allNamespaces={all_namespaces};"
         f"format={output_format};"
         f"extraArgs={compact_for_log(extra_args)};"
-        f"withoutNamespace={without_namespace}"
+        f"withoutNamespace={without_namespace};"
+        f"context={context}"
     )
     log_to_csv(client_ip, route, params)
 
@@ -96,7 +113,8 @@ def generate_cluster_diagram():
         all_namespaces=all_namespaces,
         output_format=output_format,
         extra_args=extra_args,
-        without_namespace=without_namespace
+        without_namespace=without_namespace,
+        context=context
     )
     
     if result.success:

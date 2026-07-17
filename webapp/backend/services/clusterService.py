@@ -66,10 +66,41 @@ def _run_kubectl(cmd: List[str], timeout: int) -> tuple[Optional[subprocess.Comp
         )
 
 
-def get_namespaces() -> tuple[Optional[List[str]], Optional[str]]:
-    """Retrieve the sorted list of namespace names from the connected Kubernetes cluster via kubectl."""
+def get_contexts() -> tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
+    """Retrieve the list of kubectl contexts configured locally, marking which one is current."""
     try:
-        proc, error = _run_kubectl(["kubectl", "get", "namespaces", "-o", "json"], timeout=20)
+        proc, error = _run_kubectl(["kubectl", "config", "get-contexts", "-o", "name"], timeout=10)
+        if error:
+            return None, error
+        if proc.returncode != 0:
+            error_msg = proc.stderr.strip() if proc.stderr else f"kubectl exited with code {proc.returncode}"
+            return None, _connection_error_message(error_msg, f"kubectl error while fetching contexts: {error_msg[:200]}")
+
+        names = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+        current, _ = get_current_context()
+        return [{"name": name, "current": name == current} for name in names], None
+    except Exception:
+        return None, log_unexpected_error(logger, "fetching contexts")
+
+
+def _is_known_context(context: str) -> bool:
+    """Check context against the real list of locally configured kubectl contexts."""
+    contexts, error = get_contexts()
+    if error or not contexts:
+        return False
+    return any(c["name"] == context for c in contexts)
+
+
+def get_namespaces(context: Optional[str] = None) -> tuple[Optional[List[str]], Optional[str]]:
+    """Retrieve the sorted list of namespace names from the connected Kubernetes cluster via kubectl."""
+    if context and not _is_known_context(context):
+        return None, f"Unknown kubectl context: {context!r}"
+    try:
+        cmd = ["kubectl"]
+        if context:
+            cmd.extend(["--context", context])
+        cmd.extend(["get", "namespaces", "-o", "json"])
+        proc, error = _run_kubectl(cmd, timeout=20)
         if error:
             return None, error
         if proc.returncode != 0:
@@ -83,16 +114,20 @@ def get_namespaces() -> tuple[Optional[List[str]], Optional[str]]:
         return None, log_unexpected_error(logger, "fetching namespaces")
 
 
-def get_resource_types() -> tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
+def get_resource_types(context: Optional[str] = None) -> tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
     """
     Retrieve all resource types known by the cluster via kubectl api-resources.
     Each entry includes name, shortNames, namespaced scope flag, and isCommon flag.
     Common types exclude events and endpoints to avoid noisy intermediate resources.
     """
+    if context and not _is_known_context(context):
+        return None, f"Unknown kubectl context: {context!r}"
     try:
-        proc, error = _run_kubectl(
-            ["kubectl", "api-resources", "--verbs=list", "--no-headers"], timeout=30
-        )
+        cmd = ["kubectl"]
+        if context:
+            cmd.extend(["--context", context])
+        cmd.extend(["api-resources", "--verbs=list", "--no-headers"])
+        proc, error = _run_kubectl(cmd, timeout=30)
         if error:
             return None, error
         if proc.returncode != 0:
@@ -174,12 +209,16 @@ def generate_from_cluster(
     all_namespaces: bool = False,
     output_format: str = "png",
     extra_args: str = "",
-    without_namespace: bool = False
+    without_namespace: bool = False,
+    context: Optional[str] = None
 ) -> DiagramResult:
     """Generate diagram using kubectl-diagrams plugin directly."""
     cmd: List[str] = []
     requested_output = png_output = dot_output = None
     try:
+        if context and not _is_known_context(context):
+            return DiagramResult(success=False, error=f"Unknown kubectl context: {context!r}")
+
         resources_arg = ','.join(resource_types)
         base_name = f"cluster-diagram-{uuid.uuid4().hex[:8]}"
         base_path = os.path.join(tempfile.gettempdir(), base_name)
@@ -187,6 +226,9 @@ def generate_from_cluster(
         dot_output = requested_output.replace(".dot_json", ".dot") if output_format == "dot_json" else None
 
         cmd = ["kubectl-diagrams", resources_arg]
+
+        if context:
+            cmd.extend(["--context", context])
 
         if all_namespaces:
             cmd.append("--all-namespaces")
