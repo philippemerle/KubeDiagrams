@@ -156,7 +156,7 @@ const HELM_CHART_EXAMPLES = [
     name: 'GitLab',
     description: 'GitLab - DevOps platform',
     url: 'http://charts.gitlab.io/gitlab',
-    cliArgs: '--set certmanager-issuer.email=someone@acme.com',
+    cliArgs: '--set certmanager-issuer.email=someone@acme.com --version 9.11.8',
   },
   {
     id: 'mongodb',
