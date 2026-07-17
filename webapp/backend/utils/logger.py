@@ -105,3 +105,22 @@ def get_app_logger(name: str = None) -> logging.Logger:
         name = frame.f_globals.get('__name__', 'app')
 
     return AppLogger.get_logger(name)
+
+
+def log_unexpected_error(logger: logging.Logger, action: str) -> str:
+    """
+    Log the full exception for an unexpected error and return a generic,
+    client-safe message describing it (no internal exception detail).
+
+    Must be called from an except block (uses logger.exception, which
+    requires an active exception context to capture the traceback).
+
+    Args:
+        logger: Logger to record the full exception on
+        action: Short description of what was being done when it occurred
+
+    Returns:
+        str: Generic message safe to return to the client
+    """
+    logger.exception(f"Unexpected error while {action}")
+    return f"Unexpected error while {action}. Check server logs for details."

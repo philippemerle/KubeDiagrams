@@ -28,7 +28,7 @@ export function useFileUpload() {
     const fileName = file.name.toLowerCase();
     const validExtensions = FILE_INPUT.ACCEPT.split(',').map((ext) => ext.trim());
     const hasValidExtension = validExtensions.some((ext) =>
-      fileName.endsWith(ext.replace('*', ''))
+      fileName.endsWith(ext.replaceAll('*', ''))
     );
 
     if (!hasValidExtension) {

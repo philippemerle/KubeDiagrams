@@ -19,7 +19,7 @@ function ExampleSelector({ type, onSelectExample, onSelectCliArgs }) {
         // For Helm Charts, the content is an object with url and cliArgs
         if (type === EXAMPLE_TYPES.HELM_CHART && typeof content === 'object') {
           onSelectExample(content.url);
-          if (onSelectCliArgs && content.cliArgs) {
+          if (onSelectCliArgs) {
             onSelectCliArgs(content.cliArgs);
           }
         } else {

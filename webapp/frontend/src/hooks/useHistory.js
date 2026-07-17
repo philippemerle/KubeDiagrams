@@ -101,21 +101,10 @@ export function useHistory() {
     logger.info('History cleared');
   }, []);
 
-  /**
-   * Get item by ID
-   */
-  const getHistoryItem = useCallback(
-    (id) => {
-      return history.find((item) => item.id === id);
-    },
-    [history]
-  );
-
   return {
     history,
     addToHistory,
     removeFromHistory,
     clearHistory,
-    getHistoryItem,
   };
 }

@@ -3,14 +3,14 @@
  * Main component that orchestrates Manifest diagram generation
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { DEFAULTS } from '../../../utils/constants.js';
 import { looksLikeHelmfile } from '../../../utils/validators.js';
 import { generateManifestDiagram } from '../../../services/diagramApi.js';
 import { useViewerSync } from '../../../hooks/useViewerSync.js';
 import { useFileUpload } from '../../../hooks/useFileUpload.js';
 import { useDiagramGeneration } from '../../../hooks/useDiagramGeneration.js';
+import { useHistorySync } from '../../../hooks/useHistorySync.js';
 import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import ManifestInput from './ManifestInput.jsx';
 import ManifestOutput from './ManifestOutput.jsx';
@@ -19,12 +19,13 @@ import ManifestOutput from './ManifestOutput.jsx';
 function ManifestTab({ historyContext }) {
   // Input states
   const [manifestContent, setManifestContent] = useState('');
-  const [outputFormat, setOutputFormat] = useState(DEFAULTS.OUTPUT_FORMAT);
   const [extraArgs, setExtraArgs] = useState('');
   const [withoutNamespace, setWithoutNamespace] = useState(false);
 
   // Diagram generation hook
   const {
+    outputFormat,
+    handleOutputFormatChange,
     diagram,
     command,
     message,
@@ -38,7 +39,6 @@ function ManifestTab({ historyContext }) {
     progressStep,
     handleSubmit: handleDiagramSubmit,
     setErrorMessage,
-    resetOutput,
     restoreDiagram,
   } = useDiagramGeneration({
     apiFunction: generateManifestDiagram,
@@ -63,68 +63,23 @@ function ManifestTab({ historyContext }) {
   // File upload handler
   const { createFileInputHandler } = useFileUpload();
 
-  // Track previous outputFormat to detect changes
-  const prevOutputFormatRef = useRef(outputFormat);
-  const lastHistoryIdRef = useRef(null);
-
-  // Reset output when output format changes (not on initial render)
-  useEffect(() => {
-    if (prevOutputFormatRef.current !== outputFormat && diagram) {
-      resetOutput();
-    }
-    prevOutputFormatRef.current = outputFormat;
-  }, [outputFormat, diagram, resetOutput]);
-
-  // Save to history when diagram is successfully generated
-  useEffect(() => {
-    if (diagram && progressStep === 'completed' && historyContext) {
-      const historyId = `manifest-${Date.now()}`;
-
-      // Avoid adding the same diagram multiple times
-      if (lastHistoryIdRef.current === historyId) {
-        return;
-      }
-
-      const historyItem = {
-        id: historyId,
-        type: 'manifest',
-        outputFormat,
-        diagram,
-        mimeType,
-        filename,
-        timestamp: new Date().toISOString(),
-        preview: manifestContent.substring(0, 100),
-        input: {
-          manifest: manifestContent,
-          outputFormat,
-          extraArgs,
-          withoutNamespace,
-        },
-      };
-
-      historyContext.addToHistory(historyItem);
-      lastHistoryIdRef.current = historyId;
-    }
-  }, [diagram, progressStep]); // minimal deps — avoids a save loop
-
-  // Restore from history
-  useEffect(() => {
-    if (historyContext?.restoredItem && historyContext.restoredItem.type === 'manifest') {
-      const item = historyContext.restoredItem;
-
-      // Restore all input states
-      setManifestContent(item.input.manifest);
-      setOutputFormat(item.input.outputFormat);
-      setExtraArgs(item.input.extraArgs || '');
-      setWithoutNamespace(item.input.withoutNamespace || false);
-
-      // Restore diagram output using the hook function
-      restoreDiagram(item);
-
-      // Clear the restored item
-      historyContext.clearRestoredItem();
-    }
-  }, [historyContext?.restoredItem, restoreDiagram]);
+  useHistorySync({
+    diagramType: 'manifest',
+    historyContext,
+    outputFormat,
+    diagram,
+    mimeType,
+    filename,
+    progressStep,
+    restoreDiagram,
+    buildInput: () => ({ manifest: manifestContent, outputFormat, extraArgs, withoutNamespace }),
+    buildPreview: () => manifestContent.substring(0, 100),
+    restoreInput: (input) => {
+      setManifestContent(input.manifest || '');
+      setExtraArgs(input.extraArgs || '');
+      setWithoutNamespace(input.withoutNamespace || false);
+    },
+  });
 
   const handleSubmit = () => {
     handleDiagramSubmit({
@@ -141,7 +96,7 @@ function ManifestTab({ historyContext }) {
         manifestContent={manifestContent}
         setManifestContent={setManifestContent}
         outputFormat={outputFormat}
-        setOutputFormat={setOutputFormat}
+        setOutputFormat={handleOutputFormatChange}
         extraArgs={extraArgs}
         setExtraArgs={setExtraArgs}
         withoutNamespace={withoutNamespace}
@@ -183,7 +138,6 @@ function ManifestTab({ historyContext }) {
 ManifestTab.propTypes = {
   historyContext: PropTypes.shape({
     addToHistory: PropTypes.func.isRequired,
-    getHistoryItem: PropTypes.func.isRequired,
     restoredItem: PropTypes.object,
     clearRestoredItem: PropTypes.func.isRequired,
   }),

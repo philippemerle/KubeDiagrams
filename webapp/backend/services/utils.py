@@ -6,7 +6,15 @@ import re
 import shlex
 import subprocess
 
-from constants import TEXT_FORMATS
+from constants import TEXT_FORMATS, MIME_TYPES
+from utils import InputValidator
+
+def redact_temp_paths(text: str, *paths: str) -> str:  
+    for path in paths:
+        if path:
+            text = text.replace(path, os.path.basename(path))
+    return text
+
 
 def has_fatal_error(stdout_txt: str, stderr_txt: str) -> bool:
     """
@@ -22,25 +30,57 @@ def has_fatal_error(stdout_txt: str, stderr_txt: str) -> bool:
     return ("error:" in (stdout_txt or "").lower()) or ("error:" in (stderr_txt or "").lower())
 
 
-def parse_extra_args(extra_args: str) -> list[str]:
+_SAFE_FORMAT_EXTENSIONS = {fmt: fmt for fmt in MIME_TYPES}
+
+
+def get_safe_format_extension(output_format: str) -> str:
     """
-    Parse a string of extra CLI arguments using shell-like tokenization.
+    Look up output_format in a hardcoded allowlist and return the matching
+    literal extension string.
+
+    Args:
+        output_format: Output format to check
+
+    Returns:
+        str: The same format string, sourced from a hardcoded mapping
+
+    Raises:
+        ValueError: If output_format is not in MIME_TYPES
+    """
+    try:
+        return _SAFE_FORMAT_EXTENSIONS[output_format]
+    except KeyError:
+        raise ValueError(f"Unsupported output format: {output_format!r}")
+
+
+def parse_extra_args(extra_args: str, tool: str) -> list[str]:
+    """
+    Parse a string of extra CLI arguments using shell-like tokenization,
+    rejecting any flag not in that tool's allowlist (EXTRA_ARGS_ALLOWED_FLAGS).
 
     Args:
         extra_args: Space-separated argument string (may include quoted tokens)
+        tool: Key into EXTRA_ARGS_ALLOWED_FLAGS identifying the target CLI tool
 
     Returns:
         list[str]: Parsed argument tokens
 
     Raises:
-        ValueError: If the argument string has invalid shell syntax
+        ValueError: If the argument string has invalid shell syntax, or
+            contains a flag not allowed for this tool
     """
     if not extra_args or not extra_args.strip():
         return []
     try:
-        return shlex.split(extra_args.strip())
-    except Exception as e:
-        raise ValueError(f"Invalid extraArgs: {e}")
+        tokens = shlex.split(extra_args.strip())
+    except Exception:
+        raise ValueError("Invalid extraArgs: could not parse the value (check for unmatched quotes).")
+
+    bad_flag = InputValidator.find_disallowed_flag(tokens, tool)
+    if bad_flag:
+        raise ValueError(f"Extra arg flag '{bad_flag}' is not allowed.")
+
+    return tokens
 
 
 def encode_content(content: bytes, output_format: str) -> str:
@@ -124,6 +164,39 @@ def dot_to_dot_json(dot_path: str, dot_json_path: str) -> bool:
         return True
     except Exception:
         return False
+
+
+def dot_to_svg(dot_text: str) -> str | None:
+    """
+    Render DOT source to SVG via `dot -Tsvg`, then fix local icon paths into
+    GitHub CDN URLs. dot embeds icons in the SVG as xlink:href pointing to
+    the absolute local filesystem path used at generation time, which the
+    browser can't resolve.
+
+    Args:
+        dot_text: DOT source text.
+
+    Returns:
+        str | None: The rendered SVG text, or None if the conversion failed.
+    """
+    try:
+        result = subprocess.run(
+            ["dot", "-Tsvg"],
+            input=dot_text,
+            capture_output=True,
+            text=True,
+            check=False
+        )
+        if result.returncode != 0 or not result.stdout:
+            return None
+
+        return re.sub(
+            r'xlink:href="([^"]*resources/[^"]+)"',
+            lambda m: f'xlink:href="{_local_path_to_github_url(m.group(1))}"',
+            result.stdout,
+        )
+    except Exception:
+        return None
 
 
 def enrich_dot_json_with_positions(dot_json_path: str) -> None:

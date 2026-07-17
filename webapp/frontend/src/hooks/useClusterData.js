@@ -1,14 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import {
-  getClusterContext,
+  getClusterContexts,
   getClusterNamespaces,
   getClusterResourceTypes,
 } from '../services/diagramApi.js';
 
 /**
- * Manages cluster connectivity state: namespaces, resource types, and active context.
- * Handles all fetch logic, auto-selection, and resource-type selection handlers.
+ * Manages cluster connectivity state: available kubectl contexts, namespaces,
+ * resource types, and the selected context. Handles all fetch logic,
+ * auto-selection, and resource-type selection handlers.
  *
  * @param {Object} params
  * @param {string[]} params.resourceTypes - Currently selected resource type names
@@ -28,7 +29,9 @@ export function useClusterData({
   setAllNamespaces,
   setErrorMessage,
 }) {
-  const [currentContext, setCurrentContext] = useState('');
+  const [contexts, setContexts] = useState([]);
+  const [selectedContext, setSelectedContext] = useState('');
+  const [loadingContexts, setLoadingContexts] = useState(false);
   const [namespaces, setNamespaces] = useState([]);
   const [availableResourceTypes, setAvailableResourceTypes] = useState([]);
   const [loadingNamespaces, setLoadingNamespaces] = useState(false);
@@ -37,7 +40,7 @@ export function useClusterData({
   const resourceTypesAutoSelectedRef = useRef(false);
 
   useEffect(() => {
-    fetchContext();
+    fetchContexts();
     fetchNamespaces();
     fetchResourceTypes();
   }, []);
@@ -52,21 +55,30 @@ export function useClusterData({
     }
   }, [availableResourceTypes, resourceTypes, setResourceTypes]);
 
-  const fetchContext = async () => {
+  const fetchContexts = async () => {
+    setLoadingContexts(true);
     try {
-      const response = await getClusterContext();
-      if (response.ok && response.data?.context) {
-        setCurrentContext(response.data.context);
+      const response = await getClusterContexts();
+      if (response.ok && response.data?.contexts) {
+        setContexts(response.data.contexts);
+        setSelectedContext((prev) => {
+          if (prev && response.data.contexts.some((c) => c.name === prev)) return prev;
+          const current = response.data.contexts.find((c) => c.current);
+          return current?.name || response.data.contexts[0]?.name || '';
+        });
       }
     } catch {
-      // Silent — context is informational, not blocking
+      // Silent — context list is informational, not blocking
+    } finally {
+      setLoadingContexts(false);
     }
   };
 
-  const fetchNamespaces = async () => {
+  const fetchNamespaces = async (contextOverride) => {
+    const context = contextOverride !== undefined ? contextOverride : selectedContext;
     setLoadingNamespaces(true);
     try {
-      const response = await getClusterNamespaces();
+      const response = await getClusterNamespaces(context);
       if (response.ok && response.data?.namespaces) {
         setNamespaces(response.data.namespaces);
       } else {
@@ -99,10 +111,11 @@ export function useClusterData({
     }
   };
 
-  const fetchResourceTypes = async () => {
+  const fetchResourceTypes = async (contextOverride) => {
+    const context = contextOverride !== undefined ? contextOverride : selectedContext;
     setLoadingResourceTypes(true);
     try {
-      const response = await getClusterResourceTypes();
+      const response = await getClusterResourceTypes(context);
       if (response.ok && response.data?.resourceTypes) {
         setAvailableResourceTypes(response.data.resourceTypes);
       } else {
@@ -124,6 +137,15 @@ export function useClusterData({
     } finally {
       setLoadingResourceTypes(false);
     }
+  };
+
+  const handleContextChange = (newContext) => {
+    setSelectedContext(newContext);
+    setNamespace('');
+    setResourceTypes([]);
+    resourceTypesAutoSelectedRef.current = false;
+    fetchNamespaces(newContext);
+    fetchResourceTypes(newContext);
   };
 
   const handleResourceTypeToggle = (type) => {
@@ -201,10 +223,12 @@ export function useClusterData({
 
   return {
     // Data
-    currentContext,
+    contexts,
+    selectedContext,
     namespaces,
     availableResourceTypes,
     // Loading flags
+    loadingContexts,
     loadingNamespaces,
     loadingResourceTypes,
     // Search / filtered views
@@ -214,10 +238,11 @@ export function useClusterData({
     commonVisible,
     otherVisible,
     // Fetch actions
-    fetchContext,
+    fetchContexts,
     fetchNamespaces,
     handleRefreshResourceTypes,
     // Selection handlers
+    handleContextChange,
     handleResourceTypeToggle,
     handleSelectCommon,
     handleSelectAll,

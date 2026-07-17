@@ -7,9 +7,12 @@ import tempfile
 from typing import List, Optional, Dict, Any
 
 from constants import MIME_TYPES
+from utils import get_app_logger, log_unexpected_error
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json, redact_temp_paths
+
+logger = get_app_logger(__name__)
 
 COMMON_RESOURCE_TYPES = frozenset({
     'pods', 'services', 'deployments', 'replicasets', 'statefulsets',
@@ -33,68 +36,104 @@ _CANNOT_REACH_API = (
 )
 
 
-def _raise_connection_error(error_msg: str, fallback_msg: str) -> None:
-    """Raise RuntimeError with a user-friendly message based on kubectl's connection error output."""
+def _connection_error_message(error_msg: str, fallback_msg: str) -> str:
+    """Return a user-friendly message based on kubectl's connection error output."""
     if "connect: no route to host" in error_msg or "dial tcp" in error_msg:
-        raise RuntimeError(
+        return (
             "Cannot reach the Kubernetes API server (no route to host). "
             "Start your cluster (e.g. minikube start, kind create cluster) "
             "and verify your kubeconfig with: kubectl config current-context"
         )
     if "Unable to connect to the server" in error_msg:
-        raise RuntimeError(_CANNOT_REACH_API)
+        return _CANNOT_REACH_API
     if "connection refused" in error_msg.lower():
-        raise RuntimeError(
+        return (
             "Connection to the Kubernetes API server was refused. "
             "Make sure your cluster is running and the API server is accessible."
         )
-    raise RuntimeError(fallback_msg)
+    return fallback_msg
 
 
-def _run_kubectl(cmd: List[str], timeout: int) -> subprocess.CompletedProcess:
-    """
-    Run a kubectl command and return the completed process.
-    Raises RuntimeError if kubectl is not installed or the command times out.
-    CalledProcessError propagates for the caller to handle context-specifically.
-    """
+def _run_kubectl(cmd: List[str], timeout: int) -> tuple[Optional[subprocess.CompletedProcess], Optional[str]]:
     try:
-        return subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=timeout)
+        return subprocess.run(cmd, check=False, capture_output=True, text=True, timeout=timeout), None
     except FileNotFoundError:
-        raise RuntimeError(_KUBECTL_NOT_FOUND)
+        return None, _KUBECTL_NOT_FOUND
     except subprocess.TimeoutExpired:
-        raise RuntimeError(
+        return None, (
             f"kubectl timed out after {timeout}s. "
             "Check that your cluster is running and reachable, then try again."
         )
 
 
-def get_namespaces() -> List[str]:
-    """Retrieve the sorted list of namespace names from the connected Kubernetes cluster via kubectl."""
+def get_contexts() -> tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
+    """Retrieve the list of kubectl contexts configured locally, marking which one is current."""
     try:
-        proc = _run_kubectl(["kubectl", "get", "namespaces", "-o", "json"], timeout=20)
+        proc, error = _run_kubectl(["kubectl", "config", "get-contexts", "-o", "name"], timeout=10)
+        if error:
+            return None, error
+        if proc.returncode != 0:
+            error_msg = proc.stderr.strip() if proc.stderr else f"kubectl exited with code {proc.returncode}"
+            return None, _connection_error_message(error_msg, f"kubectl error while fetching contexts: {error_msg[:200]}")
+
+        names = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+        current, _ = get_current_context()
+        return [{"name": name, "current": name == current} for name in names], None
+    except Exception:
+        return None, log_unexpected_error(logger, "fetching contexts")
+
+
+def _is_known_context(context: str) -> bool:
+    """Check context against the real list of locally configured kubectl contexts."""
+    contexts, error = get_contexts()
+    if error or not contexts:
+        return False
+    return any(c["name"] == context for c in contexts)
+
+
+def get_namespaces(context: Optional[str] = None) -> tuple[Optional[List[str]], Optional[str]]:
+    """Retrieve the sorted list of namespace names from the connected Kubernetes cluster via kubectl."""
+    if context and not _is_known_context(context):
+        return None, f"Unknown kubectl context: {context!r}"
+    try:
+        cmd = ["kubectl"]
+        if context:
+            cmd.extend(["--context", context])
+        cmd.extend(["get", "namespaces", "-o", "json"])
+        proc, error = _run_kubectl(cmd, timeout=20)
+        if error:
+            return None, error
+        if proc.returncode != 0:
+            error_msg = proc.stderr.strip() if proc.stderr else f"kubectl exited with code {proc.returncode}"
+            return None, _connection_error_message(error_msg, f"kubectl error while fetching namespaces: {error_msg[:200]}")
         result = json.loads(proc.stdout)
-        return sorted([item["metadata"]["name"] for item in result.get("items", [])])
-    except subprocess.CalledProcessError as e:
-        error_msg = e.stderr.strip() if e.stderr else str(e)
-        _raise_connection_error(error_msg, f"kubectl error while fetching namespaces: {error_msg[:200]}")
-    except RuntimeError:
-        raise
-    except json.JSONDecodeError as e:
-        raise RuntimeError(f"Could not parse kubectl output: {str(e)}")
-    except Exception as e:
-        raise RuntimeError(f"Unexpected error while fetching namespaces: {str(e)}")
+        return sorted([item["metadata"]["name"] for item in result.get("items", [])]), None
+    except json.JSONDecodeError:
+        return None, log_unexpected_error(logger, "parsing kubectl output")
+    except Exception:
+        return None, log_unexpected_error(logger, "fetching namespaces")
 
 
-def get_resource_types() -> List[Dict[str, Any]]:
+def get_resource_types(context: Optional[str] = None) -> tuple[Optional[List[Dict[str, Any]]], Optional[str]]:
     """
     Retrieve all resource types known by the cluster via kubectl api-resources.
     Each entry includes name, shortNames, namespaced scope flag, and isCommon flag.
     Common types exclude events and endpoints to avoid noisy intermediate resources.
     """
+    if context and not _is_known_context(context):
+        return None, f"Unknown kubectl context: {context!r}"
     try:
-        proc = _run_kubectl(
-            ["kubectl", "api-resources", "--verbs=list", "--no-headers"], timeout=30
-        )
+        cmd = ["kubectl"]
+        if context:
+            cmd.extend(["--context", context])
+        cmd.extend(["api-resources", "--verbs=list", "--no-headers"])
+        proc, error = _run_kubectl(cmd, timeout=30)
+        if error:
+            return None, error
+        if proc.returncode != 0:
+            error_msg = proc.stderr.strip() if proc.stderr else f"kubectl exited with code {proc.returncode}"
+            return None, _connection_error_message(error_msg, f"kubectl error while fetching resource types: {error_msg[:200]}")
+
         resources = []
         seen = set()
 
@@ -123,46 +162,42 @@ def get_resource_types() -> List[Dict[str, Any]]:
             })
 
         resources.sort(key=lambda x: (not x['isCommon'], x['name']))
-        return resources
-    except subprocess.CalledProcessError as e:
-        error_msg = e.stderr.strip() if e.stderr else str(e)
-        _raise_connection_error(error_msg, f"kubectl error while fetching resource types: {error_msg[:200]}")
-    except RuntimeError:
-        raise
-    except Exception as e:
-        raise RuntimeError(f"Unexpected error while fetching resource types: {str(e)}")
+        return resources, None
+    except Exception:
+        return None, log_unexpected_error(logger, "fetching resource types")
 
 
-def get_current_context() -> str:
+def get_current_context() -> tuple[Optional[str], Optional[str]]:
     """Return the name of the currently active kubectl context."""
     try:
-        proc = _run_kubectl(["kubectl", "config", "current-context"], timeout=5)
-        return proc.stdout.strip()
-    except subprocess.CalledProcessError as e:
-        error_msg = e.stderr.strip() if e.stderr else str(e)
-        raise RuntimeError(f"No active kubectl context found: {error_msg}")
-    except RuntimeError:
-        raise
-    except Exception as e:
-        raise RuntimeError(f"Unexpected error while fetching context: {str(e)}")
+        proc, error = _run_kubectl(["kubectl", "config", "current-context"], timeout=5)
+        if error:
+            return None, error
+        if proc.returncode != 0:
+            error_msg = proc.stderr.strip() if proc.stderr else f"kubectl exited with code {proc.returncode}"
+            return None, f"No active kubectl context found: {error_msg}"
+        return proc.stdout.strip(), None
+    except Exception:
+        return None, log_unexpected_error(logger, "fetching context")
 
 
-def _make_diagrams_error(stdout: str, stderr: str, cmd: List[str]) -> DiagramResult:
+def _make_diagrams_error(stdout: str, stderr: str, cmd: List[str], *paths: str) -> DiagramResult:
     """Return a DiagramResult describing why kubectl-diagrams failed."""
+    command = redact_temp_paths(" ".join(cmd), *paths)
     if "Unable to connect" in stderr or "connect: no route to host" in stderr:
         return DiagramResult(
             success=False,
             error="Cannot reach the Kubernetes API server. "
                   "Start your cluster (e.g. minikube start, kind create cluster) "
                   "and verify your kubeconfig with: kubectl config current-context",
-            command=" ".join(cmd),
+            command=command,
             stdout=stdout,
             stderr=stderr,
         )
     return DiagramResult(
         success=False,
         error="kubectl-diagrams failed. See command output below.",
-        command=" ".join(cmd),
+        command=command,
         stdout=stdout,
         stderr=stderr,
     )
@@ -174,11 +209,16 @@ def generate_from_cluster(
     all_namespaces: bool = False,
     output_format: str = "png",
     extra_args: str = "",
-    without_namespace: bool = False
+    without_namespace: bool = False,
+    context: Optional[str] = None
 ) -> DiagramResult:
     """Generate diagram using kubectl-diagrams plugin directly."""
     cmd: List[str] = []
+    requested_output = png_output = dot_output = None
     try:
+        if context and not _is_known_context(context):
+            return DiagramResult(success=False, error=f"Unknown kubectl context: {context!r}")
+
         resources_arg = ','.join(resource_types)
         base_name = f"cluster-diagram-{uuid.uuid4().hex[:8]}"
         base_path = os.path.join(tempfile.gettempdir(), base_name)
@@ -186,6 +226,9 @@ def generate_from_cluster(
         dot_output = requested_output.replace(".dot_json", ".dot") if output_format == "dot_json" else None
 
         cmd = ["kubectl-diagrams", resources_arg]
+
+        if context:
+            cmd.extend(["--context", context])
 
         if all_namespaces:
             cmd.append("--all-namespaces")
@@ -201,21 +244,21 @@ def generate_from_cluster(
             cmd.append("--without-namespace")
 
         if extra_args.strip():
-            cmd.extend(parse_extra_args(extra_args))
+            cmd.extend(parse_extra_args(extra_args, "kubectl-diagrams"))
 
         proc = subprocess.run(cmd, check=False, capture_output=True, text=True, timeout=60)
         stdout_output = proc.stdout or ""
         stderr_output = proc.stderr or ""
 
         if proc.returncode != 0 or has_fatal_error(stdout_output, stderr_output):
-            return _make_diagrams_error(stdout_output, stderr_output, cmd)
+            return _make_diagrams_error(stdout_output, stderr_output, cmd, requested_output, png_output, dot_output)
 
         if output_format == "dot_json":
             if not os.path.exists(dot_output):
                 return DiagramResult(
                     success=False,
-                    error=f"Output file not found: {dot_output}",
-                    command=" ".join(cmd),
+                    error=f"Output file not found: {os.path.basename(dot_output)}",
+                    command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -224,7 +267,7 @@ def generate_from_cluster(
                 return DiagramResult(
                     success=False,
                     error="dot -Tjson conversion failed (is graphviz installed?).",
-                    command=" ".join(cmd),
+                    command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -234,8 +277,8 @@ def generate_from_cluster(
             if output_info is None:
                 return DiagramResult(
                     success=False,
-                    error=f"Output file not found: {requested_output}",
-                    command=" ".join(cmd),
+                    error=f"Output file not found: {os.path.basename(requested_output)}",
+                    command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -251,7 +294,7 @@ def generate_from_cluster(
             mime_type=MIME_TYPES.get(produced_format, "application/octet-stream"),
             filename=f"{base_name}.{produced_format}",
             message="Diagram successfully generated from cluster resources using kubectl-diagrams.",
-            command=" ".join(cmd),
+            command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
             stdout=stdout_output,
             stderr=stderr_output
         )
@@ -268,11 +311,11 @@ def generate_from_cluster(
         return DiagramResult(
             success=False,
             error="Command timed out. The cluster might be slow or unresponsive.",
-            command=" ".join(cmd) or "kubectl-diagrams"
+            command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output) or "kubectl-diagrams"
         )
-    except Exception as e:
+    except Exception:
         return DiagramResult(
             success=False,
-            error=f"Unexpected error: {str(e)}",
-            command=" ".join(cmd) or "kubectl-diagrams"
+            error=log_unexpected_error(logger, "generating diagram from cluster"),
+            command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output) or "kubectl-diagrams"
         )

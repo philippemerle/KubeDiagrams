@@ -3,14 +3,14 @@
  * Main component that orchestrates HelmFile diagram generation
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { DEFAULTS } from '../../../utils/constants.js';
 import { looksLikeManifest } from '../../../utils/validators.js';
 import { generateHelmfileDiagram } from '../../../services/diagramApi.js';
 import { useViewerSync } from '../../../hooks/useViewerSync.js';
 import { useFileUpload } from '../../../hooks/useFileUpload.js';
 import { useDiagramGeneration } from '../../../hooks/useDiagramGeneration.js';
+import { useHistorySync } from '../../../hooks/useHistorySync.js';
 import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import HelmFileInput from './HelmFileInput.jsx';
 import HelmFileOutput from './HelmFileOutput.jsx';
@@ -19,12 +19,13 @@ import ProgressBar from '../../common/ProgressBar.jsx';
 function HelmFileTab({ historyContext }) {
   // Input states
   const [helmfileContent, setHelmfileContent] = useState('');
-  const [outputFormat, setOutputFormat] = useState(DEFAULTS.OUTPUT_FORMAT);
   const [extraArgs, setExtraArgs] = useState('');
   const [withoutNamespace, setWithoutNamespace] = useState(false);
 
   // Diagram generation hook
   const {
+    outputFormat,
+    handleOutputFormatChange,
     diagram,
     command,
     message,
@@ -38,7 +39,6 @@ function HelmFileTab({ historyContext }) {
     progressStep,
     handleSubmit: handleDiagramSubmit,
     setErrorMessage,
-    resetOutput,
     restoreDiagram,
   } = useDiagramGeneration({
     apiFunction: generateHelmfileDiagram,
@@ -60,68 +60,23 @@ function HelmFileTab({ historyContext }) {
   // File upload handler
   const { createFileInputHandler } = useFileUpload();
 
-  // Track previous outputFormat to detect changes
-  const prevOutputFormatRef = useRef(outputFormat);
-  const lastHistoryIdRef = useRef(null);
-
-  // Reset output when output format changes (not on initial render)
-  useEffect(() => {
-    if (prevOutputFormatRef.current !== outputFormat && diagram) {
-      resetOutput();
-    }
-    prevOutputFormatRef.current = outputFormat;
-  }, [outputFormat, diagram, resetOutput]);
-
-  // Save to history when diagram is successfully generated
-  useEffect(() => {
-    if (diagram && progressStep === 'completed' && historyContext) {
-      const historyId = `helmfile-${Date.now()}`;
-
-      // Avoid adding the same diagram multiple times
-      if (lastHistoryIdRef.current === historyId) {
-        return;
-      }
-
-      const historyItem = {
-        id: historyId,
-        type: 'helmfile',
-        outputFormat,
-        diagram,
-        mimeType,
-        filename,
-        timestamp: new Date().toISOString(),
-        preview: helmfileContent.substring(0, 100),
-        input: {
-          helmfile: helmfileContent,
-          outputFormat,
-          extraArgs,
-          withoutNamespace,
-        },
-      };
-
-      historyContext.addToHistory(historyItem);
-      lastHistoryIdRef.current = historyId;
-    }
-  }, [diagram, progressStep]); // minimal deps — avoids a save loop
-
-  // Restore from history
-  useEffect(() => {
-    if (historyContext?.restoredItem && historyContext.restoredItem.type === 'helmfile') {
-      const item = historyContext.restoredItem;
-
-      // Restore all input states
-      setHelmfileContent(item.input.helmfile);
-      setOutputFormat(item.input.outputFormat);
-      setExtraArgs(item.input.extraArgs || '');
-      setWithoutNamespace(item.input.withoutNamespace || false);
-
-      // Restore diagram output
-      restoreDiagram(item);
-
-      // Clear the restored item
-      historyContext.clearRestoredItem();
-    }
-  }, [historyContext?.restoredItem, restoreDiagram]);
+  useHistorySync({
+    diagramType: 'helmfile',
+    historyContext,
+    outputFormat,
+    diagram,
+    mimeType,
+    filename,
+    progressStep,
+    restoreDiagram,
+    buildInput: () => ({ helmfile: helmfileContent, outputFormat, extraArgs, withoutNamespace }),
+    buildPreview: () => helmfileContent.substring(0, 100),
+    restoreInput: (input) => {
+      setHelmfileContent(input.helmfile || '');
+      setExtraArgs(input.extraArgs || '');
+      setWithoutNamespace(input.withoutNamespace || false);
+    },
+  });
 
   const handleSubmit = () => {
     handleDiagramSubmit({
@@ -138,7 +93,7 @@ function HelmFileTab({ historyContext }) {
         helmfileContent={helmfileContent}
         setHelmfileContent={setHelmfileContent}
         outputFormat={outputFormat}
-        setOutputFormat={setOutputFormat}
+        setOutputFormat={handleOutputFormatChange}
         extraArgs={extraArgs}
         setExtraArgs={setExtraArgs}
         withoutNamespace={withoutNamespace}
@@ -180,7 +135,6 @@ function HelmFileTab({ historyContext }) {
 HelmFileTab.propTypes = {
   historyContext: PropTypes.shape({
     addToHistory: PropTypes.func.isRequired,
-    getHistoryItem: PropTypes.func.isRequired,
     restoredItem: PropTypes.object,
     clearRestoredItem: PropTypes.func.isRequired,
   }),

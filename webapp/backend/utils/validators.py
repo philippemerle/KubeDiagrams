@@ -1,7 +1,8 @@
 """Validation of user inputs."""
 import re
+import shlex
 from typing import Optional, Tuple
-from constants import MANIFEST_RE, KIND_RE
+from constants import MANIFEST_RE, KIND_RE, EXTRA_ARGS_ALLOWED_FLAGS
 
 
 class ValidationError(Exception):
@@ -12,12 +13,17 @@ class ValidationError(Exception):
 class InputValidator:
     """Validator for user inputs."""
 
-    SUPPORTED_FORMATS = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'pdf', 'dot', 'dot_json', 'drawio']
+    SUPPORTED_FORMATS = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'pdf', 'dot', 'dot_json', 'drawio', 'mermaid', 'd2']
 
-    # Valid Pattern for url
-    HELM_URL_PATTERN = re.compile(
-        r'^(https?://|oci://|file://|[a-zA-Z0-9\-_]+/[a-zA-Z0-9\-_]+)'
-    )
+    HELM_SCHEME_URL_PATTERN = re.compile(r'^(https?|oci|file)://[a-zA-Z0-9\-_./:~]*$')
+    HELM_CHART_REF_PATTERN = re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9\-_]*/[a-zA-Z0-9\-_]+$')
+
+    @classmethod
+    def is_valid_helm_url(cls, url: str) -> bool:
+        return bool(
+            cls.HELM_SCHEME_URL_PATTERN.fullmatch(url)
+            or cls.HELM_CHART_REF_PATTERN.fullmatch(url)
+        )
 
     @classmethod
     def validate_manifest(cls, content: str) -> Tuple[bool, Optional[str]]:
@@ -83,7 +89,7 @@ class InputValidator:
         url = url.strip()
 
         # Verify the helm url pattern
-        if not cls.HELM_URL_PATTERN.match(url):
+        if not cls.is_valid_helm_url(url):
             return False, "Invalid Helm chart URL format. Must start with http://, https://, oci://, file://, or be a chart reference."
 
         return True, None
@@ -109,13 +115,35 @@ class InputValidator:
 
         return True, None
 
-    @classmethod
-    def validate_extra_args(cls, args: str) -> Tuple[bool, Optional[str]]:
+    @staticmethod
+    def find_disallowed_flag(tokens: list, tool: str) -> Optional[str]:
         """
-        Validate extra args.
+        Return the first token that looks like a CLI flag not in that tool's
+        allowlist (EXTRA_ARGS_ALLOWED_FLAGS), or None if all tokens are allowed.
+
+        Args:
+            tokens: Already-tokenized extra args (see shlex.split)
+            tool: Key into EXTRA_ARGS_ALLOWED_FLAGS identifying the target CLI tool
+
+        Returns:
+            Optional[str]: The disallowed flag, or None if all tokens are allowed
+        """
+        allowed_flags = EXTRA_ARGS_ALLOWED_FLAGS[tool]
+        for token in tokens:
+            if token.startswith('-'):
+                flag = token.split('=', 1)[0]
+                if flag not in allowed_flags:
+                    return flag
+        return None
+
+    @classmethod
+    def validate_extra_args(cls, args: str, tool: str) -> Tuple[bool, Optional[str]]:
+        """
+        Validate extra args against the allowlist of flags for the given tool.
 
         Args:
             args: extra_args
+            tool: Key into EXTRA_ARGS_ALLOWED_FLAGS identifying the target CLI tool
 
         Returns:
             Tuple[bool, Optional[str]]: (is_valid, error_message)
@@ -123,10 +151,18 @@ class InputValidator:
         if not args or not args.strip():
             return True, None
 
-        dangerous_chars = [';', '&', '|', '`', '$', '(', ')']
-        for char in dangerous_chars:
-            if char in args:
-                return False, f"Extra args contain dangerous character '{char}'"
+        try:
+            tokens = shlex.split(args.strip())
+        except ValueError:
+            return False, "Invalid extraArgs: could not parse the value (check for unmatched quotes)."
+
+        bad_flag = cls.find_disallowed_flag(tokens, tool)
+        if bad_flag:
+            allowed_flags = EXTRA_ARGS_ALLOWED_FLAGS[tool]
+            return False, (
+                f"Extra arg flag '{bad_flag}' is not allowed. "
+                f"Allowed flags: {', '.join(sorted(allowed_flags))}"
+            )
 
         return True, None
 
@@ -181,7 +217,6 @@ class InputValidator:
         helmfile_keys = ["\nreleases:", "\nrepositories:", "\nhelmdefaults:", "\nenvironments:", "\ntemplates:"]
         return any(key in t for key in helmfile_keys)
 
-    # TODO: Not used yet
     @classmethod
     def sanitize_filename(cls, filename: str) -> str:
         """

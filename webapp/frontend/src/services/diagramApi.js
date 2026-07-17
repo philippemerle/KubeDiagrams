@@ -158,6 +158,7 @@ export async function generateHelmfileDiagram({
  * @param {string} params.outputFormat - Output format (png, jpg, svg, pdf, dot, dot_json)
  * @param {string} [params.extraArgs] - Additional CLI arguments
  * @param {boolean} [params.withoutNamespace] - Generate without namespace
+ * @param {string} [params.context] - kubectl context to use (defaults to the current one)
  * @returns {Promise<Object>} Response with diagram data
  */
 export async function generateClusterDiagram({
@@ -167,12 +168,14 @@ export async function generateClusterDiagram({
   outputFormat,
   extraArgs = '',
   withoutNamespace = false,
+  context = '',
 }) {
   logger.debug('Requesting Cluster diagram generation', {
     namespace,
     allNamespaces,
     outputFormat,
     withoutNamespace,
+    context,
   });
 
   const response = await apiFetch(API_ENDPOINTS.GENERATE_CLUSTER, {
@@ -183,6 +186,7 @@ export async function generateClusterDiagram({
       outputFormat,
       extraArgs,
       withoutNamespace,
+      context,
     }),
   });
 
@@ -226,14 +230,45 @@ export async function getClusterContext() {
 }
 
 /**
- * Get list of namespaces from Kubernetes cluster
- * @returns {Promise<Object>} Response with namespaces list
+ * Get the list of kubectl contexts configured locally, each tagged with
+ * whether it's the current one.
+ * @returns {Promise<Object>} Response with contexts list
  */
-export async function getClusterNamespaces() {
-  logger.debug('Fetching cluster namespaces');
+export async function getClusterContexts() {
+  logger.debug('Fetching kubectl contexts');
 
   try {
-    const response = await fetch(API_ENDPOINTS.CLUSTER_NAMESPACES, {
+    const response = await fetch(API_ENDPOINTS.CLUSTER_CONTEXTS, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      logger.info('kubectl contexts fetched', { count: data?.contexts?.length || 0 });
+    }
+
+    return { ok: response.ok, status: response.status, data };
+  } catch (error) {
+    logger.error('Network error fetching kubectl contexts', { error });
+    throw error;
+  }
+}
+
+/**
+ * Get list of namespaces from Kubernetes cluster
+ * @param {string} [context] - kubectl context to query (defaults to the current one)
+ * @returns {Promise<Object>} Response with namespaces list
+ */
+export async function getClusterNamespaces(context = '') {
+  logger.debug('Fetching cluster namespaces', { context });
+
+  try {
+    const url = context
+      ? `${API_ENDPOINTS.CLUSTER_NAMESPACES}?context=${encodeURIComponent(context)}`
+      : API_ENDPOINTS.CLUSTER_NAMESPACES;
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -269,13 +304,17 @@ export async function getClusterNamespaces() {
  * Each entry includes name, shortNames, namespaced scope, and isCommon flag.
  * The list is fetched once on tab open and cached in the component — use the
  * refresh button to re-query the cluster.
+ * @param {string} [context] - kubectl context to query (defaults to the current one)
  * @returns {Promise<Object>} Response with resource types list
  */
-export async function getClusterResourceTypes() {
-  logger.debug('Fetching cluster resource types');
+export async function getClusterResourceTypes(context = '') {
+  logger.debug('Fetching cluster resource types', { context });
 
   try {
-    const response = await fetch(API_ENDPOINTS.CLUSTER_RESOURCE_TYPES, {
+    const url = context
+      ? `${API_ENDPOINTS.CLUSTER_RESOURCE_TYPES}?context=${encodeURIComponent(context)}`
+      : API_ENDPOINTS.CLUSTER_RESOURCE_TYPES;
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -339,6 +378,28 @@ export async function submitFeedback({ note, comment, diagramType }) {
 }
 
 /**
+ * Render DOT source (already returned by a previous generate call) to SVG
+ * @param {string} dot - DOT source text
+ * @returns {Promise<Object>} Response with { svg } data
+ */
+export async function renderDotToSvg(dot) {
+  logger.debug('Requesting DOT-to-SVG render');
+
+  const response = await apiFetch(API_ENDPOINTS.RENDER_DOT_SVG, {
+    body: JSON.stringify({ dot }),
+  });
+
+  if (!response.ok) {
+    logger.warn('Failed to render DOT to SVG', {
+      statusCode: response.status,
+      error: response.data?.error,
+    });
+  }
+
+  return response;
+}
+
+/**
  * Check if output contains fatal errors
  * @param {string} stdout - Standard output
  * @param {string} stderr - Standard error
@@ -357,8 +418,10 @@ export default {
   generateHelmfileDiagram,
   generateClusterDiagram,
   getClusterContext,
+  getClusterContexts,
   getClusterNamespaces,
   getClusterResourceTypes,
   submitFeedback,
   hasFatalErrors,
+  renderDotToSvg,
 };

@@ -1,12 +1,17 @@
 """Service for generating diagrams from Helm charts."""
 import subprocess
 import os
+import tempfile
+import uuid
 from urllib.parse import urlparse
 
 from constants import MIME_TYPES
+from utils import InputValidator, get_app_logger, log_unexpected_error
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json, get_safe_format_extension, redact_temp_paths
+
+logger = get_app_logger(__name__)
 
 
 def generate_from_helm(
@@ -25,23 +30,34 @@ def generate_from_helm(
     Returns:
         DiagramResult: Result of the generation
     """
-    # Extract base name for output file
+    safe_ext = get_safe_format_extension(output_format)
+
+    if not InputValidator.is_valid_helm_url(chart_url):
+        raise ValueError("Invalid Helm chart URL format.")
+
+    # Friendly display name derived from the chart, sanitized. Used only for
+    # the filename metadata returned to the client, never for a real path.
     parsed = urlparse(chart_url)
-    base_name = os.path.basename(parsed.path).replace(".tgz", "").replace(".tar.gz", "")
+    display_name = os.path.basename(parsed.path).replace(".tgz", "").replace(".tar.gz", "")
 
     # OCI URLs use the last path segment as chart name
     if chart_url.startswith('oci://'):
-        base_name = chart_url.rstrip('/').split('/')[-1]
+        display_name = chart_url.rstrip('/').split('/')[-1]
 
-    dot_output = os.path.abspath(f"{base_name}.dot") if output_format == "dot_json" else None
-    requested_output = os.path.abspath(f"{base_name}.{output_format}")
-    png_output = os.path.abspath(f"{base_name}.png")
+    display_name = InputValidator.sanitize_filename(display_name) or "chart"
+
+    # Actual server-side output path: fully random, no link to user input.
+    output_base = os.path.join(tempfile.gettempdir(), f"helm-diagram-{uuid.uuid4().hex}")
+
+    dot_output = f"{output_base}.dot" if output_format == "dot_json" else None
+    requested_output = f"{output_base}.{safe_ext}"
+    png_output = f"{output_base}.png"
 
     try:
         # Command uses helm-diagrams instead of helm
         cmd = ["helm-diagrams", chart_url, "-o", dot_output or requested_output]
         if extra_args.strip():
-            cmd.extend(parse_extra_args(extra_args))
+            cmd.extend(parse_extra_args(extra_args, "helm-diagrams"))
 
         # Run the command and capture output
         proc = subprocess.run(cmd, check=False, capture_output=True, text=True)
@@ -79,7 +95,7 @@ def generate_from_helm(
             return DiagramResult(
                 success=False,
                 error=main_error,
-                command=" ".join(cmd),
+                command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
                 stdout=stdout_output,
                 stderr=stderr_output
             )
@@ -89,8 +105,8 @@ def generate_from_helm(
             if not os.path.exists(dot_output):
                 return DiagramResult(
                     success=False,
-                    error=f"Output file not found: {dot_output}",
-                    command=" ".join(cmd),
+                    error=f"Output file not found: {os.path.basename(dot_output)}",
+                    command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -99,7 +115,7 @@ def generate_from_helm(
                 return DiagramResult(
                     success=False,
                     error="dot -Tjson conversion failed (is graphviz installed?).",
-                    command=" ".join(cmd),
+                    command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -111,7 +127,7 @@ def generate_from_helm(
                 return DiagramResult(
                     success=False,
                     error=f"Output file not found (looked for {os.path.basename(requested_output)} and {os.path.basename(png_output)}).",
-                    command=" ".join(cmd),
+                    command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -131,25 +147,18 @@ def generate_from_helm(
             success=True,
             diagram=encoded,
             mime_type=MIME_TYPES.get(produced_format, "application/octet-stream"),
-            filename=f"{base_name}.{produced_format}",
+            filename=f"{display_name}.{produced_format}",
             message=message.strip(),
-            command=" ".join(cmd),
+            command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output),
             stdout=stdout_output,
             stderr=stderr_output
         )
 
-    except ValueError as e:
+    except Exception:
         FileManager.cleanup_files(requested_output, png_output, dot_output)
         return DiagramResult(
             success=False,
-            error=str(e),
-            command=" ".join(cmd) if 'cmd' in locals() else None
-        )
-    except Exception as e:
-        FileManager.cleanup_files(requested_output, png_output, dot_output)
-        return DiagramResult(
-            success=False,
-            error=f"Internal error: {e}",
-            command=" ".join(cmd) if 'cmd' in locals() else None
+            error=log_unexpected_error(logger, "generating diagram from Helm chart"),
+            command=redact_temp_paths(" ".join(cmd), requested_output, png_output, dot_output) if 'cmd' in locals() else None
         )
 

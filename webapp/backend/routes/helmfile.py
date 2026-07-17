@@ -40,7 +40,7 @@ def generate_helmfile_diagram():
         return ResponseBuilder.validation_error("outputFormat", error_msg)
 
     # Extra arguments validation
-    is_valid, error_msg = InputValidator.validate_extra_args(extra_args)
+    is_valid, error_msg = InputValidator.validate_extra_args(extra_args, "kube-diagrams")
     if not is_valid:
         return ResponseBuilder.validation_error("extraArgs", error_msg)
 

@@ -3,9 +3,12 @@ import os
 import subprocess
 
 from constants import MIME_TYPES
+from utils import get_app_logger, log_unexpected_error
 from .models import DiagramResult
 from .file_manager import FileManager
-from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json
+from .utils import parse_extra_args, has_fatal_error, encode_content, dot_to_dot_json, redact_temp_paths
+
+logger = get_app_logger(__name__)
 
 
 def generate_from_manifest(
@@ -39,7 +42,7 @@ def generate_from_manifest(
             if without_namespace:
                 cmd.append("--without-namespace")
             if extra_args.strip():
-                cmd.extend(parse_extra_args(extra_args))
+                cmd.extend(parse_extra_args(extra_args, "kube-diagrams"))
 
             # Execution
             proc = subprocess.run(cmd, check=False, capture_output=True, text=True)
@@ -52,7 +55,7 @@ def generate_from_manifest(
                 return DiagramResult(
                     success=False,
                     error="KubeDiagrams failed. See command output below.",
-                    command=" ".join(cmd),
+                    command=redact_temp_paths(" ".join(cmd), tmp_manifest, requested_output, png_output, dot_output),
                     stdout=stdout_output,
                     stderr=stderr_output
                 )
@@ -61,8 +64,8 @@ def generate_from_manifest(
                 if not os.path.exists(dot_output):
                     return DiagramResult(
                         success=False,
-                        error=f"Output file not found: {dot_output}",
-                        command=" ".join(cmd),
+                        error=f"Output file not found: {os.path.basename(dot_output)}",
+                        command=redact_temp_paths(" ".join(cmd), tmp_manifest, requested_output, png_output, dot_output),
                         stdout=stdout_output,
                         stderr=stderr_output
                     )
@@ -71,7 +74,7 @@ def generate_from_manifest(
                     return DiagramResult(
                         success=False,
                         error="dot -Tjson conversion failed (is graphviz installed?).",
-                        command=" ".join(cmd),
+                        command=redact_temp_paths(" ".join(cmd), tmp_manifest, requested_output, png_output, dot_output),
                         stdout=stdout_output,
                         stderr=stderr_output
                     )
@@ -82,8 +85,8 @@ def generate_from_manifest(
                 if not output_info:
                     return DiagramResult(
                         success=False,
-                        error=f"Output file not found (looked for {requested_output} and {png_output}).",
-                        command=" ".join(cmd),
+                        error=f"Output file not found (looked for {os.path.basename(requested_output)} and {os.path.basename(png_output)}).",
+                        command=redact_temp_paths(" ".join(cmd), tmp_manifest, requested_output, png_output, dot_output),
                         stdout=stdout_output,
                         stderr=stderr_output
                     )
@@ -101,23 +104,16 @@ def generate_from_manifest(
                 mime_type=MIME_TYPES.get(produced_format, "application/octet-stream"),
                 filename=f"{base_name}.{produced_format}",
                 message="Diagram successfully generated.",
-                command=" ".join(cmd),
+                command=redact_temp_paths(" ".join(cmd), tmp_manifest, requested_output, png_output, dot_output),
                 stdout=stdout_output,
                 stderr=stderr_output
             )
 
-        except ValueError as e:
+        except Exception:
             FileManager.cleanup_files(requested_output, png_output, dot_output)
             return DiagramResult(
                 success=False,
-                error=str(e),
-                command=" ".join(cmd) if 'cmd' in locals() else None
-            )
-        except Exception as e:
-            FileManager.cleanup_files(requested_output, png_output, dot_output)
-            return DiagramResult(
-                success=False,
-                error=f"Internal error: {e}",
-                command=" ".join(cmd) if 'cmd' in locals() else None
+                error=log_unexpected_error(logger, "generating diagram from manifest"),
+                command=redact_temp_paths(" ".join(cmd), tmp_manifest, requested_output, png_output, dot_output) if 'cmd' in locals() else None
             )
 

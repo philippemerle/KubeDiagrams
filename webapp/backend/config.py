@@ -8,7 +8,7 @@ class Config:
     """Config App and Logger."""
     
     # Flask
-    DEBUG = True
+    DEBUG = os.environ.get('FLASK_DEBUG', 'false').lower() == 'true'
     PORT = 5000
     HOST = 'localhost'
     

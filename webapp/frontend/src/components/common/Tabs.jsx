@@ -66,7 +66,6 @@ function Tabs({ historyContext }) {
 Tabs.propTypes = {
   historyContext: PropTypes.shape({
     addToHistory: PropTypes.func.isRequired,
-    getHistoryItem: PropTypes.func.isRequired,
     restoredItem: PropTypes.object,
     clearRestoredItem: PropTypes.func.isRequired,
   }),

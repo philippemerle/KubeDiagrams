@@ -1,14 +1,40 @@
 /**
  * DiagramViewer Component
  * Universal component for rendering diagrams in all supported formats
- * Supports: DOT_JSON (interactive), PDF, DOT (code), SVG, PNG, JPG, DRAWIO
+ * Supports: DOT_JSON (interactive), PDF, DOT, SVG, PNG, JPG, DRAWIO
  */
 
 import { useRef, useEffect } from 'react';
-import { Code2, Copy } from 'lucide-react';
+import mermaid from 'mermaid';
 import PanZoomContainer from './PanZoomContainer.jsx';
 import LoadingSpinner from './LoadingSpinner.jsx';
 import { OUTPUT_FORMATS } from '../../utils/constants.js';
+import { renderDotToSvg } from '../../services/diagramApi.js';
+import { useSvgDiagramRenderer } from '../../hooks/useSvgDiagramRenderer.js';
+
+// Mermaid configuration for consistent styling across the app
+mermaid.initialize({
+  startOnLoad: false,
+  theme: 'default',
+  themeVariables: { edgeLabelBackground: '#4b5563', nodeTextColor: '#f9fafb' },
+  // Default maxTextSize (50000) is too low for real cluster/namespace diagrams
+  maxTextSize: 1000000,
+  maxEdges: 2000,
+});
+
+let mermaidRenderId = 0;
+
+let mermaidQueue = Promise.resolve();
+
+function renderMermaid(content) {
+  const id = `mermaid-diagram-${++mermaidRenderId}`;
+  const task = mermaidQueue.then(() => mermaid.render(id, content));
+  mermaidQueue = task.then(
+    () => {},
+    () => {}
+  );
+  return task;
+}
 
 /**
  * Embedded draw.io viewer using embed.diagrams.net with postMessage protocol.
@@ -26,7 +52,7 @@ function DrawioViewer({ content }) {
   // Listen for draw.io init event and send the XML content
   useEffect(() => {
     const handleMessage = (event) => {
-      if (!event.origin.includes('diagrams.net')) return;
+      if (event.origin !== 'https://embed.diagrams.net') return;
       try {
         const data = JSON.parse(event.data);
         if (data.event === 'init') {
@@ -64,6 +90,116 @@ function DrawioViewer({ content }) {
         allowFullScreen
       />
     </div>
+  );
+}
+
+function DiagramRenderError({ formatLabel, message }) {
+  return (
+    <div className="flex items-center justify-center w-full h-48 text-red-500 text-sm p-4 text-center">
+      {formatLabel} rendering error: {message}
+    </div>
+  );
+}
+
+function SvgDiagramFrame({ containerRef, isRendering, loadingText }) {
+  return (
+    <div className="relative w-full h-[70vh]">
+      <PanZoomContainer className="w-full h-full bg-white rounded-md border">
+        <div ref={containerRef} className="diagram-viewer" />
+      </PanZoomContainer>
+      {isRendering && (
+        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md pointer-events-none">
+          <LoadingSpinner size="lg" color="blue" text={loadingText} />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MermaidViewer({ content }) {
+  const { containerRef, error } = useSvgDiagramRenderer(renderMermaid, content, {
+    formatLabel: 'Mermaid',
+  });
+
+  if (error) {
+    return <DiagramRenderError formatLabel="Mermaid" message={error} />;
+  }
+
+  return (
+    <PanZoomContainer className="w-full h-[70vh] bg-white rounded-md border">
+      <div ref={containerRef} className="diagram-viewer" />
+    </PanZoomContainer>
+  );
+}
+
+let d2InstancePromise = null;
+
+let d2Queue = Promise.resolve();
+
+function renderD2(content) {
+  const task = d2Queue.then(async () => {
+    if (!d2InstancePromise) {
+      d2InstancePromise = import('@terrastruct/d2').then(({ D2 }) => new D2());
+    }
+    const d2 = await d2InstancePromise;
+    const result = await d2.compile(content);
+    const svg = await d2.render(result.diagram, result.renderOptions);
+    return { svg };
+  });
+  // Keep the queue alive even if this task fails, so later renders aren't stuck
+  d2Queue = task.then(
+    () => {},
+    () => {}
+  );
+  return task;
+}
+
+function D2Viewer({ content }) {
+  const { containerRef, error, isRendering } = useSvgDiagramRenderer(renderD2, content, {
+    formatLabel: 'D2',
+    showSpinner: true,
+  });
+
+  if (error) {
+    return <DiagramRenderError formatLabel="D2" message={error} />;
+  }
+
+  return (
+    <SvgDiagramFrame
+      containerRef={containerRef}
+      isRendering={isRendering}
+      loadingText="Rendering D2 diagram..."
+    />
+  );
+}
+
+/**
+ * DotViewer Component
+ */
+async function renderDot(content) {
+  const response = await renderDotToSvg(content);
+  if (!response.ok || !response.data?.svg) {
+    throw new Error(response.data?.error || 'Failed to render DOT diagram.');
+  }
+  return { svg: response.data.svg };
+}
+
+function DotViewer({ content }) {
+  const { containerRef, error, isRendering } = useSvgDiagramRenderer(renderDot, content, {
+    formatLabel: 'DOT',
+    showSpinner: true,
+  });
+
+  if (error) {
+    return <DiagramRenderError formatLabel="DOT" message={error} />;
+  }
+
+  return (
+    <SvgDiagramFrame
+      containerRef={containerRef}
+      isRendering={isRendering}
+      loadingText="Rendering DOT diagram..."
+    />
   );
 }
 
@@ -116,6 +252,16 @@ function DiagramViewer({
     return <DrawioViewer key={viewerKey} content={diagram} />;
   }
 
+  // MERMAID - Client-side rendered viewer
+  if (ext === OUTPUT_FORMATS.MERMAID) {
+    return <MermaidViewer key={viewerKey} content={diagram} />;
+  }
+
+  // D2 - Client-side rendered viewer
+  if (ext === OUTPUT_FORMATS.D2) {
+    return <D2Viewer key={viewerKey} content={diagram} />;
+  }
+
   // PDF - Embedded viewer
   if (ext === OUTPUT_FORMATS.PDF) {
     return (
@@ -131,50 +277,11 @@ function DiagramViewer({
     );
   }
 
-  // DOT - Source code viewer
+  // DOT - Server-rendered viewer (graphviz is already a mandatory backend
+  // dependency, so rendering there avoids adding a client-side WASM lib for
+  // yet another format)
   if (ext === OUTPUT_FORMATS.DOT) {
-    return (
-      <div className="w-full h-[70vh] bg-gray-900 rounded-md border overflow-hidden flex flex-col">
-        <div className="flex items-center justify-between bg-gray-800 px-4 py-2 border-b border-gray-700">
-          <div className="flex items-center gap-2">
-            <Code2 className="w-5 h-5 text-green-400" />
-            <span className="text-sm font-semibold text-gray-300">DOT Source Code (Graphviz)</span>
-          </div>
-          <button
-            onClick={(e) => {
-              navigator.clipboard.writeText(diagram);
-              const btn = e.currentTarget;
-              const originalText = btn.innerHTML;
-              btn.innerHTML = '<span class="text-green-400">✓ Copied!</span>';
-              setTimeout(() => {
-                btn.innerHTML = originalText;
-              }, 2000);
-            }}
-            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded transition flex items-center gap-1"
-          >
-            <Copy className="w-4 h-4" />
-            Copy
-          </button>
-        </div>
-        <div className="flex-1 overflow-auto p-4">
-          <pre className="text-sm text-gray-100 font-mono whitespace-pre">
-            <code>{diagram}</code>
-          </pre>
-        </div>
-        <div className="bg-gray-800 px-4 py-2 border-t border-gray-700 text-xs text-gray-400">
-          Tip: Use this DOT code with Graphviz tools (dot, neato, fdp, circo, twopi) or online
-          visualizers like{' '}
-          <a
-            href="https://dreampuf.github.io/GraphvizOnline/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:underline"
-          >
-            GraphvizOnline
-          </a>
-        </div>
-      </div>
-    );
+    return <DotViewer key={viewerKey} content={diagram} />;
   }
 
   // SVG/PNG/JPG/JPEG - Image viewer with pan & zoom

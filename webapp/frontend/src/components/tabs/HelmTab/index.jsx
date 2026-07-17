@@ -3,13 +3,13 @@
  * Main component that orchestrates Helm chart diagram generation
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { DEFAULTS } from '../../../utils/constants.js';
 import { isValidChartUrl } from '../../../utils/validators.js';
 import { generateHelmDiagram } from '../../../services/diagramApi.js';
 import { useViewerSync } from '../../../hooks/useViewerSync.js';
 import { useDiagramGeneration } from '../../../hooks/useDiagramGeneration.js';
+import { useHistorySync } from '../../../hooks/useHistorySync.js';
 import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import HelmInput from './HelmInput.jsx';
 import HelmOutput from './HelmOutput.jsx';
@@ -18,12 +18,13 @@ import HelmOutput from './HelmOutput.jsx';
 function HelmTab({ historyContext }) {
   // Input states
   const [chartUrl, setChartUrl] = useState('');
-  const [outputFormat, setOutputFormat] = useState(DEFAULTS.OUTPUT_FORMAT);
   const [extraArgs, setExtraArgs] = useState('');
   const [inputError, setInputError] = useState('');
 
   // Diagram generation hook
   const {
+    outputFormat,
+    handleOutputFormatChange,
     diagram,
     command,
     message,
@@ -37,7 +38,6 @@ function HelmTab({ historyContext }) {
     progressStep,
     handleSubmit: handleDiagramSubmit,
     setErrorMessage: setBackendError,
-    resetOutput,
     restoreDiagram,
   } = useDiagramGeneration({
     apiFunction: generateHelmDiagram,
@@ -56,67 +56,23 @@ function HelmTab({ historyContext }) {
   // Auto-scroll to output when diagram is ready
   const outputRef = useScrollToOutput(progressStep);
 
-  // Track previous outputFormat to detect changes
-  const prevOutputFormatRef = useRef(outputFormat);
-  const lastHistoryIdRef = useRef(null);
-
-  // Reset output when output format changes (not on initial render)
-  useEffect(() => {
-    if (prevOutputFormatRef.current !== outputFormat && diagram) {
-      resetOutput();
-    }
-    prevOutputFormatRef.current = outputFormat;
-  }, [outputFormat, diagram, resetOutput]);
-
-  // Save to history when diagram is successfully generated
-  useEffect(() => {
-    if (diagram && progressStep === 'completed' && historyContext) {
-      const historyId = `helm-${Date.now()}`;
-
-      // Avoid adding the same diagram multiple times
-      if (lastHistoryIdRef.current === historyId) {
-        return;
-      }
-
-      const historyItem = {
-        id: historyId,
-        type: 'helm',
-        outputFormat,
-        diagram,
-        mimeType,
-        filename,
-        timestamp: new Date().toISOString(),
-        preview: chartUrl,
-        input: {
-          chart: chartUrl,
-          outputFormat,
-          extraArgs,
-        },
-      };
-
-      historyContext.addToHistory(historyItem);
-      lastHistoryIdRef.current = historyId;
-    }
-  }, [diagram, progressStep]); // minimal deps — avoids a save loop
-
-  // Restore from history
-  useEffect(() => {
-    if (historyContext?.restoredItem && historyContext.restoredItem.type === 'helm') {
-      const item = historyContext.restoredItem;
-
-      // Restore all input states
-      setChartUrl(item.input.chart);
-      setOutputFormat(item.input.outputFormat);
-      setExtraArgs(item.input.extraArgs || '');
+  useHistorySync({
+    diagramType: 'helm',
+    historyContext,
+    outputFormat,
+    diagram,
+    mimeType,
+    filename,
+    progressStep,
+    restoreDiagram,
+    buildInput: () => ({ chart: chartUrl, outputFormat, extraArgs }),
+    buildPreview: () => chartUrl,
+    restoreInput: (input) => {
+      setChartUrl(input.chart || '');
+      setExtraArgs(input.extraArgs || '');
       setInputError(''); // Clear any validation errors
-
-      // Restore diagram output
-      restoreDiagram(item);
-
-      // Clear the restored item
-      historyContext.clearRestoredItem();
-    }
-  }, [historyContext?.restoredItem, restoreDiagram]);
+    },
+  });
 
   // Validate chart URL on change
   useEffect(() => {
@@ -164,7 +120,7 @@ function HelmTab({ historyContext }) {
         chartUrl={chartUrl}
         setChartUrl={setChartUrl}
         outputFormat={outputFormat}
-        setOutputFormat={setOutputFormat}
+        setOutputFormat={handleOutputFormatChange}
         extraArgs={extraArgs}
         setExtraArgs={setExtraArgs}
         inputError={inputError}
@@ -203,7 +159,6 @@ function HelmTab({ historyContext }) {
 HelmTab.propTypes = {
   historyContext: PropTypes.shape({
     addToHistory: PropTypes.func.isRequired,
-    getHistoryItem: PropTypes.func.isRequired,
     restoredItem: PropTypes.object,
     clearRestoredItem: PropTypes.func.isRequired,
   }),

@@ -1,5 +1,17 @@
-import Editor from '@monaco-editor/react';
+import Editor, { loader } from '@monaco-editor/react';
+import * as monacoEditor from 'monaco-editor';
 import { configureMonacoYaml } from 'monaco-yaml';
+import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
+import YamlWorker from 'monaco-yaml/yaml.worker?worker';
+
+loader.config({ monaco: monacoEditor });
+
+window.MonacoEnvironment = {
+  getWorker(_moduleId, label) {
+    if (label === 'yaml') return new YamlWorker();
+    return new EditorWorker();
+  },
+};
 
 let configured = false;
 

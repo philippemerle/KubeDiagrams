@@ -61,11 +61,7 @@ export default function PanZoomContainer({
     if (!el) return;
 
     const update = () => {
-      const prev = el.style.transform;
-      el.style.transform = 'none';
-      const rect = el.getBoundingClientRect();
-      el.style.transform = prev || '';
-      setNaturalSize({ w: rect.width, h: rect.height });
+      setNaturalSize({ w: el.offsetWidth, h: el.offsetHeight });
 
       const vp = viewportRef.current;
       if (vp) setVpSize({ w: vp.clientWidth, h: vp.clientHeight });
@@ -251,7 +247,8 @@ export default function PanZoomContainer({
     if (!naturalSize.w || !naturalSize.h || !vpSize.w || !vpSize.h) return;
     const sx = (vpSize.w - 2 * padding) / naturalSize.w;
     const sy = (vpSize.h - 2 * padding) / naturalSize.h;
-    const s = clamp(Math.min(sx, sy), minScale, maxScale);
+
+    const s = Math.min(sx, sy, maxScale);
     const cw = naturalSize.w * s;
     const ch = naturalSize.h * s;
     const nx = (vpSize.w - cw) / 2;
@@ -302,16 +299,32 @@ export default function PanZoomContainer({
       }}
     >
       <div className="kd-controls absolute z-10 top-2 right-2 flex gap-2 pointer-events-auto">
-        <button type="button" onClick={zoomOut} className="px-2 py-1 bg-white/80 rounded">
+        <button
+          type="button"
+          onClick={zoomOut}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           −
         </button>
-        <button type="button" onClick={zoomIn} className="px-2 py-1 bg-white/80 rounded">
+        <button
+          type="button"
+          onClick={zoomIn}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           +
         </button>
-        <button type="button" onClick={reset} className="px-2 py-1 bg-white/80 rounded">
+        <button
+          type="button"
+          onClick={reset}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           Reset
         </button>
-        <button type="button" onClick={() => fit(false)} className="px-2 py-1 bg-white/80 rounded">
+        <button
+          type="button"
+          onClick={() => fit(false)}
+          className="px-2 py-1 bg-white shadow-md border border-gray-300 rounded text-gray-800 font-medium hover:bg-gray-100"
+        >
           Fit
         </button>
       </div>

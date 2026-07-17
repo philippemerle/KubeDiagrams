@@ -8,6 +8,8 @@ export const OUTPUT_FORMATS = Object.freeze({
   DOT: 'dot',
   DOT_JSON: 'dot_json',
   DRAWIO: 'drawio',
+  MERMAID: 'mermaid',
+  D2: 'd2',
 });
 
 export const OUTPUT_FORMAT_LIST = Object.freeze([
@@ -19,6 +21,8 @@ export const OUTPUT_FORMAT_LIST = Object.freeze([
   OUTPUT_FORMATS.DOT,
   OUTPUT_FORMATS.DOT_JSON,
   OUTPUT_FORMATS.DRAWIO,
+  OUTPUT_FORMATS.MERMAID,
+  OUTPUT_FORMATS.D2,
 ]);
 
 // API Endpoints
@@ -29,10 +33,12 @@ export const API_ENDPOINTS = Object.freeze({
   GENERATE_HELMFILE: '/api/generate-helmfile-diagram',
   GENERATE_CLUSTER: '/api/cluster/generate',
   CLUSTER_CONTEXT: '/api/cluster/context',
+  CLUSTER_CONTEXTS: '/api/cluster/contexts',
   CLUSTER_NAMESPACES: '/api/cluster/namespaces',
   CLUSTER_RESOURCE_TYPES: '/api/cluster/resource-types',
   SUBMIT_FEEDBACK: '/api/submit-feedback',
   EXAMPLES: '/api/examples',
+  RENDER_DOT_SVG: '/api/render-dot-svg',
 });
 
 // Example types
@@ -58,6 +64,8 @@ export const MIME_TYPES = Object.freeze({
   [OUTPUT_FORMATS.DOT]: 'text/vnd.graphviz',
   [OUTPUT_FORMATS.DOT_JSON]: 'application/json',
   [OUTPUT_FORMATS.DRAWIO]: 'application/xml',
+  [OUTPUT_FORMATS.MERMAID]: 'text/vnd.mermaid',
+  [OUTPUT_FORMATS.D2]: 'text/vnd.d2',
 });
 
 // Viewer message types for postMessage communication
@@ -80,4 +88,6 @@ export const TEXT_FORMATS = Object.freeze([
   OUTPUT_FORMATS.DOT,
   OUTPUT_FORMATS.DOT_JSON,
   OUTPUT_FORMATS.DRAWIO,
+  OUTPUT_FORMATS.MERMAID,
+  OUTPUT_FORMATS.D2,
 ]);
