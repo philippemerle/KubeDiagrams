@@ -87,7 +87,7 @@ const HELM_CHART_EXAMPLES = [
     id: 'kubernetes-dashboard',
     name: 'Kubernetes Dashboard',
     description: 'General-purpose web UI for Kubernetes clusters',
-    url: 'https://kubernetes.github.io/dashboard/kubernetes-dashboard',
+    url: 'https://kubernetes-retired.github.io/dashboard/kubernetes-dashboard',
   },
   {
     id: 'metrics-server',
