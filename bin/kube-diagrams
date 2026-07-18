@@ -25,10 +25,10 @@ from diagrams.k8s.group import Namespace
 # Absolute paths to be replaced by urls
 #
 
-DIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(diagrams.__file__))).parent)
+DIAGRAMS_PATH = str(Path(os.path.dirname(os.path.realpath(diagrams.__file__))).parent)
 DIAGRAMS_URL = \
     "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master"
-KUBEDIAGRAMS_PATH = str(Path(os.path.abspath(os.path.dirname(__file__))).parent)
+KUBEDIAGRAMS_PATH = str(Path(os.path.dirname(os.path.realpath(__file__))).parent)
 KUBEDIAGRAMS_URL = \
     "https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main"
 
@@ -331,7 +331,7 @@ def query_path(data, path, default=None):
     return data
 
 # Directory where this script is.
-DIRNAME = os.path.dirname(__file__)
+DIRNAME = os.path.dirname(os.path.realpath(__file__))
 
 # Load configuration.
 config = {}
