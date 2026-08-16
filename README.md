@@ -914,7 +914,7 @@ Don't hesitate to submit your own papers, talks, blogs, social network posts, an
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=philippemerle/KubeDiagrams&type=Date)](https://www.star-history.com/#philippemerle/KubeDiagrams&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=philippemerle/KubeDiagrams&type=Date)](https://star-history.dera.page/#philippemerle/KubeDiagrams&Date)
 
 ## Issue Stats
 
