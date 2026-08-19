@@ -17,7 +17,7 @@
 
 Generate Kubernetes architecture diagrams from Kubernetes manifest files, kustomization files, Helm charts, helmfile descriptors, and actual cluster state.
 
-There are several tools to generate Kubernetes architecture diagrams, see **[here](https://github.com/philippemerle/Awesome-Kubernetes-Architecture-Diagrams)** for a detailed list.
+There are several tools to generate Kubernetes architecture diagrams, see **[here](https://github.com/philippemerle/Awesome-Kubernetes-Architecture-Diagrams)** for a detailed list and comparison.
 Compared to these existing tools, the main originalities of **KubeDiagrams** are the support of:
 
 * **[most of all Kubernetes built-in resources](https://github.com/philippemerle/KubeDiagrams#kubernetes-built-in-resources)**,
@@ -140,7 +140,7 @@ Following software must be installed:
 
 ### Online with nothing to install on your machine
 
-You could test **KubeDiagrams** directly from your favorite Web browser **[here](https://kubediagrams.lille.inria.fr/)**.
+You could use **KubeDiagrams** directly from your favorite Web browser **[here](https://kubediagrams.lille.inria.fr/)**.
 
 ### From PyPI
 
@@ -177,7 +177,7 @@ You can start directly from source:
 git clone https://github.com/philippemerle/KubeDiagrams.git
 
 # install required Python packages
-pip install PyYAML diagrams
+pip install PyYAML diagrams graphviz2drawio
 
 # make KubeDiagrams commands available into $PATH
 PATH=$(pwd)/KubeDiagrams/bin:$PATH
@@ -219,6 +219,8 @@ options:
   -v, --verbose         verbosity, set to false by default
   --without-namespace   disable namespace cluster generation
 ```
+
+`kube-diagrams` reads Kubernetes manifests from the standard input when `filename` is equals to `-`.
 
 Examples:
 
@@ -382,7 +384,7 @@ The **KubeDiagrams Plugin for JetBrains IDEs** is available [here](https://plugi
 
 ### Kubernetes built-in resources
 
-**KubeDiagrams** supported the following 51 Kubernetes resource types:
+**KubeDiagrams** supports the following 51 Kubernetes resource types:
 
 |               Kind               |            ApiGroup            |           Versions            |                                                                          Icon                                                                          |
 | :------------------------------: | :----------------------------: | :---------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -438,9 +440,9 @@ The **KubeDiagrams Plugin for JetBrains IDEs** is available [here](https://plugi
 |     `VerticalPodAutoscaler`      |      `autoscaling.k8s.io`      |             `v1`              |                ![VerticalPodAutoscaler](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vpa.png)                |
 |        `VolumeAttachment`        |        `storage.k8s.io`        |             `v1`              |         ![VolumeAttachment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/vol-128.png)          |
 
-**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L103).
+**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L103).
 
-Currently, there are 12 unsupported Kubernetes resource types:
+Currently, there are 12 unsupported Kubernetes built-in resource types:
 
 |             Kind             |            ApiGroup            |
 | :--------------------------: | :----------------------------: |
@@ -491,7 +493,7 @@ Following lists some custom resources already supported in [examples](https://gi
 
 ### Kubernetes resources clustering
 
-With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L31) file (see the `clusters` list).
+With **KubeDiagrams**, Kubernetes resources can be clustered within the architecture diagrams automatically. **KubeDiagrams** uses the `metadata.namespace` resource field as first clustering criteria. Then, the `metadata.labels` keys can be used to define subclusters. Following table lists the predefined mappings between label keys and cluster titles, and background colors as defined in the [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L31) file (see the `clusters` list).
 
 |           Label Key           |         Cluster Title          | Background Color | Recommended |
 | :---------------------------: | :----------------------------: | :----------------------------: | :----------------------------: |
@@ -509,7 +511,7 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 | `rbac.authorization.k8s.io/aggregate-to-edit` |  Edit ClusterRole Aggregation  | transparent | Yes |
 | `rbac.authorization.k8s.io/aggregate-to-view` |  View ClusterRole Aggregation  | transparent | Yes |
 
-Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L97) file.
+Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L97) file.
 
 | Annotation Key |   Cluster Title    |  Background Color  |   Recommended   |
 | :------------: | :----------------: | :----------------: | :----------------: |
@@ -521,7 +523,7 @@ and provided to **KubeDiagrams** via the `--config` command-line option.
 ### Kubernetes resource relationships
 
 With **KubeDiagrams**, each relationship between Kubernetes resources is represented by a visual edge between visual nodes.
-Following table lists the predefined edges as defined in the [bin/kube-diagrams.yml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L3) file (see the `edges` map).
+Following table lists the predefined edges as defined in the [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L3) file (see the `edges` map).
 
 |    Edge Kind    | Edge Style | Edge Color |                                Meaning                                |
 | :-------------: | :--------: | :--------: | :-------------------------------------------------------------------: |
@@ -532,7 +534,7 @@ Following table lists the predefined edges as defined in the [bin/kube-diagrams.
 
 New edges can be easily defined or redefined in custom configuration files, and provided to **KubeDiagrams** via the `--config` command-line option.
 
-Following diagram illustrates all the visual nodes, edges, and clusters supported by default by **KubeDiagrams**.
+Following diagram illustrates most of the visual nodes, edges, and clusters supported by default by **KubeDiagrams**.
 
 ![semiotics.png](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/images/semiotics.png).
 
