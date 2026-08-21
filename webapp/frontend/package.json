@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "sync-interactive-viewer": "node scripts/sync-interactive-viewer.js",
+    "predev": "npm run sync-interactive-viewer",
     "dev": "vite --host",
+    "prebuild": "npm run sync-interactive-viewer",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
