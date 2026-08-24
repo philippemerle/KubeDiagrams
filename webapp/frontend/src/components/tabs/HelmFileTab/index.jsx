@@ -14,7 +14,6 @@ import { useHistorySync } from '../../../hooks/useHistorySync.js';
 import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import HelmFileInput from './HelmFileInput.jsx';
 import HelmFileOutput from './HelmFileOutput.jsx';
-import ProgressBar from '../../common/ProgressBar.jsx';
 
 function HelmFileTab({ historyContext }) {
   // Input states
@@ -104,12 +103,6 @@ function HelmFileTab({ historyContext }) {
         onSubmit={handleSubmit}
         onFileUpload={createFileInputHandler(setHelmfileContent, setErrorMessage)}
       />
-
-      {/* Progress Bar - Temporarily disabled */}
-      {/* <ProgressBar
-        currentStep={progressStep}
-        isVisible={progressStep !== 'idle'}
-      /> */}
 
       <div ref={outputRef}>
         <HelmFileOutput

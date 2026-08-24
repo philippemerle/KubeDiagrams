@@ -51,7 +51,9 @@ function Tabs({ historyContext }) {
         ))}
       </div>
 
-      {/* Tab content */}
+      {/* Tab content — only the active tab is mounted, so switching tabs
+          unmounts the others and discards their in-progress local state
+          (typed content, unsaved form fields). */}
       <div className="flex-1">
         {activeTab === 'manifest' && <ManifestTab historyContext={historyContext} />}
         {activeTab === 'helm' && <HelmTab historyContext={historyContext} />}

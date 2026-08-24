@@ -1,3 +1,10 @@
+// Modules in this directory use the Revealing Module Pattern (IIFE +
+// shared `window.IV` namespace), loaded via classic <script> tags in
+// index.html — not ES modules (`import`/`export`). This viewer is meant
+// to be opened directly as `file://.../index.html` (documented in the
+// project README), and `<script type="module">` fails there with a CORS
+// error under Chrome. The IIFE pattern gives the same per-file isolation
+// without that restriction.
 cytoscape.use(cytoscapeDagre);
 cytoscape.use(cytoscapeKlay);
 

@@ -14,7 +14,6 @@ import { useHistorySync } from '../../../hooks/useHistorySync.js';
 import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import ManifestInput from './ManifestInput.jsx';
 import ManifestOutput from './ManifestOutput.jsx';
-// import ProgressBar from '../../common/ProgressBar.jsx'; // Temporarily disabled
 
 function ManifestTab({ historyContext }) {
   // Input states
@@ -107,12 +106,6 @@ function ManifestTab({ historyContext }) {
         onSubmit={handleSubmit}
         onFileUpload={createFileInputHandler(setManifestContent, setErrorMessage)}
       />
-
-      {/* Progress Bar - Temporarily disabled */}
-      {/* <ProgressBar
-        currentStep={progressStep}
-        isVisible={progressStep !== 'idle'}
-      /> */}
 
       <div ref={outputRef}>
         <ManifestOutput
