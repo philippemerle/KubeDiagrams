@@ -1,0 +1,24 @@
+# Git
+.git
+.gitignore
+
+# Docs / non-build content
+README.md
+docs/
+examples/
+images/
+
+# Python (backend, CLI)
+**/__pycache__/
+**/*.pyc
+**/venv/
+**/.venv/
+
+# Node (frontend)
+**/node_modules/
+**/dist/
+**/dist-ssr/
+
+# Webapp logs
+webapp/backend/logs/*.log
+webapp/backend/logs/*.csv

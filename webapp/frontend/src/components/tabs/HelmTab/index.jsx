@@ -13,7 +13,6 @@ import { useHistorySync } from '../../../hooks/useHistorySync.js';
 import { useScrollToOutput } from '../../../hooks/useScrollToOutput.js';
 import HelmInput from './HelmInput.jsx';
 import HelmOutput from './HelmOutput.jsx';
-// import ProgressBar from '../../common/ProgressBar.jsx'; // Temporarily disabled
 
 function HelmTab({ historyContext }) {
   // Input states
@@ -128,12 +127,6 @@ function HelmTab({ historyContext }) {
         onSubmit={handleSubmit}
         onUrlChange={handleUrlChange}
       />
-
-      {/* Progress Bar - Temporarily disabled */}
-      {/* <ProgressBar
-        currentStep={progressStep}
-        isVisible={progressStep !== 'idle'}
-      /> */}
 
       <div ref={outputRef}>
         <HelmOutput

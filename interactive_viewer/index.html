@@ -23,43 +23,13 @@
       <script src="./script/defaultStyle.js"></script>
       <script src="./script/layout.js"></script>
       <script src="./script/itemAndFunctionMenus.js"></script>
-      <script>
-        (function () {
-          // 1) Autoload via ?dataUrl=...
-          const params = new URLSearchParams(location.search);
-          const dataUrl = params.get('dataUrl');
-          if (dataUrl) {
-            fetch(dataUrl)
-              .then(r => r.json())
-              .then(json => {
-                if (typeof window.renderFromDotJson === 'function') {
-                  window.renderFromDotJson(json);
-                } else {
-                  console.warn('renderFromDotJson(json) is not defined.');
-                }
-              })
-              .catch(err => console.error('Failed to load DOT_JSON via dataUrl:', err));
-          }
-
-          // 2) Autoload via postMessage
-          window.addEventListener('message', (e) => {
-            const data = e && e.data;
-            if (!data || data.type !== 'KD_LOAD_DOT_JSON' || !data.payload) return;
-
-            try {
-              const json = data.payload;
-              if (typeof window.renderFromDotJson === 'function') {
-                window.renderFromDotJson(json);
-              } else {
-                console.warn('renderFromDotJson(json) is not defined.');
-              }
-            } catch (err) {
-              console.error('Failed to handle KD_LOAD_DOT_JSON:', err);
-            }
-          }, false);
-        })();
-      </script>
-      <script  src="./script/main.js"></script>
+      <script src="./script/resourceData.js"></script>
+      <script src="./script/state.js"></script>
+      <script src="./script/elementsBuilder.js"></script>
+      <script src="./script/tooltip.js"></script>
+      <script src="./script/filters.js"></script>
+      <script src="./script/fileIO.js"></script>
+      <script src="./script/main.js"></script>
       <link rel="stylesheet" href="./style.css">
 
     </head>

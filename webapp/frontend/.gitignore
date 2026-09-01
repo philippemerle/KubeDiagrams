@@ -13,6 +13,10 @@ dist
 dist-ssr
 *.local
 
+# Synced from ../../interactive_viewer by scripts/sync-interactive-viewer.js
+# (single source of truth shared with the CLI, see npm predev/prebuild)
+public/interactive_viewer/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
