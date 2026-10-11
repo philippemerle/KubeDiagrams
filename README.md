@@ -220,7 +220,7 @@ options:
   --without-namespace   disable namespace cluster generation
 ```
 
-`kube-diagrams` reads Kubernetes manifests from the standard input when `filename` is equals to `-`.
+`kube-diagrams` could read Kubernetes manifests from the standard input when given `filename` is equals to `-`.
 
 Examples:
 
