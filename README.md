@@ -4,6 +4,7 @@
 [![license](https://img.shields.io/github/license/philippemerle/KubeDiagrams)](https://github.com/philippemerle/KubeDiagrams/blob/main/LICENSE)
 ![python version](https://img.shields.io/badge/python-%3E%3D%203.9-blue?logo=python)
 [![Socket Badge](https://badge.socket.dev/pypi/package/kubediagrams/0.8.0?artifact_id=tar-gz)](https://socket.dev/pypi/package/kubediagrams/overview/0.8.0/tar-gz)
+[![Hysen Labs](https://hysenlabs.com/badge/philippemerle-kubediagrams.svg)](https://hysenlabs.com/projects/philippemerle-kubediagrams)
 [![pypi version](https://badge.fury.io/py/KubeDiagrams.svg)](https://badge.fury.io/py/KubeDiagrams)
 [![PyPI Downloads](https://static.pepy.tech/badge/kubediagrams)](https://pepy.tech/projects/kubediagrams)
 [![Docker Stars](https://img.shields.io/docker/stars/philippemerle/kubediagrams)](https://hub.docker.com/r/philippemerle/kubediagrams)
@@ -699,6 +700,8 @@ Don't hesitate to submit your own real-world use cases as [pull requests](https:
 1. [Visualizing cloud-native applications with KubeDiagrams](https://mybox.inria.fr/f/61de0e6e5be94b7a941f/?dl=1), Philippe Merle, [PEPR Cloud Taranis Project](https://pepr-cloud.fr/en/project-taranis/), February 17, 2025.
 
 ### Blogs
+
+1. [KubeDiagrams: turning Kubernetes manifests into architecture diagrams you can actually edit](https://hysenlabs.com/projects/philippemerle-kubediagrams), Hysen Labs, October 7, 2026.
 
 1. [KubeDiagrams Launches Automated Kubernetes Architecture Visualization](https://thenextgentechinsider.com/pulse/kubediagrams-launches-automated-kubernetes-architecture-visualization), TheNextGenTechInsider.com, May 22, 2026.
 
