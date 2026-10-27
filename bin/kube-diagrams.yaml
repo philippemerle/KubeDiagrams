@@ -173,7 +173,18 @@ nodes:
   CustomResourceDefinition/apiextensions.k8s.io/v1:
     scope: Cluster
     diagram_node_classname: diagrams.k8s.others.CRD
-    # no edges
+    edges: |
+      service = query_path(resource, "spec.conversion.webhook.clientConfig.service")
+      if service != None:
+        edges.add_edge_to(
+          f"spec.conversion.webhook.clientConfig.service",
+          service.get('name'),
+          service.get('namespace'),
+          "Service",
+          "v1",
+          "REFERENCE",
+          data=service
+        )
   CustomResourceDefinition/apiextensions.k8s.io/v1beta1: CustomResourceDefinition/apiextensions.k8s.io/v1
   CSIDriver/storage.k8s.io/v1:
     scope: Cluster
