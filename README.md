@@ -441,7 +441,7 @@ The **KubeDiagrams Plugin for JetBrains IDEs** is available [here](https://plugi
 |     `VerticalPodAutoscaler`      |      `autoscaling.k8s.io`      |             `v1`              |                ![VerticalPodAutoscaler](https://raw.githubusercontent.com/philippemerle/KubeDiagrams/refs/heads/main/bin/icons/vpa.png)                |
 |        `VolumeAttachment`        |        `storage.k8s.io`        |             `v1`              |         ![VolumeAttachment](https://raw.githubusercontent.com/kubernetes/community/refs/heads/main/icons/png/resources/labeled/vol-128.png)          |
 
-**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L103).
+**Note**: The mapping between these supported Kubernetes resources and architecture diagrams is defined into [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L108).
 
 Currently, there are 12 unsupported Kubernetes built-in resource types:
 
@@ -511,8 +511,9 @@ With **KubeDiagrams**, Kubernetes resources can be clustered within the architec
 | `rbac.authorization.k8s.io/aggregate-to-admin` |  Admin ClusterRole Aggregation  | transparent | Yes |
 | `rbac.authorization.k8s.io/aggregate-to-edit` |  Edit ClusterRole Aggregation  | transparent | Yes |
 | `rbac.authorization.k8s.io/aggregate-to-view` |  View ClusterRole Aggregation  | transparent | Yes |
+| `rbac.authorization.k8s.io/aggregate-to-cluster-reader` |  ClusterReader ClusterRole Aggregation  | transparent | Yes |
 
-Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L97) file.
+Resource clustering could be also annotation-based, i.e. based on `metadata.annotations` keys. Following table lists the predefined mappings between annotation keys, cluster titles, and background colors as defined in the [bin/kube-diagrams.yaml](https://github.com/philippemerle/KubeDiagrams/blob/main/bin/kube-diagrams.yaml#L102) file.
 
 | Annotation Key |   Cluster Title    |  Background Color  |   Recommended   |
 | :------------: | :----------------: | :----------------: | :----------------: |

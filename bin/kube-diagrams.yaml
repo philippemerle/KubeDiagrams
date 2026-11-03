@@ -94,6 +94,11 @@ clusters:
     recommended: true
     graph_attr:
       bgcolor: transparent
+  - label: rbac.authorization.k8s.io/aggregate-to-cluster-reader
+    title: "ClusterReader ClusterRole Aggregation"
+    recommended: true
+    graph_attr:
+      bgcolor: transparent
   - annotation: helm.sh/hook
     title: "{}"
     recommended: true
