@@ -49,16 +49,16 @@
         13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36
       ],
       "edges": [
-        0,7,9,17,18,19,20,22,23,25,26,27,3,6,2,1,5,4,8,12,14,13,11,15,10,16,24,21
+        0,1,8,9,10,11,19,20,22,25,26,27,5,2,7,4,3,6,21,16,15,18,17,13,14,12,23,24
       ]
     },
     {
-      "name": "cluster_Application: emailservice",
+      "name": "cluster_Application: adservice",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: emailservice",
+      "label": "Application: adservice",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -68,13 +68,38 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: emailservice",
+      "tooltip": "Application: adservice",
       "_gvid": 1,
       "nodes": [
         13,14
       ],
       "edges": [
         0
+      ]
+    },
+    {
+      "name": "cluster_Application: shippingservice",
+      "bgcolor": "#ECE8F6",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "12",
+      "label": "Application: shippingservice",
+      "labeljust": "l",
+      "nodesep": "0.60",
+      "pad": "2.0",
+      "pencolor": "#AEB6BE",
+      "rankdir": "LR",
+      "ranksep": "0.75",
+      "shape": "box",
+      "splines": "ortho",
+      "style": "rounded",
+      "tooltip": "Application: shippingservice",
+      "_gvid": 2,
+      "nodes": [
+        15,16
+      ],
+      "edges": [
+        1
       ]
     },
     {
@@ -94,21 +119,21 @@
       "splines": "ortho",
       "style": "rounded",
       "tooltip": "Application: checkoutservice",
-      "_gvid": 2,
+      "_gvid": 3,
       "nodes": [
-        15,16
+        17,18
       ],
       "edges": [
-        7
+        8
       ]
     },
     {
-      "name": "cluster_Application: recommendationservice",
+      "name": "cluster_Application: currencyservice",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: recommendationservice",
+      "label": "Application: currencyservice",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -118,22 +143,22 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: recommendationservice",
-      "_gvid": 3,
+      "tooltip": "Application: currencyservice",
+      "_gvid": 4,
       "nodes": [
-        17,18
+        19,20
       ],
       "edges": [
         9
       ]
     },
     {
-      "name": "cluster_Application: frontend",
+      "name": "cluster_Application: emailservice",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: frontend",
+      "label": "Application: emailservice",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -143,38 +168,13 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: frontend",
-      "_gvid": 4,
-      "nodes": [
-        19,20,21
-      ],
-      "edges": [
-        17,18
-      ]
-    },
-    {
-      "name": "cluster_Application: paymentservice",
-      "bgcolor": "#ECE8F6",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "12",
-      "label": "Application: paymentservice",
-      "labeljust": "l",
-      "nodesep": "0.60",
-      "pad": "2.0",
-      "pencolor": "#AEB6BE",
-      "rankdir": "LR",
-      "ranksep": "0.75",
-      "shape": "box",
-      "splines": "ortho",
-      "style": "rounded",
-      "tooltip": "Application: paymentservice",
+      "tooltip": "Application: emailservice",
       "_gvid": 5,
       "nodes": [
-        22,23
+        21,22
       ],
       "edges": [
-        19
+        10
       ]
     },
     {
@@ -196,19 +196,19 @@
       "tooltip": "Application: productcatalogservice",
       "_gvid": 6,
       "nodes": [
-        24,25
+        23,24
       ],
       "edges": [
-        20
+        11
       ]
     },
     {
-      "name": "cluster_Application: cartservice",
+      "name": "cluster_Application: frontend",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: cartservice",
+      "label": "Application: frontend",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -218,22 +218,22 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: cartservice",
+      "tooltip": "Application: frontend",
       "_gvid": 7,
       "nodes": [
-        26,27
+        25,26,27
       ],
       "edges": [
-        22
+        19,20
       ]
     },
     {
-      "name": "cluster_Application: redis-cart",
+      "name": "cluster_Application: recommendationservice",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: redis-cart",
+      "label": "Application: recommendationservice",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -243,13 +243,13 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: redis-cart",
+      "tooltip": "Application: recommendationservice",
       "_gvid": 8,
       "nodes": [
         28,29
       ],
       "edges": [
-        23
+        22
       ]
     },
     {
@@ -275,12 +275,12 @@
       ]
     },
     {
-      "name": "cluster_Application: currencyservice",
+      "name": "cluster_Application: cartservice",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: currencyservice",
+      "label": "Application: cartservice",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -290,7 +290,7 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: currencyservice",
+      "tooltip": "Application: cartservice",
       "_gvid": 10,
       "nodes": [
         31,32
@@ -300,12 +300,12 @@
       ]
     },
     {
-      "name": "cluster_Application: shippingservice",
+      "name": "cluster_Application: redis-cart",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: shippingservice",
+      "label": "Application: redis-cart",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -315,7 +315,7 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: shippingservice",
+      "tooltip": "Application: redis-cart",
       "_gvid": 11,
       "nodes": [
         33,34
@@ -325,12 +325,12 @@
       ]
     },
     {
-      "name": "cluster_Application: adservice",
+      "name": "cluster_Application: paymentservice",
       "bgcolor": "#ECE8F6",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "12",
-      "label": "Application: adservice",
+      "label": "Application: paymentservice",
       "labeljust": "l",
       "nodesep": "0.60",
       "pad": "2.0",
@@ -340,7 +340,7 @@
       "shape": "box",
       "splines": "ortho",
       "style": "rounded",
-      "tooltip": "Application: adservice",
+      "tooltip": "Application: paymentservice",
       "_gvid": 12,
       "nodes": [
         35,36
@@ -351,7 +351,143 @@
     },
     {
       "_gvid": 13,
-      "name": "8f5f688838e24b5e8f94ad911c30a91f",
+      "name": "495e514252694e6884cdea287942842b",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "1.9",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
+      "imagescale": "true",
+      "label": "adservice",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: adservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 14,
+      "name": "2764e6004c9049dab4f4e5be35c8d529",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "1.9",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
+      "imagescale": "true",
+      "label": "adservice",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: adservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 15,
+      "name": "d958baf2ca5c4a9ebe0ae536e9e6373f",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "2.3",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
+      "imagescale": "true",
+      "label": "shippingservic\ne",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: shippingservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 16,
+      "name": "3395deb0ddd34b9a9ec67e481ff641a7",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "2.3",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
+      "imagescale": "true",
+      "label": "shippingservic\ne",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: shippingservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 17,
+      "name": "8bf51b6e78894387afbc37585b2b4616",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "2.3",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
+      "imagescale": "true",
+      "label": "checkoutservic\ne",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: checkoutservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 18,
+      "name": "940a4fc40b7c42c4b1851d967448b9e7",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "2.3",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
+      "imagescale": "true",
+      "label": "checkoutservic\ne",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: checkoutservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 19,
+      "name": "be9c40c4749e4d17892fb4e26fa23195",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "2.3",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
+      "imagescale": "true",
+      "label": "currencyservic\ne",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: currencyservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 20,
+      "name": "490b488ef36447d0b96494032942948a",
+      "fixedsize": "true",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "13",
+      "height": "2.3",
+      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
+      "imagescale": "true",
+      "label": "currencyservic\ne",
+      "labelloc": "b",
+      "shape": "none",
+      "style": "rounded",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: currencyservice\n...",
+      "width": "1.4"
+    },
+    {
+      "_gvid": 21,
+      "name": "a6fa455714094d85ab74a9973524f5bf",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -367,8 +503,8 @@
       "width": "1.4"
     },
     {
-      "_gvid": 14,
-      "name": "7e6a994e51d7429ea104b970f858621e",
+      "_gvid": 22,
+      "name": "30ac67c0adaa4fa8817d89ab9f8a32eb",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -384,42 +520,8 @@
       "width": "1.4"
     },
     {
-      "_gvid": 15,
-      "name": "e43ebb54ca9b415d837af667599062ab",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "1.9",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
-      "imagescale": "true",
-      "label": "checkoutservice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: checkoutservice\n...",
-      "width": "1.4"
-    },
-    {
-      "_gvid": 16,
-      "name": "c1646b74655f4de898b345f49a8376ac",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "1.9",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
-      "imagescale": "true",
-      "label": "checkoutservice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: checkoutservice\n...",
-      "width": "1.4"
-    },
-    {
-      "_gvid": 17,
-      "name": "a4a9a0e82cf1475898aa0be3c1ab7c36",
+      "_gvid": 23,
+      "name": "8a0e99026d744a29a86e898f3eeaf55e",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -427,16 +529,16 @@
       "height": "2.3",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
       "imagescale": "true",
-      "label": "recommendationse\nrvice",
+      "label": "productcatalog\nservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: recommendationservice\n...",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: productcatalogservice\n...",
       "width": "1.4"
     },
     {
-      "_gvid": 18,
-      "name": "5feef7012bcb4845ad85e72545f48f92",
+      "_gvid": 24,
+      "name": "ca605d6cac5641fcb2bca065a77cdb40",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -444,16 +546,16 @@
       "height": "2.3",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
       "imagescale": "true",
-      "label": "recommendationse\nrvice",
+      "label": "productcatalog\nservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: recommendationservice\n...",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: productcatalogservice\n...",
       "width": "1.4"
     },
     {
-      "_gvid": 19,
-      "name": "8fe345cf68a04a1c9cdcb0d2dccfa6a3",
+      "_gvid": 25,
+      "name": "a77aeae7bf624d479cbfce20f437f435",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -469,8 +571,8 @@
       "width": "1.4"
     },
     {
-      "_gvid": 20,
-      "name": "83c2645a219e4af09285aeae990fe1ac",
+      "_gvid": 26,
+      "name": "d2f6f29dfeb1460d8ce1073b4932522d",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -486,8 +588,8 @@
       "width": "1.4"
     },
     {
-      "_gvid": 21,
-      "name": "b159289f2b43431588b9bc7022a755bd",
+      "_gvid": 27,
+      "name": "438a76e867b345fa88280fc16c8cf98c",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -503,144 +605,42 @@
       "width": "1.4"
     },
     {
-      "_gvid": 22,
-      "name": "c0fa1058d4ae45309f337519edba5768",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "1.9",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
-      "imagescale": "true",
-      "label": "paymentservice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: paymentservice\n...",
-      "width": "1.4"
-    },
-    {
-      "_gvid": 23,
-      "name": "a7c584e124a6433d9bb9035eb326943f",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "1.9",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
-      "imagescale": "true",
-      "label": "paymentservice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: paymentservice\n...",
-      "width": "1.4"
-    },
-    {
-      "_gvid": 24,
-      "name": "2cd6abb5b9d343e2bb20b5cd1a0161cd",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "2.3",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
-      "imagescale": "true",
-      "label": "productcatalogse\nrvice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: productcatalogservice\n...",
-      "width": "1.4"
-    },
-    {
-      "_gvid": 25,
-      "name": "215d4ef06e3541139bc612ea3a2d8de3",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "2.3",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
-      "imagescale": "true",
-      "label": "productcatalogse\nrvice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: productcatalogservice\n...",
-      "width": "1.4"
-    },
-    {
-      "_gvid": 26,
-      "name": "e07b6651918a412ba58ee974d060e07f",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "1.9",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
-      "imagescale": "true",
-      "label": "cartservice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: cartservice\n...",
-      "width": "1.4"
-    },
-    {
-      "_gvid": 27,
-      "name": "d755d5f44070480b87210ea95a61bf9b",
-      "fixedsize": "true",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "13",
-      "height": "1.9",
-      "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
-      "imagescale": "true",
-      "label": "cartservice",
-      "labelloc": "b",
-      "shape": "none",
-      "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: cartservice\n...",
-      "width": "1.4"
-    },
-    {
       "_gvid": 28,
-      "name": "8ec796a1fec64b779b10098fb2323508",
+      "name": "76f15c626dd64caeb53a337c055e7381",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "13",
-      "height": "1.9",
+      "height": "2.3",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
       "imagescale": "true",
-      "label": "redis-cart",
+      "label": "recommendation\nservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: redis-cart\n...",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: recommendationservice\n...",
       "width": "1.4"
     },
     {
       "_gvid": 29,
-      "name": "88338506e4ed48139ee8171360232ff4",
+      "name": "9497b02f32c64aa2bb4ab92eb733e487",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "13",
-      "height": "1.9",
+      "height": "2.3",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
       "imagescale": "true",
-      "label": "redis-cart",
+      "label": "recommendation\nservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: redis-cart\n...",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: recommendationservice\n...",
       "width": "1.4"
     },
     {
       "_gvid": 30,
-      "name": "8d678aa1331a4b459ab3984b5cf6c93a",
+      "name": "3516341dfb984749b3b7392cc4af3914",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -657,7 +657,7 @@
     },
     {
       "_gvid": 31,
-      "name": "2353ecf49444403dbe55981fff2f55d1",
+      "name": "ec1f5995d69f47ed9cef4da931807c2d",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -665,16 +665,16 @@
       "height": "1.9",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
       "imagescale": "true",
-      "label": "currencyservice",
+      "label": "cartservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: currencyservice\n...",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: cartservice\n...",
       "width": "1.4"
     },
     {
       "_gvid": 32,
-      "name": "52e95c775b934589b31e712da8612109",
+      "name": "ae9e1f844fc44f5f994c1ab6cf796f3b",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -682,16 +682,16 @@
       "height": "1.9",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
       "imagescale": "true",
-      "label": "currencyservice",
+      "label": "cartservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: currencyservice\n...",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: cartservice\n...",
       "width": "1.4"
     },
     {
       "_gvid": 33,
-      "name": "758a8881483e43dfb5a9cf78c2eaa059",
+      "name": "b3fa124d345540b694e837eb5087f39e",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -699,16 +699,16 @@
       "height": "1.9",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
       "imagescale": "true",
-      "label": "shippingservice",
+      "label": "redis-cart",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: shippingservice\n...",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: redis-cart\n...",
       "width": "1.4"
     },
     {
       "_gvid": 34,
-      "name": "4bb218878b114767b6ded6cac38488e1",
+      "name": "1187ab4a0a484eda9e410771e3f62131",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -716,16 +716,16 @@
       "height": "1.9",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
       "imagescale": "true",
-      "label": "shippingservice",
+      "label": "redis-cart",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: shippingservice\n...",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: redis-cart\n...",
       "width": "1.4"
     },
     {
       "_gvid": 35,
-      "name": "3d24f153387f47c8b841924eda952ce6",
+      "name": "ad416e5d78d84708a7b874287a1e9aca",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -733,16 +733,16 @@
       "height": "1.9",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/compute\/deploy.png",
       "imagescale": "true",
-      "label": "adservice",
+      "label": "paymentservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: adservice\n...",
+      "tooltip": "kind: Deployment\napiVersion: apps\/v1\nmetadata:\n  name: paymentservice\n...",
       "width": "1.4"
     },
     {
       "_gvid": 36,
-      "name": "cc9a0f86226e40e69a17eccbd5223c33",
+      "name": "0376008de6ff4756b03683cf6074f609",
       "fixedsize": "true",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
@@ -750,11 +750,11 @@
       "height": "1.9",
       "image": "https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master\/resources\/k8s\/network\/svc.png",
       "imagescale": "true",
-      "label": "adservice",
+      "label": "paymentservice",
       "labelloc": "b",
       "shape": "none",
       "style": "rounded",
-      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: adservice\n...",
+      "tooltip": "kind: Service\napiVersion: v1\nmetadata:\n  name: paymentservice\n...",
       "width": "1.4"
     }
   ],
@@ -769,13 +769,26 @@
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: emailservice",
-      "xlabel": "5000->8080\/TCP"
+      "tooltip": "spec.selector:\n  app: adservice",
+      "xlabel": "9555\/TCP"
     },
     {
-      "_gvid": 7,
+      "_gvid": 1,
       "tail": 16,
       "head": 15,
+      "color": "black",
+      "dir": "forward",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "10",
+      "style": "dashed",
+      "tooltip": "spec.selector:\n  app: shippingservice",
+      "xlabel": "50051\/TCP"
+    },
+    {
+      "_gvid": 8,
+      "tail": 18,
+      "head": 17,
       "color": "black",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -787,19 +800,6 @@
     },
     {
       "_gvid": 9,
-      "tail": 18,
-      "head": 17,
-      "color": "black",
-      "dir": "forward",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "10",
-      "style": "dashed",
-      "tooltip": "spec.selector:\n  app: recommendationservice",
-      "xlabel": "8080\/TCP"
-    },
-    {
-      "_gvid": 17,
       "tail": 20,
       "head": 19,
       "color": "black",
@@ -808,39 +808,26 @@
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: frontend",
-      "xlabel": "80->8080\/TCP"
+      "tooltip": "spec.selector:\n  app: currencyservice",
+      "xlabel": "7000\/TCP"
     },
     {
-      "_gvid": 18,
-      "tail": 21,
-      "head": 19,
+      "_gvid": 10,
+      "tail": 22,
+      "head": 21,
       "color": "black",
       "dir": "forward",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: frontend",
-      "xlabel": "80->8080\/TCP"
+      "tooltip": "spec.selector:\n  app: emailservice",
+      "xlabel": "5000->8080\/TCP"
     },
     {
-      "_gvid": 19,
-      "tail": 23,
-      "head": 22,
-      "color": "black",
-      "dir": "forward",
-      "fontcolor": "#2D3436",
-      "fontname": "Sans-Serif",
-      "fontsize": "10",
-      "style": "dashed",
-      "tooltip": "spec.selector:\n  app: paymentservice",
-      "xlabel": "50051\/TCP"
-    },
-    {
-      "_gvid": 20,
-      "tail": 25,
-      "head": 24,
+      "_gvid": 11,
+      "tail": 24,
+      "head": 23,
       "color": "black",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -851,20 +838,33 @@
       "xlabel": "3550\/TCP"
     },
     {
-      "_gvid": 22,
-      "tail": 27,
-      "head": 26,
+      "_gvid": 19,
+      "tail": 26,
+      "head": 25,
       "color": "black",
       "dir": "forward",
       "fontcolor": "#2D3436",
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: cartservice",
-      "xlabel": "7070\/TCP"
+      "tooltip": "spec.selector:\n  app: frontend",
+      "xlabel": "80->8080\/TCP"
     },
     {
-      "_gvid": 23,
+      "_gvid": 20,
+      "tail": 27,
+      "head": 25,
+      "color": "black",
+      "dir": "forward",
+      "fontcolor": "#2D3436",
+      "fontname": "Sans-Serif",
+      "fontsize": "10",
+      "style": "dashed",
+      "tooltip": "spec.selector:\n  app: frontend",
+      "xlabel": "80->8080\/TCP"
+    },
+    {
+      "_gvid": 22,
       "tail": 29,
       "head": 28,
       "color": "black",
@@ -873,8 +873,8 @@
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: redis-cart",
-      "xlabel": "6379\/TCP"
+      "tooltip": "spec.selector:\n  app: recommendationservice",
+      "xlabel": "8080\/TCP"
     },
     {
       "_gvid": 25,
@@ -886,8 +886,8 @@
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: currencyservice",
-      "xlabel": "7000\/TCP"
+      "tooltip": "spec.selector:\n  app: cartservice",
+      "xlabel": "7070\/TCP"
     },
     {
       "_gvid": 26,
@@ -899,8 +899,8 @@
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: shippingservice",
-      "xlabel": "50051\/TCP"
+      "tooltip": "spec.selector:\n  app: redis-cart",
+      "xlabel": "6379\/TCP"
     },
     {
       "_gvid": 27,
@@ -912,13 +912,13 @@
       "fontname": "Sans-Serif",
       "fontsize": "10",
       "style": "dashed",
-      "tooltip": "spec.selector:\n  app: adservice",
-      "xlabel": "9555\/TCP"
+      "tooltip": "spec.selector:\n  app: paymentservice",
+      "xlabel": "50051\/TCP"
     },
     {
-      "_gvid": 3,
-      "tail": 15,
-      "head": 25,
+      "_gvid": 5,
+      "tail": 17,
+      "head": 24,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -929,9 +929,9 @@
       "tooltip": "from: checkoutservice\/default\/Deployment\/apps\/v1\nto: productcatalogservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 6,
-      "tail": 15,
-      "head": 34,
+      "_gvid": 2,
+      "tail": 17,
+      "head": 16,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -942,9 +942,9 @@
       "tooltip": "from: checkoutservice\/default\/Deployment\/apps\/v1\nto: shippingservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 2,
-      "tail": 15,
-      "head": 23,
+      "_gvid": 7,
+      "tail": 17,
+      "head": 36,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -955,9 +955,9 @@
       "tooltip": "from: checkoutservice\/default\/Deployment\/apps\/v1\nto: paymentservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 1,
-      "tail": 15,
-      "head": 14,
+      "_gvid": 4,
+      "tail": 17,
+      "head": 22,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -968,9 +968,9 @@
       "tooltip": "from: checkoutservice\/default\/Deployment\/apps\/v1\nto: emailservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 5,
-      "tail": 15,
-      "head": 32,
+      "_gvid": 3,
+      "tail": 17,
+      "head": 20,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -981,9 +981,9 @@
       "tooltip": "from: checkoutservice\/default\/Deployment\/apps\/v1\nto: currencyservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 4,
-      "tail": 15,
-      "head": 27,
+      "_gvid": 6,
+      "tail": 17,
+      "head": 32,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -994,9 +994,9 @@
       "tooltip": "from: checkoutservice\/default\/Deployment\/apps\/v1\nto: cartservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 8,
-      "tail": 17,
-      "head": 25,
+      "_gvid": 21,
+      "tail": 28,
+      "head": 24,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1007,9 +1007,9 @@
       "tooltip": "from: recommendationservice\/default\/Deployment\/apps\/v1\nto: productcatalogservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 12,
-      "tail": 19,
-      "head": 25,
+      "_gvid": 16,
+      "tail": 25,
+      "head": 24,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1020,9 +1020,9 @@
       "tooltip": "from: frontend\/default\/Deployment\/apps\/v1\nto: productcatalogservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 14,
-      "tail": 19,
-      "head": 32,
+      "_gvid": 15,
+      "tail": 25,
+      "head": 20,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1033,9 +1033,9 @@
       "tooltip": "from: frontend\/default\/Deployment\/apps\/v1\nto: currencyservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 13,
-      "tail": 19,
-      "head": 27,
+      "_gvid": 18,
+      "tail": 25,
+      "head": 32,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1046,9 +1046,9 @@
       "tooltip": "from: frontend\/default\/Deployment\/apps\/v1\nto: cartservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 11,
-      "tail": 19,
-      "head": 18,
+      "_gvid": 17,
+      "tail": 25,
+      "head": 29,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1059,9 +1059,9 @@
       "tooltip": "from: frontend\/default\/Deployment\/apps\/v1\nto: recommendationservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 15,
-      "tail": 19,
-      "head": 34,
+      "_gvid": 13,
+      "tail": 25,
+      "head": 16,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1072,9 +1072,9 @@
       "tooltip": "from: frontend\/default\/Deployment\/apps\/v1\nto: shippingservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 10,
-      "tail": 19,
-      "head": 16,
+      "_gvid": 14,
+      "tail": 25,
+      "head": 18,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1085,9 +1085,9 @@
       "tooltip": "from: frontend\/default\/Deployment\/apps\/v1\nto: checkoutservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 16,
-      "tail": 19,
-      "head": 36,
+      "_gvid": 12,
+      "tail": 25,
+      "head": 14,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1098,9 +1098,9 @@
       "tooltip": "from: frontend\/default\/Deployment\/apps\/v1\nto: adservice\/default\/Service\/v1"
     },
     {
-      "_gvid": 24,
+      "_gvid": 23,
       "tail": 30,
-      "head": 20,
+      "head": 26,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",
@@ -1111,9 +1111,9 @@
       "tooltip": "from: loadgenerator\/default\/Deployment\/apps\/v1\nto: frontend\/default\/Service\/v1"
     },
     {
-      "_gvid": 21,
-      "tail": 26,
-      "head": 29,
+      "_gvid": 24,
+      "tail": 31,
+      "head": 34,
       "color": "brown",
       "dir": "forward",
       "fontcolor": "#2D3436",

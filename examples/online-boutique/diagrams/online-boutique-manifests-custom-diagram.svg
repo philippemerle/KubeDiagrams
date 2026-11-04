@@ -17,586 +17,592 @@
 </a>
 </g>
 </g>
+<g id="clust10" class="cluster">
+<title>cluster_Application: loadgenerator</title>
+<g id="a_clust10"><a xlink:title="Application: loadgenerator">
+<path fill="#ece8f6" stroke="#aeb6be" d="M620,-1686.4C620,-1686.4 752,-1686.4 752,-1686.4 758,-1686.4 764,-1692.4 764,-1698.4 764,-1698.4 764,-1847.95 764,-1847.95 764,-1853.95 758,-1859.95 752,-1859.95 752,-1859.95 620,-1859.95 620,-1859.95 614,-1859.95 608,-1853.95 608,-1847.95 608,-1847.95 608,-1698.4 608,-1698.4 608,-1692.4 614,-1686.4 620,-1686.4"/>
+<text text-anchor="middle" x="686.12" y="-1844.55" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: loadgenerator</text>
+</a>
+</g>
+</g>
+<g id="clust11" class="cluster">
+<title>cluster_Application: cartservice</title>
+<g id="a_clust11"><a xlink:title="Application: cartservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M914,-412C914,-412 1029,-412 1029,-412 1035,-412 1041,-418 1041,-424 1041,-424 1041,-793.15 1041,-793.15 1041,-799.15 1035,-805.15 1029,-805.15 1029,-805.15 914,-805.15 914,-805.15 908,-805.15 902,-799.15 902,-793.15 902,-793.15 902,-424 902,-424 902,-418 908,-412 914,-412"/>
+<text text-anchor="middle" x="971.88" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: cartservice</text>
+</a>
+</g>
+</g>
+<g id="clust12" class="cluster">
+<title>cluster_Application: redis&#45;cart</title>
+<g id="a_clust12"><a xlink:title="Application: redis&#45;cart">
+<path fill="#ece8f6" stroke="#aeb6be" d="M907,-16C907,-16 1014,-16 1014,-16 1020,-16 1026,-22 1026,-28 1026,-28 1026,-368.35 1026,-368.35 1026,-374.35 1020,-380.35 1014,-380.35 1014,-380.35 907,-380.35 907,-380.35 901,-380.35 895,-374.35 895,-368.35 895,-368.35 895,-28 895,-28 895,-22 901,-16 907,-16"/>
+<text text-anchor="middle" x="960.75" y="-364.95" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: redis&#45;cart</text>
+</a>
+</g>
+</g>
+<g id="clust13" class="cluster">
+<title>cluster_Application: paymentservice</title>
+<g id="a_clust13"><a xlink:title="Application: paymentservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M202,-412C202,-412 344,-412 344,-412 350,-412 356,-418 356,-424 356,-424 356,-793.15 356,-793.15 356,-799.15 350,-805.15 344,-805.15 344,-805.15 202,-805.15 202,-805.15 196,-805.15 190,-799.15 190,-793.15 190,-793.15 190,-424 190,-424 190,-418 196,-412 202,-412"/>
+<text text-anchor="middle" x="273" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: paymentservice</text>
+</a>
+</g>
+</g>
 <g id="clust2" class="cluster">
-<title>cluster_Application: emailservice</title>
-<g id="a_clust2"><a xlink:title="Application: emailservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M235,-412C235,-412 360,-412 360,-412 366,-412 372,-418 372,-424 372,-424 372,-793.15 372,-793.15 372,-799.15 366,-805.15 360,-805.15 360,-805.15 235,-805.15 235,-805.15 229,-805.15 223,-799.15 223,-793.15 223,-793.15 223,-424 223,-424 223,-418 229,-412 235,-412"/>
-<text text-anchor="middle" x="297.75" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: emailservice</text>
+<title>cluster_Application: adservice</title>
+<g id="a_clust2"><a xlink:title="Application: adservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M278,-851.2C278,-851.2 387,-851.2 387,-851.2 393,-851.2 399,-857.2 399,-863.2 399,-863.2 399,-1232.35 399,-1232.35 399,-1238.35 393,-1244.35 387,-1244.35 387,-1244.35 278,-1244.35 278,-1244.35 272,-1244.35 266,-1238.35 266,-1232.35 266,-1232.35 266,-863.2 266,-863.2 266,-857.2 272,-851.2 278,-851.2"/>
+<text text-anchor="middle" x="332.88" y="-1228.95" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: adservice</text>
 </a>
 </g>
 </g>
 <g id="clust3" class="cluster">
-<title>cluster_Application: checkoutservice</title>
-<g id="a_clust3"><a xlink:title="Application: checkoutservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M441,-851.2C441,-851.2 585,-851.2 585,-851.2 591,-851.2 597,-857.2 597,-863.2 597,-863.2 597,-1232.35 597,-1232.35 597,-1238.35 591,-1244.35 585,-1244.35 585,-1244.35 441,-1244.35 441,-1244.35 435,-1244.35 429,-1238.35 429,-1232.35 429,-1232.35 429,-863.2 429,-863.2 429,-857.2 435,-851.2 441,-851.2"/>
-<text text-anchor="middle" x="513.12" y="-1228.95" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: checkoutservice</text>
+<title>cluster_Application: shippingservice</title>
+<g id="a_clust3"><a xlink:title="Application: shippingservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M28,-397.6C28,-397.6 170,-397.6 170,-397.6 176,-397.6 182,-403.6 182,-409.6 182,-409.6 182,-807.55 182,-807.55 182,-813.55 176,-819.55 170,-819.55 170,-819.55 28,-819.55 28,-819.55 22,-819.55 16,-813.55 16,-807.55 16,-807.55 16,-409.6 16,-409.6 16,-403.6 22,-397.6 28,-397.6"/>
+<text text-anchor="middle" x="99" y="-804.15" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: shippingservice</text>
 </a>
 </g>
 </g>
 <g id="clust4" class="cluster">
-<title>cluster_Application: recommendationservice</title>
-<g id="a_clust4"><a xlink:title="Application: recommendationservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M194,-836.8C194,-836.8 379,-836.8 379,-836.8 385,-836.8 391,-842.8 391,-848.8 391,-848.8 391,-1246.75 391,-1246.75 391,-1252.75 385,-1258.75 379,-1258.75 379,-1258.75 194,-1258.75 194,-1258.75 188,-1258.75 182,-1252.75 182,-1246.75 182,-1246.75 182,-848.8 182,-848.8 182,-842.8 188,-836.8 194,-836.8"/>
-<text text-anchor="middle" x="286.75" y="-1243.35" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: recommendationservice</text>
+<title>cluster_Application: checkoutservice</title>
+<g id="a_clust4"><a xlink:title="Application: checkoutservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M448,-836.8C448,-836.8 592,-836.8 592,-836.8 598,-836.8 604,-842.8 604,-848.8 604,-848.8 604,-1246.75 604,-1246.75 604,-1252.75 598,-1258.75 592,-1258.75 592,-1258.75 448,-1258.75 448,-1258.75 442,-1258.75 436,-1252.75 436,-1246.75 436,-1246.75 436,-848.8 436,-848.8 436,-842.8 442,-836.8 448,-836.8"/>
+<text text-anchor="middle" x="520.12" y="-1243.35" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: checkoutservice</text>
 </a>
 </g>
 </g>
 <g id="clust5" class="cluster">
-<title>cluster_Application: frontend</title>
-<g id="a_clust5"><a xlink:title="Application: frontend">
-<path fill="#ece8f6" stroke="#aeb6be" d="M495,-1276C495,-1276 731,-1276 731,-1276 737,-1276 743,-1282 743,-1288 743,-1288 743,-1657.15 743,-1657.15 743,-1663.15 737,-1669.15 731,-1669.15 731,-1669.15 495,-1669.15 495,-1669.15 489,-1669.15 483,-1663.15 483,-1657.15 483,-1657.15 483,-1288 483,-1288 483,-1282 489,-1276 495,-1276"/>
-<text text-anchor="middle" x="545.75" y="-1653.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: frontend</text>
+<title>cluster_Application: currencyservice</title>
+<g id="a_clust5"><a xlink:title="Application: currencyservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M533,-397.6C533,-397.6 675,-397.6 675,-397.6 681,-397.6 687,-403.6 687,-409.6 687,-409.6 687,-807.55 687,-807.55 687,-813.55 681,-819.55 675,-819.55 675,-819.55 533,-819.55 533,-819.55 527,-819.55 521,-813.55 521,-807.55 521,-807.55 521,-409.6 521,-409.6 521,-403.6 527,-397.6 533,-397.6"/>
+<text text-anchor="middle" x="604" y="-804.15" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: currencyservice</text>
 </a>
 </g>
 </g>
 <g id="clust6" class="cluster">
-<title>cluster_Application: paymentservice</title>
-<g id="a_clust6"><a xlink:title="Application: paymentservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M392,-412C392,-412 534,-412 534,-412 540,-412 546,-418 546,-424 546,-424 546,-793.15 546,-793.15 546,-799.15 540,-805.15 534,-805.15 534,-805.15 392,-805.15 392,-805.15 386,-805.15 380,-799.15 380,-793.15 380,-793.15 380,-424 380,-424 380,-418 386,-412 392,-412"/>
-<text text-anchor="middle" x="463" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: paymentservice</text>
+<title>cluster_Application: emailservice</title>
+<g id="a_clust6"><a xlink:title="Application: emailservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M376,-412C376,-412 501,-412 501,-412 507,-412 513,-418 513,-424 513,-424 513,-793.15 513,-793.15 513,-799.15 507,-805.15 501,-805.15 501,-805.15 376,-805.15 376,-805.15 370,-805.15 364,-799.15 364,-793.15 364,-793.15 364,-424 364,-424 364,-418 370,-412 376,-412"/>
+<text text-anchor="middle" x="438.75" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: emailservice</text>
 </a>
 </g>
 </g>
 <g id="clust7" class="cluster">
 <title>cluster_Application: productcatalogservice</title>
 <g id="a_clust7"><a xlink:title="Application: productcatalogservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M28,-397.6C28,-397.6 203,-397.6 203,-397.6 209,-397.6 215,-403.6 215,-409.6 215,-409.6 215,-807.55 215,-807.55 215,-813.55 209,-819.55 203,-819.55 203,-819.55 28,-819.55 28,-819.55 22,-819.55 16,-813.55 16,-807.55 16,-807.55 16,-409.6 16,-409.6 16,-403.6 22,-397.6 28,-397.6"/>
-<text text-anchor="middle" x="115.5" y="-804.15" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: productcatalogservice</text>
+<path fill="#ece8f6" stroke="#aeb6be" d="M707,-397.6C707,-397.6 882,-397.6 882,-397.6 888,-397.6 894,-403.6 894,-409.6 894,-409.6 894,-807.55 894,-807.55 894,-813.55 888,-819.55 882,-819.55 882,-819.55 707,-819.55 707,-819.55 701,-819.55 695,-813.55 695,-807.55 695,-807.55 695,-409.6 695,-409.6 695,-403.6 701,-397.6 707,-397.6"/>
+<text text-anchor="middle" x="794.5" y="-804.15" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: productcatalogservice</text>
 </a>
 </g>
 </g>
 <g id="clust8" class="cluster">
-<title>cluster_Application: cartservice</title>
-<g id="a_clust8"><a xlink:title="Application: cartservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M566,-412C566,-412 681,-412 681,-412 687,-412 693,-418 693,-424 693,-424 693,-793.15 693,-793.15 693,-799.15 687,-805.15 681,-805.15 681,-805.15 566,-805.15 566,-805.15 560,-805.15 554,-799.15 554,-793.15 554,-793.15 554,-424 554,-424 554,-418 560,-412 566,-412"/>
-<text text-anchor="middle" x="623.88" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: cartservice</text>
+<title>cluster_Application: frontend</title>
+<g id="a_clust8"><a xlink:title="Application: frontend">
+<path fill="#ece8f6" stroke="#aeb6be" d="M496,-1276C496,-1276 732,-1276 732,-1276 738,-1276 744,-1282 744,-1288 744,-1288 744,-1657.15 744,-1657.15 744,-1663.15 738,-1669.15 732,-1669.15 732,-1669.15 496,-1669.15 496,-1669.15 490,-1669.15 484,-1663.15 484,-1657.15 484,-1657.15 484,-1288 484,-1288 484,-1282 490,-1276 496,-1276"/>
+<text text-anchor="middle" x="546.75" y="-1653.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: frontend</text>
 </a>
 </g>
 </g>
 <g id="clust9" class="cluster">
-<title>cluster_Application: redis&#45;cart</title>
-<g id="a_clust9"><a xlink:title="Application: redis&#45;cart">
-<path fill="#ece8f6" stroke="#aeb6be" d="M560,-16C560,-16 667,-16 667,-16 673,-16 679,-22 679,-28 679,-28 679,-368.35 679,-368.35 679,-374.35 673,-380.35 667,-380.35 667,-380.35 560,-380.35 560,-380.35 554,-380.35 548,-374.35 548,-368.35 548,-368.35 548,-28 548,-28 548,-22 554,-16 560,-16"/>
-<text text-anchor="middle" x="613.75" y="-364.95" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: redis&#45;cart</text>
+<title>cluster_Application: recommendationservice</title>
+<g id="a_clust9"><a xlink:title="Application: recommendationservice">
+<path fill="#ece8f6" stroke="#aeb6be" d="M693,-836.8C693,-836.8 878,-836.8 878,-836.8 884,-836.8 890,-842.8 890,-848.8 890,-848.8 890,-1246.75 890,-1246.75 890,-1252.75 884,-1258.75 878,-1258.75 878,-1258.75 693,-1258.75 693,-1258.75 687,-1258.75 681,-1252.75 681,-1246.75 681,-1246.75 681,-848.8 681,-848.8 681,-842.8 687,-836.8 693,-836.8"/>
+<text text-anchor="middle" x="785.75" y="-1243.35" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: recommendationservice</text>
 </a>
 </g>
 </g>
-<g id="clust10" class="cluster">
-<title>cluster_Application: loadgenerator</title>
-<g id="a_clust10"><a xlink:title="Application: loadgenerator">
-<path fill="#ece8f6" stroke="#aeb6be" d="M619,-1686.4C619,-1686.4 751,-1686.4 751,-1686.4 757,-1686.4 763,-1692.4 763,-1698.4 763,-1698.4 763,-1847.95 763,-1847.95 763,-1853.95 757,-1859.95 751,-1859.95 751,-1859.95 619,-1859.95 619,-1859.95 613,-1859.95 607,-1853.95 607,-1847.95 607,-1847.95 607,-1698.4 607,-1698.4 607,-1692.4 613,-1686.4 619,-1686.4"/>
-<text text-anchor="middle" x="685.12" y="-1844.55" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: loadgenerator</text>
-</a>
-</g>
-</g>
-<g id="clust11" class="cluster">
-<title>cluster_Application: currencyservice</title>
-<g id="a_clust11"><a xlink:title="Application: currencyservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M713,-412C713,-412 855,-412 855,-412 861,-412 867,-418 867,-424 867,-424 867,-793.15 867,-793.15 867,-799.15 861,-805.15 855,-805.15 855,-805.15 713,-805.15 713,-805.15 707,-805.15 701,-799.15 701,-793.15 701,-793.15 701,-424 701,-424 701,-418 707,-412 713,-412"/>
-<text text-anchor="middle" x="784" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: currencyservice</text>
-</a>
-</g>
-</g>
-<g id="clust12" class="cluster">
-<title>cluster_Application: shippingservice</title>
-<g id="a_clust12"><a xlink:title="Application: shippingservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M887,-412C887,-412 1029,-412 1029,-412 1035,-412 1041,-418 1041,-424 1041,-424 1041,-793.15 1041,-793.15 1041,-799.15 1035,-805.15 1029,-805.15 1029,-805.15 887,-805.15 887,-805.15 881,-805.15 875,-799.15 875,-793.15 875,-793.15 875,-424 875,-424 875,-418 881,-412 887,-412"/>
-<text text-anchor="middle" x="958" y="-789.75" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: shippingservice</text>
-</a>
-</g>
-</g>
-<g id="clust13" class="cluster">
-<title>cluster_Application: adservice</title>
-<g id="a_clust13"><a xlink:title="Application: adservice">
-<path fill="#ece8f6" stroke="#aeb6be" d="M742,-851.2C742,-851.2 851,-851.2 851,-851.2 857,-851.2 863,-857.2 863,-863.2 863,-863.2 863,-1232.35 863,-1232.35 863,-1238.35 857,-1244.35 851,-1244.35 851,-1244.35 742,-1244.35 742,-1244.35 736,-1244.35 730,-1238.35 730,-1232.35 730,-1232.35 730,-863.2 730,-863.2 730,-857.2 736,-851.2 742,-851.2"/>
-<text text-anchor="middle" x="796.88" y="-1228.95" font-family="Sans-Serif" font-size="12.00" fill="#2d3436">Application: adservice</text>
-</a>
-</g>
-</g>
-<!-- 6ce44e80f2fa46d2a6d4708ad4ca7eee -->
+<!-- ab7e72af7b414fe9b55639ba7a73d843 -->
 <g id="node1" class="node">
-<title>6ce44e80f2fa46d2a6d4708ad4ca7eee</title>
-<g id="a_node1"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: emailservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="263.6" y="-538.8"/>
-<text text-anchor="middle" x="314" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">emailservice</text>
+<title>ab7e72af7b414fe9b55639ba7a73d843</title>
+<g id="a_node1"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: adservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="281.6" y="-978"/>
+<text text-anchor="middle" x="332" y="-860.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">adservice</text>
 </a>
 </g>
 </g>
-<!-- 2c014564402e442ba06086c03da4e8f3 -->
+<!-- 04b30e9476e94e9aa5dec287a4633484 -->
 <g id="node2" class="node">
-<title>2c014564402e442ba06086c03da4e8f3</title>
-<g id="a_node2"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: emailservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="263.6" y="-758.4"/>
-<text text-anchor="middle" x="314" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">emailservice</text>
+<title>04b30e9476e94e9aa5dec287a4633484</title>
+<g id="a_node2"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: adservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="281.6" y="-1197.6"/>
+<text text-anchor="middle" x="332" y="-1079.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">adservice</text>
 </a>
 </g>
 </g>
-<!-- 2c014564402e442ba06086c03da4e8f3&#45;&gt;6ce44e80f2fa46d2a6d4708ad4ca7eee -->
+<!-- 04b30e9476e94e9aa5dec287a4633484&#45;&gt;ab7e72af7b414fe9b55639ba7a73d843 -->
 <g id="edge1" class="edge">
-<title>2c014564402e442ba06086c03da4e8f3&#45;&gt;6ce44e80f2fa46d2a6d4708ad4ca7eee</title>
-<g id="a_edge1"><a xlink:title="spec.selector:&#10; &#160;app: emailservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M314,-639.72C314,-639.72 314,-567.64 314,-567.64"/>
-<polygon fill="black" stroke="black" points="317.5,-567.64 314,-557.64 310.5,-567.64 317.5,-567.64"/>
+<title>04b30e9476e94e9aa5dec287a4633484&#45;&gt;ab7e72af7b414fe9b55639ba7a73d843</title>
+<g id="a_edge1"><a xlink:title="spec.selector:&#10; &#160;app: adservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M332,-1078.92C332,-1078.92 332,-1006.84 332,-1006.84"/>
+<polygon fill="black" stroke="black" points="335.5,-1006.84 332,-996.84 328.5,-1006.84 335.5,-1006.84"/>
 </a>
 </g>
-<text text-anchor="middle" x="276.88" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">5000&#45;&gt;8080/TCP</text>
+<text text-anchor="middle" x="309.88" y="-1044.63" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">9555/TCP</text>
 </g>
-<!-- 5c37edc73e5e4969a1934b7326baafa3 -->
+<!-- e9ad16825bb54db3aa1900122ff94d3c -->
 <g id="node3" class="node">
-<title>5c37edc73e5e4969a1934b7326baafa3</title>
-<g id="a_node3"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: checkoutservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="468.6" y="-978"/>
-<text text-anchor="middle" x="519" y="-860.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">checkoutservice</text>
+<title>e9ad16825bb54db3aa1900122ff94d3c</title>
+<g id="a_node3"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: shippingservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="73.6" y="-538.8"/>
+<text text-anchor="middle" x="124" y="-420.25" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">shippingservic</text>
+<text text-anchor="middle" x="124" y="-406.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">e</text>
 </a>
 </g>
 </g>
-<!-- 5c37edc73e5e4969a1934b7326baafa3&#45;&gt;2c014564402e442ba06086c03da4e8f3 -->
-<g id="edge16" class="edge">
-<title>5c37edc73e5e4969a1934b7326baafa3&#45;&gt;2c014564402e442ba06086c03da4e8f3</title>
-<g id="a_edge16"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: emailservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M469.04,-927C421.41,-927 356.9,-927 356.9,-927 356.9,-927 356.9,-787.39 356.9,-787.39"/>
-<polygon fill="brown" stroke="brown" points="360.4,-787.39 356.9,-777.39 353.4,-787.39 360.4,-787.39"/>
-</a>
-</g>
-</g>
-<!-- 7c9932f3752e45c9a835637d2bd9a13b -->
-<g id="node11" class="node">
-<title>7c9932f3752e45c9a835637d2bd9a13b</title>
-<g id="a_node11"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: paymentservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="418.6" y="-758.4"/>
-<text text-anchor="middle" x="469" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">paymentservice</text>
-</a>
-</g>
-</g>
-<!-- 5c37edc73e5e4969a1934b7326baafa3&#45;&gt;7c9932f3752e45c9a835637d2bd9a13b -->
-<g id="edge15" class="edge">
-<title>5c37edc73e5e4969a1934b7326baafa3&#45;&gt;7c9932f3752e45c9a835637d2bd9a13b</title>
-<g id="a_edge15"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: paymentservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M502.47,-859.32C502.47,-859.32 502.47,-787.24 502.47,-787.24"/>
-<polygon fill="brown" stroke="brown" points="505.97,-787.24 502.47,-777.24 498.97,-787.24 505.97,-787.24"/>
-</a>
-</g>
-</g>
-<!-- a9daf25344fa4c4a9a7b577b4eddd1d0 -->
-<g id="node13" class="node">
-<title>a9daf25344fa4c4a9a7b577b4eddd1d0</title>
-<g id="a_node13"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: productcatalogservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="106.6" y="-758.4"/>
-<text text-anchor="middle" x="157" y="-639.85" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">productcatalogse</text>
-<text text-anchor="middle" x="157" y="-626.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">rvice</text>
-</a>
-</g>
-</g>
-<!-- 5c37edc73e5e4969a1934b7326baafa3&#45;&gt;a9daf25344fa4c4a9a7b577b4eddd1d0 -->
-<g id="edge13" class="edge">
-<title>5c37edc73e5e4969a1934b7326baafa3&#45;&gt;a9daf25344fa4c4a9a7b577b4eddd1d0</title>
-<g id="a_edge13"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: productcatalogservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M485.53,-859.53C485.53,-822.03 485.53,-783 485.53,-783 485.53,-783 218.25,-783 218.25,-783"/>
-<polygon fill="brown" stroke="brown" points="218.25,-779.5 208.25,-783 218.25,-786.5 218.25,-779.5"/>
-</a>
-</g>
-</g>
-<!-- b83e8a43cee9457eadb084cc9ab4de9b -->
-<g id="node15" class="node">
-<title>b83e8a43cee9457eadb084cc9ab4de9b</title>
-<g id="a_node15"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cartservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="562.6" y="-758.4"/>
-<text text-anchor="middle" x="613" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cartservice</text>
-</a>
-</g>
-</g>
-<!-- 5c37edc73e5e4969a1934b7326baafa3&#45;&gt;b83e8a43cee9457eadb084cc9ab4de9b -->
-<g id="edge18" class="edge">
-<title>5c37edc73e5e4969a1934b7326baafa3&#45;&gt;b83e8a43cee9457eadb084cc9ab4de9b</title>
-<g id="a_edge18"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: cartservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M548.2,-859.32C548.2,-794.86 548.2,-708 548.2,-708 548.2,-708 551.9,-708 551.9,-708"/>
-<polygon fill="brown" stroke="brown" points="551.9,-711.5 561.9,-708 551.9,-704.5 551.9,-711.5"/>
-</a>
-</g>
-</g>
-<!-- 0acc7d13ffc9443b836517f1b76110c9 -->
-<g id="node20" class="node">
-<title>0acc7d13ffc9443b836517f1b76110c9</title>
-<g id="a_node20"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: currencyservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="708.6" y="-758.4"/>
-<text text-anchor="middle" x="759" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">currencyservice</text>
-</a>
-</g>
-</g>
-<!-- 5c37edc73e5e4969a1934b7326baafa3&#45;&gt;0acc7d13ffc9443b836517f1b76110c9 -->
-<g id="edge17" class="edge">
-<title>5c37edc73e5e4969a1934b7326baafa3&#45;&gt;0acc7d13ffc9443b836517f1b76110c9</title>
-<g id="a_edge17"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: currencyservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M569.35,-927C628.17,-927 717.53,-927 717.53,-927 717.53,-927 717.53,-787.39 717.53,-787.39"/>
-<polygon fill="brown" stroke="brown" points="721.03,-787.39 717.53,-777.39 714.03,-787.39 721.03,-787.39"/>
-</a>
-</g>
-</g>
-<!-- 8b790414115f4c089ad17e9f65b98d3b -->
-<g id="node22" class="node">
-<title>8b790414115f4c089ad17e9f65b98d3b</title>
-<g id="a_node22"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: shippingservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="882.6" y="-758.4"/>
-<text text-anchor="middle" x="933" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">shippingservice</text>
-</a>
-</g>
-</g>
-<!-- 5c37edc73e5e4969a1934b7326baafa3&#45;&gt;8b790414115f4c089ad17e9f65b98d3b -->
-<g id="edge14" class="edge">
-<title>5c37edc73e5e4969a1934b7326baafa3&#45;&gt;8b790414115f4c089ad17e9f65b98d3b</title>
-<g id="a_edge14"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: shippingservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M533.8,-859.25C533.8,-854.77 533.8,-852 533.8,-852 533.8,-852 916.2,-852 916.2,-852 916.2,-852 916.2,-787.2 916.2,-787.2"/>
-<polygon fill="brown" stroke="brown" points="919.7,-787.2 916.2,-777.2 912.7,-787.2 919.7,-787.2"/>
-</a>
-</g>
-</g>
-<!-- 077eaca43cd04bbe87a458f5dd5aa78a -->
+<!-- 7367d97064df4127ac81533ef2142450 -->
 <g id="node4" class="node">
-<title>077eaca43cd04bbe87a458f5dd5aa78a</title>
-<g id="a_node4"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: checkoutservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="468.6" y="-1197.6"/>
-<text text-anchor="middle" x="519" y="-1079.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">checkoutservice</text>
+<title>7367d97064df4127ac81533ef2142450</title>
+<g id="a_node4"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: shippingservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="73.6" y="-758.4"/>
+<text text-anchor="middle" x="124" y="-639.85" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">shippingservic</text>
+<text text-anchor="middle" x="124" y="-626.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">e</text>
 </a>
 </g>
 </g>
-<!-- 077eaca43cd04bbe87a458f5dd5aa78a&#45;&gt;5c37edc73e5e4969a1934b7326baafa3 -->
+<!-- 7367d97064df4127ac81533ef2142450&#45;&gt;e9ad16825bb54db3aa1900122ff94d3c -->
 <g id="edge2" class="edge">
-<title>077eaca43cd04bbe87a458f5dd5aa78a&#45;&gt;5c37edc73e5e4969a1934b7326baafa3</title>
-<g id="a_edge2"><a xlink:title="spec.selector:&#10; &#160;app: checkoutservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M519,-1078.92C519,-1078.92 519,-1006.84 519,-1006.84"/>
-<polygon fill="black" stroke="black" points="522.5,-1006.84 519,-996.84 515.5,-1006.84 522.5,-1006.84"/>
+<title>7367d97064df4127ac81533ef2142450&#45;&gt;e9ad16825bb54db3aa1900122ff94d3c</title>
+<g id="a_edge2"><a xlink:title="spec.selector:&#10; &#160;app: shippingservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M124,-625.29C124,-625.29 124,-582.03 124,-582.03"/>
+<polygon fill="black" stroke="black" points="127.5,-582.03 124,-572.03 120.5,-582.03 127.5,-582.03"/>
 </a>
 </g>
-<text text-anchor="middle" x="496.88" y="-1044.63" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">5050/TCP</text>
+<text text-anchor="middle" x="99.25" y="-605.41" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">50051/TCP</text>
 </g>
-<!-- 9133680294f24c7c97da6aeaf31b1269 -->
+<!-- 0824fc522f68419b97e1a74cd2a73d65 -->
 <g id="node5" class="node">
-<title>9133680294f24c7c97da6aeaf31b1269</title>
-<g id="a_node5"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: recommendationservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="229.6" y="-978"/>
-<text text-anchor="middle" x="280" y="-859.45" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">recommendationse</text>
-<text text-anchor="middle" x="280" y="-845.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">rvice</text>
+<title>0824fc522f68419b97e1a74cd2a73d65</title>
+<g id="a_node5"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: checkoutservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="469.6" y="-978"/>
+<text text-anchor="middle" x="520" y="-859.45" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">checkoutservic</text>
+<text text-anchor="middle" x="520" y="-845.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">e</text>
 </a>
 </g>
 </g>
-<!-- 9133680294f24c7c97da6aeaf31b1269&#45;&gt;a9daf25344fa4c4a9a7b577b4eddd1d0 -->
-<g id="edge19" class="edge">
-<title>9133680294f24c7c97da6aeaf31b1269&#45;&gt;a9daf25344fa4c4a9a7b577b4eddd1d0</title>
-<g id="a_edge19"><a xlink:title="from: recommendationservice/default/Deployment/apps/v1&#10;to: productcatalogservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M246.6,-845C246.6,-814.39 246.6,-787 246.6,-787 246.6,-787 218.3,-787 218.3,-787"/>
-<polygon fill="brown" stroke="brown" points="218.3,-783.5 208.3,-787 218.3,-790.5 218.3,-783.5"/>
+<!-- 0824fc522f68419b97e1a74cd2a73d65&#45;&gt;7367d97064df4127ac81533ef2142450 -->
+<g id="edge14" class="edge">
+<title>0824fc522f68419b97e1a74cd2a73d65&#45;&gt;7367d97064df4127ac81533ef2142450</title>
+<g id="a_edge14"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: shippingservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M481.53,-845.16C481.53,-812.69 481.53,-783 481.53,-783 481.53,-783 185.09,-783 185.09,-783"/>
+<polygon fill="brown" stroke="brown" points="185.09,-779.5 175.09,-783 185.09,-786.5 185.09,-779.5"/>
 </a>
 </g>
 </g>
-<!-- 62ba4b0079c94252b52a4356624c68f2 -->
-<g id="node6" class="node">
-<title>62ba4b0079c94252b52a4356624c68f2</title>
-<g id="a_node6"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: recommendationservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="248.6" y="-1197.6"/>
-<text text-anchor="middle" x="299" y="-1079.05" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">recommendationse</text>
-<text text-anchor="middle" x="299" y="-1065.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">rvice</text>
-</a>
-</g>
-</g>
-<!-- 62ba4b0079c94252b52a4356624c68f2&#45;&gt;9133680294f24c7c97da6aeaf31b1269 -->
-<g id="edge3" class="edge">
-<title>62ba4b0079c94252b52a4356624c68f2&#45;&gt;9133680294f24c7c97da6aeaf31b1269</title>
-<g id="a_edge3"><a xlink:title="spec.selector:&#10; &#160;app: recommendationservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M289.5,-1064.49C289.5,-1064.49 289.5,-1021.23 289.5,-1021.23"/>
-<polygon fill="black" stroke="black" points="293,-1021.23 289.5,-1011.23 286,-1021.23 293,-1021.23"/>
-</a>
-</g>
-<text text-anchor="middle" x="267.38" y="-1044.61" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">8080/TCP</text>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d -->
-<g id="node7" class="node">
-<title>44da65c10ee3447fb2196bd8aac4819d</title>
-<g id="a_node7"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: frontend&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="562.6" y="-1402.8"/>
-<text text-anchor="middle" x="613" y="-1285.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">frontend</text>
-</a>
-</g>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d&#45;&gt;077eaca43cd04bbe87a458f5dd5aa78a -->
-<g id="edge25" class="edge">
-<title>44da65c10ee3447fb2196bd8aac4819d&#45;&gt;077eaca43cd04bbe87a458f5dd5aa78a</title>
-<g id="a_edge25"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: checkoutservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M562.74,-1352C543.73,-1352 526.6,-1352 526.6,-1352 526.6,-1352 526.6,-1226.4 526.6,-1226.4"/>
-<polygon fill="brown" stroke="brown" points="530.1,-1226.4 526.6,-1216.4 523.1,-1226.4 530.1,-1226.4"/>
-</a>
-</g>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d&#45;&gt;62ba4b0079c94252b52a4356624c68f2 -->
-<g id="edge23" class="edge">
-<title>44da65c10ee3447fb2196bd8aac4819d&#45;&gt;62ba4b0079c94252b52a4356624c68f2</title>
-<g id="a_edge23"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: recommendationservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M588.2,-1284.14C588.2,-1252.59 588.2,-1222 588.2,-1222 588.2,-1222 360.37,-1222 360.37,-1222"/>
-<polygon fill="brown" stroke="brown" points="360.37,-1218.5 350.37,-1222 360.37,-1225.5 360.37,-1218.5"/>
-</a>
-</g>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d&#45;&gt;a9daf25344fa4c4a9a7b577b4eddd1d0 -->
-<g id="edge20" class="edge">
-<title>44da65c10ee3447fb2196bd8aac4819d&#45;&gt;a9daf25344fa4c4a9a7b577b4eddd1d0</title>
-<g id="a_edge20"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: productcatalogservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M607,-1284.21C607,-1132.43 607,-780 607,-780 607,-780 218.31,-780 218.31,-780"/>
-<polygon fill="brown" stroke="brown" points="218.31,-776.5 208.31,-780 218.31,-783.5 218.31,-776.5"/>
-</a>
-</g>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d&#45;&gt;b83e8a43cee9457eadb084cc9ab4de9b -->
-<g id="edge22" class="edge">
-<title>44da65c10ee3447fb2196bd8aac4819d&#45;&gt;b83e8a43cee9457eadb084cc9ab4de9b</title>
-<g id="a_edge22"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: cartservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M625.8,-1284.05C625.8,-1284.05 625.8,-787.14 625.8,-787.14"/>
-<polygon fill="brown" stroke="brown" points="629.3,-787.14 625.8,-777.14 622.3,-787.14 629.3,-787.14"/>
-</a>
-</g>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d&#45;&gt;0acc7d13ffc9443b836517f1b76110c9 -->
-<g id="edge21" class="edge">
-<title>44da65c10ee3447fb2196bd8aac4819d&#45;&gt;0acc7d13ffc9443b836517f1b76110c9</title>
-<g id="a_edge21"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: currencyservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M663.1,-1329C693.49,-1329 726.47,-1329 726.47,-1329 726.47,-1329 726.47,-787.23 726.47,-787.23"/>
-<polygon fill="brown" stroke="brown" points="729.97,-787.23 726.47,-777.23 722.97,-787.23 729.97,-787.23"/>
-</a>
-</g>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d&#45;&gt;8b790414115f4c089ad17e9f65b98d3b -->
-<g id="edge24" class="edge">
-<title>44da65c10ee3447fb2196bd8aac4819d&#45;&gt;8b790414115f4c089ad17e9f65b98d3b</title>
-<g id="a_edge24"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: shippingservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M663.06,-1375C756.88,-1375 949.8,-1375 949.8,-1375 949.8,-1375 949.8,-787.25 949.8,-787.25"/>
-<polygon fill="brown" stroke="brown" points="953.3,-787.25 949.8,-777.25 946.3,-787.25 953.3,-787.25"/>
-</a>
-</g>
-</g>
-<!-- ad5e390e7da44c41b1846db47a381f91 -->
-<g id="node24" class="node">
-<title>ad5e390e7da44c41b1846db47a381f91</title>
-<g id="a_node24"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: adservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="746.6" y="-1197.6"/>
-<text text-anchor="middle" x="797" y="-1079.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">adservice</text>
-</a>
-</g>
-</g>
-<!-- 44da65c10ee3447fb2196bd8aac4819d&#45;&gt;ad5e390e7da44c41b1846db47a381f91 -->
-<g id="edge26" class="edge">
-<title>44da65c10ee3447fb2196bd8aac4819d&#45;&gt;ad5e390e7da44c41b1846db47a381f91</title>
-<g id="a_edge26"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: adservice/default/Service/v1">
-<path fill="none" stroke="brown" d="M644.6,-1284C644.6,-1224.25 644.6,-1147 644.6,-1147 644.6,-1147 735.68,-1147 735.68,-1147"/>
-<polygon fill="brown" stroke="brown" points="735.68,-1150.5 745.68,-1147 735.68,-1143.5 735.68,-1150.5"/>
-</a>
-</g>
-</g>
-<!-- 1d7e68929cd14c179e13f55064a4656a -->
+<!-- 065c1e17b523447da123cda900eb06a9 -->
 <g id="node8" class="node">
-<title>1d7e68929cd14c179e13f55064a4656a</title>
-<g id="a_node8"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: frontend&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="634.6" y="-1608"/>
-<text text-anchor="middle" x="685" y="-1490.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">frontend</text>
+<title>065c1e17b523447da123cda900eb06a9</title>
+<g id="a_node8"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: currencyservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="553.6" y="-758.4"/>
+<text text-anchor="middle" x="604" y="-639.85" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">currencyservic</text>
+<text text-anchor="middle" x="604" y="-626.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">e</text>
 </a>
 </g>
 </g>
-<!-- 1d7e68929cd14c179e13f55064a4656a&#45;&gt;44da65c10ee3447fb2196bd8aac4819d -->
-<g id="edge4" class="edge">
-<title>1d7e68929cd14c179e13f55064a4656a&#45;&gt;44da65c10ee3447fb2196bd8aac4819d</title>
-<g id="a_edge4"><a xlink:title="spec.selector:&#10; &#160;app: frontend">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M649,-1489.27C649,-1489.27 649,-1431.78 649,-1431.78"/>
-<polygon fill="black" stroke="black" points="652.5,-1431.78 649,-1421.78 645.5,-1431.78 652.5,-1431.78"/>
-</a>
-</g>
-<text text-anchor="middle" x="617.12" y="-1462.28" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">80&#45;&gt;8080/TCP</text>
-</g>
-<!-- 2e51e21ab09a4689a57a735e81907ac6 -->
-<g id="node9" class="node">
-<title>2e51e21ab09a4689a57a735e81907ac6</title>
-<g id="a_node9"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: frontend&#45;external&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="490.6" y="-1608"/>
-<text text-anchor="middle" x="541" y="-1489.45" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">frontend</text>
-<text text-anchor="middle" x="541" y="-1475.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">&#45;external</text>
+<!-- 0824fc522f68419b97e1a74cd2a73d65&#45;&gt;065c1e17b523447da123cda900eb06a9 -->
+<g id="edge17" class="edge">
+<title>0824fc522f68419b97e1a74cd2a73d65&#45;&gt;065c1e17b523447da123cda900eb06a9</title>
+<g id="a_edge17"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: currencyservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M557.8,-844.89C557.8,-844.89 557.8,-801.63 557.8,-801.63"/>
+<polygon fill="brown" stroke="brown" points="561.3,-801.63 557.8,-791.63 554.3,-801.63 561.3,-801.63"/>
 </a>
 </g>
 </g>
-<!-- 2e51e21ab09a4689a57a735e81907ac6&#45;&gt;44da65c10ee3447fb2196bd8aac4819d -->
-<g id="edge5" class="edge">
-<title>2e51e21ab09a4689a57a735e81907ac6&#45;&gt;44da65c10ee3447fb2196bd8aac4819d</title>
-<g id="a_edge5"><a xlink:title="spec.selector:&#10; &#160;app: frontend">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M577,-1475.02C577,-1475.02 577,-1431.67 577,-1431.67"/>
-<polygon fill="black" stroke="black" points="580.5,-1431.67 577,-1421.67 573.5,-1431.67 580.5,-1431.67"/>
-</a>
-</g>
-<text text-anchor="middle" x="545.12" y="-1455.1" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">80&#45;&gt;8080/TCP</text>
-</g>
-<!-- c4685c099b7447eaaa195e0ea829e2e2 -->
+<!-- 0efcd0c3b3f64d0e997840a2135edaba -->
 <g id="node10" class="node">
-<title>c4685c099b7447eaaa195e0ea829e2e2</title>
-<g id="a_node10"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: paymentservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="418.6" y="-538.8"/>
-<text text-anchor="middle" x="469" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">paymentservice</text>
+<title>0efcd0c3b3f64d0e997840a2135edaba</title>
+<g id="a_node10"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: emailservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="404.6" y="-758.4"/>
+<text text-anchor="middle" x="455" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">emailservice</text>
 </a>
 </g>
 </g>
-<!-- 7c9932f3752e45c9a835637d2bd9a13b&#45;&gt;c4685c099b7447eaaa195e0ea829e2e2 -->
-<g id="edge6" class="edge">
-<title>7c9932f3752e45c9a835637d2bd9a13b&#45;&gt;c4685c099b7447eaaa195e0ea829e2e2</title>
-<g id="a_edge6"><a xlink:title="spec.selector:&#10; &#160;app: paymentservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M469,-639.72C469,-639.72 469,-567.64 469,-567.64"/>
-<polygon fill="black" stroke="black" points="472.5,-567.64 469,-557.64 465.5,-567.64 472.5,-567.64"/>
+<!-- 0824fc522f68419b97e1a74cd2a73d65&#45;&gt;0efcd0c3b3f64d0e997840a2135edaba -->
+<g id="edge16" class="edge">
+<title>0824fc522f68419b97e1a74cd2a73d65&#45;&gt;0efcd0c3b3f64d0e997840a2135edaba</title>
+<g id="a_edge16"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: emailservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M493.47,-844.89C493.47,-844.89 493.47,-787.32 493.47,-787.32"/>
+<polygon fill="brown" stroke="brown" points="496.97,-787.32 493.47,-777.32 489.97,-787.32 496.97,-787.32"/>
 </a>
 </g>
-<text text-anchor="middle" x="444.25" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">50051/TCP</text>
 </g>
-<!-- bb687b82f6444935998c058b7b9291e2 -->
+<!-- ec62a73aa4024853b7893a3e1f6a6859 -->
 <g id="node12" class="node">
-<title>bb687b82f6444935998c058b7b9291e2</title>
-<g id="a_node12"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: productcatalogservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="106.6" y="-538.8"/>
-<text text-anchor="middle" x="157" y="-420.25" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">productcatalogse</text>
-<text text-anchor="middle" x="157" y="-406.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">rvice</text>
+<title>ec62a73aa4024853b7893a3e1f6a6859</title>
+<g id="a_node12"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: productcatalogservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="702.6" y="-758.4"/>
+<text text-anchor="middle" x="753" y="-639.85" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">productcatalog</text>
+<text text-anchor="middle" x="753" y="-626.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">service</text>
 </a>
 </g>
 </g>
-<!-- a9daf25344fa4c4a9a7b577b4eddd1d0&#45;&gt;bb687b82f6444935998c058b7b9291e2 -->
-<g id="edge7" class="edge">
-<title>a9daf25344fa4c4a9a7b577b4eddd1d0&#45;&gt;bb687b82f6444935998c058b7b9291e2</title>
-<g id="a_edge7"><a xlink:title="spec.selector:&#10; &#160;app: productcatalogservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M157,-625.29C157,-625.29 157,-582.03 157,-582.03"/>
-<polygon fill="black" stroke="black" points="160.5,-582.03 157,-572.03 153.5,-582.03 160.5,-582.03"/>
-</a>
-</g>
-<text text-anchor="middle" x="134.88" y="-605.41" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">3550/TCP</text>
-</g>
-<!-- 7d95f01ca3ec420c9af511be1f280d7f -->
-<g id="node14" class="node">
-<title>7d95f01ca3ec420c9af511be1f280d7f</title>
-<g id="a_node14"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: cartservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="562.6" y="-538.8"/>
-<text text-anchor="middle" x="613" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cartservice</text>
+<!-- 0824fc522f68419b97e1a74cd2a73d65&#45;&gt;ec62a73aa4024853b7893a3e1f6a6859 -->
+<g id="edge13" class="edge">
+<title>0824fc522f68419b97e1a74cd2a73d65&#45;&gt;ec62a73aa4024853b7893a3e1f6a6859</title>
+<g id="a_edge13"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: productcatalogservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M562,-844.86C562,-824.3 562,-808 562,-808 562,-808 736.2,-808 736.2,-808 736.2,-808 736.2,-801.58 736.2,-801.58"/>
+<polygon fill="brown" stroke="brown" points="739.7,-801.58 736.2,-791.58 732.7,-801.58 739.7,-801.58"/>
 </a>
 </g>
 </g>
-<!-- 02d6a736aab942feb11d4506f6c7b1c2 -->
+<!-- 7fbfcb6e60124fa1a55f2595cd06732e -->
+<g id="node20" class="node">
+<title>7fbfcb6e60124fa1a55f2595cd06732e</title>
+<g id="a_node20"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: cartservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="909.6" y="-758.4"/>
+<text text-anchor="middle" x="960" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cartservice</text>
+</a>
+</g>
+</g>
+<!-- 0824fc522f68419b97e1a74cd2a73d65&#45;&gt;7fbfcb6e60124fa1a55f2595cd06732e -->
+<g id="edge18" class="edge">
+<title>0824fc522f68419b97e1a74cd2a73d65&#45;&gt;7fbfcb6e60124fa1a55f2595cd06732e</title>
+<g id="a_edge18"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: cartservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M566.2,-845.11C566.2,-833.82 566.2,-826 566.2,-826 566.2,-826 943.2,-826 943.2,-826 943.2,-826 943.2,-787.3 943.2,-787.3"/>
+<polygon fill="brown" stroke="brown" points="946.7,-787.3 943.2,-777.3 939.7,-787.3 946.7,-787.3"/>
+</a>
+</g>
+</g>
+<!-- 92ec699f15a44538b94c168d44e9017b -->
+<g id="node24" class="node">
+<title>92ec699f15a44538b94c168d44e9017b</title>
+<g id="a_node24"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: paymentservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="247.6" y="-758.4"/>
+<text text-anchor="middle" x="298" y="-640.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">paymentservice</text>
+</a>
+</g>
+</g>
+<!-- 0824fc522f68419b97e1a74cd2a73d65&#45;&gt;92ec699f15a44538b94c168d44e9017b -->
+<g id="edge15" class="edge">
+<title>0824fc522f68419b97e1a74cd2a73d65&#45;&gt;92ec699f15a44538b94c168d44e9017b</title>
+<g id="a_edge15"><a xlink:title="from: checkoutservice/default/Deployment/apps/v1&#10;to: paymentservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M469.85,-852C409.16,-852 315,-852 315,-852 315,-852 315,-787.2 315,-787.2"/>
+<polygon fill="brown" stroke="brown" points="318.5,-787.2 315,-777.2 311.5,-787.2 318.5,-787.2"/>
+</a>
+</g>
+</g>
+<!-- 66e1c31736ba44e1831dfe2da6ea85ce -->
+<g id="node6" class="node">
+<title>66e1c31736ba44e1831dfe2da6ea85ce</title>
+<g id="a_node6"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: checkoutservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="469.6" y="-1197.6"/>
+<text text-anchor="middle" x="520" y="-1079.05" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">checkoutservic</text>
+<text text-anchor="middle" x="520" y="-1065.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">e</text>
+</a>
+</g>
+</g>
+<!-- 66e1c31736ba44e1831dfe2da6ea85ce&#45;&gt;0824fc522f68419b97e1a74cd2a73d65 -->
+<g id="edge3" class="edge">
+<title>66e1c31736ba44e1831dfe2da6ea85ce&#45;&gt;0824fc522f68419b97e1a74cd2a73d65</title>
+<g id="a_edge3"><a xlink:title="spec.selector:&#10; &#160;app: checkoutservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M520,-1064.49C520,-1064.49 520,-1021.23 520,-1021.23"/>
+<polygon fill="black" stroke="black" points="523.5,-1021.23 520,-1011.23 516.5,-1021.23 523.5,-1021.23"/>
+</a>
+</g>
+<text text-anchor="middle" x="497.88" y="-1044.61" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">5050/TCP</text>
+</g>
+<!-- 71309afa995c43d680a084a04d89e284 -->
+<g id="node7" class="node">
+<title>71309afa995c43d680a084a04d89e284</title>
+<g id="a_node7"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: currencyservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="553.6" y="-538.8"/>
+<text text-anchor="middle" x="604" y="-420.25" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">currencyservic</text>
+<text text-anchor="middle" x="604" y="-406.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">e</text>
+</a>
+</g>
+</g>
+<!-- 065c1e17b523447da123cda900eb06a9&#45;&gt;71309afa995c43d680a084a04d89e284 -->
+<g id="edge4" class="edge">
+<title>065c1e17b523447da123cda900eb06a9&#45;&gt;71309afa995c43d680a084a04d89e284</title>
+<g id="a_edge4"><a xlink:title="spec.selector:&#10; &#160;app: currencyservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M604,-625.29C604,-625.29 604,-582.03 604,-582.03"/>
+<polygon fill="black" stroke="black" points="607.5,-582.03 604,-572.03 600.5,-582.03 607.5,-582.03"/>
+</a>
+</g>
+<text text-anchor="middle" x="581.88" y="-605.41" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">7000/TCP</text>
+</g>
+<!-- 746e6aa3cb834bedbfb4932107cc251b -->
+<g id="node9" class="node">
+<title>746e6aa3cb834bedbfb4932107cc251b</title>
+<g id="a_node9"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: emailservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="404.6" y="-538.8"/>
+<text text-anchor="middle" x="455" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">emailservice</text>
+</a>
+</g>
+</g>
+<!-- 0efcd0c3b3f64d0e997840a2135edaba&#45;&gt;746e6aa3cb834bedbfb4932107cc251b -->
+<g id="edge5" class="edge">
+<title>0efcd0c3b3f64d0e997840a2135edaba&#45;&gt;746e6aa3cb834bedbfb4932107cc251b</title>
+<g id="a_edge5"><a xlink:title="spec.selector:&#10; &#160;app: emailservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M455,-639.72C455,-639.72 455,-567.64 455,-567.64"/>
+<polygon fill="black" stroke="black" points="458.5,-567.64 455,-557.64 451.5,-567.64 458.5,-567.64"/>
+</a>
+</g>
+<text text-anchor="middle" x="417.88" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">5000&#45;&gt;8080/TCP</text>
+</g>
+<!-- ab82490c13a84869b4fa271c925bf751 -->
+<g id="node11" class="node">
+<title>ab82490c13a84869b4fa271c925bf751</title>
+<g id="a_node11"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: productcatalogservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="702.6" y="-538.8"/>
+<text text-anchor="middle" x="753" y="-420.25" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">productcatalog</text>
+<text text-anchor="middle" x="753" y="-406.75" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">service</text>
+</a>
+</g>
+</g>
+<!-- ec62a73aa4024853b7893a3e1f6a6859&#45;&gt;ab82490c13a84869b4fa271c925bf751 -->
+<g id="edge6" class="edge">
+<title>ec62a73aa4024853b7893a3e1f6a6859&#45;&gt;ab82490c13a84869b4fa271c925bf751</title>
+<g id="a_edge6"><a xlink:title="spec.selector:&#10; &#160;app: productcatalogservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M753,-625.29C753,-625.29 753,-582.03 753,-582.03"/>
+<polygon fill="black" stroke="black" points="756.5,-582.03 753,-572.03 749.5,-582.03 756.5,-582.03"/>
+</a>
+</g>
+<text text-anchor="middle" x="730.88" y="-605.41" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">3550/TCP</text>
+</g>
+<!-- eb4822bbbaa740799c1ca3807ae0def8 -->
+<g id="node13" class="node">
+<title>eb4822bbbaa740799c1ca3807ae0def8</title>
+<g id="a_node13"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: frontend&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="563.6" y="-1402.8"/>
+<text text-anchor="middle" x="614" y="-1285.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">frontend</text>
+</a>
+</g>
+</g>
+<!-- eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;04b30e9476e94e9aa5dec287a4633484 -->
+<g id="edge26" class="edge">
+<title>eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;04b30e9476e94e9aa5dec287a4633484</title>
+<g id="a_edge26"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: adservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M563.91,-1352C482.87,-1352 332,-1352 332,-1352 332,-1352 332,-1226.4 332,-1226.4"/>
+<polygon fill="brown" stroke="brown" points="335.5,-1226.4 332,-1216.4 328.5,-1226.4 335.5,-1226.4"/>
+</a>
+</g>
+</g>
+<!-- eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;7367d97064df4127ac81533ef2142450 -->
+<g id="edge24" class="edge">
+<title>eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;7367d97064df4127ac81533ef2142450</title>
+<g id="a_edge24"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: shippingservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M563.86,-1386C438.98,-1386 124,-1386 124,-1386 124,-1386 124,-801.8 124,-801.8"/>
+<polygon fill="brown" stroke="brown" points="127.5,-801.8 124,-791.8 120.5,-801.8 127.5,-801.8"/>
+</a>
+</g>
+</g>
+<!-- eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;66e1c31736ba44e1831dfe2da6ea85ce -->
+<g id="edge25" class="edge">
+<title>eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;66e1c31736ba44e1831dfe2da6ea85ce</title>
+<g id="a_edge25"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: checkoutservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M563.74,-1318C544.73,-1318 527.6,-1318 527.6,-1318 527.6,-1318 527.6,-1240.85 527.6,-1240.85"/>
+<polygon fill="brown" stroke="brown" points="531.1,-1240.85 527.6,-1230.85 524.1,-1240.85 531.1,-1240.85"/>
+</a>
+</g>
+</g>
+<!-- eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;065c1e17b523447da123cda900eb06a9 -->
+<g id="edge21" class="edge">
+<title>eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;065c1e17b523447da123cda900eb06a9</title>
+<g id="a_edge21"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: currencyservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M612.4,-1284.05C612.4,-1284.05 612.4,-801.78 612.4,-801.78"/>
+<polygon fill="brown" stroke="brown" points="615.9,-801.78 612.4,-791.78 608.9,-801.78 615.9,-801.78"/>
+</a>
+</g>
+</g>
+<!-- eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;ec62a73aa4024853b7893a3e1f6a6859 -->
+<g id="edge20" class="edge">
+<title>eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;ec62a73aa4024853b7893a3e1f6a6859</title>
+<g id="a_edge20"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: productcatalogservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M659.4,-1284.05C659.4,-1118.2 659.4,-708 659.4,-708 659.4,-708 691.64,-708 691.64,-708"/>
+<polygon fill="brown" stroke="brown" points="691.64,-711.5 701.64,-708 691.64,-704.5 691.64,-711.5"/>
+</a>
+</g>
+</g>
+<!-- b0aba3a5b474426bb112d26643dcb6d2 -->
 <g id="node17" class="node">
-<title>02d6a736aab942feb11d4506f6c7b1c2</title>
-<g id="a_node17"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: redis&#45;cart&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="562.6" y="-333.6"/>
-<text text-anchor="middle" x="613" y="-215.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">redis&#45;cart</text>
+<title>b0aba3a5b474426bb112d26643dcb6d2</title>
+<g id="a_node17"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: recommendationservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="702.6" y="-1197.6"/>
+<text text-anchor="middle" x="753" y="-1079.05" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">recommendation</text>
+<text text-anchor="middle" x="753" y="-1065.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">service</text>
 </a>
 </g>
 </g>
-<!-- 7d95f01ca3ec420c9af511be1f280d7f&#45;&gt;02d6a736aab942feb11d4506f6c7b1c2 -->
-<g id="edge28" class="edge">
-<title>7d95f01ca3ec420c9af511be1f280d7f&#45;&gt;02d6a736aab942feb11d4506f6c7b1c2</title>
-<g id="a_edge28"><a xlink:title="from: cartservice/default/Deployment/apps/v1&#10;to: redis&#45;cart/default/Service/v1">
-<path fill="none" stroke="brown" d="M613,-420.07C613,-420.07 613,-362.58 613,-362.58"/>
-<polygon fill="brown" stroke="brown" points="616.5,-362.58 613,-352.58 609.5,-362.58 616.5,-362.58"/>
+<!-- eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;b0aba3a5b474426bb112d26643dcb6d2 -->
+<g id="edge23" class="edge">
+<title>eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;b0aba3a5b474426bb112d26643dcb6d2</title>
+<g id="a_edge23"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: recommendationservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M664.28,-1329C691.45,-1329 719.5,-1329 719.5,-1329 719.5,-1329 719.5,-1240.85 719.5,-1240.85"/>
+<polygon fill="brown" stroke="brown" points="723,-1240.85 719.5,-1230.85 716,-1240.85 723,-1240.85"/>
 </a>
 </g>
 </g>
-<!-- b83e8a43cee9457eadb084cc9ab4de9b&#45;&gt;7d95f01ca3ec420c9af511be1f280d7f -->
+<!-- eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;7fbfcb6e60124fa1a55f2595cd06732e -->
+<g id="edge22" class="edge">
+<title>eb4822bbbaa740799c1ca3807ae0def8&#45;&gt;7fbfcb6e60124fa1a55f2595cd06732e</title>
+<g id="a_edge22"><a xlink:title="from: frontend/default/Deployment/apps/v1&#10;to: cartservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M664.06,-1375C763.59,-1375 976.8,-1375 976.8,-1375 976.8,-1375 976.8,-787.25 976.8,-787.25"/>
+<polygon fill="brown" stroke="brown" points="980.3,-787.25 976.8,-777.25 973.3,-787.25 980.3,-787.25"/>
+</a>
+</g>
+</g>
+<!-- 871d4247e2ee43798fc7f136154641e9 -->
+<g id="node14" class="node">
+<title>871d4247e2ee43798fc7f136154641e9</title>
+<g id="a_node14"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: frontend&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="635.6" y="-1608"/>
+<text text-anchor="middle" x="686" y="-1490.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">frontend</text>
+</a>
+</g>
+</g>
+<!-- 871d4247e2ee43798fc7f136154641e9&#45;&gt;eb4822bbbaa740799c1ca3807ae0def8 -->
+<g id="edge7" class="edge">
+<title>871d4247e2ee43798fc7f136154641e9&#45;&gt;eb4822bbbaa740799c1ca3807ae0def8</title>
+<g id="a_edge7"><a xlink:title="spec.selector:&#10; &#160;app: frontend">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M650,-1489.27C650,-1489.27 650,-1431.78 650,-1431.78"/>
+<polygon fill="black" stroke="black" points="653.5,-1431.78 650,-1421.78 646.5,-1431.78 653.5,-1431.78"/>
+</a>
+</g>
+<text text-anchor="middle" x="618.12" y="-1462.28" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">80&#45;&gt;8080/TCP</text>
+</g>
+<!-- 3121973ed672473094fe340e2efd8256 -->
+<g id="node15" class="node">
+<title>3121973ed672473094fe340e2efd8256</title>
+<g id="a_node15"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: frontend&#45;external&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="491.6" y="-1608"/>
+<text text-anchor="middle" x="542" y="-1489.45" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">frontend</text>
+<text text-anchor="middle" x="542" y="-1475.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">&#45;external</text>
+</a>
+</g>
+</g>
+<!-- 3121973ed672473094fe340e2efd8256&#45;&gt;eb4822bbbaa740799c1ca3807ae0def8 -->
 <g id="edge8" class="edge">
-<title>b83e8a43cee9457eadb084cc9ab4de9b&#45;&gt;7d95f01ca3ec420c9af511be1f280d7f</title>
-<g id="a_edge8"><a xlink:title="spec.selector:&#10; &#160;app: cartservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M613,-639.72C613,-639.72 613,-567.64 613,-567.64"/>
-<polygon fill="black" stroke="black" points="616.5,-567.64 613,-557.64 609.5,-567.64 616.5,-567.64"/>
+<title>3121973ed672473094fe340e2efd8256&#45;&gt;eb4822bbbaa740799c1ca3807ae0def8</title>
+<g id="a_edge8"><a xlink:title="spec.selector:&#10; &#160;app: frontend">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M578,-1475.02C578,-1475.02 578,-1431.67 578,-1431.67"/>
+<polygon fill="black" stroke="black" points="581.5,-1431.67 578,-1421.67 574.5,-1431.67 581.5,-1431.67"/>
 </a>
 </g>
-<text text-anchor="middle" x="590.88" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">7070/TCP</text>
+<text text-anchor="middle" x="546.12" y="-1455.1" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">80&#45;&gt;8080/TCP</text>
 </g>
-<!-- 17937f820cf04c02bafdc7d1182ef78c -->
+<!-- 0c1b51f67c384a80838830ac89186746 -->
 <g id="node16" class="node">
-<title>17937f820cf04c02bafdc7d1182ef78c</title>
-<g id="a_node16"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: redis&#45;cart&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="562.6" y="-142.8"/>
-<text text-anchor="middle" x="613" y="-25.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">redis&#45;cart</text>
+<title>0c1b51f67c384a80838830ac89186746</title>
+<g id="a_node16"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: recommendationservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="702.6" y="-978"/>
+<text text-anchor="middle" x="753" y="-859.45" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">recommendation</text>
+<text text-anchor="middle" x="753" y="-845.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">service</text>
 </a>
 </g>
 </g>
-<!-- 02d6a736aab942feb11d4506f6c7b1c2&#45;&gt;17937f820cf04c02bafdc7d1182ef78c -->
+<!-- 0c1b51f67c384a80838830ac89186746&#45;&gt;ec62a73aa4024853b7893a3e1f6a6859 -->
+<g id="edge19" class="edge">
+<title>0c1b51f67c384a80838830ac89186746&#45;&gt;ec62a73aa4024853b7893a3e1f6a6859</title>
+<g id="a_edge19"><a xlink:title="from: recommendationservice/default/Deployment/apps/v1&#10;to: productcatalogservice/default/Service/v1">
+<path fill="none" stroke="brown" d="M769.8,-844.89C769.8,-844.89 769.8,-801.63 769.8,-801.63"/>
+<polygon fill="brown" stroke="brown" points="773.3,-801.63 769.8,-791.63 766.3,-801.63 773.3,-801.63"/>
+</a>
+</g>
+</g>
+<!-- b0aba3a5b474426bb112d26643dcb6d2&#45;&gt;0c1b51f67c384a80838830ac89186746 -->
 <g id="edge9" class="edge">
-<title>02d6a736aab942feb11d4506f6c7b1c2&#45;&gt;17937f820cf04c02bafdc7d1182ef78c</title>
-<g id="a_edge9"><a xlink:title="spec.selector:&#10; &#160;app: redis&#45;cart">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M613,-214.86C613,-214.86 613,-171.59 613,-171.59"/>
-<polygon fill="black" stroke="black" points="616.5,-171.59 613,-161.59 609.5,-171.59 616.5,-171.59"/>
+<title>b0aba3a5b474426bb112d26643dcb6d2&#45;&gt;0c1b51f67c384a80838830ac89186746</title>
+<g id="a_edge9"><a xlink:title="spec.selector:&#10; &#160;app: recommendationservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M753,-1064.49C753,-1064.49 753,-1021.23 753,-1021.23"/>
+<polygon fill="black" stroke="black" points="756.5,-1021.23 753,-1011.23 749.5,-1021.23 756.5,-1021.23"/>
 </a>
 </g>
-<text text-anchor="middle" x="590.88" y="-194.97" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">6379/TCP</text>
+<text text-anchor="middle" x="730.88" y="-1044.61" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">8080/TCP</text>
 </g>
-<!-- 515bf7e4d1e24e30a58007260786d284 -->
+<!-- 2d2e36916c7d47a181296b0154299c3c -->
 <g id="node18" class="node">
-<title>515bf7e4d1e24e30a58007260786d284</title>
+<title>2d2e36916c7d47a181296b0154299c3c</title>
 <g id="a_node18"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: loadgenerator&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="634.6" y="-1813.2"/>
-<text text-anchor="middle" x="685" y="-1695.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">loadgenerator</text>
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="635.6" y="-1813.2"/>
+<text text-anchor="middle" x="686" y="-1695.55" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">loadgenerator</text>
 </a>
 </g>
 </g>
-<!-- 515bf7e4d1e24e30a58007260786d284&#45;&gt;1d7e68929cd14c179e13f55064a4656a -->
+<!-- 2d2e36916c7d47a181296b0154299c3c&#45;&gt;871d4247e2ee43798fc7f136154641e9 -->
 <g id="edge27" class="edge">
-<title>515bf7e4d1e24e30a58007260786d284&#45;&gt;1d7e68929cd14c179e13f55064a4656a</title>
+<title>2d2e36916c7d47a181296b0154299c3c&#45;&gt;871d4247e2ee43798fc7f136154641e9</title>
 <g id="a_edge27"><a xlink:title="from: loadgenerator/default/Deployment/apps/v1&#10;to: frontend/default/Service/v1">
-<path fill="none" stroke="brown" d="M685,-1694.47C685,-1694.47 685,-1636.98 685,-1636.98"/>
-<polygon fill="brown" stroke="brown" points="688.5,-1636.98 685,-1626.98 681.5,-1636.98 688.5,-1636.98"/>
+<path fill="none" stroke="brown" d="M686,-1694.47C686,-1694.47 686,-1636.98 686,-1636.98"/>
+<polygon fill="brown" stroke="brown" points="689.5,-1636.98 686,-1626.98 682.5,-1636.98 689.5,-1636.98"/>
 </a>
 </g>
 </g>
-<!-- 35497fd8732d4272a052d147cdf64919 -->
+<!-- cf4567cb61514e76babec5ed265bda9a -->
 <g id="node19" class="node">
-<title>35497fd8732d4272a052d147cdf64919</title>
-<g id="a_node19"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: currencyservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="708.6" y="-538.8"/>
-<text text-anchor="middle" x="759" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">currencyservice</text>
+<title>cf4567cb61514e76babec5ed265bda9a</title>
+<g id="a_node19"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: cartservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="909.6" y="-538.8"/>
+<text text-anchor="middle" x="960" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">cartservice</text>
 </a>
 </g>
 </g>
-<!-- 0acc7d13ffc9443b836517f1b76110c9&#45;&gt;35497fd8732d4272a052d147cdf64919 -->
+<!-- 0489b3d110f24c25945af4a95aaf1c94 -->
+<g id="node22" class="node">
+<title>0489b3d110f24c25945af4a95aaf1c94</title>
+<g id="a_node22"><a xlink:title="kind: Service&#10;apiVersion: v1&#10;metadata:&#10; &#160;name: redis&#45;cart&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/network/svc.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="909.6" y="-333.6"/>
+<text text-anchor="middle" x="960" y="-215.95" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">redis&#45;cart</text>
+</a>
+</g>
+</g>
+<!-- cf4567cb61514e76babec5ed265bda9a&#45;&gt;0489b3d110f24c25945af4a95aaf1c94 -->
+<g id="edge28" class="edge">
+<title>cf4567cb61514e76babec5ed265bda9a&#45;&gt;0489b3d110f24c25945af4a95aaf1c94</title>
+<g id="a_edge28"><a xlink:title="from: cartservice/default/Deployment/apps/v1&#10;to: redis&#45;cart/default/Service/v1">
+<path fill="none" stroke="brown" d="M960,-420.07C960,-420.07 960,-362.58 960,-362.58"/>
+<polygon fill="brown" stroke="brown" points="963.5,-362.58 960,-352.58 956.5,-362.58 963.5,-362.58"/>
+</a>
+</g>
+</g>
+<!-- 7fbfcb6e60124fa1a55f2595cd06732e&#45;&gt;cf4567cb61514e76babec5ed265bda9a -->
 <g id="edge10" class="edge">
-<title>0acc7d13ffc9443b836517f1b76110c9&#45;&gt;35497fd8732d4272a052d147cdf64919</title>
-<g id="a_edge10"><a xlink:title="spec.selector:&#10; &#160;app: currencyservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M759,-639.72C759,-639.72 759,-567.64 759,-567.64"/>
-<polygon fill="black" stroke="black" points="762.5,-567.64 759,-557.64 755.5,-567.64 762.5,-567.64"/>
+<title>7fbfcb6e60124fa1a55f2595cd06732e&#45;&gt;cf4567cb61514e76babec5ed265bda9a</title>
+<g id="a_edge10"><a xlink:title="spec.selector:&#10; &#160;app: cartservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M960,-639.72C960,-639.72 960,-567.64 960,-567.64"/>
+<polygon fill="black" stroke="black" points="963.5,-567.64 960,-557.64 956.5,-567.64 963.5,-567.64"/>
 </a>
 </g>
-<text text-anchor="middle" x="736.88" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">7000/TCP</text>
+<text text-anchor="middle" x="937.88" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">7070/TCP</text>
 </g>
-<!-- e57bd0d8a9354e5f8d3aa4eb38b60a2c -->
+<!-- 72bc978d36b64dac8b7d20fe13bb3610 -->
 <g id="node21" class="node">
-<title>e57bd0d8a9354e5f8d3aa4eb38b60a2c</title>
-<g id="a_node21"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: shippingservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="882.6" y="-538.8"/>
-<text text-anchor="middle" x="933" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">shippingservice</text>
+<title>72bc978d36b64dac8b7d20fe13bb3610</title>
+<g id="a_node21"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: redis&#45;cart&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="909.6" y="-142.8"/>
+<text text-anchor="middle" x="960" y="-25.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">redis&#45;cart</text>
 </a>
 </g>
 </g>
-<!-- 8b790414115f4c089ad17e9f65b98d3b&#45;&gt;e57bd0d8a9354e5f8d3aa4eb38b60a2c -->
+<!-- 0489b3d110f24c25945af4a95aaf1c94&#45;&gt;72bc978d36b64dac8b7d20fe13bb3610 -->
 <g id="edge11" class="edge">
-<title>8b790414115f4c089ad17e9f65b98d3b&#45;&gt;e57bd0d8a9354e5f8d3aa4eb38b60a2c</title>
-<g id="a_edge11"><a xlink:title="spec.selector:&#10; &#160;app: shippingservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M933,-639.72C933,-639.72 933,-567.64 933,-567.64"/>
-<polygon fill="black" stroke="black" points="936.5,-567.64 933,-557.64 929.5,-567.64 936.5,-567.64"/>
+<title>0489b3d110f24c25945af4a95aaf1c94&#45;&gt;72bc978d36b64dac8b7d20fe13bb3610</title>
+<g id="a_edge11"><a xlink:title="spec.selector:&#10; &#160;app: redis&#45;cart">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M960,-214.86C960,-214.86 960,-171.59 960,-171.59"/>
+<polygon fill="black" stroke="black" points="963.5,-171.59 960,-161.59 956.5,-171.59 963.5,-171.59"/>
 </a>
 </g>
-<text text-anchor="middle" x="908.25" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">50051/TCP</text>
+<text text-anchor="middle" x="937.88" y="-194.97" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">6379/TCP</text>
 </g>
-<!-- 9de025121ab34024b4b1d22de0ef2205 -->
+<!-- 6893ef7e8b9041d8b3af48f14ea817fa -->
 <g id="node23" class="node">
-<title>9de025121ab34024b4b1d22de0ef2205</title>
-<g id="a_node23"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: adservice&#10;...">
-<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="746.6" y="-978"/>
-<text text-anchor="middle" x="797" y="-860.35" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">adservice</text>
+<title>6893ef7e8b9041d8b3af48f14ea817fa</title>
+<g id="a_node23"><a xlink:title="kind: Deployment&#10;apiVersion: apps/v1&#10;metadata:&#10; &#160;name: paymentservice&#10;...">
+<image xlink:href="https://raw.githubusercontent.com/mingrammer/diagrams/refs/heads/master/resources/k8s/compute/deploy.png" width="100.8px" height="100.8px" preserveAspectRatio="xMinYMin meet" x="247.6" y="-538.8"/>
+<text text-anchor="middle" x="298" y="-421.15" font-family="Sans-Serif" font-size="13.00" fill="#2d3436">paymentservice</text>
 </a>
 </g>
 </g>
-<!-- ad5e390e7da44c41b1846db47a381f91&#45;&gt;9de025121ab34024b4b1d22de0ef2205 -->
+<!-- 92ec699f15a44538b94c168d44e9017b&#45;&gt;6893ef7e8b9041d8b3af48f14ea817fa -->
 <g id="edge12" class="edge">
-<title>ad5e390e7da44c41b1846db47a381f91&#45;&gt;9de025121ab34024b4b1d22de0ef2205</title>
-<g id="a_edge12"><a xlink:title="spec.selector:&#10; &#160;app: adservice">
-<path fill="none" stroke="black" stroke-dasharray="5,2" d="M797,-1078.92C797,-1078.92 797,-1006.84 797,-1006.84"/>
-<polygon fill="black" stroke="black" points="800.5,-1006.84 797,-996.84 793.5,-1006.84 800.5,-1006.84"/>
+<title>92ec699f15a44538b94c168d44e9017b&#45;&gt;6893ef7e8b9041d8b3af48f14ea817fa</title>
+<g id="a_edge12"><a xlink:title="spec.selector:&#10; &#160;app: paymentservice">
+<path fill="none" stroke="black" stroke-dasharray="5,2" d="M298,-639.72C298,-639.72 298,-567.64 298,-567.64"/>
+<polygon fill="black" stroke="black" points="301.5,-567.64 298,-557.64 294.5,-567.64 301.5,-567.64"/>
 </a>
 </g>
-<text text-anchor="middle" x="774.88" y="-1044.63" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">9555/TCP</text>
+<text text-anchor="middle" x="273.25" y="-605.43" font-family="Sans-Serif" font-size="10.00" fill="#2d3436">50051/TCP</text>
 </g>
 </g>
 </svg>
