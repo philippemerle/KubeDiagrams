@@ -1,7 +1,9 @@
 #! /bin/sh
 
 # Build the KubeDiagrams Frontend image
-docker buildx build -t philippemerle/kubediagrams-frontend:latest frontend
+cd ..
+docker buildx build -t philippemerle/kubediagrams-frontend:latest -f webapp/frontend/Dockerfile .
+cd webapp
 
 # Push the KubeDiagrams Frontend image
 docker image push philippemerle/kubediagrams-frontend:latest
